@@ -8,10 +8,10 @@
 
 # Basic Site Settings
 locale                   : "zh-CN"
-title                    : "Guo Meng's Blog"
+title                    : "Guo Meng's Page"
 title_separator          : "-"
 name                     : &name "Guo Meng"
-description              : &description "养猪+育种+数据分析"
+description              : &description "养猪|育种|数据分析"
 url                      : https://tony2015116.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "tony2015116/tony2015116.github.io"
@@ -64,7 +64,7 @@ author:
   steam            : # Username
   telegram         : # URL
   tumblr           : # Username
-  twitter          : "@tonyituite"  # Replace this with your X / Twitter handle
+  twitter          : #"@tonyituite"  # Replace this with your X / Twitter handle
   vine             : # Username
   weibo            : # Username
   wikipedia        : # Username
