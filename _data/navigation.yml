@@ -4,8 +4,5 @@ main:
   - title: "项目"
     url: /project/
 
-- title: "Research Data"
-    url: /portfolio/
-
   - title: "简历"
     url: /cv/
