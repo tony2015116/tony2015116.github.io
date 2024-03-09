@@ -45,10 +45,9 @@ editor_options:
 
 ### 😃 我的个人项目
 
-- **📝 个人博客项目**: [my-blog](https://github.com/tony2015116/blogdown) - 用于记录和分享我的技术学习旅程。
-- **👤 个人GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116) - 展示我的开源项目和贡献。
-- **🔧 selenium webdriver service**: [wdauto](https://tony2015116.github.io/wdauto/) - 为selenium webdriver service提供辅助功能，提高自动化测试效率。
-
+- **📝 个人博客项目**: [my-blog](https://github.com/tony2015116/blogdown)
+- **👤 个人GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116)
+- **🔧 selenium webdriver service**: [wdauto](https://tony2015116.github.io/wdauto/)
 ### 🛠️ 工作项目
 
 - **🕷 睿保乐测定站csv数据爬取**: [pptsdd](https://tony2015116.github.io/pptsdd/)
