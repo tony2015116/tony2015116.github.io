@@ -19,39 +19,36 @@ Hello! I'm guo meng.
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116" alt="GitHub last commit"/></a>
 </p>
 
-## 🌟 我的职业经历
-
+- 🌟 自我比比
 我在**全国排名前十的养殖头部企业**工作，有以下经历和成就：
 - 🐖 养殖工作：养了**1年猪**。
 - 🧬 育种工作：进行了**4年的育种工作**。
 - 📊 数据分析：使用**R语言**进行了**7年的数据分析**。
 
-## 💻 我经常使用的数据分析平台
+- 💻 经常使用的数据分析平台有
+![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
+![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
+![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
+![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
 
-- ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
-- ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
-- ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
-- ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
+- 🧠 常使用的人工智能：
+![OpenAI](https://img.shields.io/badge/-OpenAI-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
 
-## 🧠 我经常使用的人工智能
+- 📘 我正在学习：
+![Python](https://img.shields.io/badge/-Python-8fcfd1?style=flat&logo=Python&labelColor=5c5c5c&color=1182c3)
 
-- ![OpenAI](https://img.shields.io/badge/-OpenAI-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
+### 🎈 兴趣爱好
 
-## 📘 我正在学习
+- 在我的项目和文档中使用 **徽章(badge)** 和 **表情符号(emoji)**
+- 
 
-- ![Python](https://img.shields.io/badge/-Python-8fcfd1?style=flat&logo=Python&labelColor=5c5c5c&color=1182c3)
-
-## 📸 兴趣爱好
-
-- 我的兴趣爱好是：📱📸 **手机摄影**。
-
-## 😃 我的个人项目
+### 😃 我的个人项目
 
 - **📝 个人博客项目**: [my-blog](https://github.com/tony2015116/blogdown) - 用于记录和分享我的技术学习旅程。
 - **👤 个人GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116) - 展示我的开源项目和贡献。
-- **🔧 辅助selenium webdriver service**: [wdauto](https://tony2015116.github.io/wdauto/) - 为selenium webdriver service提供辅助功能，提高自动化测试效率。
+- **🔧 selenium webdriver service**: [wdauto](https://tony2015116.github.io/wdauto/) - 为selenium webdriver service提供辅助功能，提高自动化测试效率。
 
-## 🛠️ 工作项目
+### 🛠️ 工作项目
 
-- **🕷️ 爬取睿保乐nedap测定站csv数据**: [pptsdd](https://tony2015116.github.io/pptsdd/) - 专注于从睿保乐nedap测定站获取原始数据。
-- **📊 瑞保乐nedap测定站数据分析**: [pptsda](https://tony2015116.github.io/pptsda/) - 对爬取的数据进行深入分析，揭示潜在的趋势和模式。
+- **🕷 睿保乐测定站csv数据爬取**: [pptsdd](https://tony2015116.github.io/pptsdd/)
+- **📊 睿保乐nedap测定站数据分析**: [pptsda](https://tony2015116.github.io/pptsda/)
