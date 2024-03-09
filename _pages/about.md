@@ -19,35 +19,30 @@ editor_options:
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116" alt="GitHub last commit"/></a>
 </p>
 
-- 🌟 自我比比
-我在**全国排名前十的养殖头部企业**工作，有以下经历和成就：
-- 🐖 养殖工作：养了**1年猪**。
-- 🧬 育种工作：进行了**4年的育种工作**。
-- 📊 数据分析：使用**R语言**进行了**7年的数据分析**。
+### 🌟 简单介绍
+90后，男硕士。已在养殖大厂工作4年。
+- 🐖 养猪1年
+- 🧬 育种4年
+- 📊 数据分析7年
 
-- 💻 经常使用的数据分析平台有
-![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
-![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
-![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
-![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
 
-- 🧠 常使用的人工智能：
-![OpenAI](https://img.shields.io/badge/-OpenAI-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
-
-- 📘 我正在学习：
-![Python](https://img.shields.io/badge/-Python-8fcfd1?style=flat&logo=Python&labelColor=5c5c5c&color=1182c3)
-
-### 🎈 兴趣爱好
-
-- 在我的项目和文档中使用 **徽章(badge)** 和 **表情符号(emoji)**
-- 
-
-### 😃 我的个人项目
-
+### 😃 个人项目
 - **📝 个人博客项目**: [my-blog](https://github.com/tony2015116/blogdown)
 - **👤 个人GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116)
 - **🔧 selenium webdriver service**: [wdauto](https://tony2015116.github.io/wdauto/)
-### 🛠️ 工作项目
 
+### 🛠️ 工作项目
 - **🕷 睿保乐测定站csv数据爬取**: [pptsdd](https://tony2015116.github.io/pptsdd/)
 - **📊 睿保乐nedap测定站数据分析**: [pptsda](https://tony2015116.github.io/pptsda/)
+
+### 💻 常用的工具：![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
+![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
+![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
+![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
+![OpenAI](https://img.shields.io/badge/-OpenAI-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
+
+### 📘 我正在学习：
+- Python
+
+### 🎈 兴趣爱好
+- 在我的项目和文档中使用 **徽章(badge)** 和 **表情符号(emoji)**
