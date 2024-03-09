@@ -13,9 +13,9 @@ main:
     url: /portfolio/
 
   - title: "博客"
-    url: /year-archive/
+    url: /archive/
 
-  - title: "简历"
+  - title: "CV"
     url: /cv/
 
   - title: "Guide"
