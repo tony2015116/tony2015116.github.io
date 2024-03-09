@@ -1,6 +1,5 @@
 ---
 permalink: /
-title: "👋 欢迎来到我的主页"
 author_profile: true
 redirect_from: 
   - /about/
@@ -9,7 +8,7 @@ editor_options:
   markdown: 
     wrap: 72
 ---
-<h2 align="center">
+<h2 align="center" style="margin-top: 0;">
 <img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/>
 你好，欢迎来到我的主页！
 </h2>

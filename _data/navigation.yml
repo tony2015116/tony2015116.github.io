@@ -13,7 +13,7 @@ main:
     url: /portfolio/
 
   - title: "博客"
-    url: /archive/
+    url: /year-archive/
 
   - title: "CV"
     url: /cv/
