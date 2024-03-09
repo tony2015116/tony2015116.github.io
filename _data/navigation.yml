@@ -1,7 +1,5 @@
 # main links links
 main:
-  - title: "教程"
-    url: /teaching/
 
   - title: "项目"
     url: /project/

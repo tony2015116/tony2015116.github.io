@@ -19,21 +19,47 @@ editor_options:
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
 </p>
 
+# 🙋 关于我
+
+欢迎来到我的个人主页！我是一位热情的软件工程师和技术爱好者，专注于创造有影响力的解决方案，以提高我们生活和工作的质量。在这里，你将了解到我作为一个专业人士的背景、经历和所追求的。
+
+## 🌱 我的旅程
+
+从小对计算机和编程充满好奇心的我，决定将我的激情转化为职业生涯。我在著名大学完成了我的计算机科学学士和软件工程硕士学位。通过学习，我不仅掌握了必要的技术技能，也学会了如何在快节奏的环境中保持学习和成长。
+
+## 💻 专业技能
+
+- **编程语言**: 精通 Python、Java、C++ 和 JavaScript。
+- **Web 开发**: 熟练掌握 HTML5、CSS3、React 和 Node.js。
+- **数据库技术**: 拥有 MySQL 和 MongoDB 的实践经验。
+- **DevOps & 云服务**: 熟悉使用 Docker、Kubernetes 和 AWS。
+
+## 🛠 工作经验
+
+我在一家国际知名科技公司担任软件开发工程师，负责设计和实现高性能的企业级应用。通过与团队紧密合作，我们成功提高了项目交付的效率和质量。
+
+## 🌟 兴趣爱好
+
+- **编程挑战**: 我喜欢通过解决复杂的算法问题来测试和提升我的编程技能。
+- **阅读**: 我是一个书虫，特别喜欢阅读技术、科幻和个人成长类的书籍。
+- **户外探险**: 在自然中徒步旅行，是我放松和寻找灵感的方式之一。
+
+## 📫 联系方式
+
+- **邮箱**: [your-email@example.com](mailto:your-email@example.com)
+- **LinkedIn**: [LinkedIn/in/yourprofile](https://linkedin.com/in/yourprofile)
+
+---
+
+感谢您访问我的网站，希望您能对我有更深入的了解。如果您有任何问题或想要讨论技术合作，请随时联系我！
+
+
+
 ### 🌟 个人短介
 90后、硕士，目前在养殖大厂。
 - 🐖 养猪1年
 - 🧬 育种4年
 - 📊 数据分析7年
-
-
-### 😃 个人项目
-- **📝 个人博客**: [my-blog](https://github.com/tony2015116/blogdown)
-- **👤 GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116)
-- **🔧 Selenium WebDriver Service**: [wdauto](https://tony2015116.github.io/wdauto/)
-
-### 🛠️ 工作项目
-- **🕷 睿保乐测定站csv数据爬取**: [pptsdd](https://tony2015116.github.io/pptsdd/)
-- **📊 睿保乐nedap测定站数据分析**: [pptsda](https://tony2015116.github.io/pptsda/)
 
 ### 💻 常用的工具：
 - ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
