@@ -1,64 +1,53 @@
 ---
 layout: archive
-title: "CV"
 permalink: /cv/
 author_profile: true
 redirect_from:
   - /resume
 ---
 
-{% include base_path %}
+# 简历
 
-Education
-======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+## 🙋‍♂️ 简介
 
-Work experience
-======
-* Spring 2024: Academic Pages Collaborator
-  * Github University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+我是一名具有强烈求知欲和创新精神的专业人士。拥有丰富的项目经验和技术背景，能够在高压环境下保持优秀的工作表现。我热衷于解决复杂问题，并且能够迅速适应新技术和环境。
 
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+## 📚 教育背景
 
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
-  
-Skills
-======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+- **计算机科学学士**  
+  🏫 某知名大学  
+  📅 2015 - 2019  
+  主修计算机科学与技术，学习了编程语言、数据结构、算法等核心课程。
 
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Talks
-======
-  <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+- **软件工程硕士**  
+  🏫 某著名大学院校  
+  📅 2019 - 2021  
+  专注于软件开发过程、项目管理和高级编程技术，完成了多个实践项目。
+
+## 💼 工作经历
+
+- **软件开发工程师**  
+  🏢 某国际科技公司  
+  📅 2021 - 至今  
+  负责开发和维护多个高性能的企业级应用程序，与团队紧密合作，确保项目按时交付。
+
+## 🛠 工作技能
+
+- **编程语言**: 精通 Python、Java、C++ 和 JavaScript
+- **Web 开发**: 熟悉 HTML5、CSS3、React 和 Node.js
+- **数据库技术**: 熟练使用 MySQL、MongoDB
+- **工具 & 平台**: Git、Docker、Kubernetes、AWS
+
+## 🎯 兴趣爱好
+
+- 编程解题和算法竞赛
+- 阅读科技和创新方面的书籍
+- 徒步旅行和探索自然
+
+## 🌍 语言
+
+- **英语**: 流利
+- **普通话**: 母语
+- **日语**: 基础会话
+
+希望我的背景和技能能够与您的团队匹配，期待有机会贡献我的力量。
