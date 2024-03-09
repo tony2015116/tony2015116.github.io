@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "🚀 我的项目"
+title: ""
 permalink: /project/
 author_profile: true
 redirect_from:
