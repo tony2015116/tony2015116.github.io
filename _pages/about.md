@@ -15,12 +15,20 @@ editor_options:
 
 <p align="center">
 <img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical"/>
-<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Ftony2015116"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Ftony2015116&amp;countColor=%23f47373&amp;style=flat"/></a>
-<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116" alt="GitHub last commit"/></a>
+<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io&countColor=%23f47373&style=flat" /></a>
+<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
+<br> <!-- 添加换行 -->
+<img src="https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3" alt="R">
+<img src="https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3" alt="Excel">
+<img src="https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3" alt="Linux">
+<img src="https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3" alt="GitHub">
+<br> <!-- 添加换行 -->
+<img src="https://img.shields.io/badge/-OpenAI-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3" alt="OpenAI">
+
 </p>
 
 ### 🌟 简单介绍
-90后，男硕士。已在养殖大厂工作4年。
+90后、男硕士，已在养殖大厂工作4年。
 - 🐖 养猪1年
 - 🧬 育种4年
 - 📊 数据分析7年
