@@ -24,7 +24,7 @@ author:
   avatar           : "profile.png"
   name             : "Guo Meng"
   pronouns         : # example: "he"
-  bio              : "Short biography for the left-hand sidebar"
+  bio              : "养猪+育种+数据分析"
   location         : "Guangxi, China"
   employer         : "扬翔股份"
   uri              : # URL
@@ -70,7 +70,7 @@ author:
   wikipedia        : # Username
   xing             : # Username
   youtube          : # Username
-  zhihu            : # URL
+  zhihu            : # "https://www.zhihu.com/people/guo-meng-68-41"
 
 
 # Site Settings
