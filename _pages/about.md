@@ -36,7 +36,7 @@ editor_options:
 - **📊 睿保乐nedap测定站数据分析**: [pptsda](https://tony2015116.github.io/pptsda/)
 
 ### 💻 常用的工具：
-![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
+- ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
 ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
 ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
 ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)

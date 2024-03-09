@@ -1,15 +1,9 @@
 # main links links
 main:
-  - title: "Publications"
-    url: /publications/
-
-  - title: "讲话"
-    url: /talks/
-
   - title: "教程"
     url: /teaching/
 
-  - title: "Portfolio"
+  - title: "文件夹"
     url: /portfolio/
 
   - title: "博客"
@@ -17,6 +11,3 @@ main:
 
   - title: "CV"
     url: /cv/
-
-  - title: "Guide"
-    url: /markdown/
