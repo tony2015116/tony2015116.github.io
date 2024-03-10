@@ -50,3 +50,23 @@ redirect_from:
 - **日语**: 基础会话
 
 希望我的背景和技能能够与您的团队匹配，期待有机会贡献我的力量。
+
+
+
+
+## 💻 专业技能
+
+-   **常用工具**: 
+![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
+    ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
+    ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
+    ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
+    ![OpenAI](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
+
+-   **Web 开发**: 熟练掌握 HTML5、CSS3、React 和 Node.js。
+-   **数据库技术**: 拥有 MySQL 和 MongoDB 的实践经验。
+-   **DevOps & 云服务**: 熟悉使用 Docker、Kubernetes 和 AWS。
+
+## 🛠 工作经验
+
+我在一家国际知名科技公司担任软件开发工程师，负责设计和实现高性能的企业级应用。通过与团队紧密合作，我们成功提高了项目交付的效率和质量。
