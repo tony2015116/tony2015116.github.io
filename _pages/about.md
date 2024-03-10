@@ -39,9 +39,9 @@ editor_options:
 
 ## 🎈 兴趣爱好
 
-- **收藏狂人**: 将**好**东西放到收藏夹吃灰
-- **胡瞎八折腾**：简单的事情搞复杂再搞简单
-- **最大的兴趣**：没啥兴趣😂
+- 将**好**东西放到收藏夹吃灰
+- 简单的事情搞复杂再搞简单
+- 最大的兴趣就是没啥兴趣😂
 
 ## 🎮 游戏
 - 欧卡2 🚚
@@ -50,21 +50,13 @@ editor_options:
 
 ## 📫 联系方式
 
--   **邮箱**: [your-email\@example.com](mailto:your-email@example.com)
+- **邮箱**: [your-email\@example.com](mailto:your-email@example.com)
 
 ------------------------------------------------------------------------
 
-感谢您访问我的网站，希望您能对我有更深入的了解。如果您有任何问题或想要讨论技术合作，请随时联系我！
+感谢您访问我的主页，希望您能对我有更深入的了解。如果您有任何问题或想要讨论技术合作，请随时联系我！
 
 
-
-### 💻 常用的工具：
-
--   ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
-    ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
-    ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
-    ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
-    ![OpenAI](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
 
 
 
