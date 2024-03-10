@@ -27,15 +27,24 @@ editor_options:
 
 ## 🙋 关于我
 
-欢迎来到我的个人主页！我是一位热情的软件工程师和技术爱好者，专注于创造有影响力的解决方案，以提高我们生活和工作的质量。在这里，你将了解到我作为一个专业人士的背景、经历和所追求的。
+- 90后养猪青年儿 🐷
+- 写代码的宅男一枚
+- 不吸烟🚬|不喝酒🍺
+- 喜欢折腾,学习新知识
+- 为公司建设添砖加瓦，为国家养猪事业贡献力量
 
 ## 🌱 我的旅程
 
-从小对计算机和编程充满好奇心的我，决定将我的激情转化为职业生涯。我在著名大学完成了我的计算机科学学士和软件工程硕士学位。通过学习，我不仅掌握了必要的技术技能，也学会了如何在快节奏的环境中保持学习和成长。
+头脑不那么聪明，好在没放弃过读书的念头！本科自学高数考研究生，喜欢折腾。终究实力配不上野心，养了猪。
 
 ## 💻 专业技能
 
--   **编程语言**: 精通 Python、Java、C++ 和 JavaScript。
+-   **常用工具**: ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
+    ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
+    ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
+    ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
+    ![OpenAI](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
+
 -   **Web 开发**: 熟练掌握 HTML5、CSS3、React 和 Node.js。
 -   **数据库技术**: 拥有 MySQL 和 MongoDB 的实践经验。
 -   **DevOps & 云服务**: 熟悉使用 Docker、Kubernetes 和 AWS。
@@ -47,22 +56,25 @@ editor_options:
 ## 🌟 兴趣爱好
 
 -   **编程挑战**: 我喜欢通过解决复杂的算法问题来测试和提升我的编程技能。
+-   在我的项目和文档中使用 **badge** 和 **emoji**
 -   **阅读**: 我是一个书虫，特别喜欢阅读技术、科幻和个人成长类的书籍。
 -   **户外探险**: 在自然中徒步旅行，是我放松和寻找灵感的方式之一。
+
+## 游戏
+- 为考驾照而玩欧卡2 🚗
+- 和平精英
+
+
 
 ## 📫 联系方式
 
 -   **邮箱**: [your-email\@example.com](mailto:your-email@example.com)
--   **LinkedIn**:
-    [LinkedIn/in/yourprofile](https://linkedin.com/in/yourprofile)
 
 ------------------------------------------------------------------------
 
 感谢您访问我的网站，希望您能对我有更深入的了解。如果您有任何问题或想要讨论技术合作，请随时联系我！
 
-### 🌟 个人短介
 
-90后、硕士，目前在养殖大厂。 - 🐖 养猪1年 - 🧬 育种4年 - 📊 数据分析7年
 
 ### 💻 常用的工具：
 
@@ -72,10 +84,6 @@ editor_options:
     ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
     ![OpenAI](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
 
-### 📘 我正在学习：
 
--   Python
 
-### 🎈 兴趣爱好
 
--   在我的项目和文档中使用 **badge** 和 **emoji**
