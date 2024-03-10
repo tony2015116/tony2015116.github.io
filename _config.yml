@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "zh-CN"
-title                    : "我的主页🏠"
+title                    : "🏠我的主页"
 title_separator          : "-"
 name                     : &name "Guo Meng"
 description              : &description "养猪🐖|育种🧬|数据分析📊"
