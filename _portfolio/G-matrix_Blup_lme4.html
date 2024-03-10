@@ -1,3 +1,10 @@
+---
+title: "workflow about blup"
+excerpt: "Short description of portfolio item number 2 <br/><img src='/images/500x300.png'>"
+collection: portfolio
+---
+
+
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
@@ -8451,15 +8458,15 @@ label {
 }
 /* Flexible box model classes */
 /* Taken from Alex Russell http://infrequently.org/2009/08/css-3-progress/ */
-/* This file is a compatability layer.  It allows the usage of flexible box 
+/* This file is a compatability layer.  It allows the usage of flexible box
 model layouts accross multiple browsers, including older browsers.  The newest,
 universal implementation of the flexible box model is used when available (see
-`Modern browsers` comments below).  Browsers that are known to implement this 
+`Modern browsers` comments below).  Browsers that are known to implement this
 new spec completely include:
 
     Firefox 28.0+
     Chrome 29.0+
-    Internet Explorer 11+ 
+    Internet Explorer 11+
     Opera 17.0+
 
 Browsers not listed, including Safari, are supported via the styling under the
@@ -11233,7 +11240,7 @@ div#pager .ui-resizable-handle {
   background: #f7f7f7;
   border-top: 1px solid #cfcfcf;
   border-bottom: 1px solid #cfcfcf;
-  /* This injects handle bars (a short, wide = symbol) for 
+  /* This injects handle bars (a short, wide = symbol) for
         the resize handle. */
 }
 div#pager .ui-resizable-handle::after {
@@ -11676,7 +11683,7 @@ ul.typeahead-list > li > a {
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
 <style type="text/css">
-    
+
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
 .ansi-black-fg { color: #3E424D; }
 .ansi-black-bg { background-color: #3E424D; }
@@ -11730,14 +11737,14 @@ div#notebook {
   div.cell {
     display: block;
     page-break-inside: avoid;
-  } 
-  div.output_wrapper { 
-    display: block;
-    page-break-inside: avoid; 
   }
-  div.output { 
+  div.output_wrapper {
     display: block;
-    page-break-inside: avoid; 
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
   }
 }
 </style>
@@ -11846,19 +11853,19 @@ MAF
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>   step 1  : 0 marker(s) removed with &gt; 10 % missing values 
-   step 2  : Recoding alleles 
-   step 4  : 0 marker(s) removed with maf &lt; 0.01 
-   step 7  : Imputing of missing values 
-   step 7d : Random imputing of missing values 
-   step 8  : No recoding of alleles necessary after imputation 
-   step 9  : 0 marker(s) removed with maf &lt; 0.01 
-   step 10 : No duplicated markers removed 
+<pre>   step 1  : 0 marker(s) removed with &gt; 10 % missing values
+   step 2  : Recoding alleles
+   step 4  : 0 marker(s) removed with maf &lt; 0.01
+   step 7  : Imputing of missing values
+   step 7d : Random imputing of missing values
+   step 8  : No recoding of alleles necessary after imputation
+   step 9  : 0 marker(s) removed with maf &lt; 0.01
+   step 10 : No duplicated markers removed
    End     : 4 marker(s) remain after the check
 
-     Summary of imputation 
-    total number of missing values                : 0 
-    number of random imputations                  : 0 
+     Summary of imputation
+    total number of missing values                : 0
+    number of random imputations                  : 0
 </pre>
 </div>
 </div>
@@ -12169,7 +12176,7 @@ G1
 <div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>D<span class="o">=</span><span class="m">1</span><span class="o">/</span><span class="p">(</span><span class="kp">ncol</span><span class="p">(</span>M<span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="m">2</span><span class="o">*</span>p1<span class="o">*</span><span class="p">(</span><span class="m">1</span><span class="o">-</span>p1<span class="p">)))</span> 
+<div class=" highlight hl-r"><pre><span></span>D<span class="o">=</span><span class="m">1</span><span class="o">/</span><span class="p">(</span><span class="kp">ncol</span><span class="p">(</span>M<span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="m">2</span><span class="o">*</span>p1<span class="o">*</span><span class="p">(</span><span class="m">1</span><span class="o">-</span>p1<span class="p">)))</span>
 G2 <span class="o">=</span> Z<span class="o">%*%</span><span class="p">(</span>D<span class="o">*</span><span class="kp">t</span><span class="p">(</span>Z<span class="p">))</span>
 G2 <span class="o">=</span><span class="kp">round</span><span class="p">(</span>G2<span class="p">,</span><span class="m">3</span><span class="p">)</span>
 G2
@@ -13607,14 +13614,14 @@ Formula: pwg ~ 0 + sex + (1 | calf)
    Data: xx
 REML criterion at convergence: -88.6077
 Random effects:
- Groups   Name        Std.Dev. 
+ Groups   Name        Std.Dev.
  calf     (Intercept) 4.564e-01
  Residual             1.386e-05
 Number of obs: 10, groups:  calf, 5
 Fixed Effects:
-sexFemale    sexMale  
-    3.400      4.333  
-convergence code 3; 2 optimizer warnings; 0 lme4 warnings 
+sexFemale    sexMale
+    3.400      4.333
+convergence code 3; 2 optimizer warnings; 0 lme4 warnings
 </pre>
 </div>
 </div>
@@ -13873,10 +13880,10 @@ LHS
 <div class="output_text output_subarea ">
 <pre>5 x 5 sparse Matrix of class &#34;dgCMatrix&#34;
       S5    S6    S4    S7    S8
-S5 2.001 .     .     .     .    
-S6 .     2.001 .     .     .    
-S4 .     .     2.001 .     .    
-S7 .     .     .     2.001 .    
+S5 2.001 .     .     .     .
+S6 .     2.001 .     .     .
+S4 .     .     2.001 .     .
+S7 .     .     .     2.001 .
 S8 .     .     .     .     2.001</pre>
 </div>
 
@@ -13892,12 +13899,12 @@ S8 .     .     .     .     2.001</pre>
 <div class="output_text output_subarea ">
 <pre>7 x 7 sparse Matrix of class &#34;dgCMatrix&#34;
           sexFemale sexMale    S5    S6    S4    S7    S8
-sexFemale         4       . 2.000 2.000 .     .     .    
+sexFemale         4       . 2.000 2.000 .     .     .
 sexMale           .       6 .     .     2.000 2.000 2.000
-S5                2       . 2.001 .     .     .     .    
-S6                2       . .     2.001 .     .     .    
-S4                .       2 .     .     2.001 .     .    
-S7                .       2 .     .     .     2.001 .    
+S5                2       . 2.001 .     .     .     .
+S6                2       . .     2.001 .     .     .
+S4                .       2 .     .     2.001 .     .
+S7                .       2 .     .     .     2.001 .
 S8                .       2 .     .     .     .     2.001</pre>
 </div>
 
@@ -14061,7 +14068,7 @@ sol
 
 
 <div class="output_text output_subarea ">
-<pre> Groups   Name        Std.Dev.  
+<pre> Groups   Name        Std.Dev.
  calf     (Intercept) 4.5644e-01
  Residual             1.3864e-05</pre>
 </div>
@@ -14115,12 +14122,12 @@ Formula: pwg ~ 0 + sex + (1 | calf)
 
 REML criterion at convergence: -88.6
 
-Scaled residuals: 
-       Min         1Q     Median         3Q        Max 
--2.773e-05 -1.664e-05  5.545e-06  1.664e-05  2.218e-05 
+Scaled residuals:
+       Min         1Q     Median         3Q        Max
+-2.773e-05 -1.664e-05  5.545e-06  1.664e-05  2.218e-05
 
 Random effects:
- Groups   Name        Variance  Std.Dev. 
+ Groups   Name        Variance  Std.Dev.
  calf     (Intercept) 2.083e-01 4.564e-01
  Residual             1.922e-10 1.386e-05
 Number of obs: 10, groups:  calf, 5
@@ -14132,7 +14139,7 @@ sexMale     4.3333     0.2635   16.44
 
 Correlation of Fixed Effects:
         sexFml
-sexMale 0.000 
+sexMale 0.000
 convergence code: 3
 unable to evaluate scaled gradient
 Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
@@ -14149,7 +14156,7 @@ Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
   </div>
 </body>
 
- 
+
 
 
 </html>
