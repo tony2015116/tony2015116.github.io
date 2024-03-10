@@ -13,15 +13,15 @@ editor_options:
 <h1 align="center" style="margin-top: 0;">
 
 <img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/>
-你好，欢迎来到我的个人主页！
+你好，欢迎来到我的主页！
 
 </h1>
 
 <p align="center">
 
-<img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical"/>
-<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io&amp;countColor=%23f47373&amp;style=flat"/></a>
-<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
+<img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical?style=for-the-badge"/>
+<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io&amp;countColor=%23f47373&amp;style=for-the-badge"/></a>
+<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io?style=for-the-badge" alt="GitHub last commit"/></a>
 
 </p>
 
@@ -45,7 +45,8 @@ editor_options:
 
 ------------------------------------------------------------------------
 
-感谢您访问我的主页，希望您能对我有更深入的了解。如果您有任何问题或想要讨论技术合作，请随时联系我！
+感谢您访问我的主页，希望您能对我有更深入的了解。
+如果您有任何问题或想要讨论技术合作，请随时联系我！
 
 
 
