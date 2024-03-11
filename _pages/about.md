@@ -20,7 +20,6 @@ editor_options:
 <p align="center">
 
 <img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical?style=for-the-badge"/>
-<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Ftony2015116%2Ftony2015116.github.io&amp;countColor=%23f47373&amp;style=for-the-badge"/></a>
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io?style=for-the-badge" alt="GitHub last commit"/></a>
 
 </p>
@@ -37,7 +36,7 @@ editor_options:
 
 - 将~~好~~东西放到收藏夹吃灰
 - 简单的事情搞复杂再搞简单
-- 最大的兴趣就是没啥兴趣😂
+- 最大的兴趣就是喜欢折腾😂
 
 ## 🎮 游戏
 - 欧卡2 🚚
