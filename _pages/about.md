@@ -18,13 +18,12 @@ editor_options:
 </h1>
 
 <p align="center">
-
-<img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical?style=for-the-badge"/>
-<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io?style=for-the-badge" alt="GitHub last commit"/></a>
-<a href="#" target="_blank"><img src="https://jaywcjlove.github.io/sb/lang/chinese.svg?style=for-the-badge" alt="jaywcjlove/sb"/></a>
+<a href="#" target="_blank"><img src="https://jaywcjlove.github.io/sb/lang/chinese.svg" alt="jaywcjlove/sb"/></a>
+<img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical"/>
+<a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
 </p>
 
-##  关于我 🙋🏻
+## 🙋🏻 关于我 
 
 - 90后养猪青年儿 🐷
 - 写代码的宅男一枚
@@ -34,6 +33,7 @@ editor_options:
 
 ## 🎈 兴趣爱好
 
+- 📤 知识分享
 - 🍳 烹饪
 - 📸 摄影
 - 🎮 玩电子游戏
