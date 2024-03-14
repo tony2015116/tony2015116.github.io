@@ -17,14 +17,14 @@ redirect_from:
 - **农学硕士**  
   🏫 华中农业大学  
   📅 2016 - 2019  
-  主修生物信息学、数量遗传学等。
+  主修生物信息学、数量遗传学等
 
 ## 🏢 工作经历
 
 - **育种师+数据分析**  
   🚜 扬翔股份  
   📅 2020 - 至今  
-  负责育种数据分析及测定站管理工作，开发和维护多个数据分析应用程序。
+  负责育种数据分析及测定站管理工作，开发和维护多个数据分析应用程序
 
 ## 🛠 工作技能
 
@@ -41,7 +41,7 @@ redirect_from:
 ## 🌱 持续学习
 
 - 参加全基因组关联分析GWAS&基因组选择GS培训
-- 自学Python,获取[Data Analysis with Python](https://www.example.com/python-data-analysis)认证
+- 自学Python,获取[Data Analysis with Python](https://www.freecodecamp.org/certification/guomeng/data-analysis-with-python-v7)认证
 
 ## 🌍 语言
 
