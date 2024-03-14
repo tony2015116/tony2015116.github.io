@@ -1,4 +1,3 @@
-@import url("https://192960944.r.cdn36.com/chinesefonts3/packages/lxgwwenkai/dist/LXGWWenKai-Light/result.css?family=lxgw");
 /* ==========================================================================
    Variables
    ========================================================================== */
@@ -15,7 +14,7 @@ $indent-var                 : 1.3em;
 
 /* system typefaces */
 $serif                      : Georgia, Times, serif;
-$sans-serif                 : "lxgw", -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+$sans-serif                 : -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 $monospace                  : Monaco, Consolas, "Lucida Console", monospace;
 
 /* sans serif typefaces */
