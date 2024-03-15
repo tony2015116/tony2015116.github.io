@@ -42,7 +42,7 @@ editor_options:
 
 ##  🌟我擅长的事
 
-- 利用开源平台进行学习和成长：熟练使用GitHub、YouTube、Twitter、Telegram等平台发掘最新的科技动态、编程教程，以及各种提升自我的资源。
+- 熟练使用GitHub、YouTube、Twitter、Telegram等平台发掘最新的科技动态、编程教程，以及各种提升自我的资源。
 
 ---
 
