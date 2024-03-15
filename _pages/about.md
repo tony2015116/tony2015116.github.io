@@ -23,7 +23,7 @@ editor_options:
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
 </p>
 
-## 🙋‍♂️🏻 关于我 
+## 🙋🏻 关于我 
 
 - 90后养猪青年儿 🐷
 - 写代码的宅男一枚
