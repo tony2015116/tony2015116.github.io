@@ -10,7 +10,7 @@
 locale                   : "zh-CN"
 title                    : "🏠我的主页"
 title_separator          : "-"
-name                     : &name "Guo Meng"
+name                     : &name "Mr.Guo"
 description              : &description "🐖养猪|🧬育种|📊数据分析"
 url                      : https://tony2015116.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
@@ -22,13 +22,13 @@ repository               : "tony2015116/tony2015116.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Guo Meng"
+  name             : "Mr.Guo"
   pronouns         : # example: "he"
   bio              : "🐖养猪|🧬育种|📊数据分析"
   location         : "Guangxi, China"
   employer         : "扬翔股份"
   uri              : # URL
-  email            : "tony2015116@163.com"
+  email            : "mguo2023331@gmail.com"
 
   # Academic websites
   arxiv            : # URL - Update with the correct link to your profile

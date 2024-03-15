@@ -10,7 +10,7 @@ redirect_from:
 ## 👤️ 简介
 
 - 具有7年使用R语言的经验，熟练使用R语言函数式编程、写R包等技能实现数据处理分析和办公自动化
-- 熟练使用ChatGPT等的人工智能
+- 熟练使用ChatGPT等人工智能
 
 ## 📚 教育背景
 
@@ -28,22 +28,23 @@ redirect_from:
 
 ## 🛠 工作技能
 
-- GWAS
-- Genomic Selection
-- 数据预处理、可视化及分析等
-- **工具 & 平台**: 
-![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=blue&labelColor=5c5c5c&color=1182c3)
-    ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=green&labelColor=5c5c5c&color=1182c3)
-    ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&labelColor=5c5c5c&color=1182c3)
-    ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&labelColor=5c5c5c&color=1182c3)
-    ![OpenAI](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=green&labelColor=5c5c5c&color=1182c3)
+- **基因组与遗传学分析**：GWAS, Genomic Selection
+- **数据处理**：数据预处理、可视化及分析等
+
+## 使用工具 & 平台：
+- ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=white&labelColor=5c5c5c&color=1182c3) 
+- ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=white&labelColor=5c5c5c&color=1182c3)
+- ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&logoColor=white&labelColor=5c5c5c&color=1182c3)
+- ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&logoColor=white&labelColor=5c5c5c&color=1182c3)
+- ![ChatGPT](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=white&labelColor=5c5c5c&color=1182c3)
+
 
 ## 🌱 持续学习
 
-- 参加全基因组关联分析GWAS&基因组选择GS培训
-- 自学Python,获取[Data Analysis with Python](https://www.freecodecamp.org/certification/guomeng/data-analysis-with-python-v7)认证
+- GWAS & GS培训
+- 学习Python并获得[Data Analysis with Python](https://www.freecodecamp.org/certification/guomeng/data-analysis-with-python-v7)认证
 
 ## 🌍 语言
 
-- **英语**: 六级
+- **英语**: 六级水平，正常阅读英文文献
 
