@@ -31,12 +31,12 @@ redirect_from:
 - **基因组与遗传学分析**：GWAS, Genomic Selection
 - **数据处理**：数据预处理、可视化及分析等
 
-## 使用工具 & 平台：
-- ![R](https://img.shields.io/badge/-R-blue?&logo=R&logoColor=white&labelColor=5c5c5c&color=1182c3) 
-- ![Excel](https://img.shields.io/badge/-Excel-blue?logo=microsoftexcel&logoColor=white&labelColor=5c5c5c&color=1182c3)
-- ![Linux](https://img.shields.io/badge/-Linux-blue?logo=Linux&logoColor=white&labelColor=5c5c5c&color=1182c3)
-- ![GitHub](https://img.shields.io/badge/-GitHub-blue?logo=GitHub&logoColor=white&labelColor=5c5c5c&color=1182c3)
-- ![ChatGPT](https://img.shields.io/badge/-ChatGPT-blue?logo=openai&logoColor=white&labelColor=5c5c5c&color=1182c3)
+## 💻 最常使用工具 & 平台：
+- R & Python
+- Excel
+- Linux
+- GitHub
+- ChatGPT
 
 
 ## 🌱 持续学习
