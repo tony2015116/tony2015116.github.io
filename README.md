@@ -1,5 +1,8 @@
 ## 🌟 How to Create a Personal Page Like Mine Using AcademicPages
-[English](./README.md)[中文](./README_zh.md)
+<p align="center">
+  <a href="./README.md">English</a> •
+  <a href="./README_zh.md">中文</a> 
+</p>
 
 If you admire the design and layout of my personal page and wish to create something similar, 
 you're welcome to explore 🚀 [academicpages.github.io](https://github.com/academicpages/academicpages.github.io). 

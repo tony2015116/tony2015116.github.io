@@ -34,12 +34,6 @@ redirect_from:
 ## 💻 最常使用工具 & 平台：
 - R & Python & Excel & Linux & GitHub & ChatGPT
 
-
-## 🌱 持续学习
-
-- GWAS & GS培训
-- 学习Python并获得[Data Analysis with Python](https://www.freecodecamp.org/certification/guomeng/data-analysis-with-python-v7)认证
-
 ## 🌍 语言
 
 - **英语**: 六级水平，正常阅读英文文献

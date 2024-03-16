@@ -42,6 +42,12 @@ editor_options:
 
 - 熟练使用GitHub、YouTube、Twitter、Telegram等平台发掘最新的科技动态、编程教程，以及各种提升自我的资源。
 
+## 🌱 持续学习
+
+- GWAS & GS培训
+- 学习Python并获得[Data Analysis with Python](https://www.freecodecamp.org/certification/guomeng/data-analysis-with-python-v7)认证
+
+
 ---
 
 🙏 感谢您访问我的主页，希望您能对我有更深入的了解。
