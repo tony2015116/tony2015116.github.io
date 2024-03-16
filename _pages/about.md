@@ -18,7 +18,6 @@ editor_options:
 </h1>
 
 <p align="center">
-<a href="#" target="_blank"><img src="https://jaywcjlove.github.io/sb/lang/chinese.svg" alt="jaywcjlove/sb"/></a>
 <img src="https://img.shields.io/badge/gender-%F0%9F%A4%B5 gentleman-critical"/>
 <a href="#"><img src="https://img.shields.io/github/last-commit/tony2015116/tony2015116.github.io" alt="GitHub last commit"/></a>
 </p>
@@ -28,7 +27,6 @@ editor_options:
 - 90后养猪青年儿 🐷
 - 写代码的宅男一枚
 - 生活简单，无不良嗜好
-- 人狠话不多
 - 喜欢折腾,学习新知识
 - 知识分享 📤
 - 业余折腾各种国内外AI
