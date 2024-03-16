@@ -17,7 +17,7 @@ redirect_from:
 - **农学硕士**  
   🏫 华中农业大学  
   📅 2016 - 2019  
-  主修生物信息学、数量遗传学等
+  主修动物科学、生物信息、遗传育种与繁殖等
 
 ## 🏢 工作经历
 
@@ -32,11 +32,7 @@ redirect_from:
 - **数据处理**：数据预处理、可视化及分析等
 
 ## 💻 最常使用工具 & 平台：
-- R & Python
-- Excel
-- Linux
-- GitHub
-- ChatGPT
+- R & Python & Excel & Linux & GitHub & ChatGPT
 
 
 ## 🌱 持续学习
