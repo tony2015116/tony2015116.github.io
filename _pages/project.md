@@ -16,5 +16,5 @@ redirect_from:
 - **📝 个人博客**: [my-blog](https://github.com/tony2015116/blogdown)
 - **👤 GitHub主页**: [my-github-profile](https://github.com/tony2015116/tony2015116)
 - **🔧 Selenium WebDriver Service**: [wdauto](https://tony2015116.github.io/wdauto/)
-- **📕 如果你想✍写本书**: [quarto_book_template](https://tony2015116.github.io/wdauto/)~试试这个模板吧
+- **📕 如果你想✍写本书**: [quarto_book_template](https://tony2015116.github.io/quarto_book_template/)~试试这个模板吧
 
