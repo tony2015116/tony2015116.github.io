@@ -10,7 +10,7 @@ redirect_from:
 ## 💼️ 工作相关
 - **🕷 睿保乐测定站csv数据爬取** [pptsdd](https://tony2015116.github.io/pptsdd/) 
 - **📊 睿保乐测定站数据分析** [pptsda](https://tony2015116.github.io/pptsda/) 
-- **👁️ 睿保乐测定站监控 ** [pptsdm](https://tony2015116.github.io/pptsdm/)
+- **👁️ 睿保乐测定站监控** [pptsdm](https://tony2015116.github.io/pptsdm/)
 
 ## 🛠️ 随便搞搞
 
