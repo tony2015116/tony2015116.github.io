@@ -31,7 +31,7 @@ redirect_from:
 - **基因组与遗传学分析**：GWAS, Genomic Selection
 - **数据处理**：数据预处理、可视化及分析等
 
-## 💻 最常使用工具 & 平台：
+## 💻 最常使用工具：
 - R & Python & Excel & Linux & GitHub & ChatGPT
 
 ## 🌍 语言
