@@ -1,0 +1,7 @@
+{%- comment -%} 将 _config.yml 中 highlight_authors 列出的名字加粗。用法：{% include highlight-authors.html text=xxx %} {%- endcomment -%}
+{%- assign hl_text = include.text -%}
+{%- for hl_name in site.highlight_authors -%}
+  {%- capture hl_bold -%}<strong class="me">{{ hl_name }}</strong>{%- endcapture -%}
+  {%- assign hl_text = hl_text | replace: hl_name, hl_bold -%}
+{%- endfor -%}
+{{- hl_text -}}

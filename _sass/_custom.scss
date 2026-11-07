@@ -1,0 +1,172 @@
+/* ==========================================================================
+   本站自定义样式：朴素、安静、以阅读为主
+   想改样式优先改这里，不要动模板原文件，方便以后同步上游更新
+   ========================================================================== */
+
+/* 配色：墨色正文 + 沉稳的蓝色链接，不用鲜艳色 */
+:root {
+  --global-text-color: #2b2b2b;
+  --global-text-color-light: #777;
+  --global-link-color: #2c5a85;
+  --global-link-color-hover: #1a3a57;
+  --global-link-color-visited: #4a5f78;
+  --global-border-color: #e6e6e6;
+}
+html[data-theme="dark"] {
+  --global-text-color: #e2e2e2;
+  --global-text-color-light: #9a9a9a;
+  --global-link-color: #8fb4d9;
+  --global-link-color-hover: #b8d2ec;
+  --global-link-color-visited: #a3b6cc;
+  --global-border-color: #3a3a3a;
+}
+
+/* 正文：舒适的行距，适合中文长段落阅读 */
+body { line-height: 1.85; }
+.page__content {
+  max-width: 42em;
+  p, li { text-justify: inter-ideograph; overflow-wrap: break-word; }
+  p { margin: 0 0 1.1em; }
+  a { text-decoration: none; border-bottom: 1px solid currentColor; }
+  a:hover { border-bottom-width: 2px; }
+  h2 {
+    margin: 2.4em 0 0.8em;
+    font-size: 1.15em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  em:lang(zh-CN) { font-style: normal; }
+}
+.page__title { font-weight: 600; letter-spacing: 0.03em; }
+
+/* 论文列表中自己的名字：只加粗，不加其他装饰 */
+strong.me { color: inherit; font-weight: 700; }
+
+/* 引用与链接：用文字链接，不用按钮 */
+.citation { font-size: 0.92em; margin-bottom: 0.3em; }
+.pub-links { font-size: 0.88em; margin: 0.2em 0 0; }
+.pub-links a { margin-right: 0.9em; }
+.pub-note { font-size: 0.88em; color: var(--global-text-color-light); }
+
+/* ---------- 首页 ---------- */
+
+/* 近况、代表作、经历：统一为简单的「左侧时间 + 右侧内容」 */
+.plain-list {
+  list-style: none;
+  margin: 0 0 1em;
+  padding: 0;
+  li {
+    display: flex;
+    gap: 1.2em;
+    margin: 0 0 0.7em;
+  }
+  .when {
+    flex: 0 0 9.6em;
+    white-space: nowrap;
+    color: var(--global-text-color-light);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.92em;
+    padding-top: 0.08em;
+  }
+  .what { flex: 1; min-width: 0; }
+  .sub { display: block; font-size: 0.9em; color: var(--global-text-color-light); }
+}
+
+/* 代表作 */
+.works {
+  list-style: none;
+  margin: 0 0 1em;
+  padding: 0;
+  li { margin: 0 0 1.3em; }
+  .t { font-weight: 600; }
+  .a, .v { display: block; font-size: 0.92em; }
+  .v { color: var(--global-text-color-light); }
+}
+
+@media (max-width: 600px) {
+  .plain-list li { flex-direction: column; gap: 0; }
+  .plain-list .when { flex: none; white-space: normal; }
+}
+
+/* 列表页（论文、报告、博客）：标题收敛一些，不抢眼 */
+.archive {
+  .archive__item-title { font-size: 1.05em; font-weight: 600; margin-top: 1.6em; }
+  .archive__item-title a { text-decoration: none; }
+  .archive__item-excerpt, .page__meta { font-size: 0.92em; }
+  h2 { font-size: 1.15em; font-weight: 600; letter-spacing: 0.05em; }
+}
+
+/* ---------- 字号：整体偏小 ---------- */
+html { font-size: 14px; }
+@media (min-width: 768px) { html { font-size: 15px; } }
+
+/* ---------- 研究成果列表：黑色、正常字号、无装饰 ---------- */
+.works-list {
+  margin: 0 0 1.6em;
+  padding-left: 1.6em;
+  li {
+    margin: 0 0 0.6em;
+    color: var(--global-text-color);
+    font-size: 1em;
+  }
+  .pub-links { margin-left: 0.4em; }
+  .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 0.6em; }
+}
+
+/* ---------- 研究成果：分类切换 + 年份列表 ---------- */
+.work-tabs {
+  display: flex; flex-wrap: wrap; gap: 0.3em 1.6em;
+  margin: 0.4em 0 1.6em;
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid var(--global-border-color);
+  a {
+    color: var(--global-text-color-light);
+    text-decoration: none !important;
+    border-bottom: 2px solid transparent !important;
+    padding-bottom: 0.35em;
+    margin-bottom: -0.65em;
+  }
+  a:hover { color: var(--global-text-color); }
+  a.on { color: var(--global-text-color); font-weight: 600; border-bottom-color: var(--global-text-color) !important; }
+  .n { margin-left: 0.35em; font-size: 0.85em; color: var(--global-text-color-light); font-weight: normal; }
+}
+/* 启用切换后，分类标题由顶部标签代替 */
+.tabs-on .work-group h2 { display: none; }
+.work-group[hidden] { display: none !important; }
+
+.work-items {
+  list-style: none; margin: 0 0 1.5em; padding: 0;
+  li {
+    display: flex; gap: 1.4em;
+    padding: 0.9em 0;
+    border-bottom: 1px solid var(--global-border-color);
+  }
+  li:first-child { padding-top: 0.2em; }
+  .y { flex: 0 0 3em; color: var(--global-text-color-light); font-variant-numeric: tabular-nums; }
+  .body { flex: 1; min-width: 0; }
+  .t { color: var(--global-text-color); font-weight: 500; line-height: 1.6; }
+  .m { color: var(--global-text-color); font-size: 0.92em; line-height: 1.6; }
+  .pub-links { margin-left: 0.6em; }
+  .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 0.7em; }
+}
+
+/* ---------- 项目列表 ---------- */
+.project-list {
+  list-style: none; margin: 0.4em 0 1.5em; padding: 0;
+  li { padding: 1em 0; border-bottom: 1px solid var(--global-border-color); }
+  li:first-child { padding-top: 0.2em; }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2em 1em; }
+  .name { color: var(--global-text-color); font-weight: 600; border-bottom: none !important; text-decoration: none !important; }
+  .name:hover { text-decoration: underline; }
+  .meta { color: var(--global-text-color-light); font-size: 0.88em; font-variant-numeric: tabular-nums; }
+  .desc { margin: 0.3em 0 0.3em; color: var(--global-text-color); }
+  .pub-links { font-size: 0.88em; }
+  .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 1em; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 600px) {
+  .work-items li { flex-direction: column; gap: 0.1em; }
+  .work-items .y { flex: none; }
+}

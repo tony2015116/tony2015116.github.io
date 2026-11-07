@@ -1,0 +1,46 @@
+---
+layout: archive
+title: "项目"
+permalink: /portfolio/
+author_profile: true
+---
+
+{% include base_path %}
+
+<!-- 项目内容在 _data/projects.yml 中编辑 -->
+<nav class="work-tabs" aria-label="项目分类">
+{% for c in site.data.projects %}
+  {% if c.items.size > 0 %}
+  <a href="#{{ c.key }}" data-tab="{{ c.key }}">{{ c.category }}<span class="n">{{ c.items.size }}</span></a>
+  {% endif %}
+{% endfor %}
+</nav>
+
+{% for c in site.data.projects %}
+  {% if c.items.size > 0 %}
+<section class="work-group" id="{{ c.key }}" data-group="{{ c.key }}">
+  <h2>{{ c.category }}</h2>
+  <ul class="project-list">
+  {% for p in c.items %}
+    <li>
+      <div class="head">
+        <a class="name" href="https://github.com/{{ p.repo }}">{{ p.name }}</a>
+        <span class="meta">{% if p.language %}{{ p.language }}{% endif %}{% if p.language and p.year %} · {% endif %}{% if p.year %}{{ p.year }}{% endif %}</span>
+      </div>
+      {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
+      <div class="pub-links">
+        <a href="https://github.com/{{ p.repo }}">github.com/{{ p.repo }}</a>
+        {% for l in p.links %}<a href="{{ l.url }}">{{ l.title }}</a>{% endfor %}
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+  {% endif %}
+{% endfor %}
+
+{% if site.author.github %}
+<p class="pub-note">更多项目见 <a href="https://github.com/{{ site.author.github }}">GitHub 主页</a>。</p>
+{% endif %}
+
+{% include category-tabs.html %}

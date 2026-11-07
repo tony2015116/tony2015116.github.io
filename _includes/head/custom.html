@@ -1,0 +1,38 @@
+{% include base_path %}
+
+<!-- start custom head snippets -->
+
+<!-- Support for jQuery, this needs to be first so that it has a chance to load. -->
+<script src="{{ base_path }}/assets/js/vendor-local/jquery-3.7.1.min.js"></script>
+
+<!-- Support for Academicons -->
+<!-- 本地加载，避免国外 CDN 在国内访问缓慢 -->
+<link rel="stylesheet" href="{{ base_path }}/assets/css/academicons.min.css">
+
+<!-- Support for Font Awesome -->
+ <link rel="preload" href="{{ base_path }}/assets/css/fontawesome.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ base_path }}/assets/css/fontawesome.css"></noscript>
+
+<!-- favicon from https://commons.wikimedia.org/wiki/File:OOjs_UI_icon_academic-progressive.svg -->
+<link rel="apple-touch-icon" sizes="180x180" href="{{ base_path }}/images/apple-touch-icon-180x180.png"/>
+<link rel="icon" type="image/svg+xml" href="{{ base_path }}/images/favicon.svg"/>
+<link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-32x32.png" sizes="32x32"/>
+<link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-192x192.png" sizes="192x192"/>
+<link rel="manifest" href="{{ base_path }}/images/manifest.json"/>
+<link rel="icon" href="{{ base_path }}/images/favicon.ico"/>
+<meta name="theme-color" content="var(--global-bg-color)"/>
+
+{% if site.baidu_analytics %}
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?{{ site.baidu_analytics }}";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+{% endif %}
+
+<!-- end custom head snippets -->

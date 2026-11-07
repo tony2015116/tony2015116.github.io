@@ -1,0 +1,14 @@
+<!-- 引用信息与相关链接（纯文字链接） -->
+{% assign t = site.data.ui-text[site.locale] %}
+{% if include.citation %}
+<p class="citation">{% include highlight-authors.html text=include.citation %}</p>
+{% endif %}
+{% if include.paperurl or include.slidesurl or include.bibtexurl or include.codeurl or include.doi %}
+<p class="pub-links">
+  {% if include.paperurl %}<a href="{{ include.paperurl }}">{{ t.paper_label | default: "Paper" }}</a>{% endif %}
+  {% if include.codeurl %}<a href="{{ include.codeurl }}">代码</a>{% endif %}
+  {% if include.slidesurl %}<a href="{{ include.slidesurl }}">{{ t.slides_label | default: "Slides" }}</a>{% endif %}
+  {% if include.bibtexurl %}<a href="{{ include.bibtexurl }}">{{ t.bibtex_label | default: "BibTeX" }}</a>{% endif %}
+  {% if include.doi %}<a href="https://doi.org/{{ include.doi }}">DOI</a>{% endif %}
+</p>
+{% endif %}

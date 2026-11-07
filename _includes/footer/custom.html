@@ -1,0 +1,13 @@
+<!-- start custom footer snippets -->
+
+<!-- MathJax 数学公式：仅在页面头部写了 math: true 时加载，避免拖慢普通页面。
+     使用国内可访问的 CDN（npmmirror），失败时回退到 jsDelivr -->
+{% if page.math %}
+<script>
+  window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script id="MathJax-script" defer src="https://registry.npmmirror.com/mathjax/4.0.0/files/tex-mml-chtml.js"
+  onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.js';s.defer=true;document.head.appendChild(s);"></script>
+{% endif %}
+
+<!-- end custom footer snippets -->

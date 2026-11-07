@@ -1,0 +1,48 @@
+---
+layout: archive
+title: "研究成果"
+permalink: /publications/
+author_profile: true
+---
+
+{% include base_path %}
+
+<nav class="work-tabs" aria-label="成果分类">
+{% for category in site.publication_category %}
+  {% assign items = site.publications | where: "category", category[0] %}
+  {% if items.size > 0 %}
+  <a href="#{{ category[0] }}" data-tab="{{ category[0] }}">{{ category[1].title }}<span class="n">{{ items.size }}</span></a>
+  {% endif %}
+{% endfor %}
+</nav>
+
+{% for category in site.publication_category %}
+  {% assign items = site.publications | where: "category", category[0] | sort: "date" | reverse %}
+  {% if items.size > 0 %}
+<section class="work-group" id="{{ category[0] }}" data-group="{{ category[0] }}">
+  <h2>{{ category[1].title }}</h2>
+  <ul class="work-items">
+  {% for p in items %}
+    <li>
+      <span class="y">{{ p.date | date: "%Y" }}</span>
+      <div class="body">
+        <div class="t">{{ p.title }}</div>
+        <div class="m">{% if p.authors %}{% include highlight-authors.html text=p.authors %}{% endif %}</div>
+        <div class="m">{{ p.venue }}{% if p.number %}，{{ p.number }}{% endif %}
+          {% if p.paperurl or p.codeurl or p.doi %}<span class="pub-links">
+            {% if p.paperurl %}<a href="{{ p.paperurl }}">全文</a>{% endif %}
+            {% if p.codeurl %}<a href="{{ p.codeurl }}">代码</a>{% endif %}
+            {% if p.doi %}<a href="https://doi.org/{{ p.doi }}">DOI</a>{% endif %}
+          </span>{% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+  {% endif %}
+{% endfor %}
+
+<p class="pub-note">加粗为本人，* 为通讯作者。{% if site.author.googlescholar %}也可在 <a href="{{ site.author.googlescholar }}">Google Scholar</a> 查看。{% endif %}</p>
+
+{% include category-tabs.html %}

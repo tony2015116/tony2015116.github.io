@@ -1,0 +1,7 @@
+# 顶部导航栏，按顺序显示。删掉某一项即可从导航隐藏。
+main:
+  - title: "研究成果"
+    url: /publications/
+
+  - title: "项目"
+    url: /portfolio/

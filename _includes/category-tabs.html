@@ -1,0 +1,28 @@
+<script>
+/* 分类切换（研究成果页、项目页共用）：一次只显示一类；地址栏带 #分类 的链接可以直接打开对应分类 */
+(function () {
+  var tabs = document.querySelectorAll('.work-tabs a');
+  var groups = document.querySelectorAll('.work-group');
+  if (!tabs.length) return;
+  document.documentElement.classList.add('tabs-on');
+  function show(key) {
+    var keys = Array.prototype.map.call(tabs, function (t) { return t.dataset.tab; });
+    if (keys.indexOf(key) < 0) key = keys[0];
+    groups.forEach(function (g) { g.hidden = g.dataset.group !== key; });
+    tabs.forEach(function (t) {
+      var on = t.dataset.tab === key;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-current', on ? 'true' : 'false');
+    });
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function (e) {
+      e.preventDefault();
+      show(t.dataset.tab);
+      try { history.replaceState(null, '', '#' + t.dataset.tab); } catch (err) {}
+    });
+  });
+  show(location.hash.slice(1));
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+})();
+</script>

@@ -1,0 +1,41 @@
+# 项目页（GitHub 项目）
+# 先写分类，每个分类下列出项目。分类和项目都按这里的顺序显示，重要的放前面。
+#
+# category:    分类名称，显示在页面顶部，例如 "R 包"、"分析流程"、"工具"
+# key:         分类的英文短名（只用字母、数字、短横线），用于网址，如 /portfolio/#r-packages
+# items:       该分类下的项目
+#   name:        项目名称
+#   repo:        GitHub 仓库，写成 用户名/仓库名
+#   description: 一两句话说明这个项目做什么、解决什么问题
+#   language:    主要语言（可选）
+#   year:        开始年份或时间段（可选）
+#   links:       其他链接（可选），如文档、CRAN、论文
+
+- category: "R 包"
+  key: "r-packages"
+  items:
+    - name: "sample-toolkit"
+      repo: "yourname/sample-toolkit"
+      description: "一个用于某某数据整理与分析的 R 包，把重复的预处理步骤封装成几个函数，减少手工操作出错。"
+      language: "R"
+      year: "2025 – 至今"
+      links:
+        - title: "文档"
+          url: "https://yourname.github.io/sample-toolkit"
+
+- category: "分析流程"
+  key: "pipelines"
+  items:
+    - name: "sample-pipeline"
+      repo: "yourname/sample-pipeline"
+      description: "论文《示例论文标题二》的全部分析代码与示例数据，可以从原始数据复现文中的所有图表。"
+      language: "Python"
+      year: "2026"
+
+- category: "小工具"
+  key: "tools"
+  items:
+    - name: "sample-scripts"
+      repo: "yourname/sample-scripts"
+      description: "日常处理数据时积累的一些脚本，例如批量转换格式、整理文件名。"
+      language: "Shell"
