@@ -24,12 +24,14 @@ author_profile: true
   {% for p in c.items %}
     <li>
       <div class="head">
-        <a class="name" href="https://github.com/{{ p.repo }}">{{ p.name }}</a>
+        {% if p.url %}{% assign href = p.url | relative_url %}{% else %}{% assign href = "https://github.com/" | append: p.repo %}{% endif %}
+        <a class="name" href="{{ href }}">{{ p.name }}</a>
         <span class="meta">{% if p.language %}{{ p.language }}{% endif %}{% if p.language and p.year %} · {% endif %}{% if p.year %}{{ p.year }}{% endif %}</span>
       </div>
       {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
       <div class="pub-links">
-        <a href="https://github.com/{{ p.repo }}">github.com/{{ p.repo }}</a>
+        {% if p.url %}<a href="{{ href }}">{{ p.url_title | default: "在线查看" }}</a>{% endif %}
+        {% if p.repo %}<a href="https://github.com/{{ p.repo }}">github.com/{{ p.repo }}</a>{% endif %}
         {% for l in p.links %}<a href="{{ l.url }}">{{ l.title }}</a>{% endfor %}
       </div>
     </li>
