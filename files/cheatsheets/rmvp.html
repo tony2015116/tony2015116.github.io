@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>rMVP 速查表</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sticky toolbar + chip rail, numbered sections of two-column card grids; Manhattan-plot chromosome stripes as the one signature motif */
+:root{
+  --bg:#f6f8f7; --surface:#ffffff; --surface-2:#eef3f1; --line:#dde5e2;
+  --fg:#16211e; --muted:#5d6b67;
+  --accent:#0b7a6b; --accent-ink:#ffffff; --accent-soft:#dcefea;
+  --chr-a:#1d4e89; --chr-b:#6fa8dc;
+  --code-bg:#f2f5f4; --code-fg:#1b2a26; --c-com:#7b8a85; --c-str:#a1471b; --c-kw:#7a3fb0; --c-num:#1d6aa8; --c-fn:#0b7a6b;
+  --warn-bg:#fff3d6; --warn-fg:#7a5200; --warn-line:#f0c96a;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --surface:#151d1b; --surface-2:#1b2523; --line:#26322f;
+  --fg:#e3ebe8; --muted:#93a39e;
+  --accent:#3cc2ab; --accent-ink:#06201b; --accent-soft:#16352f;
+  --chr-a:#5b8fd1; --chr-b:#9cc4ec;
+  --code-bg:#111917; --code-fg:#d8e3df; --c-com:#6f807b; --c-str:#e39a6f; --c-kw:#c59af0; --c-num:#7fb8ec; --c-fn:#5fd3bd;
+  --warn-bg:#3a2f12; --warn-fg:#f3d38a; --warn-line:#7a6122;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --surface:#151d1b; --surface-2:#1b2523; --line:#26322f;
+  --fg:#e3ebe8; --muted:#93a39e;
+  --accent:#3cc2ab; --accent-ink:#06201b; --accent-soft:#16352f;
+  --chr-a:#5b8fd1; --chr-b:#9cc4ec;
+  --code-bg:#111917; --code-fg:#d8e3df; --c-com:#6f807b; --c-str:#e39a6f; --c-kw:#c59af0; --c-num:#7fb8ec; --c-fn:#5fd3bd;
+  --warn-bg:#3a2f12; --warn-fg:#f3d38a; --warn-line:#7a6122;
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.6;}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+code,pre,.mono{font-family:var(--f-mono)}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding-block:14px 10px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 360px}
+.logo{width:46px;height:46px;border-radius:10px;background:var(--accent);flex:none;display:grid;place-items:center;overflow:hidden}
+.logo svg{display:block}
+.brand h1{margin:0;font-size:21px;font-weight:900;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;flex-wrap:wrap;text-wrap:balance}
+.badge{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.sub{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search{position:relative;flex:1 1 240px;min-width:0}
+.search input{width:100%;min-width:200px;height:38px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);padding:0 12px 0 34px;font:inherit}
+.search input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.search svg{position:absolute;left:11px;top:11px;color:var(--muted)}
+.btn{height:38px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,.chip:focus-visible,.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:4px 12px;scrollbar-width:thin}
+.chip{flex:none;border:0;background:var(--surface-2);color:var(--fg);padding:6px 13px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.chip .n{font-family:var(--f-mono);color:var(--muted);margin-right:5px;font-size:12px}
+.chip.on{background:var(--accent);color:var(--accent-ink)}
+.chip.on .n{color:inherit;opacity:.75}
+
+/* chromosome stripe */
+.chr{height:4px;display:flex}
+.chr i{flex:1}
+.chr i:nth-child(odd){background:var(--chr-a)} .chr i:nth-child(even){background:var(--chr-b)}
+
+main{padding-block:28px 60px;display:flex;flex-direction:column;gap:40px}
+section.sec{scroll-margin-top:150px}
+.sec-h{display:flex;align-items:center;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.num{font-family:var(--f-mono);font-weight:600;font-size:13px;background:var(--chr-a);color:#fff;border-radius:7px;padding:3px 9px}
+.sec-h h2{margin:0;font-size:19px;font-weight:900;text-wrap:balance}
+.sec-h p{margin:0 0 0 auto;color:var(--muted);font-size:12.5px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card.wide{grid-column:1/-1}
+.card h3{margin:0;font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card h3 .tag{font-weight:500;font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.card p{margin:0;max-width:72ch}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+:not(pre)>code{background:var(--surface-2);padding:1px 5px;border-radius:4px;font-size:.88em;color:var(--c-fn)}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.03em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+td.m{font-family:var(--f-mono);font-size:12.5px;color:var(--c-fn);white-space:nowrap}
+
+.codebox{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:8px}
+pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:12.5px;line-height:1.65;color:var(--code-fg)}
+.copy{position:absolute;top:6px;right:6px;font:inherit;font-size:11.5px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:6px;padding:2px 8px;cursor:pointer;opacity:.85}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+.t-com{color:var(--c-com);font-style:italic}.t-str{color:var(--c-str)}.t-kw{color:var(--c-kw);font-weight:600}.t-num{color:var(--c-num)}.t-fn{color:var(--c-fn)}
+
+.note{background:var(--surface-2);border-radius:8px;padding:9px 12px;font-size:13px}
+.note b{color:var(--accent)}
+.unv{transition:background .2s}
+body.mark .unv{background:var(--warn-bg);color:var(--warn-fg);box-shadow:inset 3px 0 0 var(--warn-line);border-radius:4px}
+.flag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);font-weight:700;white-space:nowrap}
+.models{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.model{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+.model b{font-family:var(--f-mono);font-size:15px;color:var(--chr-a)}
+.model span{font-size:12.5px;color:var(--muted)}
+.meter{display:flex;gap:3px}.meter i{width:16px;height:5px;border-radius:2px;background:var(--line)}.meter i.f{background:var(--accent)}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}
+.flow .st{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;display:flex;flex-direction:column}
+.flow .st code{background:none;padding:0;font-size:13px;font-weight:600}
+.flow .st small{color:var(--muted)}
+.flow .ar{color:var(--muted)}
+.empty{display:none;text-align:center;color:var(--muted);padding:40px 0}
+footer{color:var(--muted);font-size:12.5px;padding-block:0 40px;border-top:1px solid var(--line);padding-top:16px}
+footer a{color:var(--accent)}
+
+/* compact */
+body.compact .card{padding:10px 12px;gap:6px}
+body.compact main{gap:24px}
+body.compact pre{font-size:11.5px;line-height:1.5;padding:8px 10px}
+body.compact th,body.compact td{padding:5px 9px}
+body.compact .grid{gap:9px}
+@media (min-width:1500px){body.compact .wrap{max-width:1600px}body.compact .grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}.models{grid-template-columns:minmax(0,1fr)}.sec-h p{margin-left:0;flex-basis:100%}.btn .lbl{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="46" height="46" viewBox="0 0 46 46"><g fill="#fff">
+            <rect x="7" y="28" width="3" height="9" opacity=".55"/><rect x="11" y="22" width="3" height="15"/><rect x="15" y="30" width="3" height="7" opacity=".55"/><rect x="19" y="9" width="3" height="28"/><rect x="23" y="26" width="3" height="11" opacity=".55"/><rect x="27" y="19" width="3" height="18"/><rect x="31" y="29" width="3" height="8" opacity=".55"/><rect x="35" y="24" width="3" height="13"/></g>
+            <line x1="5" y1="15" x2="41" y2="15" stroke="#fff" stroke-width="1" stroke-dasharray="2 2" opacity=".8"/></svg>
+        </div>
+        <div style="min-width:0">
+          <h1>rMVP 速查表 <span class="badge">v1.4.6 · GWAS</span></h1>
+          <p class="sub">Memory-efficient · Visualization-enhanced · Parallel-accelerated · GLM / MLM / FarmCPU</p>
+        </div>
+      </div>
+      <div class="tools">
+        <label class="search" for="q">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7" cy="7" r="5"/><path d="m11 11 3.5 3.5"/></svg>
+          <input id="q" type="search" placeholder="搜索（如 nPC, maxLine, plot.type, threshold）" autocomplete="off">
+        </label>
+        <button class="btn" id="bMark" aria-pressed="false" title="高亮未在官方 README 中核实的内容">标记待核实<span class="lbl">: 关</span></button>
+        <button class="btn" id="bCompact" aria-pressed="false">紧凑视图</button>
+        <button class="btn" id="bTheme" title="切换主题" aria-label="切换深浅色主题">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-3px"><path d="M13.5 9.5A5.5 5.5 0 1 1 6.5 2.5a4.5 4.5 0 0 0 7 7z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="chips" id="chips" aria-label="章节"></nav>
+  </div>
+  <div class="chr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</header>
+
+<main class="wrap" id="main">
+
+<!-- 00 -->
+<section class="sec" id="s00" data-name="概览">
+  <div class="sec-h"><span class="num">00</span><h2>概览与标准流程</h2><p>华中农业大学刘小磊团队 · Apache-2.0 · CRAN + GitHub</p></div>
+  <div class="grid">
+    <div class="card wide">
+      <h3>三步工作流</h3>
+      <div class="flow">
+        <div class="st"><code>MVP.Data()</code><small>格式转换 · 对齐表型 · 算 K / PC</small></div><span class="ar">→</span>
+        <div class="st"><code>MVP()</code><small>GLM / MLM / FarmCPU 关联分析</small></div><span class="ar">→</span>
+        <div class="st"><code>MVP.Report()</code><small>曼哈顿 · QQ · 密度 · 环形图</small></div>
+      </div>
+      <p class="sub" style="margin:0">基因型以 <code>bigmemory</code> 文件映射存储，不必整体读入内存；<code>MVP()</code> 运行结束会自动出图。</p>
+    </div>
+    <div class="card wide">
+      <h3>三种模型 <span class="tag">速度 / 假阳性控制</span></h3>
+      <div class="models">
+        <div class="model"><b>GLM</b><span>固定效应：PC + 协变量</span><div>速度 <span class="meter"><i class="f"></i><i class="f"></i><i class="f"></i></span></div><div>控假阳性 <span class="meter"><i class="f"></i><i></i><i></i></span></div><span>快速扫描、结构弱的群体</span></div>
+        <div class="model"><b>MLM</b><span>PC 固定 + 亲缘矩阵 K 随机</span><div>速度 <span class="meter"><i class="f"></i><i></i><i></i></span></div><div>控假阳性 <span class="meter"><i class="f"></i><i class="f"></i><i class="f"></i></span></div><span>默认首选，最保守</span></div>
+        <div class="model"><b>FarmCPU</b><span>固定 / 随机模型迭代，伪 QTN 作协变量</span><div>速度 <span class="meter"><i class="f"></i><i class="f"></i><i></i></span></div><div>控假阳性 <span class="meter"><i class="f"></i><i class="f"></i><i></i></span></div><span>检出功效高，复杂性状</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 -->
+<section class="sec" id="s01" data-name="安装">
+  <div class="sec-h"><span class="num">01</span><h2>安装与加载</h2><p>强烈建议 R 链接 MKL / OpenBLAS 以加速并行</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>安装</h3>
+<div class="codebox"><pre><code># 稳定版（CRAN）
+install.packages("rMVP")
+
+# 开发版（GitHub；国内可用 Gitee 镜像）
+devtools::install_github("xiaolei-lab/rMVP")
+
+library(rMVP)
+?rMVP           # 全部参数
+?MVP.Report     # 绘图参数</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>其他途径与检查</h3>
+      <ul>
+        <li>Gitee 镜像：<code>gitee.com/xiaolei-lab/rMVP</code></li>
+        <li>仓库根目录带 <code>Dockerfile</code>，可自建容器</li>
+        <li class="unv">Bioconda：<code>conda install -c bioconda r-rmvp</code>（以频道版本为准）</li>
+        <li>Windows 环境配置见官方 wiki 中文指南</li>
+        <li>确认 BLAS：<code>sessionInfo()</code> 查看 BLAS / LAPACK 路径</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="sec" id="s02" data-name="数据准备">
+  <div class="sec-h"><span class="num">02</span><h2>数据准备：MVP.Data()</h2><p>转换时一并提供表型，rMVP 自动对齐个体顺序</p></div>
+  <div class="grid">
+    <div class="card wide">
+      <h3>四种基因型格式</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>格式</th><th>关键参数</th><th>完整调用（推荐）</th><th>仅转基因型 *</th></tr></thead>
+        <tbody>
+          <tr><td>PLINK binary</td><td><code>fileBed</code>（前缀，不含后缀）</td><td class="m">MVP.Data(fileBed="plink", filePhe=NULL, fileKin=FALSE, filePC=FALSE, out="mvp.plink")</td><td class="m">MVP.Data.Bfile2MVP(bfile="plink", out="mvp", maxLine=1e4)</td></tr>
+          <tr><td>VCF</td><td><code>fileVCF</code></td><td class="m">MVP.Data(fileVCF="myVCF.vcf", fileKin=FALSE, filePC=FALSE, out="mvp.vcf")</td><td class="m">MVP.Data.VCF2MVP("myVCF.vcf", out="mvp")</td></tr>
+          <tr><td>HapMap</td><td><code>fileHMP</code>（可为向量）、<code>sep.hmp</code>、<code>SNP.effect="Add"</code></td><td class="m">MVP.Data(fileHMP="hapmap.txt", filePhe="Phenotype.txt", sep.hmp="\t", sep.phe="\t", SNP.effect="Add", out="mvp.hmp")</td><td class="m">MVP.Data.Hapmap2MVP("hapmap.txt", out="mvp")</td></tr>
+          <tr><td>Numeric 0/1/2</td><td><code>fileNum</code> + <code>fileMap</code>、<code>type.geno</code>、<code>auto_transpose</code></td><td class="m">MVP.Data(fileNum="Numeric.txt", filePhe="Phenotype.txt", fileMap="Map.txt", sep.num="\t", sep.map="\t", sep.phe="\t", out="mvp.num")</td><td class="m">MVP.Data.Numeric2MVP("Numeric.txt", out="mvp", maxLine=1e4, auto_transpose=TRUE)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sub" style="margin:0">* 仅转基因型的函数要求基因型已完全填充（无缺失）。HapMap 可按染色体给多个文件：<code>fileHMP=c("chr1.hmp.txt","chr2.hmp.txt")</code></p>
+    </div>
+    <div class="card">
+      <h3>MVP.Data() 通用参数</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>参数</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td class="m">filePhe / sep.phe</td><td>表型文件及分隔符</td></tr>
+          <tr><td class="m">fileKin</td><td><code>TRUE</code> 计算亲缘矩阵；或给文件名读入外部 K</td></tr>
+          <tr><td class="m">filePC</td><td><code>TRUE</code> 计算 PCA；或给文件名读入外部 PC</td></tr>
+          <tr><td class="m">out</td><td>输出文件前缀</td></tr>
+          <tr><td class="m">maxLine</td><td>每次读入内存的标记数，内存紧张时调小</td></tr>
+          <tr><td class="m">type.geno</td><td>Numeric：<code>"char"</code> / <code>"integer"</code> / <code>"double"</code></td></tr>
+          <tr><td class="m">auto_transpose</td><td>Numeric 自动转置，保证行 = 标记</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>输入文件长什么样</h3>
+<div class="codebox"><pre><code># 表型：ID + 每列一个性状，缺失写 NA，带表头
+Taxa   trait1  trait2  trait3
+33-16  101.5   0.25    0
+4722   105.5   NA      0
+
+# Map（Numeric 格式需要）：带表头三列
+SNP        Chr  Pos
+rs3683945  1    3197400
+
+# Numeric：m×n 或 n×m 均可，值为 0/1/2</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>转换后生成的文件 <span class="tag">out="mvp"</span></h3>
+      <div class="tbl"><table>
+        <thead><tr><th>文件</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td class="m">mvp.geno.desc / .bin</td><td>基因型 big.matrix</td></tr>
+          <tr><td class="m">mvp.geno.map</td><td>标记信息：SNP、CHROM、POS</td></tr>
+          <tr><td class="m">mvp.geno.ind</td><td>个体 ID（顺序基准）</td></tr>
+          <tr><td class="m">mvp.phe</td><td>已对齐的新表型文件</td></tr>
+          <tr><td class="m">mvp.kin.desc / .bin</td><td>亲缘矩阵（fileKin=TRUE）</td></tr>
+          <tr><td class="m">mvp.pc.desc / .bin</td><td>主成分（filePC=TRUE）</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>读入数据</h3>
+<div class="codebox"><pre><code>genotype  &lt;- attach.big.matrix("mvp.geno.desc")
+phenotype &lt;- read.table("mvp.phe", head=TRUE)
+map       &lt;- read.table("mvp.geno.map", head=TRUE)</code></pre></div>
+      <div class="note"><b>注意</b>　转换时给了表型，后续一定读新生成的 <code>mvp.phe</code>，不要读原始表型文件。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="sec" id="s03" data-name="MVP()">
+  <div class="sec-h"><span class="num">03</span><h2>GWAS 主函数：MVP()</h2><p><code>phe</code> 只接受两列：ID + 一个性状</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>完整模板</h3>
+<div class="codebox"><pre><code>imMVP &lt;- MVP(
+  phe = phenotype,          # 两列，可含 NA
+  geno = genotype,
+  map = map,
+  #K = Kinship,             # 有预算好的 K 才打开
+  #CV.GLM = Covariates,     # 有协变量时打开全部 CV.*
+  #CV.MLM = Covariates,
+  #CV.FarmCPU = Covariates,
+  nPC.GLM = 5,              # 不加 PC：注释掉，别写 0
+  nPC.MLM = 3,
+  nPC.FarmCPU = 3,
+  maxLine = 10000,          # 调小可降内存
+  #ncpus = 10,              # 默认用全部 CPU
+  vc.method = "BRENT",      # 仅 MLM
+  method.bin = "static",    # 仅 FarmCPU
+  threshold = 0.05,
+  method = c("GLM", "MLM", "FarmCPU"),
+  file.output = c("pmap", "pmap.signal", "plot", "log")
+)</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>三条易错规则</h3>
+      <div class="note"><b>1</b>　不加 PC 时注释掉 <code>nPC.*</code>，不要写 <code>nPC.* = 0</code>。</div>
+      <div class="note"><b>2</b>　<code>nPC.* &gt; 0</code> 时，对应 <code>CV.*</code> 中不能再含 PC，否则重复加入。</div>
+      <div class="note"><b>3</b>　rMVP 不会调整协变量的个体顺序，须与 <code>mvp.geno.ind</code> 一致。</div>
+      <h3 style="margin-top:6px">阈值怎么定</h3>
+      <ul>
+        <li><code>threshold=0.05</code>：显著线 = 0.05 / 标记数（Bonferroni）</li>
+        <li><code>permutation.threshold=TRUE</code> + <code>permutation.rep</code>：打乱表型多次，取每次最小 p 值的 95% 分位数作经验阈值</li>
+      </ul>
+    </div>
+    <div class="card wide">
+      <h3>参数速查</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>参数</th><th>取值 / 示例</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="m">phe</td><td>data.frame（2 列）</td><td>表型：ID + 一个性状</td></tr>
+          <tr><td class="m">geno</td><td>big.matrix</td><td><code>attach.big.matrix("mvp.geno.desc")</code></td></tr>
+          <tr><td class="m">map</td><td>data.frame</td><td>SNP、染色体、位置</td></tr>
+          <tr><td class="m">K</td><td>n×n 矩阵</td><td>亲缘矩阵；不给则自动按 VanRaden 计算</td></tr>
+          <tr><td class="m">CV.GLM / CV.MLM / CV.FarmCPU</td><td>n×nCV 矩阵</td><td>各模型协变量，可含 NA</td></tr>
+          <tr><td class="m">nPC.GLM / nPC.MLM / nPC.FarmCPU</td><td>整数，如 5 / 3 / 3</td><td>作为协变量的前 n 个主成分</td></tr>
+          <tr><td class="m">method</td><td><code>"GLM"</code>, <code>"MLM"</code>, <code>"FarmCPU"</code></td><td>可选一个或多个</td></tr>
+          <tr><td class="m">vc.method</td><td><code>"BRENT"</code>, <code>"EMMA"</code>, <code>"HE"</code></td><td>MLM 方差组分估计方法</td></tr>
+          <tr><td class="m">method.bin</td><td><code>"static"</code>, <code>"FaST-LMM"</code></td><td>FarmCPU 的 bin 选择方法</td></tr>
+          <tr><td class="m">maxLoop</td><td>整数</td><td>FarmCPU 最大迭代次数</td></tr>
+          <tr><td class="m">threshold</td><td>0.05</td><td>显著线 = threshold / 标记数</td></tr>
+          <tr><td class="m">permutation.threshold</td><td>TRUE / FALSE</td><td>用置换检验定阈值</td></tr>
+          <tr><td class="m">permutation.rep</td><td>整数，如 100</td><td>置换次数</td></tr>
+          <tr><td class="m">maxLine</td><td>10000</td><td>每批处理标记数，越小越省内存</td></tr>
+          <tr><td class="m">ncpus</td><td>整数</td><td>并行 CPU 数，默认全部</td></tr>
+          <tr><td class="m">file.output</td><td>TRUE / FALSE 或子集</td><td><code>"pmap"</code> 全部 SNP · <code>"pmap.signal"</code> 显著 SNP · <code>"plot"</code> 图 · <code>"log"</code> 日志</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="sec" id="s04" data-name="K / PC / 协变量">
+  <div class="sec-h"><span class="num">04</span><h2>亲缘矩阵、主成分与协变量</h2><p>外部文件为纯数值：无个体名、无表头，行顺序同基因型</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>K 与 PC：读入或计算</h3>
+<div class="codebox"><pre><code># 亲缘矩阵（n×n）
+MVP.Data.Kin("mvp.kin.txt", out="mvp", maxLine=1e4, sep="\t")  # 读文件
+MVP.Data.Kin(TRUE, mvp_prefix="mvp.vcf", out="mvp")              # 计算
+
+# 主成分（n×nPC）
+MVP.Data.PC("mvp.pc.txt", out="mvp", sep="\t")                   # 读文件
+MVP.Data.PC(TRUE, mvp_prefix="mvp.vcf", pcs.keep=5)             # 计算
+
+# 加载
+Kinship       &lt;- attach.big.matrix("mvp.kin.desc")
+Covariates_PC &lt;- bigmemory::as.matrix(attach.big.matrix("mvp.pc.desc"))</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>环境因子 / 协变量</h3>
+<div class="codebox"><pre><code># 品种、性别作因子，体重作数值协变量
+Covariates &lt;- model.matrix.lm(
+  ~ as.factor(breed) + as.factor(sex) + as.numeric(weight),
+  data = yourdata, na.action = "na.pass")   # 允许 NA
+
+# 把 PC 并入协变量（此时 MVP() 中不要设 nPC.*）
+Covariates &lt;- cbind(Covariates, Covariates_PC)</code></pre></div>
+      <div class="note"><b>注意</b>　<code>yourdata</code> 的行顺序必须与 <code>mvp.geno.ind</code> 一致。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="sec" id="s05" data-name="可视化">
+  <div class="sec-h"><span class="num">05</span><h2>可视化：MVP.Report()</h2><p>约 50 个参数 · 也接受 PLINK / GEMMA / GAPIT / TASSEL 结果</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>plot.type</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>值</th><th>图形</th><th>输入</th></tr></thead>
+        <tbody>
+          <tr><td class="m">"d"</td><td>SNP 密度图</td><td>前 3 列即可</td></tr>
+          <tr><td class="m">"c"</td><td>环形曼哈顿图</td><td>p 值或效应列</td></tr>
+          <tr><td class="m">"m"</td><td>矩形曼哈顿图</td><td>p 值或效应列</td></tr>
+          <tr><td class="m">"q"</td><td>QQ 图</td><td>p 值列</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sub" style="margin:0">输入至少 4 列：SNP、染色体、位置、p 值；多性状继续按列追加。示例数据 <code>data(pig60K)</code>（MLM p 值）、<code>data(cattle50K)</code>（rrBLUP 效应）。</p>
+    </div>
+    <div class="card">
+      <h3>常用参数</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>参数</th><th>作用</th></tr></thead>
+        <tbody>
+          <tr><td class="m">col</td><td>向量按染色体交替；矩阵则每性状一行</td></tr>
+          <tr><td class="m">LOG10</td><td>TRUE 画 −log10(p)；画效应时 FALSE</td></tr>
+          <tr><td class="m">ylim / ylab</td><td>纵轴范围与标签</td></tr>
+          <tr><td class="m">threshold</td><td>可多条 <code>c(1e-6,1e-4)</code>；NULL 不画</td></tr>
+          <tr><td class="m">threshold.col / .lty / .lwd</td><td>阈值线颜色、线型、线宽</td></tr>
+          <tr><td class="m">amplify</td><td>TRUE 放大显著点</td></tr>
+          <tr><td class="m">signal.col / .cex / .pch</td><td>显著点样式；col=NULL 保持原色</td></tr>
+          <tr><td class="m">signal.line</td><td>环形图穿圈标示线；NULL 不画</td></tr>
+          <tr><td class="m">chr.den.col</td><td>长度 &gt;1 时画 SNP 密度条</td></tr>
+          <tr><td class="m">bin.size / bin.max</td><td>密度窗口（如 1e6）与上限</td></tr>
+          <tr><td class="m">chr.labels</td><td>染色体标签</td></tr>
+          <tr><td class="m">multracks</td><td>多性状分轨 + 合并图</td></tr>
+          <tr><td class="m">r / cir.chr.h / cir.band / outward</td><td>环形图半径、染色体环高、圈距、朝向</td></tr>
+          <tr><td class="m">cir.legend / .col / .cex</td><td>环形图图例</td></tr>
+          <tr><td class="m">band / cex</td><td>染色体间距、点大小</td></tr>
+          <tr><td class="m">conf.int.col / box</td><td>QQ 图置信区间颜色、边框</td></tr>
+          <tr><td class="m">file.type / dpi / memo</td><td>"jpg"(默认) "pdf" "tiff"；分辨率；文件名附加标记</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>矩形曼哈顿图</h3>
+<div class="codebox"><pre><code># 双阈值 + 显著点放大 + 密度条
+MVP.Report(pig60K, plot.type="m", LOG10=TRUE,
+  threshold=c(1e-6,1e-4), threshold.lty=c(1,2),
+  threshold.col=c("black","grey"), amplify=TRUE,
+  signal.col=c("red","green"),
+  chr.den.col=c("darkgreen","yellow","red"), bin.size=1e6,
+  file.type="jpg", dpi=300)
+
+# 多性状 / 多方法
+MVP.Report(pig60K, plot.type="m", multracks=TRUE,
+  threshold=c(1e-6,1e-4), amplify=TRUE, bin.size=1e6,
+  chr.den.col=c("darkgreen","yellow","red"), file.type="jpg", dpi=300)</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>环形曼哈顿图</h3>
+<div class="codebox"><pre><code>MVP.Report(pig60K, plot.type="c", r=0.4,
+  col=c("grey30","grey60"),
+  chr.labels=paste("Chr", c(1:18,"X"), sep=""),
+  threshold=c(1e-6,1e-4), cir.chr.h=1.5, amplify=TRUE,
+  signal.line=1, signal.col=c("red","green"),
+  chr.den.col=c("darkgreen","yellow","red"), bin.size=1e6,
+  outward=FALSE, file.type="jpg", dpi=300)</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>QQ 图与 SNP 密度图</h3>
+<div class="codebox"><pre><code># 单个 QQ
+MVP.Report(pig60K, plot.type="q", conf.int.col=NULL, box=TRUE,
+  file.type="jpg", dpi=300)
+
+# 多个 QQ
+MVP.Report(imMVP, plot.type="q",
+  col=c("dodgerblue1","olivedrab3","darkgoldenrod1"),
+  conf.int.col="grey", box=FALSE, multracks=TRUE,
+  file.type="jpg", dpi=300)
+
+# SNP 密度
+MVP.Report(pig60K[, 1:3], plot.type="d",
+  col=c("darkgreen","yellow","red"), file.type="jpg", dpi=300)</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>GS 效应 · 表型分布 · PCA</h3>
+<div class="codebox"><pre><code># 画 SNP 效应（非 p 值）
+MVP.Report(cattle50K, plot.type="m", band=0, LOG10=FALSE,
+  ylab="Abs(SNP effect)", threshold=0.015, threshold.col="red",
+  amplify=TRUE, signal.col=NULL,
+  col=c("dodgerblue4","deepskyblue"), chr.den.col=NULL,
+  file.type="jpg", dpi=300)
+
+# 表型分布直方图
+MVP.Hist(phe=phenotype, file.type="jpg", breakNum=18, dpi=300)
+
+# PCA（前 3 个 PC；class 可传品种/地点，pch 设点形）
+pca &lt;- attach.big.matrix("mvp.pc.desc")[, 1:3]
+MVP.PCAplot(PCA=pca, Ncluster=3, class=NULL,
+  col=c("red","green","yellow"), file.type="jpg")</code></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="sec" id="s06" data-name="结果解读">
+  <div class="sec-h"><span class="num">06</span><h2>输出结果解读</h2><p>返回值为列表，各模型结果为 Effect / SE / P 三列</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>在 R 中查看结果</h3>
+<div class="codebox"><pre><code>names(imMVP)              # map, glm.results, mlm.results, farmcpu.results
+head(imMVP$mlm.results)   # Effect, SE, P
+
+# 拼出完整表并按 p 值排序
+res &lt;- cbind(imMVP$map, imMVP$mlm.results)
+res &lt;- res[order(res[, ncol(res)]), ]
+head(res, 20)
+
+# 用返回值重画
+MVP.Report(imMVP, plot.type="m", threshold=0.05/nrow(map))</code></pre></div>
+    </div>
+    <div class="card">
+      <h3>输出文件 <span class="flag">命名待核实</span></h3>
+      <div class="tbl unv"><table>
+        <thead><tr><th>file.output</th><th>典型文件名（trait1, MLM）</th></tr></thead>
+        <tbody>
+          <tr><td class="m">"pmap"</td><td class="m">trait1.MLM.csv</td></tr>
+          <tr><td class="m">"pmap.signal"</td><td class="m">trait1.MLM_signals.csv</td></tr>
+          <tr><td class="m">"plot"</td><td class="m">trait1.MLM.Rectangular-Manhattan.jpg<br>trait1.MLM.QQplot.jpg …</td></tr>
+          <tr><td class="m">"log"</td><td class="m">MVP.&lt;日期时间&gt;.log</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sub" style="margin:0">文件写在当前工作目录，以实际生成的文件名为准。</p>
+    </div>
+    <div class="card wide">
+      <h3>结果怎么看</h3>
+      <ul>
+        <li><b>显著性</b>：默认阈值 0.05 / 标记数；样本或标记高度连锁时，可用置换阈值替代过严的 Bonferroni。</li>
+        <li><b>QQ 图</b>：多数点贴近对角线、尾部上翘为理想；整体抬升提示膨胀，可增加 PC 或改用 MLM / FarmCPU。</li>
+        <li><b>模型对比</b>：GLM 信号最多但假阳性多；MLM 最保守；FarmCPU 介于两者之间，峰更尖。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="sec" id="s07" data-name="进阶">
+  <div class="sec-h"><span class="num">07</span><h2>进阶用法</h2><p>多性状 · 内存与速度 · 底层函数</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>多性状批量</h3>
+<div class="codebox"><pre><code>for (i in 2:ncol(phenotype)) {
+  imMVP &lt;- MVP(phe = phenotype[, c(1, i)],
+               geno = genotype, map = map,
+               nPC.GLM = 5, nPC.MLM = 3, nPC.FarmCPU = 3,
+               maxLine = 10000, vc.method = "BRENT",
+               method.bin = "static", threshold = 0.05,
+               method = c("GLM", "MLM", "FarmCPU"),
+               file.output = c("pmap", "pmap.signal", "plot", "log"))
+  gc()   # 每轮释放内存
+}</code></pre></div>
+      <div class="note"><b>提速</b>　多性状共用一套 K / PC 时，先在 <code>MVP.Data(..., fileKin=TRUE, filePC=TRUE)</code> 中算好，再用 <code>K=</code> 传入。</div>
+    </div>
+    <div class="card">
+      <h3>内存与速度</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>目标</th><th>做法</th></tr></thead>
+        <tbody>
+          <tr><td>降内存</td><td>调小 <code>maxLine</code>（5000 或 2000）</td></tr>
+          <tr><td>控 CPU</td><td>设 <code>ncpus</code>，集群上避免占满节点</td></tr>
+          <tr><td>提速</td><td>链接 MKL / OpenBLAS；复用 K 与 PC</td></tr>
+          <tr><td>少跑模型</td><td><code>method = "MLM"</code></td></tr>
+          <tr><td>只要结果表</td><td><code>file.output = c("pmap","pmap.signal")</code></td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:4px">第三方结果作图</h3>
+      <p>整理成 <code>SNP, Chr, Pos, P</code> 四列（多性状加 P 列）即可送入 <code>MVP.Report()</code>。</p>
+    </div>
+    <div class="card wide">
+      <h3>单独调用模型函数 <span class="flag">签名待核实</span></h3>
+<div class="codebox unv"><pre><code>K    &lt;- MVP.K.VanRaden(genotype)                   # VanRaden 亲缘矩阵
+glm  &lt;- MVP.GLM(phe = phenotype[, c(1, 2)], geno = genotype, CV = Covariates_PC)
+mlm  &lt;- MVP.MLM(phe = phenotype[, c(1, 2)], geno = genotype, K = K,
+                CV = Covariates_PC, vc.method = "BRENT")
+farm &lt;- MVP.FarmCPU(phe = phenotype[, c(1, 2)], geno = genotype, map = map,
+                    CV = Covariates_PC, method.bin = "static")
+# 完整签名：?MVP.GLM  ?MVP.MLM  ?MVP.FarmCPU</code></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="sec" id="s08" data-name="排错">
+  <div class="sec-h"><span class="num">08</span><h2>常见问题与排错</h2><p>前三条来自官方 FAQ</p></div>
+  <div class="grid">
+    <div class="card wide">
+      <div class="tbl"><table>
+        <thead><tr><th>症状</th><th>可能原因</th><th>解决办法</th></tr></thead>
+        <tbody>
+          <tr><td>安装 devtools 报 <code>git2r</code> 配置失败</td><td>缺 OpenSSL 开发库</td><td><code>apt-get install libssl-dev</code> 后重装</td></tr>
+          <tr><td><code>install_github</code> 报 SSL CA cert 错误</td><td>证书校验失败</td><td><code>library(httr); set_config(config(ssl_verifypeer = 0L))</code>，或改用 Gitee</td></tr>
+          <tr><td>安装时 <code>lazy loading failed</code></td><td>磁盘已满</td><td>清理磁盘空间</td></tr>
+          <tr><td>表型与基因型个体对不上</td><td>读了原始表型</td><td>改读 <code>MVP.Data()</code> 生成的 <code>&lt;out&gt;.phe</code></td></tr>
+          <tr><td>协变量维度错 / 结果异常</td><td>协变量个体顺序不一致</td><td>按 <code>mvp.geno.ind</code> 重排</td></tr>
+          <tr><td>PC 被重复加入</td><td><code>CV.*</code> 含 PC 又设了 <code>nPC.*</code></td><td>二者只留其一</td></tr>
+          <tr><td>内存不足 / R 崩溃</td><td><code>maxLine</code> 过大</td><td>调小 <code>maxLine</code>，减少 <code>ncpus</code></td></tr>
+          <tr><td>仅转基因型函数报错</td><td>基因型有缺失</td><td>先填充（如 Beagle），或改用 <code>MVP.Data()</code></td></tr>
+          <tr><td>QQ 图严重膨胀</td><td>群体结构控制不足</td><td>增加 PC，改用 MLM / FarmCPU</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="sec" id="s09" data-name="引用">
+  <div class="sec-h"><span class="num">09</span><h2>引用文献</h2><p>任何功能都引主文献，所用模型另引方法文献</p></div>
+  <div class="grid">
+    <div class="card wide">
+      <div class="tbl"><table>
+        <thead><tr><th>用途</th><th>文献</th></tr></thead>
+        <tbody>
+          <tr><td>rMVP 软件</td><td>Yin L, Zhang H, Tang Z, et al. <i>Genomics, Proteomics &amp; Bioinformatics</i>, 2021, 19(4): 619–628. <a href="https://doi.org/10.1016/j.gpb.2020.10.007" target="_blank" rel="noopener">doi:10.1016/j.gpb.2020.10.007</a></td></tr>
+          <tr><td>K 矩阵</td><td>VanRaden PM. <i>J Dairy Sci</i>, 2008, 91(11): 4414–4423</td></tr>
+          <tr><td>GLM(PC) / MLM(PCA+K)</td><td>Price AL, et al. <i>Nat Genet</i>, 2006, 38(8): 904</td></tr>
+          <tr><td>MLM(K)</td><td>Yu J, et al. <i>Nat Genet</i>, 2006, 38(2): 203</td></tr>
+          <tr><td>FarmCPU</td><td>Liu X, et al. <i>PLoS Genet</i>, 2016, 12(2): e1005767</td></tr>
+          <tr><td>HE 方差组分</td><td>Zhou X. <i>Ann Appl Stat</i>, 2017, 11(4): 2027</td></tr>
+          <tr><td>EMMA / P3D</td><td>Kang HM, et al. <i>Genetics</i>, 2008, 178(3): 1709；Zhang Z, et al. <i>Nat Genet</i>, 2010, 42(4): 355</td></tr>
+          <tr><td>FaST-LMM</td><td>Lippert C, et al. <i>Nat Methods</i>, 2011, 8(10): 833</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<p class="empty" id="empty">没有匹配的条目，换个关键词试试。</p>
+</main>
+
+<footer class="wrap">
+  来源：<a href="https://github.com/xiaolei-lab/rMVP" target="_blank" rel="noopener">rMVP GitHub README</a> ·
+  <a href="https://gitee.com/xiaolei-lab/rMVP" target="_blank" rel="noopener">Gitee 镜像</a> ·
+  <a href="https://CRAN.R-project.org/package=rMVP" target="_blank" rel="noopener">CRAN</a> · 整理于 2026-11-08。开启「标记待核实」可高亮未在 README 中核实的内容。
+</footer>
+
+<script>
+(function(){
+  // syntax highlight R code
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const re=/("(?:[^"\\]|\\.)*")|(#.*$)|\b(TRUE|FALSE|NULL|NA|function|for|in|if|else|library)\b|\b(\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b|([A-Za-z_][\w.]*(?=\())/gm;
+  document.querySelectorAll('pre code').forEach(el=>{
+    const src=el.textContent; let out='',last=0,m;
+    re.lastIndex=0;
+    while((m=re.exec(src))){
+      out+=esc(src.slice(last,m.index));
+      const t=esc(m[0]);
+      out+= m[1]?`<span class="t-str">${t}</span>`: m[2]?`<span class="t-com">${t}</span>`: m[3]?`<span class="t-kw">${t}</span>`: m[4]?`<span class="t-num">${t}</span>`:`<span class="t-fn">${t}</span>`;
+      last=m.index+m[0].length;
+    }
+    out+=esc(src.slice(last)); el.innerHTML=out;
+    const box=el.closest('.codebox');
+    const b=document.createElement('button'); b.className='copy'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click',()=>{
+      const done=()=>{b.textContent='已复制';setTimeout(()=>b.textContent='复制',1400)};
+      try{navigator.clipboard.writeText(src).then(done,()=>sel(el));}catch(e){sel(el)}
+    });
+    box.appendChild(b);
+  });
+  function sel(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  // chips
+  const secs=[...document.querySelectorAll('section.sec')];
+  const chips=document.getElementById('chips');
+  const all=document.createElement('button'); all.className='chip on'; all.type='button'; all.textContent='全部'; all.dataset.t='all'; chips.appendChild(all);
+  secs.forEach(s=>{const c=document.createElement('button');c.className='chip';c.type='button';c.dataset.t=s.id;
+    c.innerHTML=`<span class="n">${s.id.slice(1)}</span>${s.dataset.name}`;chips.appendChild(c);});
+  let only=null;
+  chips.addEventListener('click',e=>{
+    const c=e.target.closest('.chip'); if(!c) return;
+    chips.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c));
+    only = c.dataset.t==='all'?null:c.dataset.t;
+    apply();
+    window.scrollTo({top:0});
+  });
+
+  // search
+  const q=document.getElementById('q');
+  q.addEventListener('input',apply);
+  function apply(){
+    const term=q.value.trim().toLowerCase(); let any=false;
+    secs.forEach(s=>{
+      if(only && s.id!==only){s.hidden=true;return;}
+      let secHit=false;
+      s.querySelectorAll('.card').forEach(card=>{
+        if(!term){card.hidden=false;card.querySelectorAll('tbody tr').forEach(r=>r.hidden=false);secHit=true;return;}
+        const h=(card.querySelector('h3')?.textContent||'').toLowerCase();
+        const headHit=h.includes(term)||(s.dataset.name||'').toLowerCase().includes(term);
+        let hit=headHit;
+        const rows=card.querySelectorAll('tbody tr');
+        rows.forEach(r=>{const ok=headHit||r.textContent.toLowerCase().includes(term);r.hidden=!ok;if(ok)hit=true;});
+        card.querySelectorAll('pre,p,li,.note,.model').forEach(x=>{if(x.textContent.toLowerCase().includes(term))hit=true;});
+        if(hit && rows.length && ![...rows].some(x=>!x.hidden)) rows.forEach(r=>r.hidden=false);
+        card.hidden=!hit; if(hit)secHit=true;
+      });
+      s.hidden=!secHit; if(secHit)any=true;
+    });
+    document.getElementById('empty').style.display=any?'none':'block';
+  }
+
+  // toggles
+  const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+  const bM=document.getElementById('bMark'), bC=document.getElementById('bCompact'), bT=document.getElementById('bTheme');
+  function setMark(on){document.body.classList.toggle('mark',on);bM.setAttribute('aria-pressed',on);bM.querySelector('.lbl').textContent=on?': 开':': 关';}
+  function setCompact(on){document.body.classList.toggle('compact',on);bC.setAttribute('aria-pressed',on);}
+  bM.onclick=()=>{const v=!document.body.classList.contains('mark');setMark(v);store.set('rmvp-mark',v?'1':'0')};
+  bC.onclick=()=>{const v=!document.body.classList.contains('compact');setCompact(v);store.set('rmvp-compact',v?'1':'0')};
+  bT.onclick=()=>{
+    const root=document.documentElement;
+    const cur=root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    root.dataset.theme=cur==='dark'?'light':'dark';
+  };
+  setMark(store.get('rmvp-mark')==='1'); setCompact(store.get('rmvp-compact')==='1');
+})();
+</script>
+
+</body></html>

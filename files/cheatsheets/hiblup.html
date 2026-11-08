@@ -1,0 +1,1761 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>HIBLUP 速查表</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&display=swap">
+<style>
+/* Layout: sticky toolbar (brand + search + section filter chips) over a stream of numbered chapter blocks; each chapter is a grid of topic cards. */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --surface-2:#eef2f0; --line:#dbe2df; --line-2:#c9d3cf;
+  --fg:#17211e; --fg-2:#4a5a55; --fg-3:#7a8984;
+  --accent:#0d6b57; --accent-soft:#dcefe8; --accent-fg:#ffffff;
+  --amber:#e09a2b; --amber-soft:#fbefd9; --amber-fg:#3d2600;
+  --code-bg:#f6f8f7; --code-fg:#1f2d29; --code-flag:#0d6b57; --code-com:#8a8f7f; --code-str:#9a5b12;
+  --mark:#ffe08a; --shadow:0 1px 2px rgba(18,40,33,.06),0 4px 14px rgba(18,40,33,.05);
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --fs:14.5px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#161e1b; --surface-2:#1c2622; --line:#26322e; --line-2:#33423d;
+  --fg:#e3ebe8; --fg-2:#a7b6b1; --fg-3:#76857f;
+  --accent:#4cc3a3; --accent-soft:#163a31; --accent-fg:#06221b;
+  --amber:#f0b24c; --amber-soft:#3a2a10; --amber-fg:#2a1a00;
+  --code-bg:#111917; --code-fg:#d8e4e0; --code-flag:#6fd6b8; --code-com:#7d8a84; --code-str:#e6b26a;
+  --mark:#6b5310; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#161e1b; --surface-2:#1c2622; --line:#26322e; --line-2:#33423d;
+  --fg:#e3ebe8; --fg-2:#a7b6b1; --fg-3:#76857f;
+  --accent:#4cc3a3; --accent-soft:#163a31; --accent-fg:#06221b;
+  --amber:#f0b24c; --amber-soft:#3a2a10; --amber-fg:#2a1a00;
+  --code-bg:#111917; --code-fg:#d8e4e0; --code-flag:#6fd6b8; --code-com:#7d8a84; --code-str:#e6b26a;
+  --mark:#6b5310; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:var(--fs);line-height:1.65}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+a{color:var(--accent)}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--accent-soft);color:var(--fg);padding:.08em .35em;border-radius:4px;word-break:break-word}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* toolbar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-top{display:flex;align-items:center;gap:16px;padding-block:14px 10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 340px}
+.logo{flex:none;width:46px;height:46px;border-radius:11px;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:17px;letter-spacing:.02em}
+.brand-text{min-width:0}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:21px;line-height:1.2;display:flex;align-items:center;gap:10px;flex-wrap:wrap;text-wrap:balance}
+.pill{font-family:var(--f-body);font-weight:500;font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.brand p{margin:2px 0 0;color:var(--fg-2);font-size:12.5px;line-height:1.45}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search{position:relative;flex:1 1 260px;min-width:0}
+.search input{width:100%;height:38px;border:1px solid var(--line-2);border-radius:9px;background:var(--surface-2);color:var(--fg);font:inherit;font-size:13.5px;padding:0 64px 0 34px}
+.search input:focus{outline:2px solid var(--accent);outline-offset:-1px;background:var(--surface)}
+.search svg{position:absolute;left:11px;top:11px;width:16px;height:16px;stroke:var(--fg-3)}
+.search kbd,.search .hits{position:absolute;right:10px;top:9px;font-family:var(--f-mono);font-size:11px;color:var(--fg-3);border:1px solid var(--line-2);border-radius:5px;padding:1px 6px;background:var(--surface)}
+.search .hits{border:0;background:none;top:10px}
+.btn{height:38px;border:1px solid var(--line-2);border-radius:9px;background:var(--surface);color:var(--fg);font:inherit;font-size:13px;padding:0 13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn:focus-visible,.chip:focus-visible,.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn svg{width:16px;height:16px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:2px 12px;scrollbar-width:thin}
+.chip{flex:none;border:1px solid transparent;background:var(--surface-2);color:var(--fg-2);font:inherit;font-size:13px;height:32px;padding:0 13px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{color:var(--fg);border-color:var(--line-2)}
+.chip.is-on{background:var(--accent);color:var(--accent-fg)}
+.chip-n{font-family:var(--f-mono);font-size:11px;opacity:.7}
+
+/* intro */
+.intro{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start;padding:16px 18px;border:1px solid var(--line);background:var(--surface);border-radius:12px}
+.intro p{margin:0;color:var(--fg-2);font-size:13.5px;max-width:90ch}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--fg-2);white-space:nowrap}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:22px;height:12px;border-radius:3px}
+
+/* sections */
+main{padding-block:8px 60px}
+.sec{margin-top:34px;scroll-margin-top:150px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.badge{flex:none;min-width:38px;height:30px;padding:0 8px;border-radius:8px;background:var(--amber);color:var(--amber-fg);font-family:var(--f-mono);font-weight:600;font-size:14px;display:grid;place-items:center}
+.sec-head h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1.3;text-wrap:balance}
+.sec-count{margin-left:auto;font-size:12px;color:var(--fg-3);font-family:var(--f-mono)}
+.lead{color:var(--fg-2);font-size:13.5px;margin:-4px 0 12px}
+.lead p{margin:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,560px),1fr));gap:14px;align-items:start}
+.card{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 6px;scroll-margin-top:150px}
+.card h3{margin:0 0 10px;font-size:15px;font-weight:700;line-height:1.4;display:flex;gap:6px;flex-wrap:wrap;align-items:baseline;padding-bottom:9px;border-bottom:1px dashed var(--line-2)}
+.card h3 code{background:none;padding:0;color:var(--accent);font-size:.92em}
+.card-body{min-width:0}
+.card-body>*{margin-top:0;margin-bottom:12px}
+.card-body p{margin:0 0 10px}
+.card-body ul,.card-body ol{padding-left:1.25em}
+.card-body li{margin:3px 0}
+.card-body li::marker{color:var(--fg-3)}
+.card-body strong{font-weight:700;color:var(--fg)}
+.card-body ol>li::marker{font-family:var(--f-mono);font-size:.9em;color:var(--accent)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:9px;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:7px 11px;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);font-weight:600;color:var(--fg-2);font-size:12px;letter-spacing:.02em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+td code{white-space:nowrap}
+td:first-child code{color:var(--accent);background:none;padding:0;font-weight:600}
+
+/* code */
+.code{position:relative;margin-bottom:12px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);border:1px solid var(--line);border-radius:9px;padding:12px 14px;overflow-x:auto;font-family:var(--f-mono);font-size:12.5px;line-height:1.6;tab-size:4}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;word-break:normal;white-space:pre}
+pre .f{color:var(--code-flag);font-weight:600}
+pre .c{color:var(--code-com);font-style:italic}
+pre .p{color:var(--code-str)}
+.copy{position:absolute;top:7px;right:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg-2);font:inherit;font-size:11.5px;border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .15s}
+.code:hover .copy,.copy:focus-visible,.copy.done{opacity:1}
+.copy.done{color:var(--accent);border-color:var(--accent)}
+@media (hover:none){.copy{opacity:1}}
+
+mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
+.empty{margin:60px auto;text-align:center;color:var(--fg-2);max-width:40ch}
+.empty strong{display:block;font-size:16px;color:var(--fg);margin-bottom:4px}
+footer{border-top:1px solid var(--line);padding-block:18px 30px;color:var(--fg-3);font-size:12px}
+
+/* compact */
+body.compact{--fs:13px}
+body.compact .cards{grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:10px}
+body.compact .card{padding:11px 13px 2px}
+body.compact .card h3{font-size:13.5px;margin-bottom:7px;padding-bottom:6px}
+body.compact pre{font-size:11.5px;padding:9px 11px}
+body.compact th,body.compact td{padding:4px 8px;font-size:12px}
+body.compact .sec{margin-top:22px}
+body.compact .lead{display:none}
+
+@media (max-width:640px){
+  .brand h1{font-size:18px}
+  .logo{width:40px;height:40px;font-size:15px}
+  .intro{grid-template-columns:1fr}
+  .legend{flex-direction:row;flex-wrap:wrap;white-space:normal}
+  .btn .lbl{display:none}
+  .card{padding:13px 13px 4px}
+  .sec{scroll-margin-top:200px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">天权</div>
+        <div class="brand-text">
+          <h1>HIBLUP 速查表 <span class="pill">v2 · 详细版</span></h1>
+          <p>PBLUP / GBLUP / ssGBLUP · 方差组分与遗传力 · 遗传相关 · SNP 效应 · 基因组选配 · LDSC / SBLUP</p>
+        </div>
+      </div>
+      <div class="tools">
+        <label class="search" for="q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="搜索 参数或文件，如 --vc-priors、.vars、h2" autocomplete="off" aria-label="搜索速查表">
+          <kbd id="kbd">/</kbd><span class="hits" id="hits" hidden></span>
+        </label>
+        <button class="btn" id="compact" type="button" aria-pressed="false" title="紧凑视图">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span class="lbl">紧凑视图</span></button>
+        <button class="btn" id="theme" type="button" title="切换深色 / 浅色" aria-label="切换深色或浅色主题">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg></button>
+      </div>
+    </div>
+    <nav class="chips" id="chips" aria-label="章节筛选">
+<button class="chip is-on" data-target="all" type="button">全部</button>
+<button class="chip" data-target="s1" type="button"><span class="chip-n">01</span>快速上手</button>
+<button class="chip" data-target="s2" type="button"><span class="chip-n">02</span>输入文件</button>
+<button class="chip" data-target="s3" type="button"><span class="chip-n">03</span>模型选择</button>
+<button class="chip" data-target="s4" type="button"><span class="chip-n">04</span>命令详解</button>
+<button class="chip" data-target="s5" type="button"><span class="chip-n">05</span>方差组分算法</button>
+<button class="chip" data-target="s6" type="button"><span class="chip-n">06</span>结果解读</button>
+<button class="chip" data-target="s7" type="button"><span class="chip-n">07</span>显著性 / PVE</button>
+<button class="chip" data-target="s8" type="button"><span class="chip-n">08</span>常见坑 / FAQ</button>
+<button class="chip" data-target="s9" type="button"><span class="chip-n">09</span>交叉验证</button>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="intro">
+    <p>依据：HIBLUP 官方教程 https://www.hiblup.com/tutorials 。HIBLUP（天权）由华中农业大学赵书红团队开发，在 BLUP 框架下整合系谱、基因组和表型，完成关系矩阵构建、方差组分/遗传力/遗传相关估计、混合模型求解、SNP 效应计算和基因组选配。引用：Yin et al. 2023, <em>Nucleic Acids Research</em>（选配另引 Tang et al. 2023, <em>Briefings in Bioinformatics</em>）。</p>
+    <div class="legend" aria-label="代码配色说明">
+      <span><i style="background:var(--code-flag)"></i>HIBLUP 参数</span>
+      <span><i style="background:var(--code-com)"></i>注释 / 输出文件</span>
+      <span><i style="background:var(--amber)"></i>章节编号</span>
+    </div>
+  </div>
+  <div id="secs">
+<section class="sec" id="s1" data-sec="s1">
+<header class="sec-head"><span class="badge">01</span><h2>快速上手与通用参数</h2><span class="sec-count">4 节</span></header>
+<div class="cards"><article class="card" id="s1-1"><h3>1.1 运行方式</h3><div class="card-body"><ul>
+<li>从 https://www.hiblup.com/download 下载对应平台的可执行文件（学术免费，商用需联系开发团队），Linux 下先 <code>chmod +x hiblup</code>。</li>
+<li>所有分析的命令结构都相同：<code>./hiblup &lt;功能开关&gt; &lt;输入文件&gt; &lt;模型参数&gt; [过滤参数] --threads n --out 前缀</code>。</li>
+<li>每个功能由一个开关决定（如 <code>--single-trait</code>），HIBLUP 再根据你给的输入文件自动决定用哪个模型（见第 3 节）。</li>
+<li>各文件中个体、SNP 的顺序<strong>不需要</strong>对齐，软件自动按 ID 匹配；表型文件中没有、但系谱/基因型中有的个体也会得到育种值。</li>
+</ul></div></article><article class="card" id="s1-2"><h3>1.2 一次完整的基因组评估流程</h3><div class="card-body"><ol>
+<li><strong>外部准备</strong>：用 PLINK/Beagle 等做基因型质控和填充，合并成一套 PLINK 二进制文件（HIBLUP 不做填充，只读一套 bfile）。</li>
+<li><strong>群体结构检查</strong>：<code>--pca</code>、<code>--cluster</code>、<code>--allele-freq --pop-class</code>，决定是否需要混合 GRM 或把群体作为固定效应。</li>
+<li><strong>构建关系矩阵一次</strong>：<code>--make-xrm</code> 生成 GA/GD 或 HA/HD，后续都用 <code>--xrm</code> 复用。</li>
+<li><strong>单性状模型</strong>：逐性状 <code>--single-trait</code>，看 <code>.anova</code> 精简固定效应，看 <code>.vars</code> 得遗传力。</li>
+<li><strong>多性状模型</strong>：<code>--multi-trait</code> 得遗传相关，必要时把单性状结果作为 <code>--vc-priors</code> 初值。</li>
+<li><strong>附加输出</strong>：需要可靠性加 <code>--r2</code>，需要标记效应加 <code>--snp-effect</code>。</li>
+<li><strong>应用</strong>：用 <code>.rand</code> 中的 GEBV 排名选种；用 <code>.snpeff</code> 对新个体 <code>--pred</code> 打分；用 <code>--mating</code> 做选配。</li>
+<li><strong>验证</strong>：用交叉验证评估预测准确性（见第 9 节）。</li>
+</ol></div></article><article class="card" id="s1-3"><h3>1.3 功能开关总览</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>开关</th>
+<th>用途</th>
+<th>主要输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--make-xrm</code></td>
+<td>构建系谱/基因组/一步法/环境关系矩阵及其逆</td>
+<td><code>.PA/.GA/.GD/.HA/.HD</code> <code>.bin</code> + <code>.id</code></td>
+</tr>
+<tr>
+<td><code>--trans-xrm</code></td>
+<td>关系矩阵二进制 ↔ 文本互转</td>
+<td><code>.txt</code> <code>.id.txt</code> 或 <code>.bin</code></td>
+</tr>
+<tr>
+<td><code>--trans-geno</code></td>
+<td>基因型转加性/显性编码、BLUPF90 格式</td>
+<td><code>.geno.A.txt</code> / <code>.geno.D.txt</code></td>
+</tr>
+<tr>
+<td><code>--allele-freq</code> / <code>--geno-freq</code></td>
+<td>等位基因频率 / 基因型频率</td>
+<td><code>.afreq</code> / <code>.gfreq</code></td>
+</tr>
+<tr>
+<td><code>--homo</code> / <code>--hete</code></td>
+<td>个体纯合度 / 杂合度</td>
+<td><code>.homo</code> / <code>.hete</code></td>
+</tr>
+<tr>
+<td><code>--ibc</code> / <code>--rc</code></td>
+<td>近交系数 / 亲缘系数</td>
+<td><code>.ibc</code> / <code>.rc</code></td>
+</tr>
+<tr>
+<td><code>--pca</code></td>
+<td>主成分分析</td>
+<td><code>.pc</code> <code>.pcp</code></td>
+</tr>
+<tr>
+<td><code>--cluster</code></td>
+<td>无监督自适应群体聚类（PCA+UMAP+HDBSCAN）</td>
+<td><code>.cluster.txt</code></td>
+</tr>
+<tr>
+<td><code>--single-trait</code></td>
+<td>单性状 / 重复力模型：方差组分 + 育种值</td>
+<td><code>.vars</code> <code>.beta</code> <code>.anova</code> <code>.rand</code></td>
+</tr>
+<tr>
+<td><code>--multi-trait</code></td>
+<td>多性状模型：方差、协方差、遗传相关</td>
+<td><code>.vars</code> <code>.covars</code> <code>.&lt;trait&gt;.beta/.anova/.rand</code></td>
+</tr>
+<tr>
+<td><code>--mme</code></td>
+<td>给定方差组分直接解混合模型方程</td>
+<td><code>.rand</code> <code>.beta</code></td>
+</tr>
+<tr>
+<td><code>--snp-effect</code></td>
+<td>计算 SNP 加性/显性效应</td>
+<td><code>.snpeff</code></td>
+</tr>
+<tr>
+<td><code>--pred</code></td>
+<td>用 SNP 效应对个体打分（GEBV/PRS）</td>
+<td><code>.bv</code></td>
+</tr>
+<tr>
+<td><code>--mating</code></td>
+<td>基因组选配</td>
+<td><code>.mating</code></td>
+</tr>
+<tr>
+<td><code>--ld</code> / <code>--ldscore</code></td>
+<td>LD 矩阵 / LD score</td>
+<td><code>.bin</code> <code>.info</code> / <code>.ldsc</code></td>
+</tr>
+<tr>
+<td><code>--ldreg</code></td>
+<td>LD score 回归估 h2、rG</td>
+<td><code>.ldsr.h2</code> <code>.ldsr.rg</code></td>
+</tr>
+<tr>
+<td><code>--sblup</code></td>
+<td>基于汇总统计的（多性状）SBLUP</td>
+<td><code>.snpeff</code></td>
+</tr>
+</tbody>
+</table></div></article><article class="card" id="s1-4"><h3>1.4 通用参数</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--threads n</code></td>
+<td>线程数</td>
+<td>不设则读取 OpenMP 环境变量，用满可用资源</td>
+</tr>
+<tr>
+<td><code>--out prefix</code></td>
+<td>输出前缀</td>
+<td>所有结果文件以此开头</td>
+</tr>
+<tr>
+<td><code>--keep file</code></td>
+<td>只用列出的个体</td>
+<td>一列 ID，无表头</td>
+</tr>
+<tr>
+<td><code>--remove file</code></td>
+<td>剔除列出的个体</td>
+<td>同上</td>
+</tr>
+<tr>
+<td><code>--extract file</code></td>
+<td>只用列出的 SNP</td>
+<td>一列 SNP ID，无表头；常用于用显著 SNP 建 GRM</td>
+</tr>
+<tr>
+<td><code>--exclude file</code></td>
+<td>剔除列出的 SNP</td>
+<td>同上</td>
+</tr>
+<tr>
+<td><code>--step n</code></td>
+<td>基因型分块读取的 SNP 数</td>
+<td>调小降低内存，代价是速度</td>
+</tr>
+<tr>
+<td><code>--float-prec</code></td>
+<td>单精度计算</td>
+<td>内存约减半；特定情况下参数估计精度会下降</td>
+</tr>
+<tr>
+<td><code>--write-txt</code></td>
+<td>同时输出文本版</td>
+<td>用于查看 XRM、LD 矩阵等二进制结果</td>
+</tr>
+<tr>
+<td><code>--add</code> / <code>--dom</code></td>
+<td>加性 / 显性遗传效应</td>
+<td>可同时给；影响 XRM、SNP 效应、打分</td>
+</tr>
+<tr>
+<td><code>--add-inv</code> / <code>--dom-inv</code></td>
+<td>同时输出关系矩阵的逆</td>
+<td>给 DMU/BLUPF90/ASReml 用，HIBLUP 自己不需要</td>
+</tr>
+<tr>
+<td><code>--ridge-value x</code></td>
+<td>求逆前对角线加小值</td>
+<td>解决矩阵非正定、无法求逆</td>
+</tr>
+<tr>
+<td><code>--pcg</code></td>
+<td>预条件共轭梯度求解</td>
+<td>大数据解 MME 更快</td>
+</tr>
+<tr>
+<td><code>--r2</code></td>
+<td>输出 SE、PEV、可靠性</td>
+<td>很耗时，按需开启</td>
+</tr>
+</tbody>
+</table>
+<p>过滤参数对所有涉及个体或 SNP 的功能都有效。</p></div></article></div></section>
+<section class="sec" id="s2" data-sec="s2">
+<header class="sec-head"><span class="badge">02</span><h2>输入文件详解</h2><span class="sec-count">5 节</span></header>
+<div class="cards"><article class="card" id="s2-1"><h3>2.1 表型文件 <code>--pheno</code></h3><div class="card-body"><p>与其他软件不同，HIBLUP 的表型文件<strong>同时包含表型和所有环境因子</strong>（协变量、固定效应、环境随机效应），模型中的效应都通过“列号”引用。</p>
+<pre><code>id    sex  season  day  weight  loc  dam     tr1      tr2      tr3
+Ind1  F    Winter  100  2.9     l3   Ind902  73.9776  21.3252  35.7737
+Ind2  M    Summer  100  1.5     l2   Ind902  94.1994  19.1162  54.2453
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>列号</th>
+<th>列名</th>
+<th>在模型中的典型角色</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>id</td>
+<td>个体 ID（必须第 1 列）；重复力模型中作永久环境效应</td>
+<td><code>--rand 1</code></td>
+</tr>
+<tr>
+<td>2, 3</td>
+<td>sex, season</td>
+<td>离散固定效应</td>
+<td><code>--dcovar 2,3</code></td>
+</tr>
+<tr>
+<td>4, 5</td>
+<td>day, weight</td>
+<td>数量协变量（必须是数字）</td>
+<td><code>--qcovar 4,5</code></td>
+</tr>
+<tr>
+<td>6, 7</td>
+<td>loc, dam</td>
+<td>环境随机效应（如场地、母体）</td>
+<td><code>--rand 6,7</code></td>
+</tr>
+<tr>
+<td>8–10</td>
+<td>tr1–tr3</td>
+<td>性状</td>
+<td><code>--pheno-pos 8</code> 或 <code>8 9 10</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>必须有表头。</li>
+<li>缺失值符号：<code>NA Na . - NaN NAN nan na N/A n/a &lt;NA&gt;</code>。</li>
+<li>默认分析第 2 列，用 <code>--pheno-pos</code> 指定。</li>
+<li>遗传随机效应<strong>不要</strong>通过 <code>--rand 1</code> 添加：提供 <code>--pedigree</code>、<code>--bfile</code> 或 <code>--xrm</code> 后自动拟合。</li>
+</ul></div></article><article class="card" id="s2-2"><h3>2.2 多性状时效应的写法</h3><div class="card-body"><p>规则：<strong>性状内用逗号，性状间用空格，某性状没有该效应写 0</strong>，顺序与 <code>--pheno-pos</code> 一一对应。</p>
+<pre><code>--pheno-pos 8 9 10
+--dcovar    2,3  0  2,3,6     # tr1: sex+season; tr2: 无; tr3: sex+season+loc
+--qcovar    4,5  5  4
+--rand      6,7  7  0
+</code></pre>
+<p>互作项用冒号：<code>2:3</code> = sex×season（详见 4.6）。</p></div></article><article class="card" id="s2-3"><h3>2.3 系谱文件 <code>--pedigree</code></h3><div class="card-body"><pre><code>id     father  mother
+Ind2   NA      NA
+Ind5   Ind1    NA
+Ind17  Ind11   Ind5
+</code></pre>
+<ul>
+<li>三列依次为个体、父亲、母亲；未知亲本用缺失符号。</li>
+<li>不要求按出生顺序排列，软件自动排序整理。</li>
+<li>系谱中出现但未单独成行的亲本（如上例 Ind1）也会被处理。</li>
+</ul></div></article><article class="card" id="s2-4"><h3>2.4 基因型文件 <code>--bfile</code></h3><div class="card-body"><ul>
+<li>只接受 PLINK 二进制 <code>.bed/.bim/.fam</code>，前缀传给 <code>--bfile</code>。</li>
+<li>只能读<strong>一套</strong>文件：按染色体分开的需先 <code>plink --merge-list</code> 合并。</li>
+<li>编码：A1A1=2，A1A2=1，A2A2=0，A1 为 <code>.bim</code> 第 5 列；所有 SNP 效应都以 A1 为效应等位基因。</li>
+<li><strong>不做填充</strong>：缺失基因型被当作杂合（编码 1），务必提前填充。</li>
+<li>选配时 <code>.fam</code> 第 5 列须标性别（1=公，2=母）。</li>
+</ul>
+<p>其他格式转换：</p>
+<pre><code># VCF -&gt; 二进制
+plink2 --vcf demo.vcf --make-bed --out demo
+# PED/MAP -&gt; 二进制
+plink2 --ped demo.ped --map demo.map --make-bed --out demo
+# HapMap -&gt; VCF（TASSEL，先排序再导出）
+run_pipeline.pl -SortGenotypeFilePlugin -inputFile demo.hmp.txt -outputFile demo.sort.hmp.txt -fileType Hapmap
+run_pipeline.pl -fork1 -h demo.sort.hmp.txt -export -exportType VCF -runfork1
+</code></pre></div></article><article class="card" id="s2-5"><h3>2.5 其他输入文件</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>参数</th>
+<th>格式</th>
+<th>用途与注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>群体分类</td>
+<td><code>--pop-class</code></td>
+<td>两列：ID、群体</td>
+<td>分群计算频率、构建混合 GRM、模型中考虑群体</td>
+</tr>
+<tr>
+<td>关系矩阵</td>
+<td><code>--xrm a,b</code></td>
+<td><code>*.bin</code>（下三角，每元素 4 字节）+ <code>*.id</code>；稀疏为 <code>*.sparse.bin</code>（ijk，12 字节）</td>
+<td>只认二进制；GCTA/LDAK 二进制 GRM 可直接用；<strong>不要传逆矩阵</strong></td>
+</tr>
+<tr>
+<td>GEBV</td>
+<td><code>--gebv</code></td>
+<td>ID + add [+ dom]</td>
+<td>反推 SNP 效应；加性列在前</td>
+</tr>
+<tr>
+<td>SNP 权重</td>
+<td><code>--snp-weight</code></td>
+<td>SNP ID + 权重（正数）</td>
+<td>加权 GRM；与 <code>--add/--dom</code> 对应</td>
+</tr>
+<tr>
+<td>SNP 效应</td>
+<td><code>--score</code></td>
+<td>SNPid a1 a2 freq_a1 add [dom]</td>
+<td><code>--pred</code>、<code>--mating</code>；同时有 add/dom 须加 <code>--add --dom</code></td>
+</tr>
+<tr>
+<td>GWAS 汇总</td>
+<td><code>--sumstat</code></td>
+<td>COJO：SNP A1 A2 FREQ BETA SE P NMISS</td>
+<td>A1 为效应等位基因，FREQ 为 A1 频率</td>
+</tr>
+<tr>
+<td>基因组窗口</td>
+<td><code>--window-file</code></td>
+<td>chr start stop</td>
+<td>不重叠；用于 LD、LD score、SBLUP</td>
+</tr>
+<tr>
+<td>个体/SNP 列表</td>
+<td><code>--keep/--remove/--extract/--exclude</code></td>
+<td>一列，无表头</td>
+<td>所有功能通用</td>
+</tr>
+</tbody>
+</table></div></article></div></section>
+<section class="sec" id="s3" data-sec="s3">
+<header class="sec-head"><span class="badge">03</span><h2>模型与自动切换</h2><span class="sec-count">3 节</span></header>
+<div class="cards"><article class="card" id="s3-1"><h3>3.1 模型结构</h3><div class="card-body"><p>HIBLUP 拟合的一般模型可写成：</p>
+<pre><code>y = Xb + Σ Wk·ck + Σ Zj·gj + e
+    │      │          │       └ 残差 e
+    │      │          └ 遗传随机效应（PA/PD、GA/GD、HA/HD 及其互作），来自 --pedigree / --bfile / --xrm
+    │      └ 环境随机效应（--rand，如场地、母体、永久环境）
+    └ 固定效应（--dcovar）与协变量（--qcovar），截距 mu 自动加入
+</code></pre>
+<p>HIBLUP 基于 <strong>V 矩阵</strong>（表型方差协方差矩阵）而不是 MME 稀疏左手项求解，因此：基因组数据（LHS 稠密）很高效；纯系谱或高度重复记录时反而不如 DMU、BLUPF90、ASReml。</p></div></article><article class="card" id="s3-2"><h3>3.2 按输入自动切换模型</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>qcovar/dcovar</th>
+<th>--rand</th>
+<th>--pedigree</th>
+<th>--bfile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LM</td>
+<td>必需</td>
+<td>不用</td>
+<td>不用</td>
+<td>不用</td>
+</tr>
+<tr>
+<td>BLUP</td>
+<td>可选</td>
+<td>必需</td>
+<td>可选</td>
+<td>可选</td>
+</tr>
+<tr>
+<td>PBLUP</td>
+<td>可选</td>
+<td>可选</td>
+<td>必需</td>
+<td>不用</td>
+</tr>
+<tr>
+<td>GBLUP</td>
+<td>可选</td>
+<td>可选</td>
+<td>不用</td>
+<td>必需</td>
+</tr>
+<tr>
+<td>SSGBLUP</td>
+<td>可选</td>
+<td>可选</td>
+<td>必需</td>
+<td>必需</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>--xrm demo.GA</code> 等价于 <code>--bfile demo --add</code>；<code>--xrm demo.HA</code> 即一步法。</li>
+<li>rrBLUP 与 GBLUP 理论等价：GBLUP 命令加 <code>--snp-effect</code> 即得 rrBLUP 的 SNP 效应。</li>
+<li><code>--pheno-pos</code> 给 1 个位置为单性状，多个位置为多性状（<code>--mme</code> 据此自动切换）。</li>
+</ul></div></article><article class="card" id="s3-3"><h3>3.3 怎么选模型</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>数据情况</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只有系谱</td>
+<td>可用 PBLUP，但官方建议 DMU / BLUPF90 更快更省内存</td>
+</tr>
+<tr>
+<td>全部个体有基因型</td>
+<td>GBLUP（<code>--bfile</code> 或 <code>--xrm demo.GA</code>）</td>
+</tr>
+<tr>
+<td>部分个体有基因型，系谱完整</td>
+<td>SSGBLUP（同时给 <code>--pedigree</code> 与 <code>--bfile</code>，构建 H 矩阵）</td>
+</tr>
+<tr>
+<td>想估显性方差</td>
+<td>加 <code>--dom</code>，得 GD/HD</td>
+</tr>
+<tr>
+<td>多品种混合群体</td>
+<td>加 <code>--pop-class</code> 构建混合 GRM，或把品种设为固定效应</td>
+</tr>
+<tr>
+<td>有 GWAS 先验显著位点</td>
+<td>加权 GRM（<code>--snp-weight</code>）或显著 SNP 单独建 GRM 作第二个随机效应</td>
+</tr>
+<tr>
+<td>只有 GWAS 汇总统计</td>
+<td>LD score 回归估参数 + SBLUP 估 SNP 效应</td>
+</tr>
+<tr>
+<td>同一个体多次记录</td>
+<td>重复力模型（<code>--rand 1</code>）；重复次数很多时改用 MME 类软件</td>
+</tr>
+</tbody>
+</table></div></article></div></section>
+<section class="sec" id="s4" data-sec="s4">
+<header class="sec-head"><span class="badge">04</span><h2>常用命令详解</h2><span class="sec-count">9 节</span></header>
+<div class="cards"><article class="card" id="s4-1"><h3>4.1 构建关系矩阵 <code>--make-xrm</code></h3><div class="card-body"><p><strong>建议先建好、再用 <code>--xrm</code> 复用</strong>：逐性状分析时每次都重建矩阵很慢，复用结果完全相同。</p>
+<p><strong>(1) 系谱矩阵 A</strong></p>
+<pre><code># --add 加性 A（--dom 得显性）；--add-inv 同时输出 A 逆（给其他软件用）
+./hiblup --make-xrm --pedigree demo.ped --add --add-inv --threads 32 --out demo
+# -&gt; demo.PA.bin  demo.PA.id  demo.PAinv.sparse.bin  demo.PAinv.sparse.id
+</code></pre>
+<p><strong>(2) 基因组矩阵 G</strong></p>
+<pre><code># --add --dom 同时得 GA、GD；--code-method 编码方法（见下表）；--step 每块 SNP 数，控制内存
+./hiblup --make-xrm --bfile demo --add --dom --code-method 1 --step 10000 --threads 32 --out demo
+# -&gt; demo.GA.bin  demo.GA.id  demo.GD.bin  demo.GD.id
+</code></pre>
+<p>G 的计算公式：G = ZZ' / [tr(ZZ')/n]，Z 为 n×m 的编码后基因型矩阵，不同方法只是 Z 的编码方式不同：</p>
+<table>
+<thead>
+<tr>
+<th><code>--code-method</code></th>
+<th>参考文献</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1（默认）</td>
+<td>Su et al. 2012, PLoS ONE</td>
+<td>加性与显性按频率中心化</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Zeng et al. 2005, Genetics</td>
+<td>基于 QTL 模型参数化</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Yang et al. 2010, Nat Genet</td>
+<td>与 GCTA 标准化思路一致</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Vitezica et al. 2017, Genetics</td>
+<td>加性、显性、上位正交（NOIA）</td>
+</tr>
+</tbody>
+</table>
+<p>同一参数也影响基因组近交系数和亲缘系数（<code>--ibc --rc --code-method</code>）。</p>
+<p><strong>(3) G 的变体</strong></p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>加参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多品种混合 G</td>
+<td><code>--pop-class pop.txt</code></td>
+<td>每个群体用自己的频率中心化，跨群体块按迹的几何均值标准化</td>
+</tr>
+<tr>
+<td>加权 G</td>
+<td><code>--snp-weight wt.txt</code></td>
+<td>权重须为正数</td>
+</tr>
+<tr>
+<td>子集 SNP 的 G</td>
+<td><code>--extract sig.snp.txt</code></td>
+<td>如只用显著 SNP</td>
+</tr>
+<tr>
+<td>剔除部分 SNP</td>
+<td><code>--exclude sig.snp.txt</code></td>
+<td>常与上一行配对计算 PVE</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(4) 一步法 H 矩阵</strong>：同时给系谱和基因型即自动构建。</p>
+<pre><code>./hiblup --make-xrm --pedigree demo.ped --bfile demo \
+         --alpha 0.05 --add --dom --out demo
+# -&gt; demo.HA.*  demo.HD.*；用 --add-inv / --dom-inv 得 H 逆（*.sparse.*）
+
+# 用自己算好的 GRM（须为二进制）构建 H
+./hiblup --make-xrm --pedigree demo.ped --xrm yourGRM --alpha 0.05 --add --out demo
+</code></pre>
+<ul>
+<li>构建过程：先把 G 线性校正到与 A22 尺度一致（使 G 对角线均值、非对角线均值分别等于 A22 的），得到 Gadj；再 Gw = (1−α)·Gadj + α·A22，然后按 Aguilar 2010 / Christensen 2010 的公式组成 H。</li>
+<li><code>--alpha</code> 越大，Gw 中系谱成分越多，可改善 G 的奇异性；示例使用 0.05。</li>
+<li>H 的构建同样支持 <code>--snp-weight</code>、<code>--pop-class</code>。</li>
+</ul>
+<p><strong>(5) 环境随机效应的矩阵</strong></p>
+<pre><code>./hiblup --make-xrm --pheno demo.phe --rand 6,7 --out demo
+# -&gt; demo.loc.sparse.*  demo.dam.sparse.*
+</code></pre>
+<p>用途：把环境效应作为 <code>--xrm</code> 输入多性状模型，从而估计环境效应在性状间的相关（默认只估遗传和残差协方差）。</p>
+<p><strong>(6) 格式转换与跨软件</strong></p>
+<pre><code># 二进制 -&gt; 文本方阵（demo.txt + demo.id.txt）；加 --triangle 输出下三角 i j k
+./hiblup --trans-xrm --xrm demo.GA --out demo
+# 文本 -&gt; 二进制（ijk 格式需加 --triangle）
+./hiblup --trans-xrm --xrm-txt demo.txt --xrm-id demo.id.txt --out demo
+# GCTA/LDAK 的 GRM 转文本
+./hiblup --trans-xrm --xrm gcta.grm --out hiblup
+# HIBLUP 的稠密 GRM 给 GCTA 用
+awk '{print $1,$1}' demo.GA.id &gt; gcta.grm.id &amp;&amp; cp demo.GA.bin gcta.grm.bin
+</code></pre>
+<ul>
+<li>文件名带 <code>.sparse.</code> 的矩阵不能直接给 GCTA/LDAK。</li>
+<li>求逆报 “matrix is not invertible”：矩阵非正定，加 <code>--ridge-value</code> 小值。</li>
+</ul>
+<p><strong>(7) 基因型转码</strong></p>
+<pre><code>./hiblup --trans-geno --bfile demo --add --out x             # x.geno.A.txt（0/1/2）
+./hiblup --trans-geno --bfile demo --dom --out x             # x.geno.D.txt（杂合=1，纯合=0）
+./hiblup --trans-geno --bfile demo --blupf90 --add --out x   # BLUPF90 格式（ID + 连续基因型字符串）
+</code></pre></div></article><article class="card" id="s4-2"><h3>4.2 单性状（估方差组分 + 育种值）</h3><div class="card-body"><pre><code># 方式一：一步到位（每次都会重建矩阵）
+./hiblup --single-trait \
+         --pheno demo.phe --pheno-pos 8 \
+         --dcovar 2,3 --qcovar 4,5 --rand 6,7 \
+         --pedigree demo.ped --bfile demo \
+         --add --dom --threads 32 --out demo
+
+# 方式二（推荐）：先建矩阵，再复用
+./hiblup --make-xrm --pedigree demo.ped --bfile demo --add --dom --out demo
+./hiblup --single-trait \
+         --pheno demo.phe --pheno-pos 8 \
+         --dcovar 2,3 --qcovar 4,5 --rand 6,7 \
+         --xrm demo.HA,demo.HD --add --dom \
+         --vc-method AI --ai-maxit 30 \
+         --threads 32 --out demo
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>本例含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--pheno-pos 8</code></td>
+<td>分析第 8 列 tr1</td>
+</tr>
+<tr>
+<td><code>--dcovar 2,3</code></td>
+<td>sex、season 作固定效应</td>
+</tr>
+<tr>
+<td><code>--qcovar 4,5</code></td>
+<td>day、weight 作协变量</td>
+</tr>
+<tr>
+<td><code>--rand 6,7</code></td>
+<td>loc、dam 作环境随机效应</td>
+</tr>
+<tr>
+<td><code>--xrm demo.HA,demo.HD</code></td>
+<td>一步法加性 + 显性遗传效应</td>
+</tr>
+<tr>
+<td><code>--vc-method AI</code></td>
+<td>AI-REML 估方差组分（见第 5 节）</td>
+</tr>
+<tr>
+<td><code>--vc-priors</code></td>
+<td>可选，给方差组分初值加速收敛（顺序见 4.5）</td>
+</tr>
+<tr>
+<td><code>--r2</code> / <code>--snp-effect</code></td>
+<td>可选，输出可靠性 / SNP 效应</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>构建 XRM 支持的选项（加权 G、混合 G、H 矩阵等）在这条命令里都能直接用。</li>
+<li>输出：<code>demo.vars</code>、<code>demo.beta</code>、<code>demo.anova</code>、<code>demo.rand</code>（解读见第 6 节）。</li>
+<li>多个性状逐个分析时，只改 <code>--pheno-pos</code> 和 <code>--out</code>，矩阵复用即可。</li>
+</ul></div></article><article class="card" id="s4-3"><h3>4.3 重复力模型（永久环境效应）</h3><div class="card-body"><pre><code># 表型文件中同一 ID 可出现多行（多次记录）
+./hiblup --single-trait \
+         --pheno demo.repeat.phe --pheno-pos 2 \
+         --rand 1 \
+         --bfile demo --threads 32 --out demo
+</code></pre>
+<ul>
+<li><code>--rand 1</code>：把第 1 列个体 ID 作为环境随机效应，即<strong>永久环境效应</strong>；遗传效应仍由 <code>--bfile</code> 拟合。</li>
+<li>结果中 ID 行（永久环境）方差 + 遗传方差，占表型方差的比例即重复力 r = (Va + Vpe) / Vp。</li>
+<li>性能提示：重复次数少（如每个体 2 次）HIBLUP 更快；重复次数多（如每个体 10 次）建议 BLUPF90、ASReml 等 MME 类软件。</li>
+</ul></div></article><article class="card" id="s4-4"><h3>4.4 多性状模型（遗传相关）</h3><div class="card-body"><pre><code>./hiblup --multi-trait \
+         --pheno demo.phe --pheno-pos 8 9 10 \
+         --qcovar 4,5 5 4 \
+         --dcovar 2,3 0 2 \
+         --rand 6,7 7 0 \
+         --xrm demo.GA,demo.GD \
+         --vc-method AI --ai-maxit 30 \
+         --threads 32 --out demo
+</code></pre>
+<p>本例每个性状的模型：</p>
+<table>
+<thead>
+<tr>
+<th>性状</th>
+<th>协变量</th>
+<th>固定效应</th>
+<th>环境随机</th>
+<th>遗传</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tr1（第 8 列）</td>
+<td>day, weight</td>
+<td>sex, season</td>
+<td>loc, dam</td>
+<td>GA, GD</td>
+</tr>
+<tr>
+<td>tr2（第 9 列）</td>
+<td>weight</td>
+<td>无</td>
+<td>dam</td>
+<td>GA, GD</td>
+</tr>
+<tr>
+<td>tr3（第 10 列）</td>
+<td>day</td>
+<td>sex</td>
+<td>无</td>
+<td>GA, GD</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>可用于一个群体内多个性状，或把<strong>不同群体的同一性状</strong>当作不同性状估跨群体遗传相关。</li>
+<li>支持不平衡数据（v1.5.0 及以上），性状数量不限。</li>
+<li>默认估计残差协方差；如需不估残差协方差，加 <code>--ignore-cove</code>。</li>
+<li>只估<strong>遗传效应和残差</strong>的协方差，至少要有一个遗传随机效应；环境效应相关见 4.1(5)。</li>
+<li>输出：<code>demo.vars</code>、<code>demo.covars</code>，以及每个性状的 <code>demo.&lt;trait&gt;.beta/.anova/.rand</code>。</li>
+<li>先用单性状结果作为 <code>--vc-priors</code>、<code>--covc-priors</code> 初值，可明显加快多性状收敛。</li>
+</ul></div></article><article class="card" id="s4-5"><h3>4.5 已知方差组分直接解 MME <code>--mme</code></h3><div class="card-body"><p>适用于方差组分已知（文献值或已估计）、只需快速计算育种值的场景，如例行遗传评估。</p>
+<pre><code># 单性状：loc 方差、GA 方差、残差方差
+./hiblup --mme --pheno demo.phe --pheno-pos 8 --rand 6 \
+         --xrm demo.GA --vc-priors v1,v2,v3 --pcg --threads 32 --out demo
+
+# 多性状：加性 + 显性
+./hiblup --mme --pheno demo.phe --pheno-pos 8 9 10 --rand 6,7 7 0 \
+         --bfile demo --add --dom \
+         --vc-priors t1_v1,t1_v2,t1_v3,t1_v4,t1_v5 t2_v1,t2_v2,t2_v3,t2_v4 t3_v1,t3_v2,t3_v3 \
+         --covc-priors cov1,cov2,cov3 cov4,cov5,cov6 cov7,cov8,cov9 \
+         --pcg --threads 32 --out demo
+</code></pre>
+<p><strong><code>--vc-priors</code> 的顺序</strong>：每个性状内依次为 环境随机效应（按 <code>--rand</code> 顺序）→ 遗传效应（按 <code>--xrm</code> 或 add、dom 顺序）→ 残差；性状内逗号、性状间空格。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义（上面多性状例子）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>t1_v1, t1_v2</td>
+<td>tr1 的 loc、dam 方差</td>
+</tr>
+<tr>
+<td>t1_v3, t1_v4</td>
+<td>tr1 的加性、显性方差</td>
+</tr>
+<tr>
+<td>t1_v5</td>
+<td>tr1 残差</td>
+</tr>
+<tr>
+<td>t2_v1</td>
+<td>tr2 的 dam 方差</td>
+</tr>
+<tr>
+<td>t2_v2, t2_v3, t2_v4</td>
+<td>tr2 加性、显性、残差</td>
+</tr>
+<tr>
+<td>t3_v1, t3_v2, t3_v3</td>
+<td>tr3 加性、显性、残差</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>--covc-priors</code> 的顺序</strong>：按“遗传效应 1、遗传效应 2 … 残差”分块（块数 = 遗传矩阵数 + 1），块内为性状间协方差矩阵的<strong>下三角，按列</strong>依次填写，块内逗号、块间空格。3 个性状时每块为 cov(1,2), cov(1,3), cov(2,3)：</p>
+<table>
+<thead>
+<tr>
+<th>块</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GA</td>
+<td>cov1 = tr1–tr2，cov2 = tr1–tr3，cov3 = tr2–tr3</td>
+</tr>
+<tr>
+<td>GD</td>
+<td>cov4, cov5, cov6（同上顺序）</td>
+</tr>
+<tr>
+<td>残差</td>
+<td>cov7, cov8, cov9（同上顺序）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>默认直接求 V 矩阵的逆；<code>--pcg</code> 用预条件共轭梯度迭代求解，很多情况下更快。</li>
+<li><code>--vc-priors</code>、<code>--covc-priors</code> 在 <code>--single-trait</code>/<code>--multi-trait</code> 中同样可用，作为 REML 起始值。</li>
+</ul></div></article><article class="card" id="s4-6"><h3>4.6 互作项</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>单性状写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E×E 固定</td>
+<td><code>--dcovar 2,2:3:6</code></td>
+<td>sex 主效应 + sex×season×loc</td>
+</tr>
+<tr>
+<td>E×E 随机</td>
+<td><code>--rand 6,6:7,7</code></td>
+<td>loc、loc×dam、dam</td>
+</tr>
+<tr>
+<td>G×G</td>
+<td><code>--xrm demo.GA:demo.GD</code></td>
+<td>只拟合 A×D</td>
+</tr>
+<tr>
+<td>G×G</td>
+<td><code>--xrm demo.GA,demo.GD,demo.GA:demo.GD</code></td>
+<td>A、D、A×D</td>
+</tr>
+<tr>
+<td>G×G</td>
+<td><code>--xrm demo.GA:demo.GA,demo.GA:demo.GD,demo.GD:demo.GD</code></td>
+<td>A×A、A×D、D×D（上位）</td>
+</tr>
+<tr>
+<td>G×E</td>
+<td><code>--rand-gxe 6:demo.GA,6:demo.GD</code></td>
+<td>loc×A、loc×D</td>
+</tr>
+<tr>
+<td>G×E 多因子</td>
+<td><code>--rand-gxe 6:7:demo.GA</code></td>
+<td>loc×dam×A</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>G×G 只能通过 <code>--xrm</code> 指定，矩阵为各矩阵的 Hadamard 积再按迹标准化：G = (G1∘G2∘…)/[tr(G1∘G2∘…)/N]。</li>
+<li>多性状时同样“性状间空格、无则写 0”：</li>
+</ul>
+<pre><code>--dcovar 2:3 0 2,3,2:3 --rand 6 7,6:7 0
+--rand-gxe 6:demo.GA 6:demo.GA,7:demo.GA 0
+</code></pre></div></article><article class="card" id="s4-7"><h3>4.7 SNP 效应、预测与选配</h3><div class="card-body"><p><strong>(1) 计算 SNP 效应</strong></p>
+<pre><code># 方式一：拟合模型时直接输出（此例为一步法单性状，加性）
+./hiblup --single-trait --pheno demo.phe --pheno-pos 8 \
+         --bfile demo --pedigree demo.ped --add --snp-effect --threads 32 --out demo
+
+# 方式二：由已有 GEBV 反推（会内部构建 G）
+./hiblup --snp-effect --gebv demo.gebv.d.txt --bfile demo --dom --threads 32 --out demo
+
+# 方式二加速：提供已建好的 G
+./hiblup --snp-effect --gebv demo.gebv.ad.txt --bfile demo \
+         --xrm demo.GA,demo.GD --add --dom --threads 32 --out demo
+</code></pre>
+<ul>
+<li>结果写入 <code>demo.snpeff</code>。</li>
+<li>GEBV 若来自加权 G，反推时必须给同样的 <code>--snp-weight</code>。</li>
+<li>应用：GWAS 式查看大效应位点；作为权重构建加权 G；给新个体打分。</li>
+</ul>
+<p><strong>(2) 预测 GEBV / PRS</strong></p>
+<pre><code>./hiblup --pred --bfile new_animals --score demo.snpeff --threads 10 --out new
+# 同时含加性、显性效应时：加 --add --dom（score 文件须为 6 列）
+# 只有显性效应：加 --dom（按 0/1/0 编码）
+</code></pre>
+<ul>
+<li>默认按加性编码（0/1/2）打分；功能同 PLINK <code>--score</code>，但速度快数倍。</li>
+<li>输出 <code>new.bv</code>，每个效应列对应一个预测值列。</li>
+<li>新个体的 <code>.bim</code> 与 <code>.snpeff</code> 中同名 SNP 的 A1/A2 必须一致。</li>
+</ul>
+<p><strong>(3) 基因组选配</strong></p>
+<pre><code>./hiblup --mating --bfile demo --score demo.snpeff --threads 32 --out demo
+</code></pre>
+<ul>
+<li>对所有公母组合预测后代期望遗传表现，同时利用加性和显性效应（适合杂交生产优化）。</li>
+<li><code>.fam</code> 第 5 列必须标性别：1=公、2=母，其他视为未知并被剔除。</li>
+<li><code>.bim</code> 与 <code>.snpeff</code> 的等位基因方向必须一致。</li>
+</ul></div></article><article class="card" id="s4-8"><h3>4.8 群体结构与基因型统计</h3><div class="card-body"><pre><code># 等位基因 / 基因型频率（可按群体分列）
+./hiblup --bfile demo --allele-freq --pop-class demo.popclass.txt --out demo   # demo.afreq
+./hiblup --bfile demo --geno-freq --out demo                                   # demo.gfreq
+# 按频率筛选 SNP，例如 0.05 &lt; freq &lt;= 0.1
+awk '$4 &gt; 0.05 &amp;&amp; $4 &lt;= 0.1 {print $1}' demo.afreq &gt; freq_filter_snp.txt
+
+# 纯合度 / 杂合度
+./hiblup --bfile demo --homo --hete --out demo        # demo.homo demo.hete
+
+# 近交系数与亲缘系数（系谱、基因型或已有矩阵均可）
+./hiblup --ibc --rc --pedigree demo.ped --out demo
+./hiblup --ibc --rc --bfile demo --code-method 1 --out demo
+./hiblup --ibc --rc --xrm demo.GA --out demo
+
+# PCA（--npc 输出前 n 个 PC，--step 控制内存）
+./hiblup --pca --bfile demo --npc 5 --out demo
+./hiblup --pca --xrm demo.GA --npc 5 --out demo
+
+# 无监督聚类（三种输入任选其一）
+./hiblup --cluster --bfile demo --npc 10 --threads 16 --out demo
+./hiblup --cluster --xrm demo.GA --npc 10 --threads 16 --out demo
+./hiblup --cluster --pc demo.pc.txt --npc 5 --threads 16 --out demo
+# 关闭 UMAP，直接在 PC 空间做 HDBSCAN（自动选 DBCV 最高的参数）
+./hiblup --cluster --bfile demo --umap-off --npc 10 --out demo
+</code></pre>
+<ul>
+<li>聚类流程：PCA 提取主要遗传变异 → UMAP 降到二维揭示非线性结构 → 改进 HDBSCAN 按局部密度识别稳定亚群，<strong>不需要预设群体数</strong>。</li>
+<li><code>--npc</code> 必须小于分析个体数。</li>
+<li>用 <code>--pc</code> 直接输入 PC 时没有特征值加权，结果可能与用基因型/XRM 输入不同。</li>
+</ul></div></article><article class="card" id="s4-9"><h3>4.9 汇总统计流程（LD / LD score / LDSC / SBLUP）</h3><div class="card-body"><pre><code># 1) 参考群 LD 矩阵（输出 .bin + .info，--write-txt 可读）
+./hiblup --ld --bfile ref --window-bp 1e6 --threads 16 --out ref_ldm
+
+# 2) LD score
+./hiblup --ldscore --bfile ref --window-bp 1000000 --threads 10 --out ref     # ref.ldsc
+
+# 3) LD score 回归：一个 sumstat 估 h2；多个 sumstat 同时估 h2 与两两 rG
+./hiblup --ldreg --sumstat t1.ma --lds ref.ldsc --out x
+./hiblup --ldreg --sumstat t1.ma t2.ma t3.ma --lds ref.ldsc --out x
+
+# 4) SBLUP：用基因型或预计算 LD 矩阵
+./hiblup --sblup --sumstat t1.ma --bfile ref --window-bp 1e6 --h2 0.3234 --threads 16 --out x
+./hiblup --sblup --sumstat t1.ma --ldm ref_ldm --h2 0.3234 --threads 10 --out x
+
+# 5) 多性状 SBLUP：h2 每性状一个，rg 按下三角 1-2 1-3 1-4 2-3 2-4 3-4
+./hiblup --sblup --sumstat t1.ma t2.ma t3.ma t4.ma --ldm ref_ldm \
+         --h2 0.3234 0.1256 0.6345 0.3536 \
+         --rg 0.1336 0.5567 0.2345 0.8454 0.3446 0.4633 --threads 10 --out x
+
+# 6) 用估得的 SNP 效应给个体打分
+./hiblup --pred --bfile target --score x.snpeff --out target
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>窗口参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--window-bp</code></td>
+<td>按物理距离划分不重叠窗口，默认 1Mb</td>
+</tr>
+<tr>
+<td><code>--window-num</code></td>
+<td>每个窗口固定 SNP 数，如 500</td>
+</tr>
+<tr>
+<td><code>--window-geno</code></td>
+<td>全基因组一个窗口，耗时、耗内存极大</td>
+</tr>
+<tr>
+<td><code>--window-file</code></td>
+<td>自定义窗口文件</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>LDSC 参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--M</code></td>
+<td>回归用的 SNP 数；默认取 LD score 文件中 MAF 在 5%–50% 的 SNP 数</td>
+</tr>
+<tr>
+<td><code>--chisq-max</code></td>
+<td>第一步估截距时卡方上限，默认 30</td>
+</tr>
+<tr>
+<td><code>--intercept-h2</code></td>
+<td>固定 h2 回归截距而不估计</td>
+</tr>
+<tr>
+<td><code>--intercept-gencov</code></td>
+<td>固定遗传协方差回归截距</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>--h2</code>、<code>--rg</code> 可来自 REML（有个体数据时）或 LD score 回归。</li>
+<li>用 <code>--ldm</code> 做 SBLUP 要求 SNP 满足哈迪-温伯格平衡，否则效应有偏、预测变差。</li>
+<li>窗口内 SNP 超过约 1 万时加 <code>--pcg</code>。</li>
+<li><strong>不要删减 LD score 文件中的 SNP</strong> 去对齐 sumstat：总 SNP 数对回归很关键。</li>
+<li>使用公开 LD score 且无 maf 列：若指定了 <code>--M</code>，maf 列可填任意值。</li>
+</ul></div></article></div></section>
+<section class="sec" id="s5" data-sec="s5">
+<header class="sec-head"><span class="badge">05</span><h2>方差组分算法与收敛</h2><span class="sec-count">3 节</span></header>
+<div class="cards"><article class="card" id="s5-1"><h3>5.1 <code>--vc-method</code> 选择</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>全称</th>
+<th>特点</th>
+<th>建议场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI</td>
+<td>Average Information REML</td>
+<td>收敛快，精度高</td>
+<td>中小数据的默认首选</td>
+</tr>
+<tr>
+<td>EM</td>
+<td>Expectation-Maximization REML</td>
+<td>稳定但慢，不易发散</td>
+<td>AI 不收敛或出现负方差时</td>
+</tr>
+<tr>
+<td>EMAI</td>
+<td>先 EM 后 AI</td>
+<td>兼顾稳健与速度</td>
+<td>初值不好、模型复杂</td>
+</tr>
+<tr>
+<td>HI</td>
+<td>HE 结果作为 AI 初值</td>
+<td>减少 AI 迭代次数</td>
+<td>较大数据</td>
+</tr>
+<tr>
+<td>HE</td>
+<td>Haseman-Elston 回归</td>
+<td>近似方法，极快；SE 用 100 次 Jackknife</td>
+<td>仅建议 &gt;10 万个体的超大数据</td>
+</tr>
+</tbody>
+</table>
+<p>HE 细节：</p>
+<ul>
+<li>有固定效应时先把表型对其回归，再对残差做 HE 回归。</li>
+<li>默认不输出随机效应解，需要加 <code>--he-pred</code>；此时可再加 <code>--pcg</code>，即 “HE+PCG” 策略，用于超大数据。</li>
+<li>样本量不足时 HE 估计可能有偏、不稳定，中小数据坚持用 REML。</li>
+</ul></div></article><article class="card" id="s5-2"><h3>5.2 收敛控制</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ai-maxit n</code></td>
+<td>AI-REML 最大迭代次数</td>
+</tr>
+<tr>
+<td><code>--em-maxit n</code></td>
+<td>EM-REML 最大迭代次数</td>
+</tr>
+<tr>
+<td><code>--vc-priors</code></td>
+<td>方差组分初值（顺序见 4.5）</td>
+</tr>
+<tr>
+<td><code>--covc-priors</code></td>
+<td>协方差初值（顺序见 4.5）</td>
+</tr>
+</tbody>
+</table></div></article><article class="card" id="s5-3"><h3>5.3 不收敛 / 结果异常时的排查顺序</h3><div class="card-body"><p>以下为通用经验，非官方规定：</p>
+<ol>
+<li>看 LOG 中每次迭代的 loglike 是否单调上升并趋于稳定；震荡或达到上限说明未收敛。</li>
+<li>检查表型：极端值、单位、缺失编码是否在 HIBLUP 认可的列表内。</li>
+<li>检查固定效应是否有水平记录过少或与随机效应混杂（<code>.anova</code> 中 Df 异常）。</li>
+<li>换 <code>--vc-method EMAI</code> 或 <code>EM</code>，或用单性状结果作为 <code>--vc-priors</code>。</li>
+<li>多性状先两两拟合，再合并；去掉估计接近 0 的随机效应。</li>
+<li>某方差组分趋于 0 或 SE 远大于估计值，说明数据不支持该效应，考虑从模型中删除并用 LRT 验证（第 7 节）。</li>
+</ol></div></article></div></section>
+<section class="sec" id="s6" data-sec="s6">
+<header class="sec-head"><span class="badge">06</span><h2>结果文件逐项解读</h2><span class="sec-count">8 节</span></header>
+<div class="lead"><p>本节数值均取自官方教程示例输出；“经验判读”为育种中的常用标准，非 HIBLUP 规定。</p></div><div class="cards"><article class="card" id="s6-1"><h3>6.1 <code>*.vars</code>：方差组分与遗传力</h3><div class="card-body"><p>单性状示例（一步法加性 + 显性，loc、dam 为环境随机效应）：</p>
+<pre><code>      Var      Var_SE   h2      h2_SE
+loc   12.2127  8.9109   0.1035  0.0682
+dam   10.6268  4.8605   0.0901  0.041
+HA    59.2007  11.7641  0.5019  0.0807
+HD    28.9946  8.9294   0.2458  0.083
+e     6.9232   1.6957   0.0587  0.0161
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>行名</td>
+<td>随机效应：环境效应用列名（loc、dam）；遗传效应用矩阵名（PA/GA/HA 加性，PD/GD/HD 显性，或 <code>--xrm</code> 给的前缀如 demo.GA）；e 为残差</td>
+</tr>
+<tr>
+<td>Var</td>
+<td>该效应的方差组分</td>
+</tr>
+<tr>
+<td>Var_SE</td>
+<td>方差的标准误</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>该方差占表型总方差 Vp 的比例</td>
+</tr>
+<tr>
+<td>h2_SE</td>
+<td>比例的标准误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>怎么算、怎么读</strong>：</p>
+<ul>
+<li>表型方差 Vp = 各行 Var 之和 = 12.21 + 10.63 + 59.20 + 28.99 + 6.92 ≈ 117.96。</li>
+<li><strong>狭义遗传力</strong> h² = V(HA) / Vp = 59.20 / 117.96 ≈ 0.502，即 HA 行的 h2。</li>
+<li>显性方差占比 d² = V(HD) / Vp ≈ 0.246；广义遗传力 H² ≈ (59.20 + 28.99) / 117.96 ≈ 0.75。</li>
+<li>loc 行 h2 = 0.10 表示场地效应解释 10% 的表型方差；dam 行即母体（共同环境）效应比例 c²。</li>
+<li>所有行的 h2 之和约为 1。</li>
+</ul>
+<p><strong>经验判读</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>判断点</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>遗传力高低</td>
+<td>h² &lt; 0.2 低；0.2–0.4 中；&gt; 0.4 高</td>
+</tr>
+<tr>
+<td>估计是否可靠</td>
+<td>Var / Var_SE &gt; 2 较可信；本例 loc（12.2/8.9 ≈ 1.4）不确定，HA（59.2/11.8 ≈ 5）可信</td>
+</tr>
+<tr>
+<td>显性是否值得保留</td>
+<td>显性方差大且 SE 较小 → 保留；接近 0 → 删除并用 LRT 检验</td>
+</tr>
+<tr>
+<td>异常信号</td>
+<td>方差趋于 0、SE 比估计值大很多、残差占比极小（可能与其他效应混杂）</td>
+</tr>
+</tbody>
+</table>
+<p>多性状时行名加性状前缀，如 <code>tr1_demo.GA</code>、<code>tr2_e</code>，每个性状单独计算 h2。</p></div></article><article class="card" id="s6-2"><h3>6.2 <code>*.covars</code>：协方差与遗传相关</h3><div class="card-body"><pre><code>Item             COVar    COVar_SE  r          r_SE
+tr1:tr2_demo.GA  46.6899  8.56852   0.747524   0.171364
+tr1:tr3_demo.GA  16.3376  5.96333   0.454749   0.185599
+tr1:tr2_demo.GD  26.9273  4.65452   0.796922   0
+tr1:tr2_e        0.24039  1.17428   0.024379   0.119333
+</code></pre>
+<ul>
+<li>行名 <code>tr1:tr2_demo.GA</code>：性状 1 与 2 在加性效应上的协方差和相关；<code>_e</code> 行为残差协方差/相关。</li>
+<li>相关 r = COVar / √(Var₁·Var₂)。例：46.69 / √(61.35 × 63.59) ≈ 0.748（Var 取自 <code>.vars</code> 中 tr1_demo.GA、tr2_demo.GA）。</li>
+<li><strong>加性遗传相关 rA</strong>（GA/HA/PA 行）用于判断间接选择和制定选择指数：rA 高（如 0.75）说明两性状受相似的加性基因控制，选一个会带动另一个。</li>
+<li>显著性快速判断：r ± 2·r_SE 不跨 0 即可认为显著；tr1:tr2_e 的 0.024 ± 0.24 跨 0，残差相关不显著。</li>
+<li><code>r_SE = 0</code>（如 tr1:tr2_demo.GD）通常说明该相关估计触到参数边界或 SE 未能计算，应谨慎对待该值。</li>
+<li>表型相关可由 rP ≈ (ΣCOVar) / √(Vp₁·Vp₂) 计算。</li>
+</ul></div></article><article class="card" id="s6-3"><h3>6.3 <code>*.beta</code>：固定效应与协变量估计</h3><div class="card-body"><pre><code>Levels         Estimation  SE
+mu             32.5285     3.4758
+sex_F          6.2933      1.7593
+sex_M          26.2353     1.7634
+season_Autumn  18.0905     0.9753
+day            0.1547      0.0574
+bornweight     1.5703      0.4614
+</code></pre>
+<ul>
+<li><code>mu</code>：总体截距。</li>
+<li><code>因子_水平</code>（如 sex_F、season_Autumn）：离散固定效应各水平的估计；<strong>比较同一因子不同水平之间的差值</strong>最有意义，例：公母差约 26.24 − 6.29 ≈ 19.9。</li>
+<li>数量协变量（day、bornweight）：回归系数，表示协变量增加 1 个单位时表型的变化量，例：出生重每增加 1 单位，性状增加约 1.57。</li>
+<li>多性状时为 <code>demo.&lt;trait&gt;.beta</code>。</li>
+</ul></div></article><article class="card" id="s6-4"><h3>6.4 <code>*.anova</code>：固定效应显著性</h3><div class="card-body"><pre><code>Factors     Df   SumSq       MeanSq      F         Pr(&gt;F)
+sex         1    49710.3845  49710.3845  7180.311  &lt;2e-16
+season      3    24515.0941  8171.698    1180.344  &lt;2e-16
+day         1    925.3352    925.3352    133.658   &lt;2e-16
+bornweight  1    437.3432    437.3432    63.171    1.30E-14
+e           493  3413.1141   6.9232
+</code></pre>
+<ul>
+<li>Df：离散因子 = 水平数 − 1（season 4 个季节 → 3），协变量 = 1。</li>
+<li><code>Pr(&gt;F)</code>：F 检验 p 值，p &lt; 0.05 说明该效应显著，应保留；不显著的可考虑从模型中删除后重跑。</li>
+<li>e 行 MeanSq 等于残差方差（6.9232，与 <code>.vars</code> 中 e 一致）。</li>
+</ul></div></article><article class="card" id="s6-5"><h3>6.5 <code>*.rand</code>：育种值与随机效应解</h3><div class="card-body"><ul>
+<li>每行一个个体，列为每个随机效应的解：</li>
+<li><code>PA</code> / <code>GA</code> / <code>HA</code> 列：<strong>加性育种值（EBV/GEBV）</strong>，包括没有表型、只有系谱或基因型的个体——这正是候选群体选种用的值。</li>
+<li><code>PD</code> / <code>GD</code> / <code>HD</code> 列：显性离差，不遗传给后代，选种通常只看加性列；杂交组合优化时才用。</li>
+<li>环境效应列（loc、dam 等）：该个体所在水平的效应估计。</li>
+<li><code>residuals</code>：残差。</li>
+<li>多性状为 <code>demo.&lt;trait&gt;.rand</code>；多性状育种值可按经济权重组合成选择指数。</li>
+<li>育种值是相对值（以群体为基准的离差），<strong>只在同一次分析内比较排名</strong>有意义。</li>
+</ul>
+<p><strong>加 <code>--r2</code> 后每个效应多出 3 列</strong>：</p>
+<pre><code>ID       GA        GA_SE    GA_PEV   GA_R2
+IND1001  6.66127   4.27597  18.2839  0.774767
+IND1003  2.08201   4.62091  21.3528  0.736963
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>含义</th>
+<th>公式 / 关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_SE</code></td>
+<td>预测误差标准差</td>
+<td>SE = √PEV（4.276² ≈ 18.28）</td>
+</tr>
+<tr>
+<td><code>_PEV</code></td>
+<td>预测误差方差</td>
+<td>PEV = Cᵢᵢ·σe²，Cᵢᵢ 为 MME 左手项逆矩阵对角元素</td>
+</tr>
+<tr>
+<td><code>_R2</code></td>
+<td>可靠性</td>
+<td>R² = 1 − PEV / σ²（σ² 为该效应的 REML 方差）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>准确性 = √R²，例 √0.775 ≈ 0.88。</li>
+<li>R² 越接近 1 越可靠：本身有表型、或有很多有表型近亲的个体高；无表型、亲缘远的候选个体低。</li>
+<li>实用：两个个体 GEBV 之差小于约 2 倍 SE 时，排名差异不确定。</li>
+<li><code>--r2</code> 计算往往比 REML 本身还慢，只在需要时开启。</li>
+</ul></div></article><article class="card" id="s6-6"><h3>6.6 LOG 文件</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C</td>
+<td>数量协变量</td>
+</tr>
+<tr>
+<td>F</td>
+<td>离散协变量（固定效应）</td>
+</tr>
+<tr>
+<td>F[ExE]</td>
+<td>环境 × 环境固定效应</td>
+</tr>
+<tr>
+<td>R[E] / R[ExE]</td>
+<td>环境随机效应 / 其互作</td>
+</tr>
+<tr>
+<td>R[G]</td>
+<td>遗传随机效应</td>
+</tr>
+<tr>
+<td>R[GxG] / R[GxE]</td>
+<td>遗传 × 遗传 / 遗传 × 环境随机效应</td>
+</tr>
+<tr>
+<td>PA / PD</td>
+<td>系谱加性 / 显性矩阵</td>
+</tr>
+<tr>
+<td>GA / GD</td>
+<td>基因组加性 / 显性矩阵</td>
+</tr>
+<tr>
+<td>HA / HD</td>
+<td>一步法加性 / 显性矩阵</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>先核对 LOG 中打印的模型方程，确认每个效应被识别为预期的类型（例如字符型协变量误放进 <code>--qcovar</code> 会出错）。</li>
+<li>看迭代过程中 loglike 是否收敛；<strong>最后一次迭代的 loglike</strong> 用于似然比检验。</li>
+</ul></div></article><article class="card" id="s6-7"><h3>6.7 其他功能的输出</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>列</th>
+<th>怎么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.snpeff</code></td>
+<td>SNPid a1 a2 freq_a1 + 效应列（add/dom 或各性状名）</td>
+<td>效应针对 a1 等位基因；绝对值大的为大效应位点；可直接给 <code>--pred</code>、<code>--mating</code></td>
+</tr>
+<tr>
+<td><code>.bv</code></td>
+<td>id + 各效应列</td>
+<td><code>--pred</code> 得到的 GEBV/PRS，用于新个体排名</td>
+</tr>
+<tr>
+<td><code>.mating</code></td>
+<td>sir dam g</td>
+<td>g 为该公母组合后代的期望遗传表现，按 g 从高到低选配</td>
+</tr>
+<tr>
+<td><code>.ibc</code></td>
+<td>id ibc</td>
+<td>近交系数；系谱来源以 0 为基准，基因组来源取决于 <code>--code-method</code>，不同方法数值不可直接比较</td>
+</tr>
+<tr>
+<td><code>.rc</code></td>
+<td>id1 id2 rc</td>
+<td>两两亲缘系数；对角为个体自身</td>
+</tr>
+<tr>
+<td><code>.pc</code></td>
+<td>id PC1…PCn</td>
+<td>画 PC1–PC2 散点图看群体分层、离群个体</td>
+</tr>
+<tr>
+<td><code>.pcp</code></td>
+<td>各 PC 的标准差、方差占比、累计占比</td>
+<td>判断需要保留几个 PC（例如作为协变量）</td>
+</tr>
+<tr>
+<td><code>.cluster.txt</code></td>
+<td>id cluster ambiguity</td>
+<td>cluster 为亚群标签；ambiguity=1 表示 HDBSCAN 初次未归类、后经近邻标签传播分配，0 为初次即归类；<strong>不是隶属概率或置信度</strong></td>
+</tr>
+<tr>
+<td><code>.afreq</code></td>
+<td>SNP a1 a2 freq_a1（或各群体 <code>XX_freq_a1</code>）</td>
+<td>比较群体间频率差异，筛选 SNP</td>
+</tr>
+<tr>
+<td><code>.gfreq</code></td>
+<td>SNP a1 a2 freq_a1a1 freq_a2a2</td>
+<td>杂合频率 = 1 − 两者之和</td>
+</tr>
+<tr>
+<td><code>.homo</code> / <code>.hete</code></td>
+<td>id a1a1 a2a2 / id a1a2</td>
+<td>个体纯合 / 杂合比例，反映近交程度</td>
+</tr>
+<tr>
+<td><code>.geno.A.txt</code> / <code>.geno.D.txt</code></td>
+<td>ID + 每个 SNP 编码</td>
+<td>加性 0/1/2，显性 杂合=1、纯合=0</td>
+</tr>
+<tr>
+<td>LD <code>.bin</code> + <code>.info</code></td>
+<td>窗口内两两 SNP 的 LD 相关 r</td>
+<td>给 <code>--ldm</code>；<code>--write-txt</code> 可查看</td>
+</tr>
+<tr>
+<td><code>.ldsc</code></td>
+<td>id maf ldscore</td>
+<td>LD score 越高，该 SNP 与周围 SNP 连锁越强</td>
+</tr>
+</tbody>
+</table></div></article><article class="card" id="s6-8"><h3>6.8 LD score 回归结果</h3><div class="card-body"><pre><code># x.ldsr.h2
+Item  Intercept  Intercept_SE  h2        h2_SE       h2_Pval
+demo  1.08285    0.011433      0.122826  0.00393122  2.71554e-214
+
+# x.ldsr.rg
+Item         CovG       CovG_SE     Intercept  Intercept_SE  rG        rG_SE      rG_Pval
+demo1:demo2  0.0252414  0.00716841  0.0166108  0.00819384    0.141956  0.0403148  0.000429607
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>怎么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h2 截距 Intercept</td>
+<td>反映群体分层等混杂，越接近 1 分层越轻；本例 1.083 说明有一定膨胀，需留意</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>基于 SNP 的遗传力</td>
+</tr>
+<tr>
+<td>h2_Pval</td>
+<td>遗传力显著性</td>
+</tr>
+<tr>
+<td>CovG</td>
+<td>遗传协方差</td>
+</tr>
+<tr>
+<td>rg 截距</td>
+<td>通常与两个 GWAS 样本重叠有关（LDSC 方法的一般解释），无重叠时应接近 0</td>
+</tr>
+<tr>
+<td>rG / rG_SE / rG_Pval</td>
+<td>遗传相关及其显著性；本例 0.14，p = 4.3e-4 显著</td>
+</tr>
+</tbody>
+</table></div></article></div></section>
+<section class="sec" id="s7" data-sec="s7">
+<header class="sec-head"><span class="badge">07</span><h2>显著性检验与 PVE</h2><span class="sec-count">3 节</span></header>
+<div class="cards"><article class="card" id="s7-1"><h3>7.1 固定效应</h3><div class="card-body"><p>自动完成：看 <code>.anova</code> 最后一列 <code>Pr(&gt;F)</code>（见 6.4）。</p></div></article><article class="card" id="s7-2"><h3>7.2 随机效应：似然比检验（LRT）</h3><div class="card-body"><p>HIBLUP 不自动检验随机效应，需手动做：</p>
+<ol>
+<li>跑<strong>完整模型</strong>（含待检验效应，如 HD），在 LOG 最后一次 REML 迭代处记下 loglike = L1。</li>
+<li>跑<strong>简化模型</strong>（去掉该效应，其他完全相同），记下 L0。</li>
+<li>在 R 中计算：</li>
+</ol>
+<pre><code>stat   &lt;- 2 * (L1 - L0)
+pvalue &lt;- pchisq(stat, df = 1, lower.tail = FALSE)
+pvalue
+</code></pre>
+<ul>
+<li>一次去掉一个方差组分时 df = 1。</li>
+<li>补充（统计学通用做法，非教程内容）：方差组分在参数边界 0 处检验时，上述 p 值偏保守，常用 p/2（0.5χ²₀ + 0.5χ²₁ 混合分布）。</li>
+<li>示例判读：stat &gt; 3.84 即 p &lt; 0.05，该效应显著，应保留。</li>
+</ul></div></article><article class="card" id="s7-3"><h3>7.3 显著 SNP 的表型方差解释率（PVE）</h3><div class="card-body"><pre><code># 1) 显著 SNP 单独建 GRM（snp.txt：一列 SNP ID，无表头）
+./hiblup --make-xrm --bfile demo --extract snp.txt --threads 32 --out grm1   # grm1.GA.*
+# 2) 其余 SNP 建 GRM
+./hiblup --make-xrm --bfile demo --exclude snp.txt --threads 32 --out grm2   # grm2.GA.*
+# 3) 两个 GRM 同时作为随机效应
+./hiblup --single-trait --pheno demo.phe --pheno-pos X --xrm grm1.GA,grm2.GA --threads 32 --out vc
+</code></pre>
+<ul>
+<li>计算：PVE = V(grm1) / [V(grm1) + V(grm2) + V(e)]，三个方差都在 <code>vc.vars</code> 中。</li>
+<li>也就是 <code>vc.vars</code> 中 grm1.GA 行的 h2；grm2.GA 行的 h2 则为其余多基因背景的贡献。</li>
+</ul></div></article></div></section>
+<section class="sec" id="s8" data-sec="s8">
+<header class="sec-head"><span class="badge">08</span><h2>常见坑与 FAQ</h2><span class="sec-count">4 节</span></header>
+<div class="cards"><article class="card" id="s8-1"><h3>8.1 数据准备</h3><div class="card-body"><ul>
+<li><strong>基因型缺失会被当作杂合</strong>：HIBLUP 不做填充，先用 Beagle 等填充。</li>
+<li><strong>只读一套 bfile</strong>：分染色体的文件先合并。</li>
+<li><strong>表型第 1 列必须是 ID</strong>，且必须有表头；字符型变量不能放进 <code>--qcovar</code>。</li>
+<li><strong>多性状参数个数必须与性状数一致</strong>：没有的效应写 <code>0</code>，否则会错位。</li>
+<li><strong>等位基因方向</strong>：所有 SNP 效应针对 <code>.bim</code> 中的 A1；跨数据集打分、选配前核对 A1/A2。</li>
+<li><strong>选配</strong>：<code>.fam</code> 第 5 列性别未标注的个体会被剔除。</li>
+</ul></div></article><article class="card" id="s8-2"><h3>8.2 关系矩阵</h3><div class="card-body"><ul>
+<li><code>--xrm</code> 只接受二进制 <code>.bin + .id</code>；文本矩阵用 <code>--trans-xrm</code> 转换（Q5）。</li>
+<li>不要把逆矩阵传给 <code>--xrm</code>：HIBLUP 直接用关系矩阵本身。</li>
+<li>矩阵无法求逆：加 <code>--ridge-value</code>；一步法可适当调整 <code>--alpha</code>。</li>
+<li>带 <code>.sparse.</code> 的矩阵不能直接给 GCTA/LDAK。</li>
+</ul></div></article><article class="card" id="s8-3"><h3>8.3 计算资源</h3><div class="card-body"><ul>
+<li>内存不够（Q2）：调小 <code>--step</code>；或加 <code>--float-prec</code>（内存约减半，个别情况损失精度）。</li>
+<li>逐性状重复建矩阵很慢：先 <code>--make-xrm</code>，再 <code>--xrm</code> 复用。</li>
+<li>超大数据（&gt;10 万个体）：<code>--vc-method HE --he-pred --pcg</code>；或先在子集上用 REML 估参数，再 <code>--mme --pcg</code> 求解全数据。</li>
+<li>纯系谱、高度重复记录：改用 DMU / BLUPF90 / ASReml。</li>
+</ul></div></article><article class="card" id="s8-4"><h3>8.4 官方 FAQ 要点</h3><div class="card-body"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>回答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1 LOG 中 C、F、R[E]、R[G] 是什么？</td>
+<td>见 6.6 符号表</td>
+</tr>
+<tr>
+<td>Q2 怎么降低内存？</td>
+<td>调小 <code>--step</code>；加 <code>--float-prec</code></td>
+</tr>
+<tr>
+<td>Q3 <code>--extract/--exclude/--remove/--keep</code> 是否对所有功能有效？</td>
+<td>是，只要分析涉及个体和 SNP</td>
+</tr>
+<tr>
+<td>Q4 能否估环境随机效应的遗传相关？</td>
+<td>能：先 <code>--make-xrm --pheno --rand</code> 建环境矩阵，再作为 <code>--xrm</code> 输入多性状模型</td>
+</tr>
+<tr>
+<td>Q5 能否直接输入文本关系矩阵？</td>
+<td>不能，先 <code>--trans-xrm</code> 转为二进制</td>
+</tr>
+<tr>
+<td>Q6 如何计算显著 SNP 的 PVE？</td>
+<td>见 7.3</td>
+</tr>
+</tbody>
+</table></div></article></div></section>
+<section class="sec" id="s9" data-sec="s9">
+<header class="sec-head"><span class="badge">09</span><h2>预测准确性验证（交叉验证）</h2><span class="sec-count">1 节</span></header>
+<div class="cards"><article class="card" id="s9-1"><h3>步骤与指标</h3><div class="card-body"><p>HIBLUP 教程没有内置交叉验证命令，下面是基于 HIBLUP 的常用做法（通用方法，供参考）：</p>
+<ol>
+<li>把有表型个体随机分为 k 份（常用 5 折，可重复多次）。</li>
+<li>每次将一份个体的表型设为 <code>NA</code>（作为验证集），其余为参考群；基因型/系谱保持完整。</li>
+<li>用相同模型跑 <code>--single-trait</code>（或参数已知时 <code>--mme</code>），从 <code>.rand</code> 取验证集个体的 GEBV。</li>
+<li>计算指标：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>计算</th>
+<th>判读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预测能力</td>
+<td>cor(GEBV, 校正表型)</td>
+<td>越高越好</td>
+</tr>
+<tr>
+<td>预测准确性</td>
+<td>cor(GEBV, 校正表型) / √h²</td>
+<td>接近 1 最好</td>
+</tr>
+<tr>
+<td>无偏性</td>
+<td>校正表型对 GEBV 的回归斜率</td>
+<td>接近 1 无偏；&lt;1 GEBV 过度离散，&gt;1 压缩</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>“校正表型”指表型减去固定效应（可用 <code>.beta</code> 计算），或直接用原始表型的近似。</li>
+<li>比较不同模型（PBLUP vs GBLUP vs SSGBLUP、有无显性、加权与否）时，使用同一组折分。</li>
+<li>你的环境中有 <code>mintyr-pipelines</code> 技能，可按性状 × 组别做 k 折划分并直接导出 HIBLUP 输入文件，需要时可以让我用它批量准备。</li>
+</ul></div></article></div></section>
+  </div>
+  <div class="empty" id="empty" hidden><strong>没有找到匹配内容</strong>换个关键词试试，比如参数名 <code>--rand</code> 或文件名 <code>.covars</code>。</div>
+</main>
+<footer><div class="wrap">内容整理自 HIBLUP 官方教程 <a href="https://www.hiblup.com/tutorials" target="_blank" rel="noopener">hiblup.com/tutorials</a>；标注“经验判读”“通用做法”的内容为育种与统计常用标准，并非 HIBLUP 规定。软件引用：Yin et al. 2023, Nucleic Acids Research。</div></footer>
+
+<script>
+(function(){
+  var root=document.documentElement, body=document.body;
+  function store(k,v){try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v);}catch(e){return null}}
+
+  // wrap tables
+  document.querySelectorAll('.card-body table, .lead table').forEach(function(t){var d=document.createElement('div');d.className='tbl';t.parentNode.insertBefore(d,t);d.appendChild(t);});
+
+  // highlight + copy for code
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function hlLine(line){
+    var ci=-1;
+    if(/^\s*#/.test(line)) ci=line.indexOf('#'); else { var m=line.search(/\s#\s/); if(m>=0) ci=m+1; }
+    var code=ci>=0?line.slice(0,ci):line, com=ci>=0?line.slice(ci):'';
+    code=esc(code).replace(/(^|[\s(])(--[a-zA-Z][\w-]*)/g,'$1<span class="f">$2</span>')
+                  .replace(/(-&gt;)(.*)$/,'<span class="c">$1$2</span>')
+                  .replace(/(&lt;-)/g,'<span class="p">$1</span>');
+    return code+(com?'<span class="c">'+esc(com)+'</span>':'');
+  }
+  document.querySelectorAll('pre > code').forEach(function(c){
+    var raw=c.textContent.replace(/\n$/,'');
+    c.innerHTML=raw.split('\n').map(hlLine).join('\n');
+    var pre=c.parentNode, w=document.createElement('div'); w.className='code';
+    pre.parentNode.insertBefore(w,pre); w.appendChild(pre);
+    var b=document.createElement('button'); b.type='button'; b.className='copy'; b.textContent='复制';
+    b.addEventListener('click',function(){
+      function ok(){b.textContent='已复制';b.classList.add('done');setTimeout(function(){b.textContent='复制';b.classList.remove('done')},1400)}
+      function fallback(){var r=document.createRange();r.selectNodeContents(c);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='已选中';}
+      try{navigator.clipboard.writeText(raw).then(ok,fallback)}catch(e){fallback()}
+    });
+    w.appendChild(b);
+  });
+
+  // theme
+  var saved=store('hb-theme'); if(saved==='dark'||saved==='light') root.setAttribute('data-theme',saved);
+  document.getElementById('theme').addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var nx=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',nx); store('hb-theme',nx);
+  });
+
+  // compact
+  var cb=document.getElementById('compact');
+  function setCompact(on){body.classList.toggle('compact',on);cb.setAttribute('aria-pressed',on?'true':'false');store('hb-compact',on?'1':'0')}
+  setCompact(store('hb-compact')==='1');
+  cb.addEventListener('click',function(){setCompact(!body.classList.contains('compact'))});
+
+  // filter + search
+  var cards=[].slice.call(document.querySelectorAll('.card'));
+  cards.forEach(function(c){c._html=c.innerHTML;c._text=c.textContent.toLowerCase()});
+  var secs=[].slice.call(document.querySelectorAll('.sec'));
+  var chipEls=[].slice.call(document.querySelectorAll('.chip'));
+  var active='all', q='';
+  var qi=document.getElementById('q'), hits=document.getElementById('hits'), kbd=document.getElementById('kbd'), empty=document.getElementById('empty');
+
+  function markText(el,term){
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null), nodes=[], n;
+    while((n=w.nextNode())){ if(n.parentNode.closest('button')) continue; if(n.nodeValue.toLowerCase().indexOf(term)>=0) nodes.push(n); }
+    nodes.forEach(function(t){
+      var s=t.nodeValue, low=s.toLowerCase(), frag=document.createDocumentFragment(), i=0, j;
+      while((j=low.indexOf(term,i))>=0){ frag.appendChild(document.createTextNode(s.slice(i,j))); var m=document.createElement('mark'); m.textContent=s.slice(j,j+term.length); frag.appendChild(m); i=j+term.length; }
+      frag.appendChild(document.createTextNode(s.slice(i))); t.parentNode.replaceChild(frag,t);
+    });
+  }
+  function apply(){
+    var term=q.trim().toLowerCase(), shown=0;
+    cards.forEach(function(c){
+      if(c._marked){ c.querySelectorAll('mark').forEach(function(m){m.replaceWith(m.textContent)}); c.normalize(); c._marked=false; }
+      var sec=c.closest('.sec').id, ok=(active==='all'||sec===active)&&(!term||c._text.indexOf(term)>=0);
+      c.hidden=!ok; if(ok){shown++; if(term){markText(c,term);c._marked=true;}}
+    });
+    secs.forEach(function(s){ s.hidden=!s.querySelector('.card:not([hidden])'); var l=s.querySelector('.lead'); if(l) l.hidden=!!term; });
+    empty.hidden=shown>0;
+    if(term){hits.hidden=false;hits.textContent=shown+' 处';kbd.hidden=true}else{hits.hidden=true;kbd.hidden=false}
+  }
+  var t; qi.addEventListener('input',function(){q=qi.value;clearTimeout(t);t=setTimeout(apply,120)});
+  qi.addEventListener('keydown',function(e){if(e.key==='Escape'){qi.value='';q='';apply();qi.blur()}});
+  document.addEventListener('keydown',function(e){ if(e.key==='/'&&document.activeElement!==qi&&!/input|textarea/i.test(document.activeElement.tagName)){e.preventDefault();qi.focus()} });
+  chipEls.forEach(function(ch){ch.addEventListener('click',function(){
+    active=ch.dataset.target; chipEls.forEach(function(x){x.classList.toggle('is-on',x===ch)}); apply();
+    var top=document.querySelector('main'); window.scrollTo({top:Math.max(0,top.offsetTop-10),behavior:'smooth'});
+  })});
+})();
+</script>
+
+</body></html>

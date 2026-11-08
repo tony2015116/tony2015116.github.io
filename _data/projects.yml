@@ -5,7 +5,9 @@
 # key:         分类的英文短名（只用字母、数字、短横线），用于网址，如 /portfolio/#r-packages
 # items:       该分类下的项目
 #   name:        项目名称
-#   repo:        GitHub 仓库，写成 用户名/仓库名
+#   repo:        GitHub 仓库，写成 用户名/仓库名（有 url 时可省略）
+#   url:         站内页面地址（可选），如 /files/cheatsheets/hiblup.html；填了后项目名链接到这里
+#   url_title:   url 链接显示的文字（可选），默认“在线查看”
 #   description: 一两句话说明这个项目做什么、解决什么问题
 #   language:    主要语言（可选）
 #   year:        开始年份或时间段（可选）
@@ -39,3 +41,25 @@
       repo: "yourname/sample-scripts"
       description: "日常处理数据时积累的一些脚本，例如批量转换格式、整理文件名。"
       language: "Shell"
+
+- category: "速查表"
+  key: "cheatsheets"
+  items:
+    - name: "HIBLUP 速查表"
+      url: "/files/cheatsheets/hiblup.html"
+      url_title: "打开速查表"
+      description: "HIBLUP（天权）使用方法与结果解读：输入文件、PBLUP / GBLUP / ssGBLUP 命令、方差组分与遗传力、遗传相关、SNP 效应、选配与 LDSC / SBLUP，附结果文件逐列解读和交叉验证。"
+      language: "HIBLUP"
+      year: "2026"
+      links:
+        - title: "官方教程"
+          url: "https://www.hiblup.com/tutorials"
+    - name: "rMVP 速查表"
+      url: "/files/cheatsheets/rmvp.html"
+      url_title: "打开速查表"
+      description: "rMVP 全基因组关联分析：数据转换、MVP() 参数、GLM / MLM / FarmCPU、亲缘矩阵与主成分、曼哈顿图 / QQ 图配方、结果解读与排错。"
+      language: "R"
+      year: "2026"
+      links:
+        - title: "rMVP 仓库"
+          url: "https://github.com/xiaolei-lab/rMVP"
