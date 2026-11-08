@@ -166,6 +166,16 @@
       description: "日常处理数据时积累的一些脚本，例如批量转换格式、整理文件名。"
       language: "Shell"
 
+- category: "教程"
+  key: "tutorials"
+  items:
+    - name: "看得见的线性代数：从向量到动物模型"
+      url: "/files/tutorials/linear-algebra-animal-model.html"
+      url_title: "打开教程"
+      description: "用几何图形和可拖动的交互演示讲动物模型需要的线性代数：向量、矩阵变换、乘法、转置、行列式、逆与方程组、秩与广义逆、方差协方差椭圆与正定、亲缘矩阵 A 与 A⁻¹，再从模型假设推导 Var(y) = ZAZ′σₐ² + Iσₑ²、BLUP、PEV 与可靠性；以 Mrode 第 3 章 8 头犊牛为例，浏览器内实时求解混合模型方程。"
+      language: "HTML"
+      year: "2026"
+
 - category: "速查表"
   key: "cheatsheets"
   items:

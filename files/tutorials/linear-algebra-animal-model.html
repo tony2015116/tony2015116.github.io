@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>看得见的线性代数：从向量到动物模型</title>
+<style>
+:root{
+  --bg:#fbfaf7;--panel:#ffffff;--ink:#22252b;--muted:#6b7078;--line:#e3e0d8;
+  --accent:#2f6fde;--accent2:#d9534f;--accent3:#1f9d6b;--warn:#b7791f;
+  --hl:#fff1b8;--soft:#eef3fc;--code:#f3f1ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181c;--panel:#1f2228;--ink:#e6e7ea;--muted:#9aa0aa;--line:#333842;
+    --accent:#6ea2ff;--accent2:#ff7b72;--accent3:#4fd1a1;--warn:#f0b35a;
+    --hl:#5a4b12;--soft:#1f2a3d;--code:#262a31;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16181c;--panel:#1f2228;--ink:#e6e7ea;--muted:#9aa0aa;--line:#333842;
+  --accent:#6ea2ff;--accent2:#ff7b72;--accent3:#4fd1a1;--warn:#f0b35a;
+  --hl:#5a4b12;--soft:#1f2a3d;--code:#262a31;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1180px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow:auto;padding:28px 12px 28px 20px;border-right:1px solid var(--line);font-size:14px}
+nav h1{font-size:17px;line-height:1.4;margin:0 0 14px}
+nav .back{font-size:13px;margin:0 0 10px;padding:0 8px}
+nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:6px}
+nav a:hover{background:var(--soft);color:var(--ink)}
+main{padding:28px 36px 80px;min-width:0}
+section{margin:0 0 56px}
+h2{font-size:24px;margin:0 0 6px;padding-top:8px}
+h2 .no{color:var(--accent);margin-right:8px}
+h3{font-size:18px;margin:26px 0 6px}
+.lead{color:var(--muted);margin:0 0 18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+.key{border-left:4px solid var(--accent);background:var(--soft)}
+.tip{border-left:4px solid var(--accent3)}
+.warn{border-left:4px solid var(--warn)}
+.card h4{margin:0 0 6px;font-size:15px}
+.eq{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:19px;text-align:center;margin:12px 0;overflow-x:auto;white-space:nowrap}
+.eqs{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:12px 0;font-family:"Cambria Math","Times New Roman",serif;font-size:17px}
+code,.m{font-family:"Cambria Math","Times New Roman",serif;font-style:italic}
+.mat{display:inline-block;position:relative;padding:2px 9px;vertical-align:middle;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;font-style:normal}
+.mat::before,.mat::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.6px solid currentColor}
+.mat::before{left:0;border-right:none}
+.mat::after{right:0;border-left:none}
+.mat table{border-collapse:collapse}
+.mat td{padding:1px 7px;text-align:right;min-width:2.2em;transition:background .15s}
+.mat td.hl{background:var(--hl);border-radius:3px}
+.mat td.b1{background:rgba(47,111,222,.10)}
+.mat td.b2{background:rgba(31,157,107,.12)}
+.mat td.b3{background:rgba(217,83,79,.12)}
+.scroll{overflow-x:auto;padding-bottom:6px}
+.lbl{font-size:13px;color:var(--muted);text-align:center}
+.mbox{display:inline-flex;flex-direction:column;align-items:center;gap:2px;margin:0 4px}
+table.data{border-collapse:collapse;font-size:14px;margin:8px 0}
+table.data th,table.data td{border:1px solid var(--line);padding:4px 10px;text-align:center}
+table.data th{background:var(--code)}
+.demo{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+canvas{background:var(--panel);border:1px solid var(--line);border-radius:10px;max-width:100%;touch-action:none}
+.ctrl{flex:1;min-width:240px}
+.ctrl label{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+.ctrl label span.n{width:3.2em;text-align:right;font-family:ui-monospace,monospace}
+.ctrl input[type=range]{flex:1}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+.out{font-size:14px;background:var(--code);border-radius:8px;padding:10px 12px;margin-top:8px}
+.bad{color:var(--accent2);font-weight:600}
+.good{color:var(--accent3);font-weight:600}
+.c1{color:var(--accent)}.c2{color:var(--accent2)}.c3{color:var(--accent3)}
+.bars .row{display:flex;align-items:center;gap:8px;font-size:13px;margin:2px 0}
+.bars .nm{width:4.5em;text-align:right;color:var(--muted)}
+.bars .track{flex:1;position:relative;height:16px;background:var(--code);border-radius:4px}
+.bars .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--muted)}
+.bars .bar{position:absolute;top:2px;bottom:2px;border-radius:3px}
+.bars .v{width:4.5em;font-family:ui-monospace,monospace}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+table.cheat{border-collapse:collapse;width:100%;font-size:14px}
+table.cheat td,table.cheat th{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+svg text{font-family:inherit}
+@media (max-width:820px){
+  .wrap{grid-template-columns:1fr}
+  nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:16px}
+  nav .links{display:flex;flex-wrap:wrap;gap:2px}
+  main{padding:20px 16px 60px}
+  .eq{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="back" href="/portfolio/#tutorials">← 返回项目</a>
+  <h1>看得见的线性代数<br><span style="font-size:14px;font-weight:400;color:var(--muted)">从向量到动物模型</span></h1>
+  <div class="links">
+  <a href="#s0">0 先看目标</a>
+  <a href="#s1">1 向量</a>
+  <a href="#s2">2 矩阵 = 变形</a>
+  <a href="#s3">3 矩阵乘法</a>
+  <a href="#s4">4 转置与对称</a>
+  <a href="#s5">5 设计矩阵 X、Z</a>
+  <a href="#s6">6 行列式</a>
+  <a href="#s7">7 逆矩阵与方程组</a>
+  <a href="#s8">8 秩与广义逆</a>
+  <a href="#s9">9 方差协方差矩阵</a>
+  <a href="#s10">10 亲缘关系矩阵 A</a>
+  <a href="#s10b">11 模型推导方差</a>
+  <a href="#s11">12 混合模型方程</a>
+  <a href="#s12">13 速查表</a>
+  </div>
+</nav>
+<main>
+
+<!-- 0 -->
+<section id="s0">
+<h2><span class="no">0</span>先看目标：我们要读懂哪一行公式？</h2>
+<p class="lead">动物模型（Animal Model）几乎都写成下面这一行。本教程只讲读懂它所需的线性代数，不多也不少。</p>
+<div class="card key">
+  <div class="eq"><b>y</b> = <b>X</b><b>b</b> + <b>Z</b><b>u</b> + <b>e</b>，　　Var(<b>u</b>) = <b>A</b>σ<sub>a</sub><sup>2</sup>，　Var(<b>e</b>) = <b>I</b>σ<sub>e</sub><sup>2</sup></div>
+  <div class="grid2" style="font-size:14px">
+    <div><b>y</b>：所有个体的表型记录（一列数 → <a href="#s1">向量</a>）</div>
+    <div><b>b</b>：固定效应，如性别、场、年季（向量）</div>
+    <div><b>u</b>：每头动物的育种值（向量，我们最想要的）</div>
+    <div><b>e</b>：残差（向量）</div>
+    <div><b>X</b>、<b>Z</b>：把效应"分配"到记录上的 0/1 表（<a href="#s5">设计矩阵</a>）</div>
+    <div><b>A</b>：个体间的亲缘关系（<a href="#s10">分子血缘相关矩阵</a>）</div>
+  </div>
+</div>
+<p>最终求解育种值靠的是 Henderson 的<b>混合模型方程（MME）</b>：</p>
+<div class="eqs">
+  <span class="mat"><table><tr><td>X′X</td><td>X′Z</td></tr><tr><td>Z′X</td><td>Z′Z + A<sup>−1</sup>α</td></tr></table></span>
+  <span class="mat"><table><tr><td>b̂</td></tr><tr><td>û</td></tr></table></span>
+  <span>=</span>
+  <span class="mat"><table><tr><td>X′y</td></tr><tr><td>Z′y</td></tr></table></span>
+  <span style="font-size:15px">　α = σ<sub>e</sub><sup>2</sup>/σ<sub>a</sub><sup>2</sup></span>
+</div>
+<p>看懂这一块需要：<b>向量、矩阵、乘法、转置（′）、逆（<sup>−1</sup>）、方程组、对称/正定矩阵</b>。下面一个个来。</p>
+
+<h3>贯穿全文的小例子</h3>
+<p>8 头犊牛，1–3 号是基础群（父母未知），4–8 号有断奶增重记录（kg）。这是 Mrode《Linear Models for the Prediction of Animal Breeding Values》第 3 章的经典例子，假设 σ<sub>a</sub><sup>2</sup>=20，σ<sub>e</sub><sup>2</sup>=40。</p>
+<div class="demo">
+<table class="data"><tr><th>动物</th><th>父</th><th>母</th><th>性别</th><th>增重 y</th></tr>
+<tr><td>1</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+<tr><td>2</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+<tr><td>3</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+<tr><td>4</td><td>1</td><td>–</td><td>公</td><td>4.5</td></tr>
+<tr><td>5</td><td>3</td><td>2</td><td>母</td><td>2.9</td></tr>
+<tr><td>6</td><td>1</td><td>2</td><td>母</td><td>3.9</td></tr>
+<tr><td>7</td><td>4</td><td>5</td><td>公</td><td>3.5</td></tr>
+<tr><td>8</td><td>3</td><td>6</td><td>公</td><td>5.0</td></tr></table>
+<svg viewBox="0 0 300 220" width="300" height="220" aria-label="系谱图" style="max-width:100%">
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <line x1="50" y1="30" x2="50" y2="105"/><line x1="50" y1="30" x2="170" y2="105"/>
+    <line x1="150" y1="30" x2="110" y2="105"/><line x1="150" y1="30" x2="170" y2="105"/>
+    <line x1="250" y1="30" x2="110" y2="105"/><line x1="250" y1="30" x2="230" y2="185"/>
+    <line x1="50" y1="105" x2="80" y2="185"/><line x1="110" y1="105" x2="80" y2="185"/>
+    <line x1="170" y1="105" x2="230" y2="185"/>
+  </g>
+  <g font-size="14" text-anchor="middle">
+    <circle cx="50" cy="30" r="15" fill="var(--panel)" stroke="var(--accent)"/><text x="50" y="35">1</text>
+    <circle cx="150" cy="30" r="15" fill="var(--panel)" stroke="var(--accent2)"/><text x="150" y="35">2</text>
+    <circle cx="250" cy="30" r="15" fill="var(--panel)" stroke="var(--accent)"/><text x="250" y="35">3</text>
+    <rect x="35" y="90" width="30" height="30" rx="4" fill="var(--panel)" stroke="var(--accent)"/><text x="50" y="110">4</text>
+    <circle cx="110" cy="105" r="15" fill="var(--panel)" stroke="var(--accent2)"/><text x="110" y="110">5</text>
+    <circle cx="170" cy="105" r="15" fill="var(--panel)" stroke="var(--accent2)"/><text x="170" y="110">6</text>
+    <rect x="65" y="170" width="30" height="30" rx="4" fill="var(--panel)" stroke="var(--accent)"/><text x="80" y="190">7</text>
+    <rect x="215" y="170" width="30" height="30" rx="4" fill="var(--panel)" stroke="var(--accent)"/><text x="230" y="190">8</text>
+  </g>
+  <text x="150" y="215" font-size="11" text-anchor="middle" fill="var(--muted)">方框=公，圆=母（1、3 在系谱中作父亲）</text>
+</svg>
+</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2><span class="no">1</span>向量：一支箭头，也是一列数</h2>
+<p class="lead">向量就是"按顺序排好的一串数"。2 个数可以画成平面上的箭头，5 个数虽然画不出来，但规则完全一样。</p>
+<div class="demo">
+<svg viewBox="0 0 230 200" width="230" height="200" style="max-width:100%">
+  <g stroke="var(--line)" stroke-width="1">
+    <path d="M30 20V170M60 20V170M90 20V170M120 20V170M150 20V170M180 20V170M210 20V170M30 170H210M30 140H210M30 110H210M30 80H210M30 50H210M30 20H210"/>
+  </g>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>
+  <line x1="30" y1="170" x2="120" y2="140" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <line x1="120" y1="140" x2="150" y2="80" stroke="var(--accent2)" stroke-width="2.5" marker-end="url(#ar)" stroke-dasharray="5 3"/>
+  <line x1="30" y1="170" x2="60" y2="110" stroke="var(--accent2)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <line x1="30" y1="170" x2="150" y2="80" stroke="var(--accent3)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="78" y="172" fill="var(--accent)" font-size="13">a=(3,1)</text>
+  <text x="2" y="110" fill="var(--accent2)" font-size="13">b=(1,2)</text>
+  <text x="154" y="76" fill="var(--accent3)" font-size="13">a+b=(4,3)</text>
+</svg>
+<div style="flex:1;min-width:240px">
+<p><b>加法</b>：对应位置相加。几何上就是"箭头首尾相接"。<br>
+<b>数乘</b>：2<b>a</b> = (6, 2)，箭头方向不变、长度翻倍。</p>
+<p>在动物模型里，<b>y</b> 就是一个 5 维列向量：</p>
+<div class="eqs"><b>y</b> = <span data-mat='[[4.5],[2.9],[3.9],[3.5],[5.0]]' data-d="1"></span></div>
+</div>
+</div>
+
+<h3>点积（内积）：矩阵乘法的"零件"</h3>
+<p>两个等长向量对应相乘再相加：<code>a·b</code> = 3×1 + 1×2 = 5。几何含义：一个向量在另一个方向上的"投影"有多长。点积为 0 ⇔ 两箭头互相垂直。</p>
+<div class="card tip"><h4>记住这一点就够了</h4>后面所有矩阵乘法，本质都是"行向量 · 列向量"的点积重复很多次。</div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2><span class="no">2</span>矩阵：一张表，也是一种"变形"</h2>
+<p class="lead">矩阵有两种看法：① 一张有行有列的数表（存数据）；② 一台把向量变成新向量的机器（做变换）。</p>
+<p>大小用"行 × 列"描述：<b>X</b> 是 5×2（5 条记录、2 个性别），<b>A</b> 是 8×8（8 头动物）。</p>
+<p>用 2×2 矩阵 <span class="mat"><table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table></span> 变换平面时，<b>第 1 列 (a,c) 是原来 x 轴单位箭头 <span class="c2">î</span> 的新位置，第 2 列 (b,d) 是 y 轴单位箭头 <span class="c1">ĵ</span> 的新位置</b>。整个网格跟着它们一起变形。拖动滑块试试：</p>
+<div class="card">
+<div class="demo">
+  <canvas id="tcv" width="340" height="340"></canvas>
+  <div class="ctrl">
+    <label>a <input type="range" id="ta" min="-2" max="2" step="0.1" value="1"><span class="n" id="tav"></span></label>
+    <label>b <input type="range" id="tb" min="-2" max="2" step="0.1" value="0"><span class="n" id="tbv"></span></label>
+    <label>c <input type="range" id="tc" min="-2" max="2" step="0.1" value="0"><span class="n" id="tcvv"></span></label>
+    <label>d <input type="range" id="td" min="-2" max="2" step="0.1" value="1"><span class="n" id="tdv"></span></label>
+    <div class="btns">
+      <button data-t="1,0,0,1">单位矩阵 I</button>
+      <button data-t="2,0,0,1.5">拉伸（对角）</button>
+      <button data-t="0.7,-0.7,0.7,0.7">旋转 45°</button>
+      <button data-t="1,1,0,1">剪切</button>
+      <button data-t="-1,0,0,1">镜像</button>
+      <button data-t="1,2,0.5,1">压扁（奇异）</button>
+    </div>
+    <div class="out" id="tout"></div>
+  </div>
+</div>
+</div>
+<p>这个画布会在 <a href="#s6">第 6 节（行列式）</a> 和 <a href="#s7">第 7 节（逆矩阵）</a> 再用到：<b>阴影方块的面积 = |行列式|</b>；能"变回去"的变换才有逆矩阵。</p>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2><span class="no">3</span>矩阵乘法：行 · 列</h2>
+<p class="lead">结果第 i 行第 j 列 = 左矩阵第 i 行 与 右矩阵第 j 列 的点积。<b>把鼠标移到（或点击）右边结果矩阵的格子上</b>看看它是怎么来的。</p>
+<div class="card">
+  <div class="eqs" id="mulDemo"></div>
+  <div class="out" id="mulOut">← 指向 C 中任一格</div>
+</div>
+<div class="grid2">
+  <div class="card key"><h4>尺寸规则（最常出错）</h4>
+  (m×<b>n</b>) · (<b>n</b>×p) = m×p。<br>左边的"列数"必须等于右边的"行数"，中间两个数"抵消"。<br>例：<b>X</b>(5×2)·<b>b</b>(2×1) = 5×1，正好和 <b>y</b> 一样大。</div>
+  <div class="card warn"><h4>顺序不能换</h4>一般 <b>AB ≠ BA</b>，甚至 BA 可能尺寸不合根本算不了。几何上：先旋转再拉伸 ≠ 先拉伸再旋转。<br>但满足结合律：(<b>AB</b>)<b>C</b> = <b>A</b>(<b>BC</b>)。</div>
+</div>
+<p>矩阵乘向量 = 对矩阵的<b>列</b>做加权求和：<b>X</b><b>b</b> = b₁·(第 1 列) + b₂·(第 2 列)。这正是"每条记录加上它所属性别的效应"。</p>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2><span class="no">4</span>转置与对称矩阵</h2>
+<p class="lead">转置：把行变成列（沿主对角线翻折）。育种文献常写 <b>X′</b>，数学书常写 <b>X</b><sup>T</sup>，是同一个意思。</p>
+<div class="eqs"><span data-mat='[[1,2,0],[0,1,3]]'></span> <span>′ =</span> <span data-mat='[[1,0],[2,1],[0,3]]'></span></div>
+<ul>
+  <li>(<b>AB</b>)′ = <b>B′A′</b>（顺序反过来，像"穿衣脱衣"）</li>
+  <li><b>X′X</b> 总是方阵，而且总是<b>对称</b>的</li>
+</ul>
+<div class="card tip"><h4>对称矩阵：A′ = A</h4>以主对角线为镜子左右对称。动物模型里的 <b>A</b>、<b>V</b>、整个 MME 左边矩阵都是对称的——因为"牛 4 和牛 7 的亲缘"当然等于"牛 7 和牛 4 的亲缘"。软件只需存一半，省一半内存。</div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2><span class="no">5</span>特殊矩阵与设计矩阵 X、Z</h2>
+<div class="grid2">
+  <div class="card"><h4>单位矩阵 I</h4><span data-mat='[[1,0,0],[0,1,0],[0,0,1]]'></span><br>乘谁都不变：<b>IA</b> = <b>A</b>，相当于数字 1。几何：什么都不做。</div>
+  <div class="card"><h4>对角矩阵</h4><span data-mat='[[3,0],[0,2]]'></span><br>只有对角线非零。几何：沿坐标轴各自拉伸。<b>X′X</b> 在单因子时就是对角阵。</div>
+  <div class="card"><h4>零矩阵 0、方阵</h4>全是 0 的矩阵；行数=列数的叫方阵。只有方阵才谈得上行列式与逆。</div>
+</div>
+<h3>设计（关联）矩阵：0/1 的"记账本"</h3>
+<p>每一行是一条记录，每一列是一个效应水平；该记录属于哪个水平，那一格就是 1。</p>
+<div class="scroll"><div class="eqs" id="xzShow"></div></div>
+<p><b>X</b>（5×2）：第 1 列"公"、第 2 列"母"。<b>Z</b>（5×8）：每列是一头动物，1–3 号没有记录所以整列为 0。</p>
+<div class="card key"><h4>直觉：X′X 和 Z′Z 在"数个数"</h4>
+<div class="eqs"><span>X′X =</span><span id="xtx"></span><span>　X′y =</span><span id="xty"></span></div>
+X′X 对角线 = 每个性别有几条记录（公 3、母 2）；X′y = 每个性别的增重总和。所以 (X′X)<sup>−1</sup>X′y 就是"各性别的平均值"——这就是最小二乘。<b>Z′Z</b> 同理：对角线是每头动物的记录数（这里 1–3 号为 0，4–8 号为 1）。</div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2><span class="no">6</span>行列式：变换把面积放大了几倍</h2>
+<p class="lead">对 2×2 矩阵，det = ad − bc。几何意义：单位正方形变换后的（有方向的）面积。</p>
+<ul>
+  <li>|det| = 2：面积变 2 倍；det 为负：图形被"翻面"（镜像）。</li>
+  <li><b>det = 0：平面被压成一条线（或一个点）</b>——信息丢失了，无法还原。回到<a href="#s2">第 2 节画布</a>点"压扁（奇异）"看看。</li>
+  <li>高维也一样：3×3 是体积缩放，n×n 是"n 维体积"缩放。</li>
+</ul>
+<div class="card warn"><h4>和育种的联系</h4>det = 0 的矩阵叫<b>奇异矩阵</b>，没有逆。MME 左边矩阵如果奇异（比如模型里同时放了总均值和全部性别水平），就需要第 8 节的处理。REML 估计方差组分时还会用到 log|<b>V</b>| 或 log|<b>C</b>|。</div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2><span class="no">7</span>逆矩阵与线性方程组</h2>
+<p class="lead">逆矩阵 <b>A</b><sup>−1</sup> 就是"撤销"变换：<b>A</b><sup>−1</sup><b>A</b> = <b>I</b>。它是矩阵世界的"除法"。</p>
+<div class="card"><h4>2×2 求逆公式</h4>
+<div class="eqs"><span class="mat"><table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table></span><sup>−1</sup> = <span style="font-size:15px">1/(ad−bc) ×</span> <span class="mat"><table><tr><td>d</td><td>−b</td></tr><tr><td>−c</td><td>a</td></tr></table></span></div>
+主对角线互换、副对角线变号，再除以行列式——这就是为什么 det=0 时不能求逆（除以 0）。</div>
+<h3>方程组 = 找交点</h3>
+<p>方程组 <b>Ax</b> = <b>b</b> 的解是 <b>x</b> = <b>A</b><sup>−1</sup><b>b</b>。两个未知数时，每个方程是一条直线，解就是交点。固定第一个方程 <span class="c1">x + y = 4</span>，调节第二个方程：</p>
+<div class="card">
+<div class="demo">
+  <canvas id="lcv" width="340" height="340"></canvas>
+  <div class="ctrl">
+    <p style="margin:0 0 4px;font-size:14px" class="c2">第二个方程：a·x + b·y = c</p>
+    <label>a <input type="range" id="la" min="-3" max="3" step="0.5" value="1"><span class="n" id="lav"></span></label>
+    <label>b <input type="range" id="lb" min="-3" max="3" step="0.5" value="-1"><span class="n" id="lbv"></span></label>
+    <label>c <input type="range" id="lc" min="-6" max="8" step="0.5" value="0"><span class="n" id="lcv2"></span></label>
+    <div class="btns">
+      <button data-l="1,-1,0">唯一解</button>
+      <button data-l="1,1,2">无解（平行）</button>
+      <button data-l="2,2,8">无穷多解（重合）</button>
+    </div>
+    <div class="out" id="lout"></div>
+  </div>
+</div>
+</div>
+<div class="card key"><h4>MME 就是这样一个方程组</h4>只不过未知数有 2 + 8 = 10 个（2 个性别效应 + 8 个育种值），"直线"变成了 10 维空间里的"超平面"。原理完全相同：系数矩阵行列式不为 0 → 唯一解。大型评估（几百万头）不会真去求逆，而是用迭代法（如 Gauss-Seidel、PCG）直接解方程。</div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2><span class="no">8</span>秩、线性相关与广义逆</h2>
+<p class="lead">秩（rank）= 矩阵里真正"独立"的列（或行）有几个 = 变换后空间还剩几维。</p>
+<p>如果模型里同时放总均值 μ 和两个性别水平：</p>
+<div class="eqs"><span>X =</span><span data-mat='[[1,1,0],[1,0,1],[1,0,1],[1,1,0],[1,1,0]]'></span><span>　X′X =</span><span data-mat='[[5,3,2],[3,3,0],[2,0,2]]'></span></div>
+<p>第 1 列 = 第 2 列 + 第 3 列，有一列是"多余的"（线性相关），秩 = 2 而不是 3，所以 det(<b>X′X</b>) = 0。直观上：给 μ 加 10、给两个性别各减 10，预测值完全不变——数据无法区分，解有无穷多个。</p>
+<div class="card tip"><h4>三种常见处理</h4>
+① 去掉一列（如 SAS 把最后一个水平设为 0）；② 加约束（如两性别效应之和为 0）；③ 用<b>广义逆</b> <b>G</b>（满足 <b>AGA</b> = <b>A</b>）得到一组解。<br>
+关键结论：虽然 b̂ 本身不唯一，但<b>可估函数</b>（如"公 − 母"的差）以及<b>育种值 û 的排序</b>是唯一的。所以育种值通常以"相对值"解读。</div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2><span class="no">9</span>方差协方差矩阵：一个"椭圆"</h2>
+<p class="lead">两个随机变量的方差和协方差可以排成对称矩阵 <b>V</b> = [[Var₁, Cov],[Cov, Var₂]]。数据点云的形状就是一个椭圆。</p>
+<div class="card">
+<div class="demo">
+  <canvas id="ecv" width="340" height="340"></canvas>
+  <div class="ctrl">
+    <label>Var₁ <input type="range" id="ev1" min="0.3" max="4" step="0.1" value="2"><span class="n" id="ev1v"></span></label>
+    <label>Var₂ <input type="range" id="ev2" min="0.3" max="4" step="0.1" value="1"><span class="n" id="ev2v"></span></label>
+    <label>Cov <input type="range" id="ecv2" min="-3" max="3" step="0.1" value="0.8"><span class="n" id="ecvv"></span></label>
+    <div class="out" id="eout"></div>
+  </div>
+</div>
+</div>
+<ul>
+  <li>Cov = 0：椭圆的轴与坐标轴平行；Cov &gt; 0：向右上倾斜（正相关）。</li>
+  <li>椭圆的长短轴方向 = <b>特征向量</b>；轴长² ∝ <b>特征值</b>。</li>
+  <li>把 Cov 拉得太大（|Cov| &gt; √(Var₁·Var₂)，即相关系数 |r|&gt;1），就会出现负特征值——这样的"方差矩阵"在现实中不可能存在。</li>
+</ul>
+<div class="card key"><h4>正定矩阵（positive definite）</h4>所有特征值 &gt; 0，等价于对任意非零 <b>x</b> 都有 <b>x′Vx</b> &gt; 0（"任何组合的方差都为正"）。合法的方差协方差矩阵必须正定（或至少半正定）。<b>A</b>、<b>G</b>、<b>R</b> 都应如此；多性状分析中估出的遗传协方差矩阵"不正定"是常见报错，原因往往就是相关系数估出了界。</div>
+
+<h3>多性状模型里的克罗内克积 ⊗</h3>
+<p>两个性状的育种值方差：Var(<b>u</b>) = <b>G₀</b> ⊗ <b>A</b>。⊗ 的规则：用左边矩阵的每个元素去乘整个右边矩阵，拼成大块。</p>
+<div class="scroll"><div class="eqs" id="kron"></div></div>
+<p style="font-size:14px;color:var(--muted)">G₀ = 2 个性状的遗传方差/协方差，A = 2 头半同胞（亲缘 0.5）。结果 4×4 描述"任意两头动物 × 任意两个性状"的协方差。</p>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2><span class="no">10</span>亲缘关系矩阵 A（分子血缘相关矩阵）</h2>
+<p class="lead">a<sub>ij</sub> = 动物 i 与 j 的加性遗传相关的 2 倍亲缘系数；a<sub>ii</sub> = 1 + F<sub>i</sub>（F 为近交系数）。</p>
+<div class="card"><h4>表格法（按出生顺序，父母在前）</h4>
+设动物 j 的父母为 s、d（未知则视为 0）：<br>
+・非对角：a<sub>ij</sub> = ½ (a<sub>is</sub> + a<sub>id</sub>)　——"我和你的亲缘 = 我和你父母亲缘的平均"<br>
+・对角：a<sub>jj</sub> = 1 + ½ a<sub>sd</sub>　——"父母越亲，我越近交"</div>
+<div class="scroll"><div class="eqs"><span>A =</span><span id="Ashow"></span></div></div>
+<p id="Aread">读读看：a<sub>14</sub> = 0.5（父子）；a<sub>56</sub> = 0.25（同母半同胞）；8 号的父母 3 和 6 之间 a<sub>36</sub> = 0，所以 8 号不近交，a<sub>88</sub> = 1。</p>
+<div class="card tip"><h4>为什么 MME 用 A<sup>−1</sup> 而不是 A</h4>
+A 几乎处处非零（稠密），而 <b>A<sup>−1</sup> 非常稀疏</b>：只有"父母–子女"和"父–母"之间才非零，并且可以直接从系谱写出来（Henderson 规则），根本不用先算 A 再求逆。这就是几百万头动物也能做 BLUP 的秘密。</div>
+<div class="scroll"><div class="eqs"><span>A<sup>−1</sup> =</span><span id="Aishow"></span></div></div>
+</section>
+
+<!-- 10b -->
+<section id="s10b">
+<h2><span class="no">11</span>从模型推导方差：V、协方差与 BLUP 公式</h2>
+<p class="lead">模型 y = Xb + Zu + e 只写了"均值结构"。把几条假设和三条运算规则用上，就能推出数据的方差结构，进而推出育种值该怎么估。</p>
+
+<h3>第 1 步：模型假设（推导的全部"原料"）</h3>
+<div class="card">
+<table class="cheat">
+<tr><th>假设</th><th>含义</th><th>生物学解释</th></tr>
+<tr><td>E(<b>u</b>) = 0，E(<b>e</b>) = 0</td><td>随机效应均值为 0</td><td>育种值是相对于群体的离差；"平均"部分已放进 Xb</td></tr>
+<tr><td>Var(<b>u</b>) = <b>A</b>σₐ² ＝ <b>G</b></td><td>育种值的协方差由亲缘决定</td><td>只考虑加性效应；亲缘越近，育种值越相像</td></tr>
+<tr><td>Var(<b>e</b>) = <b>I</b>σₑ² ＝ <b>R</b></td><td>残差互不相关、方差相同</td><td>没有共同环境（如同窝效应）；若有，需另加随机效应</td></tr>
+<tr><td>Cov(<b>u</b>, <b>e</b>′) = 0</td><td>遗传与环境无关</td><td>好基因的牛不会被系统地分到好圈舍</td></tr>
+<tr><td><b>b</b> 固定、σₐ²、σₑ² 已知</td><td>BLUP 需要先知道方差组分</td><td>实际中先用 REML 估计（见本节末）</td></tr>
+</table>
+</div>
+
+<h3>第 2 步：三条运算规则（标量 → 矩阵）</h3>
+<div class="grid2">
+  <div class="card key"><h4>① 期望：线性的</h4>E(<b>Ax</b> + <b>c</b>) = <b>A</b>E(<b>x</b>) + <b>c</b><br><span style="color:var(--muted);font-size:14px">标量版：E(ax+c) = aE(x)+c</span></div>
+  <div class="card key"><h4>② 方差："夹心"</h4>Var(<b>Ax</b>) = <b>A</b>·Var(<b>x</b>)·<b>A′</b><br><span style="color:var(--muted);font-size:14px">标量版：Var(ax) = a²Var(x)。a² 拆成"左乘 A、右乘 A′"。几何上就是：把第 9 节的椭圆用第 2 节的矩阵 A 变形一下。</span></div>
+  <div class="card key"><h4>③ 和的方差</h4>Var(<b>x</b>+<b>w</b>) = Var(<b>x</b>) + Var(<b>w</b>) + Cov(<b>x</b>,<b>w</b>′) + Cov(<b>w</b>,<b>x</b>′)<br>Cov(<b>Ax</b>, (<b>Bw</b>)′) = <b>A</b>Cov(<b>x</b>,<b>w</b>′)<b>B′</b></div>
+</div>
+
+<h3>第 3 步：推导</h3>
+<div class="card">
+<p style="margin:0"><b>均值：</b>E(<b>y</b>) = <b>X</b>b + <b>Z</b>E(<b>u</b>) + E(<b>e</b>) = <b>Xb</b></p>
+<p style="margin:8px 0 0"><b>方差：</b>Xb 是常数，不贡献方差，所以</p>
+<div class="eq">Var(<b>y</b>) = Var(<b>Zu</b> + <b>e</b>) <span style="color:var(--muted);font-size:14px">　(规则③，Cov(u,e′)=0 两项消失)</span><br>
+= <b>Z</b>·Var(<b>u</b>)·<b>Z′</b> + Var(<b>e</b>) <span style="color:var(--muted);font-size:14px">　(规则②)</span><br>
+= <b>ZAZ′</b>σₐ² + <b>I</b>σₑ² ＝ <b>V</b></div>
+<p style="margin:8px 0 0"><b>记录与育种值的协方差：</b></p>
+<div class="eq">Cov(<b>y</b>, <b>u′</b>) = Cov(<b>Zu</b> + <b>e</b>, <b>u′</b>) = <b>Z</b>·Var(<b>u</b>) = <b>ZA</b>σₐ²</div>
+</div>
+<p>把例子代进去（σₐ²=20，σₑ²=40），<b>V</b> 的行列对应有记录的动物 4–8：</p>
+<div class="scroll"><div class="eqs"><span>V =</span><span id="Vshow"></span><span style="font-size:14px;color:var(--muted)">（行列 = 动物 4,5,6,7,8）</span></div></div>
+<div class="card tip"><h4>看懂 V 的每个元素，就是经典数量遗传学</h4>
+・<b>对角线</b> V<sub>ii</sub> = a<sub>ii</sub>σₐ² + σₑ² = 20 + 40 = 60 = 表型方差 σₚ²，h² = 20/60 = 1/3。<br>
+・<b>非对角</b> V<sub>ij</sub> = a<sub>ij</sub>σₐ²：<span id="Vread"></span><br>
+　这正是教科书上"半同胞表型协方差 = ¼σₐ²、亲子协方差 = ½σₐ²"的矩阵写法。<br>
+・亲属之间表型相关，所以 y 不能当作独立数据处理——这就是普通最小二乘不够用的原因。</div>
+
+<h3>第 4 步：从方差到"最好的预测"</h3>
+<p>已知 y 后，怎样猜 u 最准？统计上的答案是条件期望。在正态假设下，它是一条回归：</p>
+<div class="eq">û = Cov(<b>u</b>, <b>y′</b>) · Var(<b>y</b>)<sup>−1</sup> · (<b>y</b> − E(<b>y</b>)) = <b>GZ′V</b><sup>−1</sup>(<b>y</b> − <b>X</b>b̂)</div>
+<p>其中 b̂ 用广义最小二乘（GLS）估计：b̂ = (<b>X′V</b><sup>−1</sup><b>X</b>)<sup>−1</sup><b>X′V</b><sup>−1</sup><b>y</b>。<b>V</b><sup>−1</sup> 就像"权重"：方差大、彼此相关的记录被打折。</p>
+
+<div class="card key"><h4>标量直觉：只有自身一条记录时</h4>
+所有矩阵都变成数：G = σₐ²，Z = 1，V = σₚ²，于是
+<div class="eq">û = (σₐ² / σₚ²)(y − μ) = <b>h²</b>(y − μ)</div>
+这就是经典的"育种值 = 遗传力 × 表型离差"。回归系数 = 协方差 / 方差。矩阵版 GZ′V<sup>−1</sup> 只是把它推广到"多条记录、亲属互相借信息"的情况。拖动滑块看：点是模拟的个体，横轴表型离差，纵轴真实育种值。
+<div class="demo" style="margin-top:10px">
+  <canvas id="rcv" width="340" height="340"></canvas>
+  <div class="ctrl">
+    <label>h² <input type="range" id="rh2" min="0.05" max="0.95" step="0.05" value="0.35"><span class="n" id="rh2v"></span></label>
+    <div class="out"><span class="c2">红色虚线</span>：斜率 1，直接拿表型当育种值。<br><span class="c3">绿色实线</span>：斜率 h²，即 BLUP 的"收缩"预测，离差平方和最小。<br>h² 越低，点云越扁平，最佳预测线越平——证据少，就越保守。</div>
+  </div>
+</div>
+</div>
+
+<div class="card tip"><h4>Henderson 的贡献：不用求 V<sup>−1</sup></h4>
+V 是 n×n 的稠密矩阵（n = 记录数，可达上亿），求逆不现实。Henderson 证明：上面 GLS + 回归公式的解，与<a href="#s11">混合模型方程</a>的解<b>完全相同</b>；而 MME 只用到稀疏的 A<sup>−1</sup> 和 R<sup>−1</sup>。下面在浏览器里用两种方法分别算一遍：</div>
+<div class="scroll"><table class="data" id="cmpTbl"></table></div>
+
+<h3>第 5 步：预测有多准——PEV 与可靠性</h3>
+<p>预测误差 u − û 的方差（PEV）可以直接从 MME 左边矩阵的逆 C<sup>−1</sup> 读出：</p>
+<div class="eq">Var(u<sub>i</sub> − û<sub>i</sub>) = c<sup>ii</sup>σₑ²，　　r²<sub>i</sub> = 1 − PEV<sub>i</sub> / (a<sub>ii</sub>σₐ²)，　　SEP = √PEV</div>
+<p>其中 c<sup>ii</sup> 是 C<sup>−1</sup> 里动物 i 对应的对角元。还有两个常用结论：Var(û) = Cov(u, û′) = G − PEV（估计值的方差比真实育种值小，也就是"收缩"），以及 r² = Var(û<sub>i</sub>)/Var(u<sub>i</sub>)。</p>
+<div class="scroll"><table class="data" id="pevTbl"></table></div>
+
+<h3>附：σₐ²、σₑ² 本身怎么来？（REML 一瞥）</h3>
+<div class="card warn">
+以上都假设方差组分已知。实际中先用 <b>REML</b>（约束最大似然）估计：它去掉固定效应 b 的影响，再让数据出现的"可能性"最大。其对数似然为
+<div class="eq">log L = −½ [ log|<b>V</b>| + log|<b>X′V</b><sup>−1</sup><b>X</b>| + <b>y′Py</b> ] + 常数，　<b>P</b> = <b>V</b><sup>−1</sup> − <b>V</b><sup>−1</sup><b>X</b>(<b>X′V</b><sup>−1</sup><b>X</b>)<sup>−1</sup><b>X′V</b><sup>−1</sup></div>
+这里用到了行列式（第 6 节）、逆（第 7 节）。EM-REML 的迭代式更直观（q 为动物数，<b>C</b><sup>uu</sup> 为 C<sup>−1</sup> 中育种值那一块）：
+<div class="eq">σ̂ₐ² = [ û′A<sup>−1</sup>û + tr(A<sup>−1</sup>C<sup>uu</sup>)σₑ² ] / q</div>
+直观上：第一项是"估出来的育种值有多分散"，第二项把预测误差补回来，因为 û 被收缩了。这里又出现了迹 tr（对角线之和）。
+</div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2><span class="no">12</span>把一切拼起来：混合模型方程（MME）</h2>
+<p class="lead">下面所有数字都由浏览器实时计算。拖动遗传力，看育种值如何变化。</p>
+<div class="card">
+  <label style="display:flex;gap:10px;align-items:center;font-size:15px">遗传力 h² <input type="range" id="h2" min="0.05" max="0.9" step="0.01" value="0.33" style="flex:1"><span id="h2v" style="font-family:monospace;width:3.5em"></span></label>
+  <div class="btns"><button id="mrode">恢复原例 h²=1/3（α=2）</button></div>
+  <div id="alphaOut" class="out"></div>
+</div>
+<h3>第 1 步：拼出左边矩阵 C 与右边向量</h3>
+<p><span style="background:rgba(47,111,222,.15);padding:0 4px">蓝</span> = X′X，<span style="background:rgba(31,157,107,.18);padding:0 4px">绿</span> = X′Z 和 Z′X，<span style="background:rgba(217,83,79,.15);padding:0 4px">红</span> = Z′Z + A<sup>−1</sup>α。注意它是对称的。</p>
+<div class="scroll"><div class="eqs"><span>C =</span><span id="lhs"></span><span>　r =</span><span id="rhs"></span></div></div>
+<h3>第 2 步：解方程 C·[b̂; û] = r</h3>
+<div class="demo">
+  <div class="scroll"><div class="eqs" style="justify-content:flex-start"><span>[b̂; û] = C<sup>−1</sup>r =</span><span id="sol"></span></div></div>
+  <div style="flex:1;min-width:260px">
+    <div class="lbl">估计育种值 EBV（kg）</div>
+    <div class="bars" id="bars"></div>
+  </div>
+</div>
+<div class="card key"><h4>你能从结果里读出什么</h4>
+・<b>1–3 号没有记录</b>，但通过 <b>A<sup>−1</sup></b> 从后代那里"借"到了信息，所以也有育种值。<br>
+・<b>α 是"收缩"力度</b>：h² 越低，α 越大，A<sup>−1</sup>α 在对角线上越重，育种值越被拉向 0（越保守）。把 h² 拖到 0.05 看看，再拖到 0.9。<br>
+・<b>Z′Z + A<sup>−1</sup>α</b> 中的"+"让矩阵变得可逆：即使有动物没记录（Z′Z 对角为 0），加上 A<sup>−1</sup>α 后仍正定。<br>
+・预测误差方差 PEV 和可靠性也来自 C<sup>−1</sup>（推导见<a href="#s10b">第 11 节</a>）：PEV = c<sup>ii</sup>σₑ²，r² = 1 − PEV/(a<sub>ii</sub>σₐ²)；本例无近交（a<sub>ii</sub>=1），化简为 r² = 1 − c<sup>ii</sup>·α。</div>
+<div class="scroll"><div class="bars" id="rel"></div></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2><span class="no">13</span>速查表</h2>
+<div class="card">
+<table class="cheat">
+<tr><th>符号</th><th>名称</th><th>一句话</th><th>在动物模型里</th></tr>
+<tr><td>a·b</td><td>点积</td><td>对应相乘再相加</td><td>矩阵乘法的每一格</td></tr>
+<tr><td>AB</td><td>矩阵乘法</td><td>行·列；(m×n)(n×p)=m×p</td><td>Xb、Zu、X′X …</td></tr>
+<tr><td>A′ / Aᵀ</td><td>转置</td><td>行列互换；(AB)′=B′A′</td><td>X′y、Z′Z</td></tr>
+<tr><td>I</td><td>单位矩阵</td><td>相当于 1，什么都不做</td><td>Var(e)=Iσₑ²</td></tr>
+<tr><td>|A|, det</td><td>行列式</td><td>面积/体积缩放倍数，0 ⇒ 不可逆</td><td>REML 似然中的 log|V|</td></tr>
+<tr><td>A⁻¹</td><td>逆矩阵</td><td>撤销变换；A⁻¹A=I</td><td>A⁻¹α 加进 MME</td></tr>
+<tr><td>rank</td><td>秩</td><td>独立列的个数</td><td>固定效应不满秩 ⇒ 广义逆</td></tr>
+<tr><td>A⁻</td><td>广义逆</td><td>AGA=A，奇异时也能"凑"一个解</td><td>b̂ 不唯一，可估函数唯一</td></tr>
+<tr><td>λ, v</td><td>特征值/向量</td><td>Av=λv，椭圆的轴</td><td>判断正定、主成分</td></tr>
+<tr><td>正定</td><td>positive definite</td><td>特征值全 &gt;0，x′Vx&gt;0</td><td>合法的 A、G、R</td></tr>
+<tr><td>⊗</td><td>克罗内克积</td><td>每个元素乘整个矩阵</td><td>多性状 G₀⊗A</td></tr>
+<tr><td>tr(A)</td><td>迹</td><td>对角线之和</td><td>REML/EM 算法公式</td></tr>
+</table>
+</div>
+<p style="color:var(--muted);font-size:14px">进一步阅读：Mrode R.A.《Linear Models for the Prediction of Animal Breeding Values》第 1–3 章；张沅《家畜育种学》中 BLUP 部分。有了本页的基础，读这些书时遇到的矩阵运算应当都不陌生了。</p>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#888";
+function fmt(x,d){d=(d==null)?3:d;if(Math.abs(x)<5e-11)x=0;return String(parseFloat(x.toFixed(d))).replace("-","−");}
+function matHTML(M,o){o=o||{};const d=o.d==null?3:o.d;let h='<span class="mat"><table>';
+  M.forEach((r,i)=>{h+="<tr>";r.forEach((v,j)=>{const c=o.cc?o.cc(i,j):"";h+='<td'+(o.id?' id="'+o.id+"-"+i+"-"+j+'"':"")+(c?' class="'+c+'"':"")+">"+(typeof v==="number"?fmt(v,d):v)+"</td>";});h+="</tr>";});
+  return h+"</table></span>";}
+const T=M=>M[0].map((_,j)=>M.map(r=>r[j]));
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const scal=(A,c)=>A.map(r=>r.map(v=>v*c));
+function inv(M){const n=M.length;const a=M.map((r,i)=>r.concat(r.map((_,j)=>i===j?1:0)));
+  for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(a[r][c])>Math.abs(a[p][c]))p=r;
+    if(Math.abs(a[p][c])<1e-12)return null;const t=a[c];a[c]=a[p];a[p]=t;const pv=a[c][c];
+    for(let j=0;j<2*n;j++)a[c][j]/=pv;
+    for(let r=0;r<n;r++)if(r!==c){const f=a[r][c];if(f)for(let j=0;j<2*n;j++)a[r][j]-=f*a[c][j];}}
+  return a.map(r=>r.slice(n));}
+function kron(A,B){const out=[];A.forEach(ra=>{B.forEach(rb=>{const row=[];ra.forEach(va=>rb.forEach(vb=>row.push(va*vb)));out.push(row);});});return out;}
+
+document.querySelectorAll("[data-mat]").forEach(el=>{el.innerHTML=matHTML(JSON.parse(el.dataset.mat),{d:el.dataset.d?+el.dataset.d:3});});
+
+/* ---------- canvas helper ---------- */
+function setupCanvas(cv){const W=340,dpr=window.devicePixelRatio||1;cv.width=W*dpr;cv.height=W*dpr;cv.style.width=W+"px";cv.style.height=W+"px";const ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);return {ctx,W};}
+function arrow(ctx,x1,y1,x2,y2,col,w){ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w||2.5;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1),L=Math.hypot(x2-x1,y2-y1);if(L<2)return;const h=Math.min(10,L*.4);
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.4),y2-h*Math.sin(a-.4));ctx.lineTo(x2-h*Math.cos(a+.4),y2-h*Math.sin(a+.4));ctx.closePath();ctx.fill();}
+function bindRange(id,lbl,fn){const el=$(id);const upd=()=>{$(lbl).textContent=fmt(+el.value,2);fn();};el.addEventListener("input",upd);return upd;}
+
+/* ---------- 2: transform demo ---------- */
+const tcv=$("#tcv");const tc=setupCanvas(tcv);
+function drawT(){const ctx=tc.ctx,W=tc.W,s=W/10,O=W/2;
+  const a=+$("#ta").value,b=+$("#tb").value,c=+$("#tc").value,d=+$("#td").value;
+  ["#tav","#tbv","#tcvv","#tdv"].forEach((k,i)=>$(k).textContent=fmt([a,b,c,d][i],2));
+  const P=(x,y)=>[O+(a*x+b*y)*s,O-(c*x+d*y)*s];
+  ctx.clearRect(0,0,W,W);
+  ctx.strokeStyle=css("--line");ctx.lineWidth=1;
+  for(let k=-5;k<=5;k++){ctx.beginPath();ctx.moveTo(O+k*s,0);ctx.lineTo(O+k*s,W);ctx.moveTo(0,O-k*s);ctx.lineTo(W,O-k*s);ctx.stroke();}
+  ctx.strokeStyle=css("--accent");ctx.globalAlpha=.35;
+  for(let k=-8;k<=8;k++){let p=P(k,-8),q=P(k,8);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();p=P(-8,k);q=P(8,k);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();}
+  ctx.globalAlpha=.25;ctx.fillStyle=css("--warn");ctx.beginPath();[[0,0],[1,0],[1,1],[0,1]].forEach((v,i)=>{const p=P(v[0],v[1]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+  let p=P(1,0);arrow(ctx,O,O,p[0],p[1],css("--accent2"));p=P(0,1);arrow(ctx,O,O,p[0],p[1],css("--accent"));
+  const det=a*d-b*c;let h="矩阵 "+matHTML([[a,b],[c,d]],{d:2})+"<br>det = ad − bc = <b>"+fmt(det,2)+"</b>，阴影面积 = "+fmt(Math.abs(det),2)+(det<-1e-9?"（负号：图形被翻面）":"");
+  if(Math.abs(det)<1e-9)h+='<br><span class="bad">det = 0：平面被压成一条线，信息丢失，没有逆矩阵。</span>';
+  else h+="<br>逆矩阵（把网格变回去）："+matHTML(inv([[a,b],[c,d]]),{d:2});
+  $("#tout").innerHTML=h;}
+["#ta","#tb","#tc","#td"].forEach(id=>$(id).addEventListener("input",drawT));
+document.querySelectorAll("[data-t]").forEach(bt=>bt.addEventListener("click",()=>{bt.dataset.t.split(",").forEach((v,i)=>$(["#ta","#tb","#tc","#td"][i]).value=v);drawT();}));
+
+/* ---------- 3: multiplication hover ---------- */
+const MA=[[1,2,0],[0,1,3]],MB=[[2,1],[1,0],[0,4]],MC=mul(MA,MB);
+$("#mulDemo").innerHTML='<span class="mbox">'+matHTML(MA,{id:"mA"})+'<span class="lbl">A (2×3)</span></span>·<span class="mbox">'+matHTML(MB,{id:"mB"})+'<span class="lbl">B (3×2)</span></span>=<span class="mbox">'+matHTML(MC,{id:"mC"})+'<span class="lbl">C (2×2)</span></span>';
+function hlMul(i,j){document.querySelectorAll("#mulDemo td").forEach(t=>t.classList.remove("hl"));
+  for(let k=0;k<3;k++){$("#mA-"+i+"-"+k).classList.add("hl");$("#mB-"+k+"-"+j).classList.add("hl");}
+  $("#mC-"+i+"-"+j).classList.add("hl");
+  $("#mulOut").innerHTML="C 的第 "+(i+1)+" 行第 "+(j+1)+" 列 = A 第 "+(i+1)+" 行 · B 第 "+(j+1)+" 列 = "+MA[i].map((v,k)=>v+"×"+MB[k][j]).join(" + ")+" = <b>"+MC[i][j]+"</b>";}
+for(let i=0;i<2;i++)for(let j=0;j<2;j++){const el=$("#mC-"+i+"-"+j);el.style.cursor="pointer";el.addEventListener("mouseenter",()=>hlMul(i,j));el.addEventListener("click",()=>hlMul(i,j));}
+
+/* ---------- 7: linear system ---------- */
+const lcv=$("#lcv");const lc=setupCanvas(lcv);
+function drawL(){const ctx=lc.ctx,W=lc.W,s=W/12,O=W/2;
+  const a2=+$("#la").value,b2=+$("#lb").value,c2=+$("#lc").value;
+  $("#lav").textContent=fmt(a2,1);$("#lbv").textContent=fmt(b2,1);$("#lcv2").textContent=fmt(c2,1);
+  const P=(x,y)=>[O+x*s,O-y*s];
+  ctx.clearRect(0,0,W,W);ctx.strokeStyle=css("--line");ctx.lineWidth=1;
+  for(let k=-6;k<=6;k++){ctx.beginPath();ctx.moveTo(O+k*s,0);ctx.lineTo(O+k*s,W);ctx.moveTo(0,O-k*s);ctx.lineTo(W,O-k*s);ctx.stroke();}
+  ctx.strokeStyle=css("--muted");ctx.beginPath();ctx.moveTo(0,O);ctx.lineTo(W,O);ctx.moveTo(O,0);ctx.lineTo(O,W);ctx.stroke();
+  function line(a,b,c,col,dash){ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.setLineDash(dash||[]);ctx.beginPath();
+    if(Math.abs(b)>1e-9){let p=P(-7,(c+7*a)/b),q=P(7,(c-7*a)/b);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+    else if(Math.abs(a)>1e-9){let p=P(c/a,-7),q=P(c/a,7);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+    ctx.stroke();ctx.setLineDash([]);}
+  line(1,1,4,css("--accent"));line(a2,b2,c2,css("--accent2"),[7,5]);
+  const det=1*b2-a2*1;let h="系数矩阵 "+matHTML([[1,1],[a2,b2]],{d:1})+"　det = "+fmt(det,2)+"<br>";
+  if(Math.abs(det)>1e-9){const x=(4*b2-1*c2)/det,y=(1*c2-a2*4)/det;const p=P(x,y);
+    ctx.fillStyle=css("--accent3");ctx.beginPath();ctx.arc(p[0],p[1],6,0,7);ctx.fill();
+    h+='<span class="good">唯一解</span>：x = '+fmt(x,2)+"，y = "+fmt(y,2)+"（两线交于一点）";}
+  else if(Math.abs(a2)<1e-9&&Math.abs(b2)<1e-9){h+=Math.abs(c2)<1e-9?"第二个方程变成 0 = 0，没提供信息 → 无穷多解":'<span class="bad">0 = '+fmt(c2,1)+"，矛盾 → 无解</span>";}
+  else{const k=a2;const consistent=Math.abs(c2-4*k)<1e-9;
+    h+=consistent?'<span class="bad">det=0，两线重合 → 无穷多解</span>（第二个方程只是第一个的倍数，等于没多给信息）':'<span class="bad">det=0，两线平行 → 无解</span>';}
+  $("#lout").innerHTML=h;}
+["#la","#lb","#lc"].forEach(id=>$(id).addEventListener("input",drawL));
+document.querySelectorAll("[data-l]").forEach(bt=>bt.addEventListener("click",()=>{bt.dataset.l.split(",").forEach((v,i)=>$(["#la","#lb","#lc"][i]).value=v);drawL();}));
+
+/* ---------- 9: covariance ellipse ---------- */
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+const Zs=[];for(let i=0;i<260;i++){const u1=rnd()||1e-9,u2=rnd();const r=Math.sqrt(-2*Math.log(u1));Zs.push([r*Math.cos(2*Math.PI*u2),r*Math.sin(2*Math.PI*u2)]);}
+const ecv=$("#ecv");const ec=setupCanvas(ecv);
+function drawE(){const ctx=ec.ctx,W=ec.W,s=W/12,O=W/2;
+  const v1=+$("#ev1").value,v2=+$("#ev2").value,c=+$("#ecv2").value;
+  $("#ev1v").textContent=fmt(v1,1);$("#ev2v").textContent=fmt(v2,1);$("#ecvv").textContent=fmt(c,1);
+  ctx.clearRect(0,0,W,W);ctx.strokeStyle=css("--line");ctx.lineWidth=1;
+  for(let k=-6;k<=6;k++){ctx.beginPath();ctx.moveTo(O+k*s,0);ctx.lineTo(O+k*s,W);ctx.moveTo(0,O-k*s);ctx.lineTo(W,O-k*s);ctx.stroke();}
+  const tr=v1+v2,det=v1*v2-c*c,disc=Math.sqrt((v1-v2)*(v1-v2)/4+c*c),l1=tr/2+disc,l2=tr/2-disc;
+  let vx,vy;if(Math.abs(c)>1e-9){vx=c;vy=l1-v1;}else if(v1>=v2){vx=1;vy=0;}else{vx=0;vy=1;}
+  const nrm=Math.hypot(vx,vy);vx/=nrm;vy/=nrm;
+  const rr=c/Math.sqrt(v1*v2);
+  let h="V = "+matHTML([[v1,c],[c,v2]],{d:1})+"　相关系数 r = "+fmt(rr,2)+"<br>特征值 λ₁ = "+fmt(l1,2)+"，λ₂ = "+fmt(l2,2)+"，det = "+fmt(det,2)+"<br>";
+  if(l2>1e-9){const L11=Math.sqrt(v1),L21=c/L11,L22=Math.sqrt(v2-L21*L21);
+    ctx.fillStyle=css("--accent");ctx.globalAlpha=.45;
+    Zs.forEach(z=>{const x=L11*z[0],y=L21*z[0]+L22*z[1];ctx.beginPath();ctx.arc(O+x*s,O-y*s,2,0,7);ctx.fill();});ctx.globalAlpha=1;
+    const ang=Math.atan2(vy,vx);ctx.save();ctx.translate(O,O);ctx.rotate(-ang);
+    ctx.strokeStyle=css("--accent3");ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(0,0,2*Math.sqrt(l1)*s,2*Math.sqrt(l2)*s,0,0,7);ctx.stroke();ctx.restore();
+    arrow(ctx,O,O,O+vx*2*Math.sqrt(l1)*s,O-vy*2*Math.sqrt(l1)*s,css("--accent2"),2);
+    arrow(ctx,O,O,O-vy*2*Math.sqrt(l2)*s,O-vx*2*Math.sqrt(l2)*s,css("--warn"),2);
+    h+='<span class="good">正定 ✓</span>　绿色椭圆（2 倍标准差）约圈住 86% 的点；<span class="c2">红箭头</span>/<span style="color:var(--warn)">橙箭头</span> = 两个特征向量方向';}
+  else{ctx.fillStyle=css("--accent2");ctx.font="15px sans-serif";ctx.textAlign="center";ctx.fillText("不存在这样的数据云",O,O);
+    h+='<span class="bad">不正定 ✗</span>：λ₂ ≤ 0，|r| ≥ 1。现实中的方差矩阵不可能是这样，软件会报错 "not positive definite"。';}
+  $("#eout").innerHTML=h;}
+["#ev1","#ev2","#ecv2"].forEach(id=>$(id).addEventListener("input",drawE));
+
+/* ---------- Kronecker ---------- */
+const G0=[[2,1],[1,3]],As=[[1,0.5],[0.5,1]];
+$("#kron").innerHTML='<span class="mbox">'+matHTML(G0)+'<span class="lbl">G₀</span></span>⊗<span class="mbox">'+matHTML(As)+'<span class="lbl">A</span></span>=<span class="mbox">'+matHTML(kron(G0,As),{cc:(i,j)=>((i<2)===(j<2))?(i<2?"b1":"b2"):"b3"})+'<span class="lbl">G₀⊗A (4×4)</span></span>';
+
+/* ---------- 5,10,11: animal model ---------- */
+const ped=[[1,0,0],[2,0,0],[3,0,0],[4,1,0],[5,3,2],[6,1,2],[7,4,5],[8,3,6]];
+const recAnimal=[4,5,6,7,8],sex=[1,2,2,1,1],yv=[4.5,2.9,3.9,3.5,5.0];
+const y=yv.map(v=>[v]);
+const X=sex.map(s=>[s===1?1:0,s===2?1:0]);
+const Z=recAnimal.map(a=>ped.map((_,j)=>j===a-1?1:0));
+function Amat(p){const n=p.length;const A=Array.from({length:n},()=>Array(n).fill(0));
+  for(let i=0;i<n;i++){const s=p[i][1],d=p[i][2];
+    for(let j=0;j<i;j++){const v=0.5*((s?A[j][s-1]:0)+(d?A[j][d-1]:0));A[i][j]=v;A[j][i]=v;}
+    A[i][i]=1+((s&&d)?0.5*A[s-1][d-1]:0);}
+  return A;}
+const A=Amat(ped),Ai=inv(A);
+$("#xzShow").innerHTML='<span>y =</span>'+matHTML(y,{d:1})+'<span>X =</span>'+matHTML(X,{d:0})+'<span>Z =</span>'+matHTML(Z,{d:0});
+$("#xtx").innerHTML=matHTML(mul(T(X),X),{d:0});$("#xty").innerHTML=matHTML(mul(T(X),y),{d:1});
+$("#Ashow").innerHTML=matHTML(A,{d:3,cc:(i,j)=>i===j?"b1":""});
+$("#Aishow").innerHTML=matHTML(Ai,{d:3,cc:(i,j)=>Math.abs(Ai[i][j])>1e-9?(i===j?"b1":"b3"):""});
+// fix narrative of a88 with actual computed value
+(function(){const p=$("#Aread");if(p)p.innerHTML="读读看：a<sub>14</sub> = "+fmt(A[0][3])+"（父子）；a<sub>56</sub> = "+fmt(A[4][5])+"（同母半同胞）；a<sub>78</sub> = "+fmt(A[6][7])+"；对角线 a<sub>88</sub> = "+fmt(A[7][7])+"：8 号的父母 3 和 6 之间 a<sub>36</sub> = "+fmt(A[2][5])+"，所以 8 号不近交。本例所有对角元都是 1，说明没有近交个体。";})();
+
+/* ---------- 10b: variance derivation ---------- */
+(function(){
+  const sa=20,se=40,ids=recAnimal;
+  const I5=ids.map((_,i)=>ids.map((_,j)=>i===j?1:0));
+  const G=scal(A,sa);
+  const V=add(mul(mul(Z,G),T(Z)),scal(I5,se));
+  $("#Vshow").innerHTML=matHTML(V,{d:1,cc:(i,j)=>i===j?"b1":(Math.abs(V[i][j])>1e-9?"b3":"")});
+  const rel=(x,w)=>{const px=ped[x-1],pw=ped[w-1];
+    if(px[1]===w||px[2]===w||pw[1]===x||pw[2]===x)return "亲子";
+    const sh=[1,2].filter(k=>px[k]&&px[k]===pw[k]).length;
+    if(sh===2)return "全同胞";if(sh===1)return "半同胞";return "其他亲属";};
+  const pairs=[];for(let i=0;i<5;i++)for(let j=i+1;j<5;j++)if(Math.abs(V[i][j])>1e-9){const a=A[ids[i]-1][ids[j]-1];pairs.push("动物"+ids[i]+"–"+ids[j]+" "+rel(ids[i],ids[j])+"，a="+fmt(a)+" → "+fmt(V[i][j],1));}
+  $("#Vread").innerHTML=pairs.join("；")+"；其余为 0（无亲缘）。";
+  // GLS + regression
+  const Vi=inv(V);
+  const XtVi=mul(T(X),Vi);
+  const bG=mul(inv(mul(XtVi,X)),mul(XtVi,y));
+  const resid=y.map((r,i)=>[r[0]-mul([X[i]],bG)[0][0]]);
+  const uG=mul(mul(mul(G,T(Z)),Vi),resid);
+  // MME at alpha = se/sa
+  const al=se/sa;
+  const XtX=mul(T(X),X),XtZ=mul(T(X),Z),ZtZ=mul(T(Z),Z),ZZA=add(ZtZ,scal(Ai,al));
+  const C=XtX.map((r,i)=>r.concat(XtZ[i])).concat(T(XtZ).map((r,i)=>r.concat(ZZA[i])));
+  const rhs=mul(T(X),y).concat(mul(T(Z),y));
+  const Ci=inv(C),sol=mul(Ci,rhs);
+  const g=bG.concat(uG);
+  const names=["公 b̂","母 b̂"].concat(ped.map(p=>"动物"+p[0]+" û"));
+  let h="<tr><th>效应</th><th>方法一：GLS + 回归<br><span style='font-weight:400;font-size:12px'>需要 V⁻¹（5×5）</span></th><th>方法二：MME<br><span style='font-weight:400;font-size:12px'>只需 A⁻¹</span></th><th>差</th></tr>";
+  names.forEach((n,i)=>{h+="<tr><td>"+n+"</td><td>"+fmt(g[i][0],4)+"</td><td>"+fmt(sol[i][0],4)+"</td><td>"+fmt(g[i][0]-sol[i][0],8)+"</td></tr>";});
+  $("#cmpTbl").innerHTML=h;
+  let p="<tr><th>动物</th><th>c<sup>ii</sup></th><th>PEV = c<sup>ii</sup>σₑ²</th><th>SEP</th><th>Var(û) = a<sub>ii</sub>σₐ² − PEV</th><th>可靠性 r²</th></tr>";
+  ped.forEach((q,i)=>{const cii=Ci[i+2][i+2],pev=cii*se,aii=A[i][i];p+="<tr><td>"+q[0]+"</td><td>"+fmt(cii,4)+"</td><td>"+fmt(pev,2)+"</td><td>"+fmt(Math.sqrt(pev),2)+"</td><td>"+fmt(aii*sa-pev,2)+"</td><td>"+fmt(1-pev/(aii*sa),3)+"</td></tr>";});
+  $("#pevTbl").innerHTML=p;
+})();
+const rcv=$("#rcv");const rc=setupCanvas(rcv);
+function drawR(){const ctx=rc.ctx,W=rc.W,s=W/7,O=W/2;const h=+$("#rh2").value;$("#rh2v").textContent=fmt(h,2);
+  ctx.clearRect(0,0,W,W);ctx.strokeStyle=css("--line");ctx.lineWidth=1;
+  for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(O+k*s,0);ctx.lineTo(O+k*s,W);ctx.moveTo(0,O-k*s);ctx.lineTo(W,O-k*s);ctx.stroke();}
+  ctx.fillStyle=css("--accent");ctx.globalAlpha=.45;
+  Zs.forEach(z=>{const u=Math.sqrt(h)*z[0],yy=u+Math.sqrt(1-h)*z[1];ctx.beginPath();ctx.arc(O+yy*s,O-u*s,2,0,7);ctx.fill();});ctx.globalAlpha=1;
+  ctx.lineWidth=2.5;ctx.strokeStyle=css("--accent2");ctx.setLineDash([7,5]);ctx.beginPath();ctx.moveTo(O-3.5*s,O+3.5*s);ctx.lineTo(O+3.5*s,O-3.5*s);ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle=css("--accent3");ctx.beginPath();ctx.moveTo(O-3.5*s,O+3.5*h*s);ctx.lineTo(O+3.5*s,O-3.5*h*s);ctx.stroke();
+  ctx.fillStyle=css("--muted");ctx.font="12px sans-serif";ctx.fillText("表型离差 y−μ →",W-100,O+16);ctx.fillText("↑ 真实育种值 u",O+6,14);}
+$("#rh2").addEventListener("input",drawR);
+
+let h2=1/3;
+const labels=["公","母"].concat(ped.map(p=>"动物"+p[0]));
+function solveMME(){
+  const alpha=(1-h2)/h2;
+  $("#h2v").textContent=Math.abs(h2-1/3)<1e-9?"1/3":fmt(h2,2);
+  $("#alphaOut").innerHTML="α = σₑ²/σₐ² = (1−h²)/h² = <b>"+fmt(alpha,3)+"</b>"+(Math.abs(h2-1/3)<1e-9?"　（σₐ²=20, σₑ²=40）":"");
+  const XtX=mul(T(X),X),XtZ=mul(T(X),Z),ZtX=T(XtZ),ZtZ=mul(T(Z),Z),ZZA=add(ZtZ,scal(Ai,alpha));
+  const C=XtX.map((r,i)=>r.concat(XtZ[i])).concat(ZtX.map((r,i)=>r.concat(ZZA[i])));
+  const r=mul(T(X),y).concat(mul(T(Z),y));
+  const Ci=inv(C),sol=mul(Ci,r);
+  $("#lhs").innerHTML=matHTML(C,{d:3,cc:(i,j)=>(i<2&&j<2)?"b1":(i<2||j<2)?"b2":"b3"});
+  $("#rhs").innerHTML=matHTML(r,{d:1});
+  $("#sol").innerHTML=matHTML(sol.map((v,i)=>[labels[i],v[0]]),{d:3});
+  const u=sol.slice(2).map(v=>v[0]);const mx=Math.max(0.3,...u.map(Math.abs));
+  $("#bars").innerHTML=u.map((v,i)=>{const w=Math.abs(v)/mx*50;const left=v>=0?50:50-w;
+    return '<div class="row"><span class="nm">'+labels[i+2]+'</span><span class="track"><span class="mid"></span><span class="bar" style="left:'+left+'%;width:'+w+'%;background:'+(v>=0?"var(--accent3)":"var(--accent2)")+'"></span></span><span class="v">'+fmt(v,3)+"</span></div>";}).join("")
+    +'<div class="lbl" style="margin-top:6px">公 b̂ = '+fmt(sol[0][0],3)+"，母 b̂ = "+fmt(sol[1][0],3)+"</div>";
+  const rel=u.map((_,i)=>Math.max(0,1-Ci[i+2][i+2]*alpha));
+  $("#rel").innerHTML='<div class="lbl">可靠性 r² = 1 − cⁱⁱα（越长越可信）</div>'+rel.map((v,i)=>'<div class="row"><span class="nm">'+labels[i+2]+'</span><span class="track"><span class="bar" style="left:0;width:'+(v*100)+'%;background:var(--accent)"></span></span><span class="v">'+fmt(v,3)+"</span></div>").join("");
+}
+$("#h2").addEventListener("input",e=>{h2=+e.target.value;solveMME();});
+$("#mrode").addEventListener("click",()=>{h2=1/3;$("#h2").value=0.33;solveMME();});
+
+function all(){drawT();drawL();drawE();drawR();}
+all();solveMME();
+if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",all);
+})();
+</script>
+</body>
+</html>
