@@ -12,6 +12,8 @@
 #   language:    主要语言（可选）
 #   year:        开始年份或时间段（可选）
 #   links:       其他链接（可选），如文档、CRAN、论文
+#   citation:    引用信息（可选），显示在项目下方，带“复制”按钮。发布新版本后记得改版本号
+#   bibtex:      BibTeX 格式的引用（可选），点“BibTeX”展开。用 | 开头，下面每行缩进写
 
 - category: "R 包"
   key: "r-packages"
@@ -26,6 +28,15 @@
           url: "https://tony2015116.github.io/mintyr/"
         - title: "CRAN"
           url: "https://CRAN.R-project.org/package=mintyr"
+      citation: "Guo M (2026). mintyr: Grouped and Nested Data Pipelines Built on 'data.table'. R package version 0.2.0, https://CRAN.R-project.org/package=mintyr."
+      bibtex: |
+        @Manual{mintyr,
+          title = {mintyr: Grouped and Nested Data Pipelines Built on 'data.table'},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 0.2.0},
+          url = {https://CRAN.R-project.org/package=mintyr},
+        }
     - name: "tidypptsda"
       repo: "tony2015116/tidypptsda"
       description: "种猪测定站（NEDAP、FIRE）采食记录的清洗与分析：按 Casey 等（2005）16 条标准识别饲喂器错误，稳健回归 + LOESS 清洗体重，Jiao 等（2014）线性混合模型校正采食量，补齐日体重与日采食后计算日增重（ADG）、日采食量（ADFI）和料肉比（FCR）；每头猪附可信度标记，删除的记录都写明原因。"
@@ -34,6 +45,26 @@
       links:
         - title: "文档"
           url: "https://tony2015116.github.io/tidypptsda/"
+      citation: "Guo M (2026). tidypptsda: Process and Analyse Pig Performance Testing Station Data. R package version 1.6.2, https://github.com/tony2015116/tidypptsda."
+      bibtex: |
+        @Manual{tidypptsda,
+          title = {tidypptsda: Process and Analyse Pig Performance Testing Station Data},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 1.6.2},
+          url = {https://github.com/tony2015116/tidypptsda},
+        }
+
+- category: "软件"
+  key: "software"
+  items:
+    # TODO：替换为你的软件。示例条目，可复制修改；全部删除后这个分类会自动隐藏
+    - name: "示例软件 V1.0"
+      repo: "tony2015116/sample-software"
+      description: "一句话说明软件做什么、给谁用、解决什么问题。"
+      language: "Windows / R Shiny"
+      year: "2026"
+      citation: "Guo M (2026). 示例软件 V1.0. 计算机软件著作权，登记号 2026SR0000000."
 
 - category: "分析流程"
   key: "pipelines"

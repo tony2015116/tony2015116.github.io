@@ -34,6 +34,16 @@ author_profile: true
         {% if p.repo %}<a href="https://github.com/{{ p.repo }}">github.com/{{ p.repo }}</a>{% endif %}
         {% for l in p.links %}<a href="{{ l.url }}">{{ l.title }}</a>{% endfor %}
       </div>
+      {% if p.citation or p.bibtex %}
+      <div class="cite">
+        {% if p.citation %}<span class="cite-label">引用</span><span class="cite-text">{{ p.citation }}</span>{% endif %}
+        <span class="cite-actions">
+          {% if p.citation %}<button type="button" class="cite-copy" data-copy="{{ p.citation | escape }}">复制</button>{% endif %}
+          {% if p.bibtex %}<button type="button" class="cite-copy" data-copy-bibtex="1">复制 BibTeX</button>{% endif %}
+        </span>
+        {% if p.bibtex %}<details><summary>BibTeX</summary><pre>{{ p.bibtex | strip | escape }}</pre></details>{% endif %}
+      </div>
+      {% endif %}
     </li>
   {% endfor %}
   </ul>
@@ -46,3 +56,26 @@ author_profile: true
 {% endif %}
 
 {% include category-tabs.html %}
+
+<script>
+/* 复制引用：先用剪贴板接口，不可用时退回到选中文本 */
+document.querySelectorAll('.cite-copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var pre = btn.closest('.cite').querySelector('pre');
+    var text = btn.hasAttribute('data-copy-bibtex') && pre ? pre.textContent : btn.getAttribute('data-copy');
+    var label = btn.textContent;
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = label; }, 1500); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'absolute'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      done(ok ? '已复制' : '请手动复制');
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { done('已复制'); }, fallback);
+    } else { fallback(); }
+  });
+});
+</script>
