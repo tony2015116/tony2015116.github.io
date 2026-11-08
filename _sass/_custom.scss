@@ -166,6 +166,35 @@ html { font-size: 14px; }
   .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 1em; overflow-wrap: anywhere; }
 }
 
+/* 项目引用信息 */
+.project-list .cite {
+  margin: 0.6em 0 0;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--global-border-color);
+  border-radius: 3px;
+  font-size: 0.85em;
+  line-height: 1.6;
+  color: var(--global-text-color);
+  .cite-label { color: var(--global-text-color-light); margin-right: 0.6em; }
+  .cite-text { overflow-wrap: anywhere; }
+  .cite-actions { display: inline-block; margin-left: 0.4em; }
+  .cite-copy {
+    font: inherit; font-size: 0.95em;
+    color: var(--global-text-color-light);
+    background: none; border: none; padding: 0; margin-right: 0.8em;
+    cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em;
+  }
+  .cite-copy:hover, .cite-copy:focus-visible { color: var(--global-text-color); }
+  details { margin-top: 0.3em; }
+  summary { cursor: pointer; color: var(--global-text-color-light); width: fit-content; }
+  pre {
+    margin: 0.4em 0 0; padding: 0.6em 0.8em;
+    font-size: 0.95em; line-height: 1.5;
+    background: var(--global-code-background-color);
+    overflow-x: auto; white-space: pre;
+  }
+}
+
 @media (max-width: 600px) {
   .work-items li { flex-direction: column; gap: 0.1em; }
   .work-items .y { flex: none; }
