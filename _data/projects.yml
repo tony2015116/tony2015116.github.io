@@ -54,17 +54,64 @@
           note = {R package version 1.6.2},
           url = {https://github.com/tony2015116/tidypptsda},
         }
+    - name: "tidypptsdm"
+      repo: "tony2015116/tidypptsdm"
+      description: "种猪测定站（NEDAP、FIRE）测定期间的每日监控，是 tidypptsda 的日常搭档：按测定站、栋、猪和小时汇总最近几天的数据，列出最后一天的警报（测定站无访问、耳标读不到、采食量下降、猪不来吃料或吃得太少），生成可逐站浏览的离线 HTML 报告和带色阶的 Excel 工作簿，并可设为每天定时运行。"
+      language: "R"
+      year: "2026 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/tidypptsdm/"
+        - title: "快速入门"
+          url: "https://tony2015116.github.io/tidypptsdm/articles/tidypptsdm-zh.html"
+      citation: "Guo M (2026). tidypptsdm: Daily Monitoring of Pig Performance Testing Stations. R package version 1.1.1, https://github.com/tony2015116/tidypptsdm."
+      bibtex: |
+        @Manual{tidypptsdm,
+          title = {tidypptsdm: Daily Monitoring of Pig Performance Testing Stations},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 1.1.1},
+          url = {https://github.com/tony2015116/tidypptsdm},
+        }
+
+- category: "Python 包"
+  key: "python-packages"
+  items:
+    - name: "tidypptsdm（Python）"
+      repo: "tony2015116/tidypptsdm-py"
+      description: "R 包 tidypptsdm 的 Python 版本，计算结果与 R 版逐表一致：读取 NEDAP / FIRE 测定站导出文件，生成每日汇总表、警报、中文 HTML 报告和 Excel 工作簿；可在 Python 中调用，也可用命令行 tidypptsdm 运行或设为每天定时任务（Windows 任务计划程序或 crontab）。"
+      language: "Python"
+      year: "2026 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/tidypptsdm-py/"
+        - title: "PyPI"
+          url: "https://pypi.org/project/tidypptsdm/"
+      citation: "Guo M (2026). tidypptsdm: Daily Monitoring of Pig Performance Testing Stations. Python package version 1.1.5, https://github.com/tony2015116/tidypptsdm-py."
+      bibtex: |
+        @Manual{tidypptsdm_py,
+          title = {tidypptsdm: Daily Monitoring of Pig Performance Testing Stations},
+          author = {Meng Guo},
+          year = {2026},
+          note = {Python package version 1.1.5},
+          url = {https://github.com/tony2015116/tidypptsdm-py},
+        }
 
 - category: "软件"
   key: "software"
   items:
-    # TODO：替换为你的软件。示例条目，可复制修改；全部删除后这个分类会自动隐藏
-    - name: "示例软件 V1.0"
-      repo: "tony2015116/sample-software"
-      description: "一句话说明软件做什么、给谁用、解决什么问题。"
-      language: "Windows / R Shiny"
+    - name: "tidypptsdm 测定站监控（Windows 桌面程序）"
+      repo: "tony2015116/tidypptsdm-py"
+      description: "给测定站日常管理人员用的 Windows 桌面程序，不需要安装 R 或 Python：下载解压后双击 tidypptsdm.exe，选择导出文件夹和结果文件夹，点“运行监控”即生成中文报告（首页列出今日待办的测定站和猪）和 Excel 工作簿；点“设为每天定时”后每天自动运行。"
+      language: "Windows"
       year: "2026"
-      citation: "Guo M (2026). 示例软件 V1.0. 计算机软件著作权，登记号 2026SR0000000."
+      links:
+        - title: "下载 exe（最新版）"
+          url: "https://github.com/tony2015116/tidypptsdm-py/releases/latest/download/tidypptsdm-windows.zip"
+        - title: "使用说明"
+          url: "https://tony2015116.github.io/tidypptsdm-py/app/"
+        - title: "所有版本"
+          url: "https://github.com/tony2015116/tidypptsdm-py/releases"
 
 - category: "分析流程"
   key: "pipelines"
