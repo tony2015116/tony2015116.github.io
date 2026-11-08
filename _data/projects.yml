@@ -26,6 +26,14 @@
           url: "https://tony2015116.github.io/mintyr/"
         - title: "CRAN"
           url: "https://CRAN.R-project.org/package=mintyr"
+    - name: "tidypptsda"
+      repo: "tony2015116/tidypptsda"
+      description: "种猪测定站（NEDAP、FIRE）采食记录的清洗与分析：按 Casey 等（2005）16 条标准识别饲喂器错误，稳健回归 + LOESS 清洗体重，Jiao 等（2014）线性混合模型校正采食量，补齐日体重与日采食后计算日增重（ADG）、日采食量（ADFI）和料肉比（FCR）；每头猪附可信度标记，删除的记录都写明原因。"
+      language: "R"
+      year: "2025 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/tidypptsda/"
 
 - category: "分析流程"
   key: "pipelines"
