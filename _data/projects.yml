@@ -143,6 +143,11 @@
           url: "https://github.com/tony2015116/yingzi-downloader#readme"
         - title: "所有版本"
           url: "https://github.com/tony2015116/yingzi-downloader/releases"
+    - name: "FPF 数据处理（Windows 桌面程序）"
+      repo: "tony2015116/fpf-data-processor"
+      description: "影子科技数据下载器的下游工具：把下载的母猪综合查询、猪只转移、母猪档案 xlsx 批量读取合并、清洗，判定品种和品系（规则可在界面里编辑、导入导出），导出 R 可直接读取的 rds 或 csv；结果与原 R 脚本逐格比对一致。单个 exe，有图形界面，也可用命令行或从 R 调用。"
+      language: "Python"
+      year: "2026"
 
 - category: "分析流程"
   key: "pipelines"
