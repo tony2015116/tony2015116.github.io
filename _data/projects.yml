@@ -16,14 +16,16 @@
 - category: "R 包"
   key: "r-packages"
   items:
-    - name: "sample-toolkit"
-      repo: "yourname/sample-toolkit"
-      description: "一个用于某某数据整理与分析的 R 包，把重复的预处理步骤封装成几个函数，减少手工操作出错。"
+    - name: "mintyr"
+      repo: "tony2015116/mintyr"
+      description: "基于 data.table 的分组 / 嵌套数据处理工具包：批量导入 Excel / CSV（含多行表头），按性状 × 分组重塑与嵌套，组内可复现的（分层）k 折交叉验证，生成可直接写进报告的描述统计，并为 HIBLUP、DMU、ASReml-R 导出输入文件。"
       language: "R"
-      year: "2025 – 至今"
+      year: "2024 – 至今"
       links:
         - title: "文档"
-          url: "https://yourname.github.io/sample-toolkit"
+          url: "https://tony2015116.github.io/mintyr/"
+        - title: "CRAN"
+          url: "https://CRAN.R-project.org/package=mintyr"
 
 - category: "分析流程"
   key: "pipelines"
