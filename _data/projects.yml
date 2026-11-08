@@ -131,6 +131,18 @@
           url: "https://tony2015116.github.io/tidypptsdm-py/app/"
         - title: "所有版本"
           url: "https://github.com/tony2015116/tidypptsdm-py/releases"
+    - name: "影子科技数据下载器（Windows 桌面程序）"
+      repo: "tony2015116/yingzi-downloader"
+      description: "影子科技（扬翔）养殖平台的数据批量下载工具：一个窗口完成母猪综合查询、猪只转移、母猪档案、遗传性状查询、育种值查询、系谱查询六种下载，自动登录、筛选、导出并按条件命名；超过导出上限自动按日期拆分，国标编码超过 400 个自动分批合并；支持记住登录、后台运行和每天定时下载。"
+      language: "Python"
+      year: "2026"
+      links:
+        - title: "下载 exe（最新版）"
+          url: "https://github.com/tony2015116/yingzi-downloader/releases/latest/download/yingzi-downloader-windows.zip"
+        - title: "使用说明"
+          url: "https://github.com/tony2015116/yingzi-downloader#readme"
+        - title: "所有版本"
+          url: "https://github.com/tony2015116/yingzi-downloader/releases"
 
 - category: "分析流程"
   key: "pipelines"
