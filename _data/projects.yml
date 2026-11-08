@@ -57,7 +57,7 @@
     - name: "ASReml-R 4.2 速查表"
       url: "/files/cheatsheets/asreml-r.html"
       url_title: "打开速查表"
-      description: "ASReml-R 4.2 与 ASRgenomics：模型公式与方差结构、动物模型 / 重复力 / 多性状、G / H 矩阵构建、结果提取与遗传参数计算，附勘误与常见报错。"
+      description: "ASReml-R 4.2 与 ASRgenomics：v3→v4 迁移、模型公式与方差结构、试验设计模型库、动物模型与多性状、G×E、GBLUP / ssGBLUP、ASRgwas，附 vpredict() 代码生成器和勘误说明。"
       language: "R"
       year: "2026"
       links:
