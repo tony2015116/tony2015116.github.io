@@ -54,6 +54,15 @@
       links:
         - title: "官方教程"
           url: "https://www.hiblup.com/tutorials"
+    - name: "ASReml-R 4.2 速查表"
+      url: "/files/cheatsheets/asreml-r.html"
+      url_title: "打开速查表"
+      description: "ASReml-R 4.2 与 ASRgenomics：模型公式与方差结构、动物模型 / 重复力 / 多性状、G / H 矩阵构建、结果提取与遗传参数计算，附勘误与常见报错。"
+      language: "R"
+      year: "2026"
+      links:
+        - title: "参考手册"
+          url: "https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/ASReml-R-Reference-Manual-4.2.pdf"
     - name: "rMVP 速查表"
       url: "/files/cheatsheets/rmvp.html"
       url_title: "打开速查表"

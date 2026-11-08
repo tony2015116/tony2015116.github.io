@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASReml-R 4.2 速查手册</title>
+<script>
+  try {
+    var t = localStorage.getItem('asr-theme');
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>/* Tailwind v3.4.17 precompiled */
+*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Inter,Noto Sans SC,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sec{scroll-margin-top:8rem}.sec>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.sec-head{display:flex;flex-direction:column;gap:.25rem;border-bottom-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));padding-bottom:.5rem}.sec-head:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}@media (min-width:640px){.sec-head{flex-direction:row;align-items:center;justify-content:space-between}}.sec-no{display:flex;height:1.75rem;width:2rem;flex-shrink:0;align-items:center;justify-content:center;border-radius:.5rem;font-size:.75rem;line-height:1rem;font-weight:700;--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.sec-title{font-size:1rem;line-height:1.5rem;font-weight:700;--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.sec-title:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}@media (min-width:640px){.sec-title{font-size:1.125rem;line-height:1.75rem}}.sec-note{font-size:.75rem;line-height:1rem;--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.sec-note:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.\!card>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.\!card{border-radius:.75rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1));padding:1rem;--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.\!card:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.card>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.card{border-radius:.75rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1));padding:1rem;--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.card:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.card-flush{overflow:hidden;border-radius:.75rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1));--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.card-flush:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.card-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;border-bottom-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));background-color:rgba(241,245,249,.8);padding:.625rem 1rem}.card-bar:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1));background-color:rgba(30,41,59,.8)}.card-title{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;font-size:.875rem;line-height:1.25rem;font-weight:600;--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.card-title:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.tag{border-radius:.25rem;padding:.125rem .5rem;font-family:JetBrains Mono,monospace;font-size:11px}.txt>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.txt{font-size:.75rem;line-height:1rem;line-height:1.625;--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.txt:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.ul{list-style-type:disc}.ul>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.ul{padding-left:1rem}.tbl{width:100%;border-collapse:collapse;text-align:left;font-size:.75rem;line-height:1rem}.tbl thead tr{border-bottom-width:1px;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1));--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.tbl thead tr:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1));background-color:rgba(30,41,59,.4);--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.tbl th{vertical-align:bottom;font-weight:600}.tbl td,.tbl th{padding:.5rem .75rem}.tbl td{vertical-align:top}.tbl tbody>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse));--tw-divide-opacity:1;border-color:rgb(226 232 240/var(--tw-divide-opacity,1))}.tbl tbody:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(30 41 59/var(--tw-divide-opacity,1))}.c{font-family:JetBrains Mono,monospace;--tw-text-opacity:1;color:rgb(3 105 161/var(--tw-text-opacity,1))}.c:is(.dark *){--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.old{font-family:JetBrains Mono,monospace;--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1));text-decoration-line:line-through}.old:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.new{font-family:JetBrains Mono,monospace;font-weight:600;--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.new:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.fix{display:inline-block;border-radius:.25rem;--tw-bg-opacity:1;background-color:rgb(254 243 199/var(--tw-bg-opacity,1));padding:.125rem .375rem;vertical-align:middle;font-size:10px;font-weight:600;--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.fix:is(.dark *){background-color:rgba(120,53,15,.6);--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.code-block{overflow-x:auto;border-radius:.5rem;--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1));padding:.75rem;font-size:.75rem;line-height:1rem;--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.code-head{margin-bottom:.375rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;border-bottom-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1));padding-bottom:.375rem;font-size:11px;--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.copy-btn{flex-shrink:0;font-family:Inter,Noto Sans SC,system-ui,sans-serif;--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.copy-btn:hover{--tw-text-opacity:1;color:rgb(125 211 252/var(--tw-text-opacity,1))}.callout{border-radius:.5rem;border-width:1px;padding:.625rem;font-size:.75rem;line-height:1rem;line-height:1.625}.cat-pill{flex-shrink:0;border-radius:9999px;border-width:1px;border-color:transparent;--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1));padding:.25rem .625rem;--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1));transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.cat-pill:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.cat-pill:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1));--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.cat-pill:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.cat-pill.is-active{--tw-border-opacity:1;border-color:rgb(2 132 199/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(2 132 199/var(--tw-bg-opacity,1));--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.cat-pill.is-active:hover{--tw-bg-opacity:1;background-color:rgb(2 132 199/var(--tw-bg-opacity,1))}.pointer-events-none{pointer-events:none}.visible{visibility:visible}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.bottom-5{bottom:1.25rem}.left-3{left:.75rem}.right-2\.5{right:.625rem}.right-5{right:1.25rem}.top-0{top:0}.top-2{top:.5rem}.top-2\.5{top:.625rem}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-2\.5{margin-top:.625rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-4{height:1rem}.h-7{height:1.75rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-4{width:1rem}.w-8{width:2rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-slate-200>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(226 232 240/var(--tw-divide-opacity,1))}.overflow-x-auto{overflow-x:auto}.scroll-smooth{scroll-behavior:smooth}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-100{--tw-border-opacity:1;border-color:rgb(254 243 199/var(--tw-border-opacity,1))}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138/var(--tw-border-opacity,1))}.border-emerald-500\/40{border-color:rgba(16,185,129,.4)}.border-sky-100{--tw-border-opacity:1;border-color:rgb(224 242 254/var(--tw-border-opacity,1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253/var(--tw-border-opacity,1))}.border-sky-600{--tw-border-opacity:1;border-color:rgb(2 132 199/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.\!bg-transparent{background-color:transparent!important}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199/var(--tw-bg-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-amber-50\/70{background-color:rgba(255,251,235,.7)}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6/var(--tw-bg-opacity,1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.bg-cyan-700{--tw-bg-opacity:1;background-color:rgb(14 116 144/var(--tw-bg-opacity,1))}.bg-emerald-50\/40{background-color:rgba(236,253,245,.4)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105/var(--tw-bg-opacity,1))}.bg-fuchsia-600{--tw-bg-opacity:1;background-color:rgb(192 38 211/var(--tw-bg-opacity,1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229/var(--tw-bg-opacity,1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234/var(--tw-bg-opacity,1))}.bg-rose-100{--tw-bg-opacity:1;background-color:rgb(255 228 230/var(--tw-bg-opacity,1))}.bg-rose-50\/40{background-color:rgba(255,241,242,.4)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.bg-sky-100{--tw-bg-opacity:1;background-color:rgb(224 242 254/var(--tw-bg-opacity,1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255/var(--tw-bg-opacity,1))}.bg-sky-50\/70{background-color:rgba(240,249,255,.7)}.bg-sky-600{--tw-bg-opacity:1;background-color:rgb(2 132 199/var(--tw-bg-opacity,1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-100\/80{background-color:rgba(241,245,249,.8)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-600{--tw-bg-opacity:1;background-color:rgb(71 85 105/var(--tw-bg-opacity,1))}.bg-slate-800\/90{background-color:rgba(30,41,59,.9)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241/var(--tw-bg-opacity,1))}.bg-teal-600{--tw-bg-opacity:1;background-color:rgb(13 148 136/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/95{background-color:hsla(0,0%,100%,.95)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.from-sky-600{--tw-gradient-from:#0284c7 var(--tw-gradient-from-position);--tw-gradient-to:rgba(2,132,199,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.\!p-0{padding:0!important}.p-1\.5{padding:.375rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-1{padding-bottom:.25rem}.pb-1\.5{padding-bottom:.375rem}.pb-2{padding-bottom:.5rem}.pl-4{padding-left:1rem}.pl-9{padding-left:2.25rem}.pr-8{padding-right:2rem}.pt-2{padding-top:.5rem}.pt-2\.5{padding-top:.625rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:JetBrains Mono,monospace}.font-sans{font-family:Inter,Noto Sans SC,system-ui,sans-serif}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-.025em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15/var(--tw-text-opacity,1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229/var(--tw-text-opacity,1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234/var(--tw-text-opacity,1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60/var(--tw-text-opacity,1))}.text-sky-400{--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.text-sky-600{--tw-text-opacity:1;color:rgb(2 132 199/var(--tw-text-opacity,1))}.text-sky-700{--tw-text-opacity:1;color:rgb(3 105 161/var(--tw-text-opacity,1))}.text-sky-800{--tw-text-opacity:1;color:rgb(7 89 133/var(--tw-text-opacity,1))}.text-sky-900{--tw-text-opacity:1;color:rgb(12 74 110/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.placeholder-slate-400::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(148 163 184/var(--tw-placeholder-opacity,1))}.placeholder-slate-400::placeholder{--tw-placeholder-opacity:1;color:rgb(148 163 184/var(--tw-placeholder-opacity,1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.outline{outline-style:solid}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-sky-500:hover{--tw-border-opacity:1;border-color:rgb(14 165 233/var(--tw-border-opacity,1))}.hover\:bg-sky-700:hover{--tw-bg-opacity:1;background-color:rgb(3 105 161/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.hover\:text-sky-300:hover{--tw-text-opacity:1;color:rgb(125 211 252/var(--tw-text-opacity,1))}.hover\:text-slate-600:hover{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-amber-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(245 158 11/var(--tw-ring-opacity,1))}.focus\:ring-sky-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(14 165 233/var(--tw-ring-opacity,1))}.dark\:block:is(.dark *){display:block}.dark\:hidden:is(.dark *){display:none}.dark\:border-amber-800\/70:is(.dark *){border-color:rgba(146,64,14,.7)}.dark\:border-amber-900\/50:is(.dark *){border-color:rgba(120,53,15,.5)}.dark\:border-amber-900\/60:is(.dark *){border-color:rgba(120,53,15,.6)}.dark\:border-emerald-500\/30:is(.dark *){border-color:rgba(16,185,129,.3)}.dark\:border-sky-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(7 89 133/var(--tw-border-opacity,1))}.dark\:border-sky-900\/50:is(.dark *){border-color:rgba(12,74,110,.5)}.dark\:border-sky-900\/70:is(.dark *){border-color:rgba(12,74,110,.7)}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.dark\:border-slate-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.dark\:border-slate-800\/80:is(.dark *){border-color:rgba(30,41,59,.8)}.dark\:bg-amber-900\/60:is(.dark *){background-color:rgba(120,53,15,.6)}.dark\:bg-amber-950\/30:is(.dark *){background-color:rgba(69,26,3,.3)}.dark\:bg-amber-950\/40:is(.dark *){background-color:rgba(69,26,3,.4)}.dark\:bg-emerald-950\/20:is(.dark *){background-color:rgba(2,44,34,.2)}.dark\:bg-rose-900\/50:is(.dark *){background-color:rgba(136,19,55,.5)}.dark\:bg-rose-950\/20:is(.dark *){background-color:rgba(76,5,25,.2)}.dark\:bg-sky-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 132 199/var(--tw-bg-opacity,1))}.dark\:bg-sky-900\/50:is(.dark *){background-color:rgba(12,74,110,.5)}.dark\:bg-sky-900\/60:is(.dark *){background-color:rgba(12,74,110,.6)}.dark\:bg-sky-950\/30:is(.dark *){background-color:rgba(8,47,73,.3)}.dark\:bg-sky-950\/50:is(.dark *){background-color:rgba(8,47,73,.5)}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.dark\:bg-slate-800\/40:is(.dark *){background-color:rgba(30,41,59,.4)}.dark\:bg-slate-800\/80:is(.dark *){background-color:rgba(30,41,59,.8)}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.dark\:bg-slate-900\/95:is(.dark *){background-color:rgba(15,23,42,.95)}.dark\:bg-slate-950:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 6 23/var(--tw-bg-opacity,1))}.dark\:bg-teal-900\/50:is(.dark *){background-color:rgba(19,78,74,.5)}.dark\:text-amber-200:is(.dark *){--tw-text-opacity:1;color:rgb(253 230 138/var(--tw-text-opacity,1))}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.dark\:text-indigo-400:is(.dark *){--tw-text-opacity:1;color:rgb(129 140 248/var(--tw-text-opacity,1))}.dark\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(192 132 252/var(--tw-text-opacity,1))}.dark\:text-rose-300:is(.dark *){--tw-text-opacity:1;color:rgb(253 164 175/var(--tw-text-opacity,1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.dark\:text-sky-200:is(.dark *){--tw-text-opacity:1;color:rgb(186 230 253/var(--tw-text-opacity,1))}.dark\:text-sky-300:is(.dark *){--tw-text-opacity:1;color:rgb(125 211 252/var(--tw-text-opacity,1))}.dark\:text-sky-400:is(.dark *){--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.dark\:text-teal-300:is(.dark *){--tw-text-opacity:1;color:rgb(94 234 212/var(--tw-text-opacity,1))}.dark\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\:hover\:bg-slate-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.dark\:hover\:text-slate-200:hover:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:w-64{width:16rem}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:flex-nowrap{flex-wrap:nowrap}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width:768px){.md\:w-72{width:18rem}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}.md\:justify-between{justify-content:space-between}}@media (min-width:1024px){.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:col-span-5{grid-column:span 5/span 5}.lg\:col-span-7{grid-column:span 7/span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}
+</style>
+<style>
+  body { font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
+  code, pre { font-family: 'JetBrains Mono', monospace; }
+  pre { white-space: pre; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+  @media print {
+    .no-print { display: none !important; }
+    .card, .card-flush { break-inside: avoid; box-shadow: none !important; }
+    .code-block pre { max-height: none !important; overflow: visible !important; white-space: pre-wrap; }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+<!-- ============================== HEADER ============================== -->
+<header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm no-print">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">ASR</div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">ASReml-R 4.2 &amp; ASRgenomics 速查表</h1>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800">v2 · 修订版</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">混合模型 (REML) · 系谱 / 基因组选择 (GBLUP / ssGBLUP) · GWAS (ASRgwas) · 已勘误</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div class="relative w-full sm:w-64 md:w-72">
+          <input id="searchInput" type="text" placeholder="搜索 (如 vm, fa, H.inverse, h2, CV)…"
+            class="w-full pl-9 pr-8 py-1.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <button id="clearSearchBtn" type="button" title="清除搜索" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <button id="hlToggleBtn" type="button" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0" title="高亮标记出本版修正之处">标记修正: 关</button>
+        <button id="densityToggleBtn" type="button" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0">紧凑视图</button>
+        <button id="themeToggleBtn" type="button" aria-label="切换深色模式" class="p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0">
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg class="w-4 h-4 block dark:hidden text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+        <button id="printBtn" type="button" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-sm shrink-0">打印 / PDF</button>
+      </div>
+    </div>
+    <nav class="flex items-center gap-1.5 overflow-x-auto pt-2.5 pb-1 text-xs font-medium border-t border-slate-100 dark:border-slate-800/80 mt-2.5">
+      <button type="button" data-filter="all" class="cat-pill is-active">全部</button>
+      <button type="button" data-filter="errata" class="cat-pill">00 勘误</button>
+      <button type="button" data-filter="v42" class="cat-pill">01 版本迁移</button>
+      <button type="button" data-filter="syntax" class="cat-pill">02 数据与公式</button>
+      <button type="button" data-filter="variance" class="cat-pill">03 方差结构/约束</button>
+      <button type="button" data-filter="extract" class="cat-pill">04 结果与检验</button>
+      <button type="button" data-filter="models" class="cat-pill">05 试验设计模型</button>
+      <button type="button" data-filter="animal" class="cat-pill">06 动物模型</button>
+      <button type="button" data-filter="gxe" class="cat-pill">07 G×E</button>
+      <button type="button" data-filter="genomics" class="cat-pill">08 ASRgenomics</button>
+      <button type="button" data-filter="gs" class="cat-pill">09 GBLUP / CV</button>
+      <button type="button" data-filter="gwas" class="cat-pill">10 GWAS</button>
+      <button type="button" data-filter="calc" class="cat-pill">⚡ vpredict 生成器</button>
+      <button type="button" data-filter="ref" class="cat-pill">参考资料</button>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-8">
+
+  <div id="searchStatus" class="hidden bg-sky-50 dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800 rounded-xl px-4 py-2.5 text-sm flex items-center justify-between no-print">
+    <span id="searchStatusText" class="text-sky-800 dark:text-sky-200 font-medium"></span>
+    <button id="resetFilterBtn" type="button" class="text-xs font-semibold text-sky-600 dark:text-sky-400 hover:underline">重置筛选</button>
+  </div>
+
+  <!-- ===================================================== 00 ERRATA -->
+  <section data-category="errata" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-amber-500">00</span><h2 class="sec-title">本版勘误与修订说明</h2></div>
+      <span class="sec-note">点击顶栏「标记修正」可在全文高亮 <span class="fix">已修正</span> 位置</span>
+    </div>
+    <div class="card-flush">
+      <div class="overflow-x-auto">
+        <table class="tbl">
+          <thead><tr><th>#</th><th>位置</th><th>原版问题</th><th>修正后</th><th>后果 / 依据</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>9.2 ssGBLUP</td><td class="old">H.inverse(A=Amat, G=Ginv, …, inverse=TRUE)</td><td class="new">H.inverse(A=Amat, Ginv=Ginv, lambda=0.9, sparseform=TRUE)</td><td>参数名为 <code class="c">Ginv</code>；<code class="c">inverse</code> 已标记弃用（生成 H 用 <code class="c">H.matrix()</code>）。ASRgenomics 手册</td></tr>
+            <tr><td>2</td><td>2.5 / 9.2</td><td>“lambda=0.9 等价于 90% 基因组 + 10% 系谱”</td><td>λ 同时设定 τ=ω=λ，缩放的是 (G⁻¹ − A₂₂⁻¹) 整项，取值 0–1</td><td>概念错误。G 与 A₂₂ 的融合 (blend/align) 应在 <code class="c">G.tuneup()</code> 完成</td></tr>
+            <tr><td>3</td><td>9.1 GBLUP</td><td class="old">G.inverse(G, sparseform=TRUE)$Ginv</td><td class="new">G.inverse(G, sparseform=TRUE)$Ginv.sparse</td><td>sparseform=TRUE 时 <code class="c">$Ginv</code> 为 NULL，<code class="c">vm()</code> 会直接报错</td></tr>
+            <tr><td>4</td><td>01 / 06 / 05</td><td class="old">ide(Animal, ainv)</td><td class="new">ide(Animal)</td><td><code class="c">ide()</code> 只接受一个因子，复制模型中已有 <code class="c">vm()</code> 因子的水平（WAM 教程 / VSNi KB）</td></tr>
+            <tr><td>5</td><td>6.1 模型 1</td><td>无系谱重复力用 <code class="c">random=~ide(Animal, ainv)</code></td><td><code class="new">random = ~ Animal</code></td><td><code class="c">ide()</code> 需配合同名 <code class="c">vm()</code> 项使用</td></tr>
+            <tr><td>6</td><td>2.4</td><td>“x = "omit" (默认)”</td><td><code class="new">x</code> 默认为 <code class="new">"fail"</code></td><td>协变量含 NA 且不设 x 时模型直接报错，而不是删行</td></tr>
+            <tr><td>7</td><td>2.5</td><td>vm() 默认要求 <code class="c">"PD"</code></td><td>默认 <code class="new">singG = "NSD"</code>；<code class="c">"PSD"</code> 仅在 source 为<strong>非逆</strong> G 矩阵时使用</td><td>传入逆矩阵时 PSD 无意义</td></tr>
+            <tr><td>8</td><td>全文</td><td><code class="c">$\sigma^2_a$</code> 等 LaTeX 写法</td><td>改为 Unicode：σ²ₐ、A₂₂⁻¹</td><td>页面未加载 MathJax，原文显示为乱码美元符号</td></tr>
+            <tr><td>9</td><td>4.2 LRT</td><td>手算 p 值未做边界修正</td><td>边界检验 p = 0.5 × (1 − pchisq(D, 1))</td><td>与 <code class="c">boundary=TRUE</code> 的混合 χ² 一致</td></tr>
+            <tr><td>10</td><td>4.2 Wald</td><td>注释称 <code class="c">denDF="default"</code> 为 Kenward-Roger</td><td>default 依次尝试 algebraic / numeric 分母自由度</td><td>注释误导</td></tr>
+            <tr><td>11</td><td>4.3 predict</td><td class="old">sed = list("Nitrogen:Variety"=TRUE)</td><td class="new">sed = TRUE</td><td>sed 为逻辑值</td></tr>
+            <tr><td>12</td><td>3B 场景 A</td><td>按位置填 <code class="c">iv$Value &lt;- c(...)</code></td><td>按 <code class="c">Component</code> 名称赋值</td><td>组分顺序随模型改变，按位置极易填错</td></tr>
+            <tr><td>13</td><td>3B 场景 C</td><td><code class="c">mod_unconstrained</code> 未定义</td><td>补充无约束模型</td><td>原代码无法运行</td></tr>
+            <tr><td>14</td><td>9.4 CV</td><td><code class="c">mod_full$vparameters.table</code></td><td>用 <code class="c">start.values=TRUE</code> 取表，再按名称填入 <code class="c">mod_full$vparameters</code></td><td>拟合后的对象无此元素（只有 start.values 返回）</td></tr>
+            <tr><td>15</td><td>2.1</td><td>排序注释 Trial→Row→Col 与 <code class="c">ar1(Column):ar1(Row)</code> 矛盾</td><td>排序与 residual 外层→内层顺序一致</td><td>—</td></tr>
+            <tr><td>16</td><td>2.4</td><td>“无表型个体须靠 y="include" 才获得 GEBV”</td><td>只要个体在 ainv/ginv/hinv 中，<code class="c">vm()</code> 就输出其 BLUP</td><td>include 影响的是数据行与拟合值</td></tr>
+            <tr><td>17</td><td>9.2</td><td>ssGBLUP 未校准 G 与 A₂₂</td><td>新增 <code class="c">match.G2A()</code> + <code class="c">G.tuneup(align=TRUE)</code></td><td>官方 H.inverse 示例流程</td></tr>
+            <tr><td>18</td><td>标题 / 08</td><td>“ASRgenomics 1.1.6”</td><td>“1.1.x”（CRAN 2025-08 为 1.1.5）</td><td>版本号无法核实</td></tr>
+            <tr><td>19</td><td>页面脚本</td><td>彩色分类按钮选中后高亮失效；深色模式不记忆；深色模式下打印为深底</td><td>统一 <code class="c">.is-active</code>；localStorage + 系统偏好；打印前临时切回浅色</td><td>交互 bug</td></tr>
+            <tr><td>20</td><td>杂项</td><td>“設定”、“取向异质性”、样式类拼写</td><td>“设定”、“异质性”等</td><td>错别字</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 01 VERSION -->
+  <section data-category="v42" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-rose-600">01</span><h2 class="sec-title">版本迁移 (v3 → v4.x) 与全局设置</h2></div>
+      <span class="text-xs text-rose-600 dark:text-rose-400 font-semibold">网上旧教程多为 v3 语法，务必先对照</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="card-flush lg:col-span-2">
+        <div class="card-bar"><h3 class="card-title">1.1 核心语法对照表</h3><span class="tag bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">Breaking Changes</span></div>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead><tr><th>功能</th><th class="text-rose-600 dark:text-rose-400">v3（已废弃）</th><th class="text-emerald-700 dark:text-emerald-400">v4.1 / v4.2</th><th>注意事项</th></tr></thead>
+            <tbody>
+              <tr><td class="font-medium">残差项</td><td class="old">rcov = ~ units</td><td class="new">residual = ~ units<br>residual = ~ idv(units)</td><td><code class="c">idv(units)</code> 会多出一行固定为 1 的 <code class="c">units!R</code>，位于 varcomp 末尾</td></tr>
+              <tr><td class="font-medium">系谱逆矩阵</td><td class="old">random = ~ ped(ID)<br>ginverse = list(ID = ainv)</td><td class="new">random = ~ vm(ID, ainv)</td><td><code class="c">vm()</code> 在公式中直接绑定因子与已知(逆)矩阵</td></tr>
+              <tr><td class="font-medium">永久环境 (PE) <span class="fix">已修正</span></td><td class="old">~ ped(ID) + ide(ID)</td><td class="new">~ vm(ID, ainv) + ide(ID)</td><td><code class="c">ide()</code> 只有一个参数，沿用 <code class="c">vm(ID, …)</code> 的水平但不带亲缘协方差</td></tr>
+              <tr><td class="font-medium">计算 A⁻¹</td><td class="old">asreml.Ainverse(ped)$ginv</td><td class="new">ainverse(ped)</td><td>返回带 <code class="c">rowNames</code>、<code class="c">INVERSE=TRUE</code> 属性的三元组</td></tr>
+              <tr><td class="font-medium">方差函数</td><td class="old">pin(mod, h2 ~ V1/(V1+V2))</td><td class="new">vpredict(mod, h2 ~ V1/(V1+V2))</td><td>V1、V2… 对应 <code class="c">summary(mod)$varcomp</code> 行号；Delta 法近似 SE</td></tr>
+              <tr><td class="font-medium">分区残差</td><td class="old">rcov = ~ at(Site):units</td><td class="new">residual = ~ dsum(~ units | Site)</td><td>每个 Site 一组独立残差（也可放空间结构）</td></tr>
+              <tr><td class="font-medium">GLMM 分布族</td><td class="old">family = asreml.binomial()</td><td class="new">family = asr_binomial(link = "logit")</td><td>另有 <code class="c">asr_gaussian / asr_poisson / asr_gamma</code></td></tr>
+              <tr><td class="font-medium">缺失值设定</td><td class="old">na.method.Y / na.method.X</td><td class="new">na.action = na.method(y = , x = )</td><td>默认 <code class="c">y="include"</code>、<code class="c">x="fail"</code>（详见 2.4）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>1.2 v4.2 性能与全局选项</span><span class="tag bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300">New in 4.2</span></h3>
+        <ul class="txt ul">
+          <li><strong>内存：</strong>工作空间上限提升（官方称最高约 96 GB），适合大型 G / H 矩阵。</li>
+          <li><strong>多线程：</strong>OpenMP 并行（官方称最多 16 线程），FA 与稠密矩阵运算显著提速。</li>
+          <li><strong>参数化：</strong>使用 <code class="c">idv / ar1v / us</code> 等带方差的结构时，以 sigma 参数化报告组分。</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-head"><span>全局选项 asreml.options()</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>library(asreml)
+asreml.options(
+  threads    = 8,       # 并行线程 (v4.2)
+  workspace  = "8gb",   # REML 求解内存
+  pworkspace = "4gb",   # predict() 内存
+  maxit      = 30,      # 默认 13
+  ai.sing    = TRUE     # AI 矩阵奇异时继续迭代
+)
+asreml.options()        # 查看当前设置</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 02 DATA & FORMULA -->
+  <section data-category="syntax" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-sky-600">02</span><h2 class="sec-title">数据读取、系谱与模型公式</h2></div>
+      <span class="sec-note">Data · Pedigree · Formula terms · na.method · 关键参数</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="card">
+        <h3 class="card-title"><span>2.1 数据读取与排序</span><code class="c text-xs">asreml.read.table()</code></h3>
+        <div class="txt">
+          <p><code class="c">asreml.read.table()</code> 将<strong>首字母大写</strong>的列读为因子，小写为数值。用 <code class="c">read.csv()</code> 时需自行 <code class="c">as.factor()</code>。</p>
+          <ul class="ul">
+            <li>因子水平名避免空格、逗号、<code class="c">#</code>、<code class="c">$</code>。</li>
+            <li><strong>空间/嵌套残差：</strong>建议按 residual 项由外到内排序（<code class="c">ar1(Column):ar1(Row)</code> → 先 Column 后 Row），并保证 Row×Column 网格完整（缺失小区补 NA 行）。<span class="fix">已修正</span></li>
+          </ul>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>读取与排序</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>nin89 &lt;- asreml.read.table("nin89.csv", header = TRUE,
+                           sep = ",", na.strings = "NA")
+
+# residual = ~ dsum(~ ar1(Column):ar1(Row) | Trial)
+# 排序顺序 = Trial -&gt; Column -&gt; Row
+sbt &lt;- sbt[order(sbt$Trial, sbt$Column, sbt$Row), ]</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>2.2 系谱 A⁻¹ 与外部逆矩阵</span><code class="c text-xs">ainverse() / giv</code></h3>
+        <ul class="txt ul">
+          <li><strong>系谱三列：</strong>个体、父本、母本；未知亲本用 <code class="c">0</code> 或 <code class="c">NA</code>；建议祖先排在后代之前。</li>
+          <li><strong>三元组格式：</strong>3 列 <code class="c">Row, Column, Value</code>（下三角，按行内列排序），需 <code class="c">rowNames</code> 与 <code class="c">INVERSE=TRUE</code> 属性。</li>
+          <li><code class="c">vm()</code> 的因子水平须是 source 中 <code class="c">rowNames</code> 的子集。</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-head"><span>A⁻¹ 与外部三元组</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># 1. 系谱直接生成 A^-1
+ainv &lt;- ainverse(harvey[, 1:3])   # Calf, Sire, Dam
+head(attr(ainv, "rowNames"))
+
+# 2. 外部三元组 (3 列) 补齐属性
+hinv &lt;- as.matrix(hinv)
+attr(hinv, "rowNames") &lt;- as.character(idd$V1)
+attr(hinv, "INVERSE")  &lt;- TRUE
+
+# 3. 模型中绑定
+mod &lt;- asreml(y1 ~ Line, random = ~ vm(Calf, ainv),
+              residual = ~ idv(units), data = harvey)</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>2.3 公式算符与特殊函数</span><span class="tag text-sky-600">Table 4-1</span></h3>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead><tr><th>语法</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td class="c">A:B · A*B · A/B</td><td>互作；<code class="c">A*B = A+B+A:B</code>；<code class="c">A/B = A+A:B</code>（嵌套）</td></tr>
+              <tr><td class="c">trait · units</td><td>多性状索引；每个观测一个水平</td></tr>
+              <tr><td class="c">mv</td><td>缺失值作为额外效应估计</td></tr>
+              <tr><td class="c">at(f, l)</td><td>仅在 f 的水平 l 上拟合，如 <code class="c">at(Site, 3):Row</code></td></tr>
+              <tr><td class="c">lin(f) · pol(x, t)</td><td>因子作线性项 / 正交多项式</td></tr>
+              <tr><td class="c">spl(x, k) · dev(x)</td><td>三次样条（随机）/ 偏离趋势项</td></tr>
+              <tr><td class="c">and(f)</td><td>叠加设计矩阵（双列 <code class="c">Male + and(Female)</code>）</td></tr>
+              <tr><td class="c">grp(name)</td><td>多列协变量打包，配合 <code class="c">group = list(...)</code></td></tr>
+              <tr><td class="c">str(form, vmodel)</td><td>多个随机项共用协方差结构（直接-母体）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="card border-sky-200 dark:border-sky-900/70">
+        <h3 class="card-title"><span>2.4 <code class="c">na.action = na.method(y = , x = )</code> 详解</span><span class="fix">已修正</span></h3>
+        <div class="callout bg-sky-50/70 dark:bg-sky-950/30 border-sky-100 dark:border-sky-900/50 space-y-1">
+          <div class="font-semibold text-sky-900 dark:text-sky-300">① 响应变量：<code>y = "include"</code>（默认）/ <code>"omit"</code> / <code>"fail"</code></div>
+          <p><strong>include：</strong>保留 y 为 NA 的行（不贡献似然），以下场景应使用：</p>
+          <ul class="ul text-[11px]">
+            <li><strong>规则网格空间分析</strong>（<code>ar1(Row):ar1(Col)</code>）：删除缺失小区会破坏网格。</li>
+            <li><strong>多性状</strong> <code>cbind(t1, t2)</code>：只缺一个性状的个体仍保留其他性状信息。</li>
+            <li><strong>交叉验证掩码</strong>：验证集 y 置 NA 后需保留其行，以便直接按行对齐预测值。</li>
+          </ul>
+          <p class="text-[11px]">注：无表型个体只要出现在 <code>ainv / ginv / hinv</code> 的 rowNames 中，<code>vm()</code> 就会给出其 BLUP，与 y 的设置无关。</p>
+          <p><strong>omit：</strong>删除 y 为 NA 的行；仅适用于无网格要求的单性状模型。</p>
+        </div>
+        <div class="callout bg-amber-50/70 dark:bg-amber-950/30 border-amber-100 dark:border-amber-900/50 space-y-1">
+          <div class="font-semibold text-amber-900 dark:text-amber-300">② 解释变量：<code>x = "fail"</code>（默认）/ <code>"include"</code> / <code>"omit"</code></div>
+          <p><strong>fail（默认）：</strong>固定或随机项中出现 NA 时报错停止，提醒你主动处理。</p>
+          <p><strong>include：</strong>协变量 NA 按 0 处理（⚠️ 先中心化 <code>scale(x, scale = FALSE)</code>，让 0 等于均值）；因子 NA 在设计矩阵中该行全为 0。</p>
+          <p><strong>omit：</strong>删除任一解释变量为 NA 的整行。</p>
+        </div>
+      </div>
+
+      <div class="card-flush">
+        <div class="card-bar"><h3 class="card-title">2.5 高频关键参数</h3><span class="tag text-sky-600">Essential Arguments</span></div>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead><tr><th>参数</th><th>函数</th><th>含义与调优</th></tr></thead>
+            <tbody>
+              <tr><td class="c font-semibold">workspace / pworkspace</td><td class="font-mono">asreml()</td><td>求解 / predict 内存，如 <code class="c">"4gb"</code>；报 <em>workspace insufficient</em> 时调大。</td></tr>
+              <tr><td class="c font-semibold">maxit</td><td class="font-mono">asreml()</td><td>默认 13；多性状 <code class="c">us()</code>、<code class="c">fa()</code>、GLMM 建议 30–100；固定方差求 BLUP 时设 1。</td></tr>
+              <tr><td class="c font-semibold">singG <span class="fix">已修正</span></td><td class="font-mono">vm()</td><td>默认 <code class="c">"NSD"</code>（非奇异）。若 source 是<strong>关系矩阵本身（非逆）</strong>且半正定，用 <code class="c">vm(ID, G, singG = "PSD")</code>。</td></tr>
+              <tr><td class="c font-semibold">ai.sing</td><td class="font-mono">asreml()</td><td>AI 矩阵奇异时继续迭代（多性状 / FA 常用）。</td></tr>
+              <tr><td class="c font-semibold">equate.levels</td><td class="font-mono">asreml()</td><td>如 <code class="c">c("Male","Female")</code>：叠加模型中两因子共享水平集合。</td></tr>
+              <tr><td class="c font-semibold">classify / sed / average</td><td class="font-mono">predict()</td><td>预测分类；<code class="c">sed=TRUE</code> 输出差值标准误；<code class="c">average</code> 把因子纳入平均集。</td></tr>
+              <tr><td class="c font-semibold">sparseform <span class="fix">已修正</span></td><td class="font-mono">G.inverse()<br>H.inverse()</td><td><code class="c">TRUE</code>：三元组，从 <code class="c">$Ginv.sparse</code>（G.inverse）取出给 <code class="c">vm()</code>；<code class="c">FALSE</code>：完整方阵 <code class="c">$Ginv</code>，供 <code class="c">H.inverse(Ginv = …)</code>。</td></tr>
+              <tr><td class="c font-semibold">lambda / tau / omega <span class="fix">已修正</span></td><td class="font-mono">H.inverse()</td><td>H⁻¹ = A⁻¹ + [0 0; 0 τG⁻¹ − ωA₂₂⁻¹]。给 λ 时 τ = ω = λ（0–1），缩放整个 (G⁻¹ − A₂₂⁻¹)，<strong>不是</strong>“基因组/系谱比例”。</td></tr>
+              <tr><td class="c font-semibold">P3D</td><td class="font-mono">gwas.asreml()</td><td><code class="c">TRUE</code>：零模型估一次方差后固定，逐 SNP 扫描快很多；精确检验或 GLMM 可设 <code class="c">FALSE</code>。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 03 VARIANCE -->
+  <section data-category="variance" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-indigo-600">03</span><h2 class="sec-title">方差结构 (G &amp; R)、初始值与约束</h2></div>
+      <span class="sec-note">后缀：无 = 相关矩阵 · v = 同质方差 · h = 异质方差</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="card-flush lg:col-span-2">
+        <div class="card-bar"><h3 class="card-title">3.1 常用方差模型 (Table 5-1)</h3><span class="tag text-indigo-600 dark:text-indigo-400">n = 水平数</span></div>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead><tr><th>函数</th><th>结构</th><th>参数数</th><th>典型用途</th></tr></thead>
+            <tbody>
+              <tr><td class="c font-semibold">id / idv / idh</td><td class="font-mono">I ; σ²I ; diag(σ₁²…σₙ²)</td><td class="font-mono">0 / 1 / n</td><td>默认随机项；<code class="c">idh(Site)</code>（= <code class="c">diag</code>）异质方差</td></tr>
+              <tr><td class="c font-semibold">ar1 / ar1v / ar1h</td><td class="font-mono">C<sub>ij</sub> = ρ^|i−j|</td><td class="font-mono">1 / 2 / n+1</td><td>田间行列空间 <code class="c">ar1(Row):ar1(Column)</code>、重复测量</td></tr>
+              <tr><td class="c font-semibold">ar2 / ma1 / arma / sar</td><td class="font-mono">AR(2), MA(1), ARMA(1,1)</td><td class="font-mono">2 / 1 / 2 / 1</td><td>高阶时序 / 空间</td></tr>
+              <tr><td class="c font-semibold">cor / corv / corh / corgh</td><td class="font-mono">C<sub>ij</sub> = ρ ; C<sub>ij</sub> = ρ<sub>ij</sub>(corgh)</td><td class="font-mono">1 / 2 / n+1 / n(n+1)/2</td><td>统一相关（Type-B）；异质方差 + 非结构相关</td></tr>
+              <tr><td class="c font-semibold">us(obj, init = )</td><td class="font-mono">V<sub>ij</sub> = σ<sub>ij</sub></td><td class="font-mono">n(n+1)/2</td><td>多性状 <code class="c">us(trait):vm(ID, ainv)</code>；少地点 MET</td></tr>
+              <tr><td class="c font-semibold">fa(obj, k) / rr(obj, k)</td><td class="font-mono">ΛΛᵀ + Ψ（rr 中 Ψ = 0）</td><td class="font-mono">n(k+1) − k(k−1)/2</td><td>多环境 G×E 首选，收敛优于 <code class="c">us()</code></td></tr>
+              <tr><td class="c font-semibold">vm(f, source)</td><td class="font-mono">σ²A / σ²G / σ²H</td><td class="font-mono">1</td><td>绑定 ainv / ginv / hinv</td></tr>
+              <tr><td class="c font-semibold">ide(f)</td><td class="font-mono">σ²I（沿用 vm 水平）</td><td class="font-mono">1</td><td>永久环境、母体环境</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">3.2 直积规则与初始值</h3>
+        <div class="txt">
+          <p><strong class="text-indigo-600 dark:text-indigo-400">直积单一尺度：</strong>直积项（如 <code class="c">Column:Row</code>）中至多一个组分带方差，其余为相关矩阵：<code class="c">ar1v(Column):ar1(Row)</code>、<code class="c">id(units):us(trait)</code>。</p>
+          <p><strong class="text-indigo-600 dark:text-indigo-400">约束代码：</strong><code class="c">P</code> 正值 · <code class="c">U</code> 无约束 · <code class="c">F</code> 固定 · <code class="c">B</code> 落在边界 · <code class="c">C</code> 等式约束。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>start.values 改初值</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># 1. 不拟合，仅导出参数表
+sv &lt;- asreml(yield ~ Variety, random = ~ Rep,
+             data = nin89, start.values = TRUE)
+iv &lt;- sv$vparameters.table
+print(iv)   # Component, Value, Constraint
+
+# 2. 按名称修改
+iv$Value[iv$Component == "Rep"] &lt;- 0.5
+
+# 3. 传回重新拟合
+mod &lt;- asreml(yield ~ Variety, random = ~ Rep,
+              data = nin89, G.param = iv, R.param = iv)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 pt-2">3B 方差固定 (<code class="c">"F"</code>) 与等式约束 (<code class="c">vcc</code>)</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="card">
+        <h3 class="card-title">3.3 何时需要固定方差</h3>
+        <ol class="txt list-decimal pl-4 space-y-2">
+          <li><strong>常规育种值评估：</strong>参数已由大样本估计，全部设 <code class="c">"F"</code> 并 <code class="c">maxit = 1</code>，直接解 MME 得 BLUP 与 SE。</li>
+          <li><strong>两阶段 MET / Meta 加权：</strong>二阶段用 <code class="c">weights = 1/SE²</code>，并把 <code class="c">units!R</code> 固定为 1，使误差方差等于一阶段已知值。</li>
+          <li><strong>LRT 检验特定假设：</strong>如固定 Cov<sub>A</sub> = 0，或检验 r<sub>g</sub> = 1（边界检验）。</li>
+          <li><strong>多性状逐步收敛：</strong>先用单性状方差固定对角线，只估协方差，收敛后再放开为 <code class="c">"P"</code> 联合估计。</li>
+          <li><strong>GWAS 快速扫描 (P3D / EMMAX)：</strong>零模型估一次 σ²ₐ、σ²ₑ，扫描时固定。</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>3.4 三种固定 / 约束写法</span><span class="fix">已修正</span></h3>
+        <div class="code-block">
+          <div class="code-head"><span>Constraint = "F" 与 vcc</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># 场景 A: 已知参数，固定方差直接解 BLUP —— 按名称赋值
+sv &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, ginv),
+             residual = ~ idv(units), data = dat1,
+             start.values = TRUE)
+iv &lt;- sv$vparameters.table
+print(iv$Component)   # 先确认组分名称
+iv$Value[iv$Component == "vm(Genotype, ginv)"] &lt;- 1.1427
+iv$Value[iv$Component == "units!units"]        &lt;- 1.3724
+iv$Constraint &lt;- "F"
+mod_blup &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, ginv),
+                   residual = ~ idv(units), data = dat1,
+                   G.param = iv, R.param = iv, maxit = 1)
+
+# 场景 B: 两阶段 MET，固定残差尺度 = 1 (wt = 1/SE^2)
+sv_wt &lt;- asreml(blue ~ Site, random = ~ fa(Site, 2):Variety,
+                weights = wt, data = stage1_blues,
+                start.values = TRUE)
+iv_wt &lt;- sv_wt$vparameters.table
+r_row &lt;- iv_wt$Component == "units!R"
+iv_wt$Value[r_row] &lt;- 1; iv_wt$Constraint[r_row] &lt;- "F"
+mod_stage2 &lt;- asreml(blue ~ Site, random = ~ fa(Site, 2):Variety,
+                     weights = wt, data = stage1_blues,
+                     G.param = iv_wt, R.param = iv_wt)
+
+# 场景 C: 约束父本方差 = 母本方差 (NCII)
+mod_unc &lt;- asreml(length ~ rep,
+                  random = ~ female + male + female:male,
+                  data = pine)                       # 无约束模型
+sv_nc &lt;- asreml(length ~ rep,
+                random = ~ female + male + female:male,
+                data = pine, start.values = TRUE)
+gam &lt;- sv_nc$vparameters.table
+# 第 1 列: 约束组号(相同 = 相等); 第 2 列: 比例系数
+M &lt;- cbind(c(1, 1, 2, 3), c(1, 1, 1, 1))
+dimnames(M) &lt;- list(gam$Component, NULL)  # 行数须等于组分数
+mod_eq &lt;- asreml(length ~ rep,
+                 random = ~ female + male + female:male,
+                 vcc = M, data = pine)
+lrt.asreml(mod_unc, mod_eq, boundary = FALSE)   # H0: σ²m = σ²f</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 04 EXTRACT -->
+  <section data-category="extract" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-emerald-600">04</span><h2 class="sec-title">结果提取、显著性检验与预测</h2></div>
+      <span class="sec-note">varcomp · BLUE/BLUP · Wald · LRT · predict</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="card">
+        <h3 class="card-title">4.1 方差组分与 BLUE / BLUP</h3>
+        <p class="txt"><code class="c">coef(mod)</code> 只给估计值；需要 SE 与 z.ratio 用 <code class="c">summary(mod, coef = TRUE)</code>。</p>
+        <div class="code-block">
+          <div class="code-head"><span>模型核心输出</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>mod$converge                  # TRUE = 收敛
+mod$loglik                    # REML 对数似然
+summary(mod)$aic; summary(mod)$bic   # 同一固定效应下比较
+summary(mod)$varcomp          # component, std.error, z.ratio
+
+mod &lt;- update(mod)            # 未收敛时继续迭代
+
+blue &lt;- summary(mod, coef = TRUE)$coef.fixed
+blup &lt;- summary(mod, coef = TRUE)$coef.random
+
+plot(mod)                     # 残差诊断
+plot(varioGram(mod))          # 空间模型变异函数图
+fitted(mod); resid(mod)</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>4.2 Wald 检验与 LRT</span><span class="fix">已修正</span></h3>
+        <ul class="txt ul">
+          <li><strong>Wald：</strong>默认 <code class="c">ssType = "incremental"</code>（序贯）；不平衡数据用 <code class="c">"conditional"</code>。<code class="c">denDF = "default"</code> 优先代数法，失败时用数值法。</li>
+          <li><strong>LRT：</strong>嵌套模型且固定效应完全相同；方差 = 0 在参数边界上，用混合 χ²。</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-head"><span>Wald 与 LRT</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># 条件 F 检验 + 近似分母自由度
+wald.asreml(mod, ssType = "conditional", denDF = "default")
+
+# 随机效应 LRT (方差在边界 0 上)
+lrt.asreml(mod_full, mod_reduced, boundary = TRUE)
+
+# 手算 (单个方差组分, 边界修正 0.5χ²0 + 0.5χ²1)
+D &lt;- 2 * (mod_full$loglik - mod_reduced$loglik)
+p_boundary &lt;- 0.5 * (1 - pchisq(D, df = 1))
+p_interior &lt;- 1 - pchisq(D, df = 1)  # 协方差/相关等非边界参数</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>4.3 predict 与可靠性</span><span class="fix">已修正</span></h3>
+        <p class="txt"><code class="c">predict()</code> 基于超表对其他因子求平均，给出 <code class="c">classify</code> 组合的预测值与 SED。</p>
+        <div class="code-block">
+          <div class="code-head"><span>predict 与 reliability</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>pv &lt;- predict(mod, classify = "Variety", sed = TRUE)
+head(pv$pvals)   # predicted.value, std.error, status
+pv$avsed         # 平均 SED
+
+pv_int &lt;- predict(mod, classify = "Nitrogen:Variety",
+                  sed = TRUE)
+
+# 育种值可靠性 r^2 = 1 - PEV / ((1 + F_i) * Va)
+# PEV = std.error^2；无近交时 F_i = 0
+blup_df$rel &lt;- 1 - blup_df$std.error^2 / Va</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 05 MODELS -->
+  <section data-category="models" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-purple-600">05</span><h2 class="sec-title">经典试验设计与遗传模型库 (Cookbook Case 1–12)</h2></div>
+      <span class="sec-note">V1, V2… 严格对应 summary(mod)$varcomp 行号，使用前务必打印确认</span>
+    </div>
+    <div class="card-flush">
+      <div class="overflow-x-auto">
+        <table class="tbl">
+          <thead><tr><th>案例</th><th>核心公式</th><th>遗传参数</th><th>vpredict() 模板</th></tr></thead>
+          <tbody>
+            <tr><td class="font-medium">1 &amp; 2<br><span class="text-slate-500">拉丁方 / 裂区</span></td>
+              <td class="font-mono">y ~ Variety, random = ~ Day + Run<br>y ~ Variety*Nitrogen, random = ~ Blocks/Wplots</td>
+              <td>组内相关 r = σ²<sub>d</sub> / (σ²<sub>d</sub> + σ²<sub>r</sub> + σ²<sub>e</sub>)</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">predict(mod, classify = "Variety:Nitrogen", sed = TRUE)</td></tr>
+            <tr><td class="font-medium">3 &amp; 4<br><span class="text-slate-500">空间 / MET</span></td>
+              <td class="font-mono">random = ~ units, residual = ~ ar1(Row):ar1(Column)<br>random = ~ fa(Site, 2):Variety + at(Site):Rep<br>residual = ~ dsum(~ ar1(Row):ar1(Col) | Site)</td>
+              <td>Var(e) = σ²<sub>ξ</sub>[Σ<sub>c</sub> ⊗ Σ<sub>r</sub>] + σ²<sub>η</sub>I<br>G<sub>e</sub> = ΛΛᵀ + Ψ</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">summary(mod)$aic  # 比较 AR1×AR1 / +units / IB</td></tr>
+            <tr><td class="font-medium">5<br><span class="text-slate-500">半同胞子代测定</span></td>
+              <td class="font-mono">height ~ Site/Block<br>random = ~ Family + Family:Site + Family:Site:Block</td>
+              <td>h²<sub>i</sub> = 4σ²<sub>F</sub> / (σ²<sub>F</sub> + σ²<sub>FS</sub> + σ²<sub>FSB</sub> + σ²<sub>e</sub>)</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">vpredict(mod, h2 ~ 4*V1/(V1+V2+V3+V4))</td></tr>
+            <tr><td class="font-medium">6<br><span class="text-slate-500">巢式交配</span></td>
+              <td class="font-mono">亲本: y ~ Block/Rep, random = ~ Male/Female<br>个体: random = ~ vm(ID, ainv)</td>
+              <td>h² = 4σ²<sub>M</sub> / (σ²<sub>M</sub> + σ²<sub>F(M)</sub> + σ²<sub>e</sub>)<br>h² = σ²<sub>A</sub> / (σ²<sub>A</sub> + σ²<sub>e</sub>)</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">vpredict(m1, h2 ~ 4*V1/(V1+V2+V3))<br>vpredict(m2, h2 ~ V1/(V1+V2))</td></tr>
+            <tr><td class="font-medium">7 &amp; 8<br><span class="text-slate-500">NCII / 双列</span></td>
+              <td class="font-mono">random = ~ Rep + Male + Fem + Male:Fem<br>random = ~ Block + Male*Female + Family</td>
+              <td>h²<sub>N</sub> = 2(σ²<sub>M</sub> + σ²<sub>F</sub>) / V<sub>P</sub><br>H²<sub>B</sub> = [2(σ²<sub>M</sub> + σ²<sub>F</sub>) + 4σ²<sub>MF</sub>] / V<sub>P</sub></td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">vpredict(m1, h2N ~ 2*(V2+V3)/(V2+V3+V4+V5))<br>vpredict(m1, h2B ~ (2*(V2+V3)+4*V4)/(V2+V3+V4+V5))</td></tr>
+            <tr><td class="font-medium">9 &amp; 10 <span class="fix">已修正</span><br><span class="text-slate-500">无性系 / 重复力</span></td>
+              <td class="font-mono">date ~ 1 + Age<br>random = ~ vm(Animal, ainv) + ide(Animal)</td>
+              <td>h² = σ²<sub>A</sub> / V<sub>P</sub><br>rep = (σ²<sub>A</sub> + σ²<sub>PE</sub>) / V<sub>P</sub></td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">vpredict(m, h2 ~ V1/(V1+V2+V3))<br>vpredict(m, rep ~ (V1+V2)/(V1+V2+V3))</td></tr>
+            <tr><td class="font-medium">11<br><span class="text-slate-500">双性状</span></td>
+              <td class="font-mono">cbind(t1, t2) ~ trait + trait:Block/Rep<br>random = ~ us(trait):vm(ID, ainv)<br>residual = ~ units:us(trait)</td>
+              <td>r<sub>g</sub> = Cov<sub>A</sub> / √(V<sub>A1</sub>V<sub>A2</sub>)<br>r<sub>p</sub> = (Cov<sub>A</sub> + Cov<sub>e</sub>) / √(V<sub>P1</sub>V<sub>P2</sub>)</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400"># V4 = units!R (固定 1)<br>vpredict(biv, rg ~ V2/sqrt(V1*V3))<br>vpredict(biv, rp ~ (V2+V6)/sqrt((V1+V5)*(V3+V7)))</td></tr>
+            <tr><td class="font-medium">12<br><span class="text-slate-500">二分类 GLMM</span></td>
+              <td class="font-mono">status ~ 1, random = ~ Sire + Dam + Family<br>family = asr_binomial(link = "probit")</td>
+              <td>潜在尺度残差：probit = 1；logit = π²/3 ≈ 3.2899</td>
+              <td class="font-mono text-purple-600 dark:text-purple-400">vpredict(THRp, h2 ~ 4*V1/(V1+V2+V3+1))<br>vpredict(THRl, h2 ~ 4*V1/(V1+V2+V3+3.2899))</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 06 ANIMAL -->
+  <section data-category="animal" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-fuchsia-600">06</span><h2 class="sec-title">动物模型进阶：重复力、母体效应、多性状与遗传相关</h2></div>
+      <span class="sec-note">WAM 教程 v4 写法</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+      <div class="card">
+        <h3 class="card-title"><span>6.1 个体动物模型 vs 重复力模型 <span class="fix">已修正</span></span><code class="c text-xs">vm(Animal, ainv) + ide(Animal)</code></h3>
+        <div class="txt">
+          <p><strong>模型：</strong>y = Xb + Z₁a + Z₂pe + e，a ~ N(0, Aσ²ₐ)，pe ~ N(0, Iσ²ₚₑ)。</p>
+          <p><strong>要点：</strong>有重复记录却只拟合 <code class="c">vm()</code> 时，σ²ₚₑ 会并入 σ²ₐ，遗传力被严重高估（Cookbook 案例 10：0.636 → 0.026）。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>三步对比</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>ainv &lt;- ainverse(ped)   # Animal, Sire, Dam
+
+# 模型 1: 不用系谱，个体作普通随机因子 -&gt; 总重复力
+m_rep &lt;- asreml(date ~ 1 + Age, random = ~ Animal,
+                residual = ~ idv(units), data = dat)
+vpredict(m_rep, rep ~ V1 / (V1 + V2))
+
+# 模型 2: 基础动物模型 (仅适用于单次测量)
+m_her &lt;- asreml(date ~ 1 + Age, random = ~ vm(Animal, ainv),
+                residual = ~ idv(units), data = dat)
+
+# 模型 3: 重复力动物模型 (加性 + 永久环境)
+m_full &lt;- asreml(date ~ 1 + Age,
+                 random = ~ vm(Animal, ainv) + ide(Animal),
+                 residual = ~ idv(units), data = dat)
+summary(m_full)$varcomp  # V1 vm, V2 ide, V3 units!units, V4 units!R
+
+vpredict(m_full, h2  ~ V1 / (V1 + V2 + V3))
+vpredict(m_full, pe2 ~ V2 / (V1 + V2 + V3))
+vpredict(m_full, rep ~ (V1 + V2) / (V1 + V2 + V3))
+
+lrt.asreml(m_full, m_her, boundary = TRUE)  # PE 是否显著</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>6.2 母体效应模型 M1–M4 <span class="fix">已修正</span></span><code class="c text-xs">str(~ vm(Animal,ainv) + vm(Dam,ainv), …)</code></h3>
+        <div class="txt">
+          <p><strong>模型：</strong>y = Xb + Z₁a + Z₂m + Z₃c + e；a 直接加性，m 母体遗传，c 母体永久环境，σ<sub>am</sub> = Cov(a, m)。</p>
+          <p><strong>Willham (1972) 总遗传力：</strong>h²<sub>T</sub> = (σ²ₐ + 0.5σ²ₘ + 1.5σ<sub>am</sub>) / σ²ₚ，σ²ₚ = σ²ₐ + σ²ₘ + σ<sub>am</sub> + σ²<sub>c</sub> + σ²ₑ。</p>
+          <p>Dam 的 ID 须出现在系谱中，否则 <code class="c">vm(Dam, ainv)</code> 报错。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>四种递进模型</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># M1: Dam 作普通随机因子 (母体总效应, 不分遗传/环境)
+m1 &lt;- asreml(bwt ~ 1 + sex, random = ~ vm(Animal, ainv) + Dam,
+             residual = ~ idv(units), data = gryphon)
+
+# M2: 直接加性 + 母体遗传, Cov(a,m) = 0
+m2 &lt;- asreml(bwt ~ 1 + sex,
+             random = ~ vm(Animal, ainv) + vm(Dam, ainv),
+             residual = ~ idv(units), data = gryphon)
+
+# M3: + 母体永久环境 ide(Dam)
+m3 &lt;- asreml(bwt ~ 1 + sex,
+             random = ~ vm(Animal, ainv) + vm(Dam, ainv) + ide(Dam),
+             residual = ~ idv(units), data = gryphon)
+
+# M4: 允许 Cov(a,m) != 0
+m4 &lt;- asreml(bwt ~ 1 + sex,
+  random = ~ str(~ vm(Animal, ainv) + vm(Dam, ainv),
+                 ~ us(2, init = c(1, -0.1, 0.5)):vm(Animal, ainv)) +
+             ide(Dam),
+  residual = ~ idv(units), data = gryphon)
+
+# V1 = Va, V2 = Cov(a,m), V3 = Vm, V4 = Vc, V5 = Ve
+summary(m4)$varcomp
+vpredict(m4, h2_d ~ V1 / (V1+V2+V3+V4+V5))
+vpredict(m4, h2_m ~ V3 / (V1+V2+V3+V4+V5))
+vpredict(m4, c2   ~ V4 / (V1+V2+V3+V4+V5))
+vpredict(m4, r_am ~ V2 / sqrt(V1 * V3))
+vpredict(m4, h2_T ~ (V1 + 0.5*V3 + 1.5*V2) / (V1+V2+V3+V4+V5))</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>6.3 多性状动物模型</span><code class="c text-xs">cbind(t1, t2, t3) ~ trait</code></h3>
+        <ul class="txt ul">
+          <li>固定效应须含 <code class="c">trait</code>，其他固定因子与其互作（<code class="c">trait:sex</code>）。</li>
+          <li>用 <code class="c">na.method(y = "include", x = "include")</code> 保留部分测定的个体。</li>
+          <li><code class="c">us(trait)</code> 有 t(t+1)/2 个参数（3 性状 = 6），用单性状方差作 <code class="c">init</code>，或改用 <code class="c">corgh / fa(trait, k)</code>。</li>
+          <li><code class="c">init</code> 顺序为下三角按行：(1,1), (2,1), (2,2), (3,1), (3,2), (3,3)。</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-head"><span>双性状 / 三性状</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>init_G &lt;- c(3.0, 0.5, 2.0)   # V1, Cov12, V2
+init_R &lt;- c(4.0, 0.2, 2.5)
+biv &lt;- asreml(
+  fixed    = cbind(bwt, tarsus) ~ trait + trait:sex,
+  random   = ~ us(trait, init = init_G):vm(Animal, ainv) +
+               us(trait):Dam,
+  residual = ~ id(units):us(trait, init = init_R),
+  na.action = na.method(y = "include", x = "include"),
+  data = gryphon, maxit = 30)
+
+init_G3 &lt;- c(10, 2, 15, 1.5, 3, 20)  # V1,C12,V2,C13,C23,V3
+triv &lt;- asreml(
+  fixed    = cbind(y1, y2, y3) ~ trait + trait:Line,
+  random   = ~ us(trait, init = init_G3):vm(Calf, ainv),
+  residual = ~ id(units):us(trait),
+  na.action = na.method(y = "include"),
+  data = harvey, maxit = 50)</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>6.4 相关系数与显著性检验</span><code class="c text-xs">us() vs idh() / corgh()</code></h3>
+        <div class="txt">
+          <p>r<sub>g</sub> = Cov<sub>A</sub>/√(V<sub>A1</sub>V<sub>A2</sub>)；r<sub>e</sub> = Cov<sub>R</sub>/√(V<sub>R1</sub>V<sub>R2</sub>)；r<sub>p</sub> = (Cov<sub>A</sub>+Cov<sub>R</sub>)/√(V<sub>P1</sub>V<sub>P2</sub>)。</p>
+          <p><strong>H₀: r<sub>g</sub> = 0：</strong>用 <code class="c">idh(trait)</code> 替换 <code class="c">us(trait)</code>，LRT 设 <code class="c">boundary = FALSE</code>（0 不在边界）。<strong>H₀: r<sub>g</sub> = 1</strong> 在边界上，需固定相关后做边界检验。</p>
+          <p><code class="c">corgh(trait)</code> 直接把 r<sub>g</sub> 作为参数输出（varcomp 中先列相关、后列方差）。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>r_g / r_e / r_p 与 LRT</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># V1 Va1, V2 CovA, V3 Va2, V4 units!R, V5 Ve1, V6 CovE, V7 Ve2
+summary(biv)$varcomp
+vpredict(biv, h2_1 ~ V1 / (V1 + V5))
+vpredict(biv, h2_2 ~ V3 / (V3 + V7))
+vpredict(biv, r_g  ~ V2 / sqrt(V1 * V3))
+vpredict(biv, r_e  ~ V6 / sqrt(V5 * V7))
+vpredict(biv, r_p  ~ (V2 + V6) / sqrt((V1 + V5) * (V3 + V7)))
+
+# corgh: 直接估计 r_g 及其 SE
+biv_cor &lt;- asreml(cbind(t1, t2) ~ trait + trait:Block/Rep,
+                  random = ~ corgh(trait):vm(ID, ainv),
+                  residual = ~ id(units):us(trait), data = nested)
+
+# 约束模型 Cov_A = 0
+biv0 &lt;- asreml(cbind(t1, t2) ~ trait + trait:Block/Rep,
+               random = ~ idh(trait):vm(ID, ainv),
+               residual = ~ id(units):us(trait), data = nested)
+lrt.asreml(biv, biv0, boundary = FALSE)</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 07 GxE -->
+  <section data-category="gxe" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-teal-600">07</span><h2 class="sec-title">基因 × 环境互作 (G×E) 与 Type-B 遗传相关</h2></div>
+      <span class="sec-note">CS → corh → corgh / us → fa</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      <div class="card lg:col-span-2">
+        <h3 class="card-title">7.1 概念与模型选择</h3>
+        <div class="txt">
+          <p><strong>Type-B 相关 (Burdon 1977)：</strong>同一性状在不同环境间的遗传相关。复合对称模型下 r<sub>B</sub> = σ²<sub>G</sub> / (σ²<sub>G</sub> + σ²<sub>GE</sub>)。r<sub>B</sub> → 1 表示排名稳定；经验上 r<sub>B</sub> &lt; 约 0.67 提示存在较强秩次改变型 G×E，可考虑划分育种区。</p>
+          <p><strong>设计效应：</strong><code class="c">at(Site):Rep</code> 每地点独立区组方差；<code class="c">at(Site, c("S1","S3")):Block</code> 仅特定地点。</p>
+          <p><strong>残差：</strong><code class="c">dsum(~ units | Site)</code> 地点异质残差，或 <code class="c">dsum(~ ar1(Row):ar1(Col) | Site)</code> 加空间。</p>
+          <table class="tbl mt-2">
+            <thead><tr><th>地点数</th><th>推荐结构</th></tr></thead>
+            <tbody>
+              <tr><td>任意，先行</td><td>CS：<code class="c">vm + Site:vm</code></td></tr>
+              <tr><td>任意</td><td><code class="c">corh(Site)</code>：异质方差 + 统一相关</td></tr>
+              <tr><td>≤ 4</td><td><code class="c">corgh / us(Site)</code></td></tr>
+              <tr><td>≥ 5</td><td><code class="c">fa(Site, k)</code>，k 逐步增加按 AIC/LRT 选</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card lg:col-span-3">
+        <h3 class="card-title">7.2 四种递进结构</h3>
+        <div class="code-block">
+          <div class="code-head"><span>G×E 模型与 r_B</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code># 1. 复合对称 (CS): 同质遗传方差、相同两两相关
+m_cs &lt;- asreml(yield ~ Site,
+  random   = ~ vm(ID, ainv) + Site:vm(ID, ainv) + at(Site):Rep,
+  residual = ~ dsum(~ units | Site), data = met_dat)
+# 先打印 varcomp 确认 V1 = σ²G, V2 = σ²GE
+summary(m_cs)$varcomp
+vpredict(m_cs, r_B ~ V1 / (V1 + V2))
+
+# 2. corh: 各地点独立遗传方差 + 统一相关 r_B (直接输出)
+m_corh &lt;- asreml(yield ~ Site,
+  random   = ~ corh(Site):vm(ID, ainv) + at(Site):Rep,
+  residual = ~ dsum(~ units | Site), data = met_dat)
+summary(m_corh)$varcomp   # "...!Site!cor" 行即 r_B 及 SE
+
+# 3. corgh: 非结构化相关 (地点少时)
+m_corgh &lt;- asreml(yield ~ Site,
+  random   = ~ corgh(Site):vm(ID, ainv) + at(Site):Rep,
+  residual = ~ dsum(~ ar1(Row):ar1(Col) | Site), data = met_dat)
+
+# 4. 因子分析 FA(2): 地点多时首选，捕获异质性并保证半正定
+m_fa2 &lt;- asreml(yield ~ Site,
+  random   = ~ fa(Site, 2):vm(ID, ainv) + at(Site):Rep,
+  residual = ~ dsum(~ ar1(Row):ar1(Col) | Site), data = met_dat,
+  maxit = 50)</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 08 ASRgenomics -->
+  <section data-category="genomics" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-cyan-700">08</span><h2 class="sec-title">ASRgenomics：基因型质控与亲缘矩阵</h2></div>
+      <span class="sec-note font-mono">CRAN ASRgenomics 1.1.x</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card">
+        <h3 class="card-title"><span>8.1 基因型格式与 <code class="c">qc.filtering()</code></span><span class="fix">已修正</span></h3>
+        <div class="txt">
+          <p>输入 <code class="c">n × p</code> 数值矩阵（行名 = 个体，列名 = SNP，编码 0/1/2；PLINK <code class="c">--recodeA</code> 可生成）。字母型基因型先用 <code class="c">snp.recode()</code> 转码。</p>
+          <p>callrate 阈值表示允许的<strong>缺失比例</strong>：<code class="c">marker.callrate = 0.2</code> 删除缺失 &gt; 20% 的 SNP。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>读取 · 质控 · 可视化</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>library(ASRgenomics)
+
+M_raw &lt;- as.matrix(read.csv("genotype.csv", row.names = 1))
+
+M_filter &lt;- qc.filtering(
+  M = M_raw,
+  na.string       = "-9",  # 缺失标记
+  marker.callrate = 0.2,   # SNP 缺失 &gt; 20% 删除
+  ind.callrate    = 0.2,   # 个体缺失 &gt; 20% 删除
+  maf             = 0.05,
+  heterozygosity  = 0.95,  # 最大观测杂合度
+  Fis             = 1,     # 最大 |Fis|
+  impute          = FALSE, # TRUE: 用均值填补
+  plots           = TRUE)
+
+dim(M_filter$M.clean)
+M_filter$plot.missing.ind; M_filter$plot.missing.SNP
+M_filter$plot.maf; M_filter$plot.heteroz; M_filter$plot.Fis</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>8.2 G 矩阵、调优与 PCA</span><span class="tag bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300">Kinship</span></h3>
+        <div class="txt">
+          <p><code class="c">G.matrix()</code>：加性 <code class="c">"VanRaden"</code> / <code class="c">"Yang"</code>，显性 <code class="c">"Su"</code> / <code class="c">"Vitezica"</code>。病态矩阵用 <code class="c">G.tuneup()</code> 做 blend / bend / align（<code class="c">G.inverse()</code> 内的同名选项将弃用）。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>G · 调优 · 诊断 · PCA</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>G &lt;- G.matrix(M = M_filter$M.clean, method = "VanRaden")$G
+
+# 防奇异 A: 对角线加小常数 (Cookbook 写法)
+G_d &lt;- G; diag(G_d) &lt;- diag(G_d) + 0.01
+# 防奇异 B: blend (推荐)
+G_b &lt;- G.tuneup(G = G, blend = TRUE, pblend = 0.02)$Gb
+
+kinship.diagnostics(K = G)
+kinship.heatmap(K = G, dendrogram = TRUE,
+                row.label = FALSE, col.label = FALSE)
+
+pca &lt;- kinship.pca(K = G, ncp = 15)
+pca$eigenvalues; pca$plot.scree; pca$plot.pca</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 09 GBLUP / ssGBLUP / CV -->
+  <section data-category="gs" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-blue-600">09</span><h2 class="sec-title">GBLUP、一步法 ssGBLUP 与交叉验证</h2></div>
+      <span class="text-xs text-rose-600 dark:text-rose-400 font-semibold">sparseform：GBLUP 取 $Ginv.sparse；ssGBLUP 先取完整 $Ginv</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="card">
+        <h3 class="card-title"><span>9.1 GBLUP 流程 <span class="fix">已修正</span></span><code class="c text-xs">G.inverse(sparseform = TRUE)$Ginv.sparse</code></h3>
+        <div class="code-block">
+          <div class="code-head"><span>GBLUP 完整工作流</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>library(ASRgenomics); library(asreml); library(dplyr)
+
+data(pheno.pine); dat &lt;- pheno.pine
+dat[, 1:3] &lt;- lapply(dat[, 1:3], as.factor)
+
+data(geno.pine655)
+M_clean &lt;- qc.filtering(M = geno.pine655, maf = 0.05,
+             marker.callrate = 0.2, ind.callrate = 0.2,
+             na.string = "-9", plots = FALSE)$M.clean
+Gmat &lt;- G.matrix(M_clean, method = "VanRaden")$G
+
+# 表型与 G 对齐
+chk  &lt;- match.kinship2pheno(K = Gmat, pheno.data = dat,
+          indiv = "Genotype", clean = FALSE, mism = TRUE)
+dat1 &lt;- droplevels(dat[chk$matchesP, ])
+
+# 稀疏逆矩阵
+G_b  &lt;- G.tuneup(G = Gmat, blend = TRUE, pblend = 0.02)$Gb
+ginv &lt;- G.inverse(G = G_b, sparseform = TRUE)$Ginv.sparse
+
+modg &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, ginv),
+               residual = ~ idv(units),
+               na.action = na.method(y = "include"), data = dat1)
+summary(modg)$varcomp
+vpredict(modg, h2 ~ V1 / (V1 + V2))
+
+# 导出 GEBV
+blup &lt;- as.data.frame(summary(modg, coef = TRUE)$coef.random)
+gebv &lt;- data.frame(
+  ID   = sub("^vm\\(Genotype, ginv\\)_", "", rownames(blup)),
+  gebv = blup$solution, se = blup$std.error)
+write.csv(gebv, "gebv_gblup.csv", row.names = FALSE)</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>9.2 一步法 ssGBLUP <span class="fix">已修正</span></span><code class="c text-xs">H.inverse(A, Ginv, lambda)</code></h3>
+        <div class="txt">
+          <p><code class="c">A</code> 与 <code class="c">Ginv</code> 都须为<strong>完整方阵</strong>，Ginv 的个体须是 A 的子集；建议先将 G 对齐 (align) 到 A₂₂ 再求逆。</p>
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>ssGBLUP 完整工作流</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>library(ASRgenomics); library(AGHmatrix); library(asreml)
+
+data(ped.pine)
+A &lt;- AGHmatrix::Amatrix(data = ped.pine)   # n_a x n_a
+
+G &lt;- G.matrix(M_clean, method = "VanRaden")$G
+
+# 1. 检查并匹配 G 与 A
+chk &lt;- match.G2A(A = A, G = G, clean = TRUE, ord = TRUE,
+                 mism = TRUE, RMdiff = TRUE)
+
+# 2. 将 G 对齐到 A22，再求完整逆
+G_al &lt;- G.tuneup(G = chk$Gclean, A = chk$Aclean,
+                 align = TRUE, sparseform = FALSE)$Gb
+Ginv &lt;- G.inverse(G = G_al, sparseform = FALSE)$Ginv
+
+# 3. 构建 H^-1 (λ 同时设定 τ = ω，范围 0–1)
+hinv &lt;- H.inverse(A = A, Ginv = Ginv, lambda = 0.90,
+                  sparseform = TRUE)
+attr(hinv, "INVERSE")   # 应为 TRUE
+
+# 4. 拟合：已测序与未测序个体同时得到 GEBV
+ss &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, hinv),
+             residual = ~ idv(units), workspace = "2gb",
+             na.action = na.method(y = "include"), data = dat)
+summary(ss)$varcomp
+vpredict(ss, h2 ~ V1 / (V1 + V2))
+summary(ss)$aic
+blup_ss &lt;- summary(ss, coef = TRUE)$coef.random</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span>9.3 K 折交叉验证与 <code class="c">G.predict()</code></span><span class="tag text-blue-600">PA · Accuracy · Bias</span></h3>
+        <ul class="txt ul">
+          <li><strong>预测力 PA：</strong>r(y<sub>val</sub>, GEBV)，y 可用观测值或校正表型 y*。</li>
+          <li><strong>准确性：</strong>r(y, GEBV) / √h²（Dekkers 2007），h² 统一用全量数据估计值。</li>
+          <li><strong>偏差：</strong><code class="c">lm(y_val ~ gebv_val)</code> 的斜率 b₁，理想值 1；b₁ &lt; 1 表示 GEBV 离散度过大（膨胀）。</li>
+          <li><strong>CV1</strong>：随机分折（家系内有亲属）；<strong>CV2</strong>：整家系留出（预测新家系）。</li>
+          <li><code class="c">G.predict(G, gy)</code>：用多元正态条件分布由已知 BLUP 预测其余个体，<code class="c">gy</code> 须为带行名的矩阵。</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-head"><span>掩码 CV 循环 + G.predict</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>set.seed(2026); k &lt;- 5
+dat1$fold &lt;- sample(rep(1:k, length.out = nrow(dat1)))
+pa &lt;- b1 &lt;- numeric(k)
+term &lt;- "vm(Genotype, ginv)_"
+
+for (i in 1:k) {
+  dcv &lt;- dat1
+  val &lt;- which(dcv$fold == i)
+  dcv$y_train &lt;- dcv$DBH_Adj
+  dcv$y_train[val] &lt;- NA                 # 掩盖验证集
+
+  m &lt;- asreml(y_train ~ 1, random = ~ vm(Genotype, ginv),
+              residual = ~ idv(units),
+              na.action = na.method(y = "include"),
+              data = dcv, trace = FALSE)
+
+  cr   &lt;- summary(m, coef = TRUE)$coef.random
+  gebv &lt;- cr[paste0(term, dcv$Genotype[val]), "solution"]
+  yv   &lt;- dat1$DBH_Adj[val]
+  pa[i] &lt;- cor(yv, gebv, use = "complete.obs")
+  b1[i] &lt;- coef(lm(yv ~ gebv))[2]
+}
+cat("PA:", mean(pa), "| Acc:", mean(pa) / sqrt(h2_full),
+    "| b1:", mean(b1), "\n")
+
+# G.predict: G 为参考群 + 候选群的完整方阵
+gy &lt;- as.matrix(gebv_ref)       # 一列 BLUP
+rownames(gy) &lt;- ref_ids
+g_cond &lt;- G.predict(G = G_full, gy = gy)
+head(g_cond)                     # predicted.value</code></pre>
+        </div>
+      </div>
+
+      <div class="card border-2 border-emerald-500/40 dark:border-emerald-500/30">
+        <h3 class="card-title"><span>9.4 CV 中是否固定方差组分？ <span class="fix">已修正</span></span><span class="tag bg-emerald-600 text-white">方法学问答</span></h3>
+        <div class="overflow-x-auto">
+          <table class="tbl border border-slate-200 dark:border-slate-800">
+            <thead><tr><th>策略</th><th>做法</th><th>评价</th></tr></thead>
+            <tbody>
+              <tr class="bg-emerald-50/40 dark:bg-emerald-950/20"><td class="font-semibold text-emerald-700 dark:text-emerald-400">1 每折重估（推荐）</td><td>每折仅用训练集估计方差并预测</td><td>无数据泄露；论文首选</td></tr>
+              <tr><td class="font-semibold text-sky-700 dark:text-sky-400">2 热启动</td><td>以全量结果作初值，约束仍为 P</td><td>仍是每折重估，只是收敛更快</td></tr>
+              <tr class="bg-rose-50/40 dark:bg-rose-950/20"><td class="font-semibold text-rose-700 dark:text-rose-400">3 固定全量方差</td><td>Constraint = "F" + maxit = 1</td><td>轻微泄露，小样本或低 h² 时高估 PA；需在论文中说明</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/70 text-amber-900 dark:text-amber-200">
+          <strong>关键区分：</strong>折内拟合用策略 1；而计算准确性 r/√h² 时，分母统一使用<strong>全量数据的 h²<sub>full</sub></strong>，以便公平比较 ABLUP / GBLUP / ssGBLUP。
+        </div>
+        <div class="code-block">
+          <div class="code-head"><span>热启动 vs 固定方差</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>mod_full &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, ginv),
+                   residual = ~ idv(units), data = dat1)
+h2_full &lt;- vpredict(mod_full, h2 ~ V1 / (V1 + V2))$Estimate[1]
+
+# 拟合对象没有 vparameters.table：取表后按名称填入估计值
+iv_full &lt;- asreml(DBH_Adj ~ 1, random = ~ vm(Genotype, ginv),
+                  residual = ~ idv(units), data = dat1,
+                  start.values = TRUE)$vparameters.table
+iv_full$Value &lt;- mod_full$vparameters[iv_full$Component]
+
+iv_fix &lt;- iv_full; iv_fix$Constraint &lt;- "F"
+
+for (i in 1:k) {
+  dcv &lt;- dat1
+  dcv$y_train &lt;- ifelse(dcv$fold == i, NA, dcv$DBH_Adj)
+
+  # 策略 2: 热启动，每折仍重新估计
+  m_re &lt;- asreml(y_train ~ 1, random = ~ vm(Genotype, ginv),
+                 residual = ~ idv(units),
+                 na.action = na.method(y = "include"),
+                 G.param = iv_full, R.param = iv_full,
+                 data = dcv, trace = FALSE)
+
+  # 策略 3: 固定方差，只解一次 MME
+  m_fx &lt;- asreml(y_train ~ 1, random = ~ vm(Genotype, ginv),
+                 residual = ~ idv(units),
+                 na.action = na.method(y = "include"),
+                 G.param = iv_fix, R.param = iv_fix,
+                 maxit = 1, data = dcv, trace = FALSE)
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 10 GWAS -->
+  <section data-category="gwas" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-amber-600">10</span><h2 class="sec-title">ASRgwas 全基因组关联分析</h2></div>
+      <span class="sec-note font-mono">y = 1μ + αᵢsᵢ + Xβ + Z₁u + Qδ + Z₂a + e</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="card">
+        <h3 class="card-title"><span>10.1 连续性状 MLM (Q + K)</span><code class="c text-xs">P3D = TRUE</code></h3>
+        <p class="txt"><code class="c">pre.gwas()</code> 一次完成表型/基因型对齐、QC、填补、K⁻¹ 与群体结构矩阵 Q。用碎石图确定 <code class="c">npc</code>。</p>
+        <div class="code-block">
+          <div class="code-head"><span>连续性状 GWAS</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>library(asreml); library(ASRgwas)
+
+pre_c &lt;- pre.gwas(
+  pheno.data = dat, indiv = "ID", resp = "amoebic_load",
+  geno.data = geno.salmon, Q.method = "K", method = "VanRaden",
+  maf = 0.05, marker.callrate = 0.2, ind.callrate = 0.2,
+  heterozygosity = 0.8, Fis = 0.98, impute = TRUE)
+pre_c$plot.scree               # 确定 npc
+
+gw &lt;- gwas.asreml(
+  pheno.data = pre_c$pheno.data, resp = "amoebic_load", gen = "ID",
+  Kinv = pre_c$Kinv, Q = pre_c$Q, npc = 7,
+  geno.data = pre_c$geno.data, map.data = pre_c$map,
+  pvalue.thr = 5e-04, workspace = "2gb", P3D = TRUE)
+
+gw$heritability                # 零模型 h2
+gw$gwas.sel                    # 超过阈值的 SNP
+qq.plot(gwas.table = gw$gwas.all)
+manhattan.plot(gwas.table = gw$gwas.all, padding = 2e6)</code></pre>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="card-title"><span>10.2 二分类性状 GLMM</span><code class="c text-xs">family = "binomial"</code></h3>
+        <p class="txt">0/1 性状（存活、抗病）可同时加入协变量 <code class="c">cov</code>、固定因子 <code class="c">fixedf</code> 与额外随机效应 <code class="c">randomf</code>。</p>
+        <div class="code-block">
+          <div class="code-head"><span>二分类 GWAS</span><button type="button" class="copy-btn">复制</button></div>
+<pre><code>pre_b &lt;- pre.gwas(
+  pheno.data = dat, indiv = "ID", resp = "ipn_mortality",
+  geno.data = geno.salmon, Q.method = "K", method = "VanRaden",
+  maf = 0.05, marker.callrate = 0.2, ind.callrate = 0.2,
+  heterozygosity = 0.8, Fis = 0.98, impute = TRUE)
+
+gwB &lt;- gwas.asreml(
+  pheno.data = pre_b$pheno.data, resp = "ipn_mortality", gen = "ID",
+  Kinv = pre_b$Kinv, Q = pre_b$Q, npc = 3,
+  cov = "tag_wgt", fixedf = "sex", randomf = "family",
+  family = "binomial",
+  geno.data = pre_b$geno.data, map.data = pre_b$map,
+  pvalue.thr = 5e-04, threads = 1, P3D = FALSE)
+
+gwB$call                       # 内部 asreml 公式
+summary(gwB$mod)$varcomp</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== CALC -->
+  <section data-category="calc" class="sec no-print">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-amber-500">⚡</span><h2 class="sec-title">交互式 vpredict() 代码生成器与手算验证</h2></div>
+      <span class="sec-note">选择模型并填入方差组分，实时计算并生成 R 代码</span>
+    </div>
+    <div class="card border-amber-200 dark:border-amber-900/60">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="calcModelSelect" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">1. 模型类型</label>
+              <select id="calcModelSelect" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="animal">个体动物模型 / GBLUP / ssGBLUP</option>
+                <option value="rep">重复力动物模型 (vm + ide)</option>
+                <option value="halfsib">多点半同胞家系模型</option>
+                <option value="ncii">NCII 析因亲本模型</option>
+                <option value="maternal">母体效应模型 M4</option>
+                <option value="biv">双性状动物模型</option>
+                <option value="glmm_logit">二分类阈值模型 (父本模型)</option>
+                <option value="gxe_typeb">多点 G×E (Type-B)</option>
+              </select>
+            </div>
+            <div>
+              <label for="calcObjName" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">2. 模型对象名</label>
+              <input id="calcObjName" type="text" value="mod.asr" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+          </div>
+          <div id="calcInputsContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+          <p id="calcNote" class="text-[11px] text-slate-500 dark:text-slate-400"></p>
+        </div>
+        <div class="lg:col-span-5 flex flex-col justify-between bg-slate-900 text-slate-100 rounded-xl p-4 space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2">
+              <span class="text-xs font-semibold text-amber-400">实时估算</span>
+              <span id="calcFormulaBadge" class="text-[11px] font-mono text-slate-400 text-right"></span>
+            </div>
+            <div id="calcMetricsOutput" class="grid grid-cols-2 gap-2 text-xs"></div>
+          </div>
+          <div class="code-block !p-0 !bg-transparent pt-2 border-t border-slate-800">
+            <div class="code-head"><span>生成的 R 代码</span><button type="button" class="copy-btn text-amber-400">复制代码</button></div>
+            <pre class="text-xs text-emerald-300 overflow-x-auto"><code id="calcCodeOutput"></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== REFERENCES -->
+  <section data-category="ref" class="sec">
+    <div class="sec-head">
+      <div class="flex items-center gap-2.5"><span class="sec-no bg-slate-600">📚</span><h2 class="sec-title">官方手册与权威教程</h2></div>
+    </div>
+    <div class="card">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+        <a href="https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/ASReml-R-Reference-Manual-4.2.pdf" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">ASReml-R 4.2 Reference Manual ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">Butler et al., VSN International</span></a>
+        <a href="https://vsni.co.uk/asreml-r-version-4-2-more-power-and-speed-for-breeding-analyses/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">What's New in ASReml-R 4.2 ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">内存、多线程与 FA 加速说明</span></a>
+        <a href="https://wamwiki.github.io/docs/tutorials/tutorial-asreml-r-v4/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">Animal Models in ASReml-R v4 (WAMWiki) ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">单性状、多性状与母体效应教程</span></a>
+        <a href="https://wam-tutorial.github.io/en/04_01-rep_asreml.html" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">Repeated measures in ASReml-R 4.2 (WAM) ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1"><code>vm(animal, ainv) + ide(animal)</code> 写法出处</span></a>
+        <a href="https://cran.r-project.org/web/packages/ASRgenomics/refman/ASRgenomics.html" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">CRAN ASRgenomics Reference ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">G.matrix / G.tuneup / G.inverse / H.inverse / G.predict</span></a>
+        <a href="https://asreml.kb.vsni.co.uk/knowledge-base/asreml-r-supplementary-packages/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">ASReml-R Supplementary Packages ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">ASRgwas、ASRtriala 主页</span></a>
+        <a href="https://asreml.kb.vsni.co.uk/knowledge-base/asreml_r_documentation/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">ASReml-R 文档与安装 ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">安装与许可证激活</span></a>
+        <a href="https://vsni.co.uk/asreml-r-snippets-constraining-variance-components/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">Snippet: Constraining Variance Components ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">固定方差与 vcc 等式约束</span></a>
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10073444/" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex flex-col"><span class="font-semibold text-sky-700 dark:text-sky-400">G×E 与交叉验证应用论文 ↗</span><span class="text-slate-500 dark:text-slate-400 mt-1">原版引用链接（建议自行核对题目）</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="text-center text-[11px] text-slate-400 py-4 no-print">函数签名以各包当前官方手册为准；本表 v2 修订于 2026-11。</footer>
+
+<div id="copyToast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 dark:bg-sky-600 text-white text-xs font-medium px-3.5 py-2 rounded-lg shadow-lg">已复制</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+
+  /* ---- 1. Theme (remember choice) ---- */
+  document.getElementById('themeToggleBtn').addEventListener('click', function () {
+    var dark = root.classList.toggle('dark');
+    try { localStorage.setItem('asr-theme', dark ? 'dark' : 'light'); } catch (e) {}
+  });
+
+  /* ---- 2. Print: temporarily switch to light ---- */
+  var wasDark = false;
+  window.addEventListener('beforeprint', function () { wasDark = root.classList.contains('dark'); root.classList.remove('dark'); });
+  window.addEventListener('afterprint', function () { if (wasDark) root.classList.add('dark'); });
+  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+
+  /* ---- 3. Compact view ---- */
+  var compact = false;
+  var densityBtn = document.getElementById('densityToggleBtn');
+  densityBtn.addEventListener('click', function () {
+    compact = !compact;
+    document.querySelectorAll('.code-block pre').forEach(function (pre) {
+      pre.style.maxHeight = compact ? '9rem' : '';
+      pre.style.overflowY = compact ? 'auto' : '';
+    });
+    densityBtn.textContent = compact ? '展开代码' : '紧凑视图';
+  });
+
+  /* ---- 4. Highlight fixes ---- */
+  var hl = false;
+  var hlBtn = document.getElementById('hlToggleBtn');
+  hlBtn.addEventListener('click', function () {
+    hl = !hl;
+    document.querySelectorAll('.fix').forEach(function (f) {
+      var card = f.closest('.card, .card-flush, tr');
+      if (card && !card.closest('[data-category="errata"]')) {
+        card.style.outline = hl ? '2px solid #f59e0b' : '';
+        card.style.outlineOffset = hl ? '2px' : '';
+      }
+    });
+    hlBtn.textContent = hl ? '标记修正: 开' : '标记修正: 关';
+  });
+
+  /* ---- 5. Filter & search ---- */
+  var searchInput = document.getElementById('searchInput');
+  var clearBtn = document.getElementById('clearSearchBtn');
+  var statusBox = document.getElementById('searchStatus');
+  var statusText = document.getElementById('searchStatusText');
+  var pills = document.querySelectorAll('.cat-pill');
+  var sections = document.querySelectorAll('main > section[data-category]');
+  var active = 'all';
+
+  function apply() {
+    var q = searchInput.value.trim().toLowerCase();
+    clearBtn.classList.toggle('hidden', !q);
+    var n = 0;
+    sections.forEach(function (sec) {
+      var catOk = active === 'all' || sec.dataset.category === active;
+      if (!catOk) { sec.classList.add('hidden'); return; }
+      var cards = sec.querySelectorAll('.card, .card-flush');
+      var any = false;
+      cards.forEach(function (c) {
+        if (c.parentElement.closest('.card, .card-flush')) return; // nested
+        var ok = !q || c.textContent.toLowerCase().indexOf(q) !== -1;
+        c.classList.toggle('hidden', !ok);
+        if (ok) { any = true; n++; }
+      });
+      sec.classList.toggle('hidden', !any);
+    });
+    if (q || active !== 'all') {
+      statusBox.classList.remove('hidden');
+      var label = active === 'all' ? '全部' : document.querySelector('.cat-pill[data-filter="' + active + '"]').textContent;
+      statusText.textContent = '筛选: ' + label + (q ? ' | 关键词 "' + q + '"' : '') + ' — 匹配 ' + n + ' 张卡片';
+    } else {
+      statusBox.classList.add('hidden');
+    }
+  }
+  pills.forEach(function (p) {
+    p.addEventListener('click', function () {
+      active = p.dataset.filter;
+      pills.forEach(function (x) { x.classList.toggle('is-active', x === p); });
+      apply();
+      if (active !== 'all') window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+  searchInput.addEventListener('input', apply);
+  clearBtn.addEventListener('click', function () { searchInput.value = ''; apply(); });
+  document.getElementById('resetFilterBtn').addEventListener('click', function () {
+    searchInput.value = ''; pills[0].click();
+  });
+
+  /* ---- 6. Copy ---- */
+  var toast = document.getElementById('copyToast'), timer;
+  function showToast(m) {
+    toast.textContent = m; toast.classList.remove('hidden');
+    clearTimeout(timer); timer = setTimeout(function () { toast.classList.add('hidden'); }, 1800);
+  }
+  function fallbackCopy(t) {
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('已复制到剪贴板'); } catch (e) { showToast('复制失败，请手动选择'); }
+    document.body.removeChild(ta);
+  }
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var code = btn.closest('.code-block').querySelector('code');
+    if (!code) return;
+    var t = code.textContent;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(t).then(function () { showToast('已复制到剪贴板'); }, function () { fallbackCopy(t); });
+    } else { fallbackCopy(t); }
+  });
+
+  /* ---- 7. vpredict calculator ---- */
+  function f(x, d) { return isFinite(x) ? x.toFixed(d) : '—'; }
+  var cfgs = {
+    animal: {
+      badge: 'h² = V1 / (V1 + V2)',
+      note: 'V1 = vm(ID, ainv/ginv/hinv)，V2 = units!units；idv(units) 时 units!R 位于最后，不参与计算。',
+      inputs: [{ id: 'V1', label: 'V1 加性方差', val: 1.1427 }, { id: 'V2', label: 'V2 残差方差', val: 1.3724 }],
+      compute: function (v, o) {
+        var vp = v.V1 + v.V2;
+        return { metrics: [['表型方差 Vp', f(vp, 4)], ['遗传力 h²', f(v.V1 / vp, 4)]],
+          code: 'summary(' + o + ')$varcomp\nvpredict(' + o + ', h2 ~ V1 / (V1 + V2))' };
+      }
+    },
+    rep: {
+      badge: 'h² = V1/ΣV · rep = (V1+V2)/ΣV',
+      note: '模型 random = ~ vm(Animal, ainv) + ide(Animal)：V1 = vm，V2 = ide，V3 = units!units。',
+      inputs: [{ id: 'V1', label: 'V1 加性 vm()', val: 0.6454 }, { id: 'V2', label: 'V2 永久环境 ide()', val: 11.4526 }, { id: 'V3', label: 'V3 残差', val: 12.9644 }],
+      compute: function (v, o) {
+        var vp = v.V1 + v.V2 + v.V3;
+        return { metrics: [['遗传力 h²', f(v.V1 / vp, 4)], ['永久环境比 pe²', f(v.V2 / vp, 4)], ['重复力 rep', f((v.V1 + v.V2) / vp, 4)], ['表型方差 Vp', f(vp, 4)]],
+          code: 'vpredict(' + o + ', h2  ~ V1 / (V1 + V2 + V3))\nvpredict(' + o + ', pe2 ~ V2 / (V1 + V2 + V3))\nvpredict(' + o + ', rep ~ (V1 + V2) / (V1 + V2 + V3))' };
+      }
+    },
+    halfsib: {
+      badge: 'h²ᵢ = 4·V1 / (V1+V2+V3+V4)',
+      note: 'V1 Family，V2 Family:Site，V3 Family:Site:Block，V4 残差；半同胞 σ²A = 4σ²F。',
+      inputs: [{ id: 'V1', label: 'V1 家系', val: 0.0567 }, { id: 'V2', label: 'V2 家系×地点', val: 0.0146 }, { id: 'V3', label: 'V3 家系×区组', val: 0.0682 }, { id: 'V4', label: 'V4 残差', val: 0.4407 }],
+      compute: function (v, o) {
+        var vp = v.V1 + v.V2 + v.V3 + v.V4;
+        return { metrics: [['加性方差 4·V1', f(4 * v.V1, 4)], ['单株遗传力 h²', f(4 * v.V1 / vp, 4)]],
+          code: 'vpredict(' + o + ', h2 ~ 4 * V1 / (V1 + V2 + V3 + V4))' };
+      }
+    },
+    ncii: {
+      badge: 'h²N = 2(V2+V3)/Vp · H²B = (2(V2+V3)+4V4)/Vp',
+      note: 'V1 为 Rep 方差，不进入 Vp；V2 Male，V3 Fem，V4 Male:Fem，V5 残差。',
+      inputs: [{ id: 'V2', label: 'V2 父本', val: 12.5 }, { id: 'V3', label: 'V3 母本', val: 14.2 }, { id: 'V4', label: 'V4 父×母', val: 6.8 }, { id: 'V5', label: 'V5 残差', val: 45.0 }],
+      compute: function (v, o) {
+        var vp = v.V2 + v.V3 + v.V4 + v.V5;
+        return { metrics: [['狭义 h²N', f(2 * (v.V2 + v.V3) / vp, 4)], ['广义 H²B', f((2 * (v.V2 + v.V3) + 4 * v.V4) / vp, 4)]],
+          code: 'vpredict(' + o + ', h2N ~ 2 * (V2 + V3) / (V2 + V3 + V4 + V5))\nvpredict(' + o + ', h2B ~ (2 * (V2 + V3) + 4 * V4) / (V2 + V3 + V4 + V5))' };
+      }
+    },
+    maternal: {
+      badge: 'h²T = (V1 + 0.5V3 + 1.5V2) / Vp',
+      note: 'M4：V1 Va，V2 Cov(a,m)，V3 Vm，V4 Vc = ide(Dam)，V5 Ve。',
+      inputs: [{ id: 'V1', label: 'V1 直接加性', val: 2.45 }, { id: 'V2', label: 'V2 Cov(a,m)', val: -0.38 }, { id: 'V3', label: 'V3 母体遗传', val: 0.92 }, { id: 'V4', label: 'V4 母体环境', val: 0.65 }, { id: 'V5', label: 'V5 残差', val: 3.1 }],
+      compute: function (v, o) {
+        var vp = v.V1 + v.V2 + v.V3 + v.V4 + v.V5;
+        var ram = (v.V1 > 0 && v.V3 > 0) ? v.V2 / Math.sqrt(v.V1 * v.V3) : NaN;
+        var s = '(V1 + V2 + V3 + V4 + V5)';
+        return { metrics: [['h²a / h²m', f(v.V1 / vp, 3) + ' / ' + f(v.V3 / vp, 3)], ['h²T / r_am', f((v.V1 + 0.5 * v.V3 + 1.5 * v.V2) / vp, 3) + ' / ' + f(ram, 3)]],
+          code: 'vpredict(' + o + ', h2_d ~ V1 / ' + s + ')\nvpredict(' + o + ', h2_m ~ V3 / ' + s + ')\nvpredict(' + o + ', c2   ~ V4 / ' + s + ')\nvpredict(' + o + ', r_am ~ V2 / sqrt(V1 * V3))\nvpredict(' + o + ', h2_T ~ (V1 + 0.5*V3 + 1.5*V2) / ' + s + ')' };
+      }
+    },
+    biv: {
+      badge: 'r_g = V2 / √(V1·V3)',
+      note: 'V4 为固定为 1 的 units!R 尺度项，不参与计算。',
+      inputs: [{ id: 'V1', label: 'V1 Va1', val: 2.15 }, { id: 'V2', label: 'V2 CovA', val: 0.85 }, { id: 'V3', label: 'V3 Va2', val: 1.6 }, { id: 'V5', label: 'V5 Ve1', val: 3.1 }, { id: 'V6', label: 'V6 CovE', val: 0.4 }, { id: 'V7', label: 'V7 Ve2', val: 2.4 }],
+      compute: function (v, o) {
+        var rg = (v.V1 > 0 && v.V3 > 0) ? v.V2 / Math.sqrt(v.V1 * v.V3) : NaN;
+        var re = (v.V5 > 0 && v.V7 > 0) ? v.V6 / Math.sqrt(v.V5 * v.V7) : NaN;
+        var rp = (v.V2 + v.V6) / Math.sqrt((v.V1 + v.V5) * (v.V3 + v.V7));
+        return { metrics: [['h²₁ / h²₂', f(v.V1 / (v.V1 + v.V5), 3) + ' / ' + f(v.V3 / (v.V3 + v.V7), 3)], ['r_g', f(rg, 3)], ['r_e', f(re, 3)], ['r_p', f(rp, 3)]],
+          code: 'vpredict(' + o + ', h2_1 ~ V1 / (V1 + V5))\nvpredict(' + o + ', h2_2 ~ V3 / (V3 + V7))\nvpredict(' + o + ', r_g  ~ V2 / sqrt(V1 * V3))\nvpredict(' + o + ', r_e  ~ V6 / sqrt(V5 * V7))\nvpredict(' + o + ', r_p  ~ (V2 + V6) / sqrt((V1 + V5) * (V3 + V7)))' };
+      }
+    },
+    glmm_logit: {
+      badge: 'h² = 4·V1 / (V1+V2+V3+σ²ε)',
+      note: 'random = ~ Sire + Dam + Family；logit σ²ε = π²/3 ≈ 3.2899，probit σ²ε = 1。',
+      inputs: [{ id: 'V1', label: 'V1 父本', val: 0.054 }, { id: 'V2', label: 'V2 母本', val: 0 }, { id: 'V3', label: 'V3 家系', val: 0.258 }],
+      compute: function (v, o) {
+        var s = v.V1 + v.V2 + v.V3;
+        return { metrics: [['logit 尺度 h²', f(4 * v.V1 / (s + Math.PI * Math.PI / 3), 4)], ['probit 尺度 h²', f(4 * v.V1 / (s + 1), 4)]],
+          code: '# logit: 残差方差 pi^2/3\nvpredict(' + o + ', h2_logit  ~ 4 * V1 / (V1 + V2 + V3 + 3.2899))\n# probit: 残差方差 1\nvpredict(' + o + ', h2_probit ~ 4 * V1 / (V1 + V2 + V3 + 1))' };
+      }
+    },
+    gxe_typeb: {
+      badge: 'r_B = V1/(V1+V2) · H² = V1/(V1+V2/s+V3/(s·r))',
+      note: 'CS 模型：V1 σ²G，V2 σ²GE，V3 平均残差；s 地点数，r 每点重复数。',
+      inputs: [{ id: 'V1', label: 'V1 σ²G', val: 0.45 }, { id: 'V2', label: 'V2 σ²GE', val: 0.18 }, { id: 'V3', label: 'V3 σ²e', val: 0.85 }, { id: 'S', label: 's 地点数', val: 4 }, { id: 'R', label: 'r 重复数', val: 3 }],
+      compute: function (v, o) {
+        var s = Math.max(1, Math.round(v.S)), r = Math.max(1, Math.round(v.R));
+        var rb = v.V1 / (v.V1 + v.V2);
+        var hm = v.V1 / (v.V1 + v.V2 / s + v.V3 / (s * r));
+        return { metrics: [['Type-B r_B', f(rb, 4) + (isFinite(rb) ? (rb < 0.67 ? '（G×E 较强）' : '（较稳定）') : '')], ['单株 h² / 均值 H²', f(v.V1 / (v.V1 + v.V2 + v.V3), 3) + ' / ' + f(hm, 3)]],
+          code: 'vpredict(' + o + ', r_B     ~ V1 / (V1 + V2))\nvpredict(' + o + ', h2_ind  ~ V1 / (V1 + V2 + V3))\nvpredict(' + o + ', H2_mean ~ V1 / (V1 + V2/' + s + ' + V3/' + (s * r) + '))' };
+      }
+    }
+  };
+
+  var sel = document.getElementById('calcModelSelect'),
+      objIn = document.getElementById('calcObjName'),
+      box = document.getElementById('calcInputsContainer'),
+      badge = document.getElementById('calcFormulaBadge'),
+      noteEl = document.getElementById('calcNote'),
+      out = document.getElementById('calcMetricsOutput'),
+      codeOut = document.getElementById('calcCodeOutput');
+
+  function render() {
+    var c = cfgs[sel.value];
+    badge.textContent = c.badge;
+    noteEl.textContent = c.note;
+    box.innerHTML = '';
+    c.inputs.forEach(function (inp) {
+      var wrap = document.createElement('div');
+      var lab = document.createElement('label');
+      lab.className = 'block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1';
+      lab.textContent = inp.label;
+      var el = document.createElement('input');
+      el.type = 'number'; el.step = 'any'; el.value = inp.val; el.dataset.vid = inp.id;
+      el.className = 'calc-in w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-amber-500';
+      el.addEventListener('input', update);
+      wrap.appendChild(lab); wrap.appendChild(el); box.appendChild(wrap);
+    });
+    update();
+  }
+  function update() {
+    var c = cfgs[sel.value];
+    var o = objIn.value.trim() || 'mod.asr';
+    var v = {};
+    box.querySelectorAll('.calc-in').forEach(function (el) { v[el.dataset.vid] = parseFloat(el.value) || 0; });
+    var res = c.compute(v, o);
+    out.innerHTML = '';
+    res.metrics.forEach(function (m) {
+      var d = document.createElement('div');
+      d.className = 'bg-slate-800/90 rounded-lg p-2.5 border border-slate-700';
+      var a = document.createElement('div'); a.className = 'text-[11px] text-slate-400'; a.textContent = m[0];
+      var b = document.createElement('div'); b.className = 'text-sm sm:text-base font-bold font-mono text-white mt-0.5'; b.textContent = m[1];
+      d.appendChild(a); d.appendChild(b); out.appendChild(d);
+    });
+    codeOut.textContent = res.code;
+  }
+  sel.addEventListener('change', render);
+  objIn.addEventListener('input', update);
+  render();
+})();
+</script>
+</body>
+</html>
