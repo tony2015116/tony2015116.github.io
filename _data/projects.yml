@@ -73,6 +73,25 @@
           note = {R package version 1.1.1},
           url = {https://github.com/tony2015116/tidypptsdm},
         }
+    - name: "pigheatmap"
+      repo: "tony2015116/pigheatmap"
+      description: "猪场生产数据的性能热图：按胎次 × 月份（或场区、品系）汇总产仔数等指标，画成标注数值和窝数的热图；可按样本量调节格子透明度，一眼看出哪些结果不可靠；胎次、背膘厚、首配日龄等有经验最优区间的性状用分段色阶标出好坏区间；中文列名和标签开箱即用。"
+      language: "R"
+      year: "2026 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/pigheatmap/"
+        - title: "快速上手"
+          url: "https://tony2015116.github.io/pigheatmap/articles/pigheatmap.html"
+      citation: "Guo M (2026). pigheatmap: Performance Heatmaps for Swine Production Data. R package version 0.2.0, https://github.com/tony2015116/pigheatmap."
+      bibtex: |
+        @Manual{pigheatmap,
+          title = {pigheatmap: Performance Heatmaps for Swine Production Data},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 0.2.0},
+          url = {https://github.com/tony2015116/pigheatmap},
+        }
 
 - category: "Python 包"
   key: "python-packages"
