@@ -161,6 +161,12 @@
 - category: "小工具"
   key: "tools"
   items:
+    - name: "猪场批次生产周转模拟"
+      url: "/files/tools/pig-batch-production.html"
+      url_title: "打开模拟"
+      description: "从妊娠期、哺乳期和断奶至配种间隔出发推导单周批到五周批、18 天与 36 天批的繁殖周期、母猪群数和配种舍 / 妊娠舍 / 产房 / 保育 / 育肥的全进全出单元数；用图标动画演示猪群周转、返情并批、后备补充与淘汰，并给出栏位参数、优劣势对比、每日用工曲线、可导出的全年作业日历、自定义批次检验、按现有栋舍反推和转批过渡方案。"
+      language: "HTML"
+      year: "2026"
     - name: "sample-scripts"
       repo: "yourname/sample-scripts"
       description: "日常处理数据时积累的一些脚本，例如批量转换格式、整理文件名。"

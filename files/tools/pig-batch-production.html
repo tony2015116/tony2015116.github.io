@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>猪场批次生产周转模拟</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDF1F0; --panel:#FFFFFF; --ink:#16302C; --muted:#5A716D; --line:#C8D4D1; --soft:#E2E9E7;
+  --breed:#3563A0; --gest:#2F7D55; --farrow:#B0741C; --hatch:#9FB0AC; --nur:#2A8A8A; --fin:#8A5A2B; --bad:#B3261E;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1817; --panel:#172322; --ink:#E2ECE9; --muted:#93A8A4; --line:#2D3E3B; --soft:#1F2E2C;
+    --breed:#7AA3DA; --gest:#62B488; --farrow:#DDA24A; --hatch:#4D605C; --nur:#5CC0C0; --fin:#C8925A; --bad:#F2867C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1817; --panel:#172322; --ink:#E2ECE9; --muted:#93A8A4; --line:#2D3E3B; --soft:#1F2E2C;
+  --breed:#7AA3DA; --gest:#62B488; --farrow:#DDA24A; --hatch:#4D605C; --nur:#5CC0C0; --fin:#C8925A; --bad:#F2867C;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 20px 60px;}
+h1{font-size:clamp(24px,3.4vw,34px);line-height:1.2;margin:0 0 6px;font-weight:700;letter-spacing:.01em;}
+h2{font-size:20px;margin:0 0 12px;font-weight:700;}
+h3{font-size:15px;margin:0;font-weight:700;display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
+p{margin:0 0 10px;max-width:72ch;}
+.lead{color:var(--muted);margin-bottom:18px;}
+.num{font-variant-numeric:tabular-nums;}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;background:var(--panel);
+  border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:16px;}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden;}
+.seg button{border:0;background:transparent;color:var(--ink);font:inherit;font-weight:600;padding:7px 16px;cursor:pointer;}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel);}
+.btn{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:600;
+  padding:6px 12px;border-radius:8px;cursor:pointer;min-width:40px;}
+.btn:hover{border-color:var(--ink);}
+button:focus-visible,input:focus-visible{outline:3px solid var(--breed);outline-offset:2px;}
+.clock{margin-left:auto;text-align:right;line-height:1.25;}
+.clock b{font-size:26px;font-variant-numeric:tabular-nums;}
+.clock span{display:block;color:var(--muted);font-size:13px;}
+.speed{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;}
+.speed input{width:120px;accent-color:var(--ink);}
+
+/* stage grid */
+.stage-grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;margin-bottom:16px;}
+@media (max-width:1000px){.stage-grid{grid-template-columns:1fr;}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;}
+.ringcard svg{width:100%;height:auto;display:block;max-width:300px;margin:0 auto;}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin:8px 0 14px;justify-content:center;}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+.ring-breed{stroke:var(--breed);} .ring-gest{stroke:var(--gest);} .ring-farrow{stroke:var(--farrow);}
+.ringarc{fill:none;stroke-width:20;opacity:.28;}
+.slot{stroke:var(--ink);stroke-width:1.5;opacity:.55;}
+.evl{font-size:11.5px;fill:var(--muted);font-weight:600;}
+.dotl{font-size:12px;font-weight:700;fill:#fff;}
+.rc1{font-size:22px;font-weight:700;fill:var(--ink);}
+.rc2{font-size:12.5px;fill:var(--muted);}
+.log{list-style:none;margin:0;padding:0;font-size:13px;border-top:1px solid var(--line);}
+.log li{display:grid;grid-template-columns:44px 12px 1fr;gap:6px;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);}
+.log li .d{color:var(--muted);font-variant-numeric:tabular-nums;}
+.log li i{width:10px;height:10px;border-radius:50%;}
+.logtitle{font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:600;}
+
+/* farm plan */
+.plan{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.85fr) 20px minmax(0,1fr) 20px 86px;gap:6px;align-items:stretch;}
+.zone{border:1.5px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);min-width:0;}
+.zone.breed{border-top:5px solid var(--breed);} .zone.gest{border-top:5px solid var(--gest);} .zone.farrow{border-top:5px solid var(--farrow);}
+.zone.nursery{border-style:dashed;display:flex;flex-direction:column;justify-content:center;text-align:center;}
+.zone h3 small{font-weight:500;color:var(--muted);font-size:12px;}
+.zmeta{font-size:12px;color:var(--muted);margin:2px 0 8px;}
+.flow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px;font-weight:700;}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px;}
+.tile{border:1.5px solid var(--line);border-radius:6px;padding:6px 8px 8px;background:var(--panel);min-height:86px;
+  display:flex;flex-direction:column;gap:1px;transition:background-color .3s,border-color .3s;}
+.tile .tname{font-size:11.5px;color:var(--muted);font-weight:600;}
+.tile .tgroup{font-size:17px;font-weight:700;line-height:1.25;}
+.tile .tsub{font-size:11.5px;color:var(--muted);line-height:1.3;min-height:15px;}
+.tile .bar{height:4px;background:var(--soft);border-radius:2px;margin-top:auto;overflow:hidden;}
+.tile .bar i{display:block;height:100%;width:0;background:var(--gc,var(--ink));}
+.tile[data-state="occ"]{background:color-mix(in srgb,var(--gc) 15%,var(--panel));border-color:var(--gc);}
+.tile[data-state="occ"] .tgroup{color:var(--gc);}
+.tile[data-state="wash"]{background:color-mix(in srgb,#4AA3DF 8%,var(--panel));}
+.tile[data-state="wash"] .tgroup{color:var(--muted);font-size:14px;}
+.tile[data-state="idle"] .tgroup{color:var(--muted);font-size:14px;opacity:.8;}
+.returnline{margin-top:10px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;}
+@media (max-width:720px){
+  .plan{grid-template-columns:1fr;}
+  .flow{transform:rotate(90deg);height:18px;}
+}
+.tok{position:fixed;left:0;top:0;width:48px;height:34px;pointer-events:none;z-index:50;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35));}
+.tok svg{width:100%;height:100%;display:block;overflow:visible;}
+.tok.piglet{width:54px;height:24px;}
+.barn{width:100%;height:auto;display:block;margin:2px 0;overflow:visible;}
+.zicon{width:58px;height:40px;flex:none;display:block;overflow:visible;}
+.zhead{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.zhead h3{flex:1;flex-direction:column;align-items:flex-start;gap:0;}
+.zone.nursery .zicon{margin:0 auto 4px;}
+.drop{animation:fall 1s linear infinite;}
+.drop:nth-child(2n){animation-delay:-.35s}.drop:nth-child(3n){animation-delay:-.7s}
+@keyframes fall{from{transform:translateY(-6px);opacity:0}25%{opacity:1}to{transform:translateY(22px);opacity:0}}
+@media (prefers-reduced-motion: reduce){.drop{animation:none}}
+/* gantt */
+.gwrap{overflow-x:auto;}
+.gwrap svg{min-width:760px;width:100%;height:auto;display:block;}
+.gtick{stroke:var(--line);stroke-width:1;}
+.gtl{font-size:11px;fill:var(--muted);}
+.grl{font-size:12px;fill:var(--ink);font-weight:600;}
+.grow{fill:var(--soft);}
+.gbl{font-size:11px;fill:#fff;font-weight:700;}
+.hbg{fill:var(--soft);} .hln{stroke:var(--hatch);stroke-width:2.5;}
+.gcur{stroke:var(--ink);stroke-width:2;}
+.note{font-size:13px;color:var(--muted);}
+
+/* params */
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px 14px;margin-bottom:14px;}
+.form label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px;}
+.form input{font:inherit;font-weight:600;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;}
+.tscroll{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px;}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+th{font-weight:700;background:var(--soft);}
+td.v{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;}
+td.f{color:var(--muted);font-size:12.5px;}
+.cur{background:color-mix(in srgb,var(--breed) 10%,transparent);}
+.section{margin-top:16px;}
+.formula{font-size:15px;background:var(--bg);border-left:4px solid var(--ink);padding:10px 14px;margin:10px 0 14px;border-radius:0 6px 6px 0;max-width:72ch;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media (max-width:800px){.two{grid-template-columns:1fr;}}
+ul.plain{margin:0;padding-left:1.2em;max-width:72ch;} ul.plain li{margin-bottom:6px;}
+@media (prefers-reduced-motion: reduce){.tile{transition:none;}}
+
+.seg{flex-wrap:wrap;}
+.seg button{padding:7px 12px;}
+.modebar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:0 0 6px;}
+.modeline{font-size:13.5px;color:var(--muted);margin:0 0 12px;max-width:none;}
+.units.dense{grid-template-columns:repeat(auto-fill,minmax(92px,1fr));}
+table.wide{min-width:1150px;font-size:13px;}
+table.wide th{font-size:12.5px;white-space:nowrap;}
+table.wide td{white-space:nowrap;}
+tr.cur td{background:color-mix(in srgb,var(--breed) 12%,transparent);}
+.ctable{min-width:900px;font-size:13.5px;}
+.ctable tr[data-id]{cursor:pointer;}
+.ctable tr[data-id]:hover td{background:var(--soft);}
+.ctable td.sc{white-space:nowrap;}
+.dots{display:inline-flex;gap:3px;vertical-align:middle;}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:inline-block;}
+.dots.gd i.on{background:var(--gest);} .dots.md i.on{background:var(--farrow);} .dots.bd i.on{background:#C8414F;}
+.ctable .scn{font-size:11.5px;color:var(--muted);margin-left:4px;}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:16px;}
+.pcard{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--bg);cursor:pointer;display:flex;flex-direction:column;gap:8px;}
+.pcard:hover{border-color:var(--muted);}
+.pcard.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset;background:var(--panel);}
+.pcard h3{font-size:17px;align-items:center;}
+.pcard .tag{font-size:12px;font-weight:500;color:var(--muted);}
+.pcard .kv{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);}
+.pcard .kv b{color:var(--ink);font-variant-numeric:tabular-nums;}
+.pcard h4{margin:4px 0 2px;font-size:13.5px;display:flex;align-items:center;gap:6px;}
+.pcard h4::before{content:"";width:8px;height:8px;border-radius:2px;display:inline-block;}
+.pcard h4.pro::before{background:var(--gest);} .pcard h4.con::before{background:#C8414F;} .pcard h4.fit::before{background:var(--breed);}
+.pcard ul{margin:0;padding-left:1.15em;font-size:13.5px;line-height:1.55;}
+.pcard p.fit{font-size:13.5px;margin:0;}
+
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);margin:4px 0 16px;flex-wrap:wrap;}
+.tabs button{border:0;background:none;font:inherit;font-weight:600;font-size:15px;color:var(--muted);padding:10px 16px;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);}
+.tabs button:hover{color:var(--ink);}
+details.settings{margin-bottom:14px;}
+details.settings summary{cursor:pointer;font-weight:700;font-size:15px;}
+details.settings[open] summary{margin-bottom:12px;}
+.form label{min-width:0;}
+.form label.chk{flex-direction:row;align-items:center;gap:8px;grid-column:span 2;color:var(--ink);}
+.form label.chk input{width:auto;}
+.form select{font:inherit;font-weight:600;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;}
+.aux{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.3fr) minmax(0,1fr);gap:6px;margin-top:10px;align-items:stretch;}
+.auxbox{border:1.5px dashed var(--line);border-radius:8px;padding:8px 10px;display:flex;gap:10px;align-items:center;background:var(--bg);min-width:0;}
+.auxbox .zicon{width:48px;height:34px;}
+.auxbox .at{font-size:12.5px;color:var(--muted);line-height:1.35;}
+.auxbox .at b{display:block;color:var(--ink);font-size:14px;}
+@media (max-width:720px){.aux{grid-template-columns:1fr;} .aux .flow{transform:rotate(90deg);height:18px;}}
+.down{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,2fr) 20px 90px;gap:6px;align-items:stretch;}
+@media (max-width:720px){.down{grid-template-columns:1fr;} .down .flow{transform:rotate(90deg);height:18px;}}
+.zone.nur{border-top:5px solid var(--nur);} .zone.fin{border-top:5px solid var(--fin);}
+.zone.endbox{border-style:dashed;display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center;}
+.tile .tcnt{font-size:12px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0;}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--muted);}
+.kpi b{display:block;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.3;}
+.chartwrap{overflow-x:auto;} .chartwrap svg{min-width:720px;width:100%;height:auto;display:block;}
+.lgd{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:6px 0;}
+.lgd i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+.caltools{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin:10px 0;}
+.caltools label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px;}
+.caltools input,.caltools select{font:inherit;font-weight:600;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px;padding:6px 8px;}
+.calscroll{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:8px;}
+.calscroll table{min-width:720px;font-size:13px;}
+.calscroll th{position:sticky;top:0;z-index:1;}
+tr.flag td{background:color-mix(in srgb,#C8414F 9%,transparent);}
+tr.hol td{background:color-mix(in srgb,#C8414F 16%,transparent);}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;border-radius:4px;padding:0 6px;margin-left:4px;background:var(--soft);color:var(--muted);}
+.badge.r{background:color-mix(in srgb,#C8414F 18%,transparent);color:var(--bad);}
+.badge.g{background:color-mix(in srgb,var(--gest) 18%,transparent);color:var(--gest);}
+.msg{border-radius:8px;padding:10px 14px;font-size:14px;margin:10px 0;max-width:none;}
+.msg.ok{background:color-mix(in srgb,var(--gest) 12%,transparent);}
+.msg.bad{background:color-mix(in srgb,#C8414F 12%,transparent);}
+.msg.warn{background:color-mix(in srgb,var(--farrow) 15%,transparent);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chips button{font:inherit;font-size:13px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:3px 12px;cursor:pointer;}
+.chips button:hover{border-color:var(--ink);}
+td.bad{color:var(--bad);font-weight:600;} td.ok{color:var(--gest);font-weight:600;}
+@media print{
+  body.printing *{visibility:hidden !important;}
+  body.printing #calprint, body.printing #calprint *{visibility:visible !important;}
+  body.printing #calprint{position:absolute;left:0;top:0;width:100%;}
+  body.printing .calscroll{max-height:none;overflow:visible;border:0;}
+  body.printing .calscroll th{position:static;}
+}
+.backlink{margin:0 0 8px;font-size:13px;max-width:none;}
+.backlink a{color:var(--muted);text-decoration:none;}
+.backlink a:hover{color:var(--ink);text-decoration:underline;}
+@media print{.backlink{display:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="backlink"><a href="/portfolio/#tools">← 返回项目</a></p>
+  <h1>猪场批次生产周转模拟</h1>
+  <p class="lead">从妊娠期、哺乳期和断奶至配种间隔三个生物学常数出发，推导各批次模式下配种舍、妊娠舍、产房和保育、育肥舍的单元数量与猪群周转路线，并模拟母猪流失补充、分娩离散、用工曲线、作业日历和改造过渡。</p>
+
+  <details class="card settings" open>
+    <summary>场景参数（全页通用，修改后动画和各表同步更新）</summary>
+    <div class="form" id="form">
+      <label>基础母猪存栏（头）<input type="number" id="pN" value="1200" min="40" step="10"></label>
+      <label>配种受胎率（%）<input type="number" id="pConc" value="92" min="50" max="100"></label>
+      <label>分娩率（%）<input type="number" id="pFar" value="88" min="50" max="100"></label>
+      <label>窝均断奶仔猪（头）<input type="number" id="pWean" value="12" min="6" max="18" step="0.1"></label>
+      <label>栏位冗余（%）<input type="number" id="pBuf" value="5" min="0" max="30"></label>
+      <label>母猪年更新率（%）<input type="number" id="pRepl" value="40" min="0" max="80"></label>
+      <label>保育期（天）<input type="number" id="pNurD" value="49" min="20" max="70"></label>
+      <label>育肥期（天）<input type="number" id="pFinD" value="112" min="60" max="160"></label>
+      <label>保育成活率（%）<input type="number" id="pNurS" value="97" min="70" max="100"></label>
+      <label>育肥成活率（%）<input type="number" id="pFinS" value="98" min="70" max="100"></label>
+      <label>单栋育肥舍容量（头）<input type="number" id="pCap" value="1000" min="100" step="50"></label>
+      <label class="chk"><input type="checkbox" id="pInd" checked> 诱导分娩：妊娠 113 天未产母猪用前列腺素类药物诱导</label>
+    </div>
+  </details>
+
+  <div class="modebar">
+    <div class="seg" id="modes" role="group" aria-label="生产模式"></div>
+  </div>
+  <p class="modeline" id="modeline"></p>
+
+  <div class="tabs" role="tablist" aria-label="页面分区">
+    <button role="tab" id="t-anim" aria-controls="tab-anim" aria-selected="true">周转动画</button>
+    <button role="tab" id="t-param" aria-controls="tab-param" aria-selected="false">参数与对比</button>
+    <button role="tab" id="t-labor" aria-controls="tab-labor" aria-selected="false">用工与日历</button>
+    <button role="tab" id="t-plan" aria-controls="tab-plan" aria-selected="false">自定义与改造</button>
+  </div>
+
+  <!-- ============ 周转动画 ============ -->
+  <section class="tabpanel" id="tab-anim" role="tabpanel" aria-labelledby="t-anim">
+    <div class="controls" role="group" aria-label="模拟控制">
+      <div style="display:flex;gap:6px">
+        <button class="btn" id="back" aria-label="后退一天">−1天</button>
+        <button class="btn" id="play" aria-label="暂停">暂停</button>
+        <button class="btn" id="fwd" aria-label="前进一天">+1天</button>
+      </div>
+      <label class="speed">速度 <input type="range" id="speed" min="1" max="30" value="5"> <span id="speedv" class="num">5 天/秒</span></label>
+      <div class="clock"><b id="day">第 0 天</b><span id="cyc"></span></div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card ringcard">
+        <svg id="ring" viewBox="0 0 320 320" role="img" aria-label="繁殖周期上各母猪群所处位置"></svg>
+        <div class="legend" id="legend"></div>
+        <p class="logtitle">作业记录</p>
+        <ul class="log" id="log" aria-live="polite"></ul>
+      </div>
+      <div class="card">
+        <div class="plan" id="plan">
+          <div class="zone breed"><div class="zhead"><svg class="zicon" id="zi-0" viewBox="0 0 60 40" aria-hidden="true"></svg><h3>配种舍 <small id="cnt-0"></small></h3></div><p class="zmeta" id="zm-0"></p><div class="units" id="units-0"></div></div>
+          <div class="flow" aria-hidden="true">→</div>
+          <div class="zone gest"><div class="zhead"><svg class="zicon" id="zi-1" viewBox="0 0 60 40" aria-hidden="true"></svg><h3>妊娠舍 <small id="cnt-1"></small></h3></div><p class="zmeta" id="zm-1"></p><div class="units" id="units-1"></div></div>
+          <div class="flow" aria-hidden="true">→</div>
+          <div class="zone farrow"><div class="zhead"><svg class="zicon" id="zi-2" viewBox="0 0 60 40" aria-hidden="true"></svg><h3>产房 <small id="cnt-2"></small></h3></div><p class="zmeta" id="zm-2"></p><div class="units" id="units-2"></div></div>
+          <div class="flow" aria-hidden="true">→</div>
+          <div class="zone endbox" id="nurptr"><svg class="zicon" id="zi-3" viewBox="0 0 60 40" aria-hidden="true"></svg><h3 style="justify-content:center">保育</h3><p class="zmeta" style="margin:2px 0 0">断奶仔猪<br>见下方</p></div>
+        </div>
+        <div class="aux">
+          <div class="auxbox" id="giltsrc"><svg class="zicon" id="zi-5" viewBox="0 0 60 40" aria-hidden="true"></svg><div class="at"><b>后备引种</b><span id="giltTxt"></span></div></div>
+          <div class="flow" aria-hidden="true">→</div>
+          <div class="auxbox" id="buffer"><svg class="zicon" id="zi-6" viewBox="0 0 60 40" aria-hidden="true"></svg><div class="at"><b>待配栏</b><span id="bufTxt"></span></div></div>
+          <div class="auxbox" id="cullbox"><svg class="zicon" id="zi-7" viewBox="0 0 60 40" aria-hidden="true"></svg><div class="at"><b>淘汰母猪</b><span id="cullTxt"></span></div></div>
+        </div>
+        <p class="returnline">屋顶颜色代表栋舍，舍内小猪颜色和编号代表母猪群；心形表示已输精，带仔猪表示已分娩，水滴表示正在清洗消毒。红色“返”图标为返情母猪，“后”为后备母猪，灰色为淘汰母猪。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>保育与育肥周转</h2>
+      <div class="down">
+        <div class="zone nur"><div class="zhead"><svg class="zicon" id="zi-3b" viewBox="0 0 60 40" aria-hidden="true"></svg><h3>保育舍 <small id="cnt-3"></small></h3></div><p class="zmeta" id="zm-3"></p><div class="units" id="units-3"></div></div>
+        <div class="flow" aria-hidden="true">→</div>
+        <div class="zone fin"><div class="zhead"><svg class="zicon" id="zi-4" viewBox="0 0 60 40" aria-hidden="true"></svg><h3>育肥舍 <small id="cnt-4"></small></h3></div><p class="zmeta" id="zm-4"></p><div class="units" id="units-4"></div></div>
+        <div class="flow" aria-hidden="true">→</div>
+        <div class="zone endbox" id="market"><svg class="zicon" id="zi-8" viewBox="0 0 60 40" aria-hidden="true"></svg><h3 style="justify-content:center">出栏</h3><p class="zmeta" id="mktTxt" style="margin:2px 0 0"></p></div>
+      </div>
+    </div>
+
+    <div class="card section">
+      <h2>单元占用甘特图</h2>
+      <p class="note" id="gnote"></p>
+      <div class="gwrap"><svg id="gantt" role="img" aria-label="各单元占用时间表"></svg></div>
+    </div>
+  </section>
+
+  <!-- ============ 参数与对比 ============ -->
+  <section class="tabpanel" id="tab-param" role="tabpanel" aria-labelledby="t-param" hidden>
+    <div class="card">
+      <h2>母猪场生产参数</h2>
+      <div class="tscroll"><table id="ptable" class="wide"></table></div>
+      <p class="note" style="margin-top:8px">当前模式所在行已高亮。每批配种头数按“各舍在群母猪（含待配返情母猪）平均存栏 = 基础母猪”反推，已包含补入的后备母猪；产床 = 每批分娩窝数 ×（1+冗余），配种栏 = 每批配种数 ×（1+冗余），妊娠栏 = 每批配种数 × 受胎率 ×（1+冗余）。“单元”指同一天全进全出的一组栏舍。PSY 为理论值。</p>
+    </div>
+
+    <div class="card section">
+      <h2>保育与育肥参数</h2>
+      <p class="note">每批仔猪按断奶日成批进入保育，再成批转入育肥。单元数 = ⌈(停留天数 + 清洗天数) ÷ B⌉，保育至少清洗 4 天、育肥至少 5 天。“单批栋数”= 每批育肥猪 ÷ 单栋育肥舍容量，≥1 表示每批仔猪可以单一来源整栋全进全出。</p>
+      <div class="tscroll"><table id="dtable2" class="wide"></table></div>
+    </div>
+
+    <div class="card section" id="compare">
+      <h2>各批次模式优势与劣势对比</h2>
+      <p class="note">评分为 1–5 分的相对比较，依据本页推导出的单元数、利用率、批量和作业节律，并结合一般生产经验；数值越高代表该维度越有利。点击任一行或卡片可切换模式并回到动画。</p>
+      <div class="tscroll"><table id="ctable" class="ctable"></table></div>
+      <div class="pcards" id="pcards"></div>
+    </div>
+
+    <div class="card section">
+      <h2>第一性原理推导</h2>
+      <p>批次生产的全部结构来自三个数：妊娠期 G 约 114 天，是生物学常数；哺乳期 L 是管理决策；断奶到输精间隔 W 经同期化处理后可稳定在约 5 天。三者之和是一头母猪的繁殖周期：</p>
+      <div class="formula num">C = G + L + W = 114 + L + 5</div>
+      <p>母猪群要每隔 B 天准时“接力”，周期必须能被批次间隔整除，母猪被分成 n 个固定群：</p>
+      <div class="formula num">C = n × B　　L = 21 → C = 140 = 20 周；L = 28 → C = 147 = 21 周；L = 25 → C = 144</div>
+      <p>140 能被 7、14、28、35 整除，147 能被 7、21 整除，所以三周批必须配 28 天断奶，其余周批配 21 天断奶；144 不是 7 的倍数，只能走 18 天或 36 天这类非周批。每栋舍的全进全出单元数由停留天数 D、最短清洗天数 X 与 B 决定：</p>
+      <div class="formula num">单元数 = ⌈(D + X) ÷ B⌉　　利用率 = D ÷ (单元数 × B)</div>
+      <div class="tscroll"><table id="dtable" class="wide"></table></div>
+      <p style="margin-top:12px">四周批做了两处调整：产前 3 天进产房（产房停留 24 天，一个单元刚好装下），孕检转栏推迟到配后 30 天（妊娠舍停留 81 天，3 个单元刚好装下）。</p>
+    </div>
+
+    <div class="card section">
+      <h2>单批作业日程 <small class="note" id="schedmode" style="font-weight:500"></small></h2>
+      <p class="note">以断奶日为 D0。各模式单批日程结构相同，差别在哺乳天数、孕检转栏日和进产房日。</p>
+      <div class="tscroll"><table id="stable"></table></div>
+    </div>
+
+    <div class="card section">
+      <h2>返情母猪与后备母猪</h2>
+      <ul class="plain">
+        <li>返情一般出现在配后约 21 天。B 能整除 21（单周批、三周批）时，返情母猪自然发情日就是某一批的输精日，直接随批配种。</li>
+        <li>返情时母猪刚排卵，随后约 16 天处于黄体期，烯丙孕素只能推迟发情、不能提前，所以返情母猪最早在配后约 42 天（第二个情期）才能再配。二周批的 42 天正好是 3 个批次，自然随批；四周批、五周批、18 天批、36 天批要在待配栏饲喂烯丙孕素，分别并入配后第 56、70、54、72 天的那一批，停药日 ≈ 目标输精日 − 6 天。用药剂量与疗程请由兽医确定。</li>
+        <li>后备母猪在目标批次断奶日前约 21 天进入待配栏，饲喂烯丙孕素同期，与断奶母猪同日输精。每批补入后备数 = 淘汰数 + 妊娠期损失数，使每批配种头数保持稳定。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 用工与日历 ============ -->
+  <section class="tabpanel" id="tab-labor" role="tabpanel" aria-labelledby="t-labor" hidden>
+    <div class="card">
+      <h2>母猪场每日用工曲线 <small class="note" id="labmode" style="font-weight:500"></small></h2>
+      <p class="note">按稳定生产期的期望头数，把各项作业工时摊到每一天并叠加，展示一个完整繁殖周期。只计母猪场（配种、妊娠、产房），不含保育育肥。工时系数为估算默认值，请按本场实测修改。</p>
+      <div class="form" id="labform">
+        <label>输精（含查情，时/头）<input type="number" id="lAi" value="0.3" step="0.05" min="0"></label>
+        <label>接产（时/窝）<input type="number" id="lFar" value="1.5" step="0.1" min="0"></label>
+        <label>哺乳期护理（时/窝/天）<input type="number" id="lLit" value="0.15" step="0.01" min="0"></label>
+        <label>母猪日常饲喂巡栏（时/头/天）<input type="number" id="lRou" value="0.03" step="0.005" min="0"></label>
+        <label>每人每天有效工时<input type="number" id="lHrs" value="8" step="0.5" min="1"></label>
+      </div>
+      <div class="kpis" id="labkpi"></div>
+      <div class="lgd" id="lablgd"></div>
+      <div class="chartwrap"><svg id="labchart" role="img" aria-label="每日用工曲线"></svg></div>
+      <p class="note" style="margin-top:6px">其他固定系数：同期化注射 0.02 时/头·次；查返情 0.01 时/头·天；孕检 0.03 时/头；转群 0.06–0.08 时/头；断奶仔猪转出 0.01 时/头；仔猪处理 0.4 时/窝；产房清洗 1.0 时/床，配怀栏清洗 0.15 时/栏，分 3 天完成。</p>
+      <h3 style="margin:16px 0 8px">各模式用工对比</h3>
+      <div class="tscroll"><table id="labtable"></table></div>
+    </div>
+
+    <div class="card section" id="calprint">
+      <h2>全年作业日历 <small class="note" id="calmode" style="font-weight:500"></small></h2>
+      <p class="note">以第 1 群断奶日为起点，排出之后 365 天的关键作业。周末和法定节假日（元旦、春节、劳动节、国庆，按近似日期标注，以当年公布为准）上的作业会高亮。头数为按场景参数计算的期望值。</p>
+      <div class="caltools">
+        <label>第 1 群断奶日<input type="date" id="calStart"></label>
+        <label>显示<select id="calFilter"><option value="all">全部作业</option><option value="key">仅关键作业（断奶、输精、分娩）</option><option value="flag">仅周末和节假日</option></select></label>
+        <button class="btn" id="calCsv">导出 Excel（CSV）</button>
+        <button class="btn" id="calPrint">打印日历</button>
+        <span class="note" id="calMsg"></span>
+      </div>
+      <div class="kpis" id="calkpi"></div>
+      <div class="chartwrap"><svg id="wkchart" role="img" aria-label="关键作业的星期分布" style="min-width:420px;max-width:640px"></svg></div>
+      <div class="calscroll"><table id="caltable"></table></div>
+    </div>
+  </section>
+
+  <!-- ============ 自定义与改造 ============ -->
+  <section class="tabpanel" id="tab-plan" role="tabpanel" aria-labelledby="t-plan" hidden>
+    <div class="card">
+      <h2>自定义批次模式</h2>
+      <p class="note">设定批次间隔和各阶段天数，页面检验繁殖周期能否被批次间隔整除，并推导单元数。通过后可加入模式列表，在动画、参数和用工页中使用。</p>
+      <div class="form" id="cform">
+        <label>批次间隔 B（天）<input type="number" id="cB" value="21" min="3" max="70"></label>
+        <label>哺乳期 L（天）<input type="number" id="cL" value="28" min="14" max="42"></label>
+        <label>断奶至输精 W（天）<input type="number" id="cW" value="5" min="3" max="10"></label>
+        <label>妊娠期 G（天）<input type="number" id="cG" value="114" min="110" max="118"></label>
+        <label>产前进产房（天）<input type="number" id="cPre" value="5" min="1" max="10"></label>
+        <label>配后孕检转栏（天）<input type="number" id="cCp" value="28" min="18" max="40"></label>
+      </div>
+      <div id="cout"></div>
+    </div>
+
+    <div class="card section">
+      <h2>按现有栋舍反推</h2>
+      <p class="note">输入现有产房和配怀舍条件，判断各批次模式能支撑多少基础母猪、目标存栏（场景参数）是否可行、缺多少栏位。产房按“整间”分配到单元，房间数除不尽的部分会闲置；配怀舍需要能分隔出足够的全进全出单元。</p>
+      <div class="form" id="bform">
+        <label>产房间数<input type="number" id="bRooms" value="8" min="1"></label>
+        <label>每间产床数<input type="number" id="bCpr" value="36" min="1"></label>
+        <label>配怀栏总数<input type="number" id="bStalls" value="1100" min="1"></label>
+        <label>配怀舍可分隔单元数<input type="number" id="bParts" value="8" min="1"></label>
+      </div>
+      <div id="bout"></div>
+      <div class="tscroll"><table id="btable" class="wide"></table></div>
+    </div>
+
+    <div class="card section">
+      <h2>从连续生产转为批次生产的过渡方案</h2>
+      <p class="note">连续生产中，母猪的断奶日均匀分布在每一天。转批时，每头母猪在断奶时被归入最近的一个批次：离批次断奶日在“哺乳期可调范围”内的，通过提前或推迟断奶对齐；其余的断奶后饲喂烯丙孕素，等到下一个批次再同期发情。已怀孕的母猪无法调整，要等它们分娩断奶后才能归批，所以过渡期约为一个繁殖周期。</p>
+      <div class="form" id="tform">
+        <label>现行哺乳期（天）<input type="number" id="tLcur" value="24" min="14" max="35"></label>
+        <label>哺乳期可调范围 ±（天）<input type="number" id="tAdj" value="3" min="0" max="10"></label>
+        <label>断奶仔猪最低日龄（天）<input type="number" id="tMin" value="18" min="14" max="28"></label>
+      </div>
+      <div class="kpis" id="tkpi"></div>
+      <h3 style="margin:14px 0 8px">各模式过渡难度对比</h3>
+      <div class="tscroll"><table id="ttable"></table></div>
+      <h3 style="margin:18px 0 8px">逐周过渡计划 <small class="note" id="tmode" style="font-weight:500"></small></h3>
+      <div class="calscroll" style="max-height:460px"><table id="tweek"></table></div>
+    </div>
+  </section>
+</div>
+<script>
+/* ================= 模式与模型 ================= */
+const BASE_MODES = [
+  {id:'w1',  label:'单周批',  B:7,  L:21, pre:5, cp:28},
+  {id:'w2',  label:'二周批',  B:14, L:21, pre:5, cp:28},
+  {id:'w3',  label:'三周批',  B:21, L:28, pre:5, cp:28},
+  {id:'w4',  label:'四周批',  B:28, L:21, pre:3, cp:30},
+  {id:'w5',  label:'五周批',  B:35, L:21, pre:5, cp:28},
+  {id:'d18', label:'18 天批', B:18, L:25, pre:5, cp:28},
+  {id:'d36', label:'36 天批', B:36, L:25, pre:5, cp:28}
+];
+let MODES = BASE_MODES.slice();
+const PAL = ['#C8414F','#D99A1E','#0F7C8C','#3A5FA0','#7A4FA0','#6E9420','#D0663A','#4A5670'];
+const mod = (a,b) => ((a % b) + b) % b;
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+let M, P = {}, EXP, memo = new Map(), memoTop = -1;
+let T0, LOOP, tu, playing = true, speed = 5, prevDay = null, gStart = null, last = performance.now();
+let activeTab = 'anim';
+
+function col(g){ return M.n <= 8 ? PAL[g] : `hsl(${Math.round(mod(g*360/M.n*7, 360))} 58% 43%)`; }
+function num(id, dflt=0){ const v = parseFloat($(id).value); return isFinite(v) ? v : dflt; }
+function readP(){
+  P = {N:Math.max(10,num('pN',1200)), conc:num('pConc',92), far:Math.min(num('pFar',88), num('pConc',92)),
+       wean:num('pWean',12), buf:num('pBuf',5), repl:num('pRepl',40),
+       nurD:Math.max(10,Math.round(num('pNurD',49))), finD:Math.max(30,Math.round(num('pFinD',112))),
+       nurS:num('pNurS',97), finS:num('pFinS',98), cap:Math.max(1,num('pCap',1000)), induce:$('pInd').checked};
+}
+
+function makeMode(md){
+  const G = md.G ?? 114, W = md.W ?? 5, C = G + md.L + W, fs = W + G, fe = fs - md.pre, check = W + md.cp;
+  const B = md.B;
+  const S = [
+    {k:'breed',  name:'配种舍', start:0,      dur:check,     minW:2, capW:3},
+    {k:'gest',   name:'妊娠舍', start:check,  dur:fe-check,  minW:2, capW:3},
+    {k:'farrow', name:'产房',   start:fe,     dur:C-fe,      minW:3, capW:6},
+    {k:'nur',    name:'保育舍', start:0,      dur:P.nurD,    minW:4, capW:7, down:true},
+    {k:'fin',    name:'育肥舍', start:P.nurD, dur:P.finD,    minW:5, capW:10, down:true}
+  ];
+  S.forEach(st => { st.N = Math.ceil((st.dur + st.minW)/B); st.wash = Math.min(st.capW, st.N*B - st.dur); });
+  const T = 21 % B === 0 ? 21 : Math.ceil(42/B)*B;   // 返情（配后约 21 天）后进入新的黄体期，最早在配后约 42 天再次发情
+  return {...md, G, W, C, fs, fe, check, n:C/B, S, N:S.map(s => s.N), T};
+}
+function withMode(md, fn){ const sM = M, sE = EXP, sm = memo, st = memoTop; M = makeMode(md); EXP = expected(); memo = new Map(); memoTop = -1;
+  try { return fn(); } finally { M = sM; EXP = sE; memo = sm; memoTop = st; } }
+
+function unitName(k,u,N){
+  const L = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(k===0) return N>1 ? '配种' + L[u] : '配种单元';
+  if(k===1) return '妊娠' + (u+1);
+  if(k===2) return N>1 ? '产房' + L[u] : '产房单元';
+  if(k===3) return '保育' + (u+1);
+  return '育肥' + (u+1);
+}
+function stageOf(s){ return s < M.check ? 0 : s < M.fe ? 1 : 2; }
+function groupAt(g,t){
+  const x = t - g*M.B, s = mod(x,M.C), k = stageOf(s);
+  const j = Math.floor(x/M.C)*M.n + g;
+  return {s,k,j,u:mod(j,M.N[k])};
+}
+/* 通用：阶段 k 的第 u 个单元在 t 时刻的状态。母猪阶段 j 为母猪批次；下游阶段 j 为仔猪批次（断奶时刻 jB） */
+function unitAt(k,u,t){
+  const st = M.S[k], N = st.N, B = M.B, slot = N*B;
+  const x = t - st.start - u*B, m = Math.floor(x/slot), j = u + N*m, e = x - m*slot;
+  if(e < st.dur) return {occ:true, j, g:mod(j,M.n), e};
+  const a = e - st.dur;
+  if(a < st.wash) return {occ:false, wash:true, rem:st.wash - a, a};
+  return {occ:false, wash:false, rem:slot - e};
+}
+
+/* 分娩离散：相对妊娠期 G 的偏移天数与比例 */
+const DIST = {nat:[[-2,.05],[-1,.15],[0,.30],[1,.28],[2,.15],[3,.07]], ind:[[-2,.05],[-1,.15],[0,.70],[1,.10]]};
+const dist = () => P.induce ? DIST.ind : DIST.nat;
+function farrowedFrac(gd){ let f = 0; for(const [o,p] of dist()) if(M.G + o <= gd) f += p; return f; }
+function weanAgeRange(){ const d = dist(); return [M.L - d[d.length-1][0], M.L - d[0][0]]; }
+
+/* 批次头数模型：每批配种头数保持目标；后备 = 淘汰 + 妊娠期损失；返情母猪并入目标批次 */
+function rnd(j,salt){ const x = Math.sin(j*127.1 + salt*311.7 + M.B*17.3 + M.L*3.1)*43758.5453; return x - Math.floor(x); }
+function remTarget(){ return P.N*P.repl/100*M.B/365; }
+function invFactor(tgt){
+  const conc = tgt*P.conc/100, far = tgt*P.far/100, ret = tgt - conc, W = M.W;
+  let days = tgt*(W + 21) + conc*(M.check - W - 21) + (conc + far)/2*(M.fe - M.check) + far*(M.C - M.fe);
+  if(M.T === 21) days -= ret*W; else days += ret*(M.T - W - 21);
+  return days/(tgt*M.C);
+}
+/* 每批配种头数：使各舍在群母猪（含待配栏的返情母猪）平均存栏等于基础母猪数 */
+function batchTarget(){ return Math.max(1, Math.round(P.N/(M.n*invFactor(100)))); }
+function expected(){
+  const tgt = batchTarget(), conc = Math.round(tgt*P.conc/100), far = Math.round(tgt*P.far/100);
+  const loss = conc - far, culls = Math.max(0, Math.round(remTarget() - loss)), ret = tgt - conc;
+  const kept = far - culls, gilts = Math.max(0, tgt - kept - ret), weaned = Math.round(far*P.wean);
+  const nurOut = Math.round(weaned*P.nurS/100);
+  return {tgt, bred:kept+ret+gilts, kept, rin:ret, gilts, conc, ret, far, loss, culls, weaned, born:Math.round(weaned/0.9), nurOut, finOut:Math.round(nurOut*P.finS/100)};
+}
+function bd(j){
+  if(j < 0) return EXP;
+  if(memo.has(j)) return memo.get(j);
+  for(let i = memoTop + 1; i < j; i++) bd(i);
+  const tgt = EXP.tgt, prev = bd(j - M.n);
+  const culls = Math.max(0, Math.round(remTarget()*(0.8 + 0.4*rnd(j,1)) - prev.loss));
+  const kept = Math.max(0, prev.far - culls);
+  const rin = bd(j - M.T/M.B).ret;
+  const gilts = Math.max(0, tgt - kept - rin), bred = kept + rin + gilts;
+  const cr = Math.min(.99, Math.max(.5, P.conc/100 + (rnd(j,2) - .5)*.06));
+  const conc = Math.round(bred*cr), ret = bred - conc;
+  const fr = Math.min(cr, Math.max(.4, P.far/100 + (rnd(j,3) - .5)*.05));
+  const far = Math.min(conc, Math.round(bred*fr)), loss = conc - far;
+  const weaned = Math.round(far*(P.wean + (rnd(j,4) - .5)*1.0));
+  const nurOut = Math.round(weaned*P.nurS/100*(0.99 + .02*rnd(j,5)));
+  const d = {tgt, bred, kept, rin, gilts, conc, ret, far, loss, culls, weaned, born:Math.round(weaned/0.9),
+             nurOut:Math.min(weaned,nurOut), finOut:Math.min(nurOut, Math.round(nurOut*P.finS/100*(0.99 + .02*rnd(j,6))))};
+  memo.set(j, d); memoTop = Math.max(memoTop, j);
+  return d;
+}
+function stageText(s){
+  if(s < M.W) return `断奶第${s}天 · 待配`;
+  if(s < M.check) return `配后第${s-M.W}天`;
+  if(s < M.fe) return `妊娠第${s-M.W}天`;
+  if(s < M.fs + 4 && farrowedFrac(s-M.W) < 1) return `待产 · 妊娠${s-M.W}天`;
+  return `哺乳第${Math.max(0,s-M.fs)}天`;
+}
+/* 单元内头数 */
+function headcount(k,j,s,e){
+  const d = bd(j);
+  if(k===0){
+    if(s >= M.W + 21) return {c:d.conc, t:`${d.conc} 头（返情 ${d.ret} 已转出）`};
+    const rinIn = M.T === 21 ? (s >= M.W ? d.rin : 0) : d.rin;
+    const c = d.kept + d.gilts + rinIn;
+    return {c, t:`${c} 头（经产 ${d.kept}·后备 ${d.gilts}·返情 ${rinIn}）`};
+  }
+  if(k===1){ const c = Math.round(d.conc - (d.conc - d.far)*(s - M.check)/(M.fe - M.check)); return {c, t:`${c} 头妊娠母猪`}; }
+  if(k===2){
+    const lit = Math.round(d.far*farrowedFrac(s - M.W));
+    if(lit < d.far) return {c:d.far, lit, t:`已产 ${lit}/${d.far} 窝`};
+    const p = Math.round(d.born - (d.born - d.weaned)*Math.max(0, s - M.fs)/(M.C - M.fs));
+    return {c:d.far, lit, t:`${d.far} 窝 · 仔猪 ${p} 头`};
+  }
+  const pd = bd(j - M.n);
+  if(k===3){ const c = Math.round(pd.weaned - (pd.weaned - pd.nurOut)*e/M.S[3].dur); return {c, t:`日龄 ${M.L + Math.floor(e)} 天 · ${c} 头`}; }
+  const c = Math.round(pd.nurOut - (pd.nurOut - pd.finOut)*e/M.S[4].dur);
+  return {c, t:`日龄 ${M.L + P.nurD + Math.floor(e)} 天 · ${c} 头`};
+}
+function bufferAt(t){
+  let ret = 0, gil = 0; const j0 = Math.floor(t/M.B);
+  for(let j = j0 - Math.ceil(M.T/M.B) - 2; j <= j0 + Math.ceil(21/M.B) + 1; j++){
+    const d = bd(j);
+    if(t >= j*M.B - 21 && t < j*M.B) gil += d.gilts;
+    if(M.T !== 21){ const det = j*M.B + M.W + 21, mv = j*M.B + M.T; if(t >= det && t < mv) ret += d.ret; }
+  }
+  return {ret, gil};
+}
+function windowSum(t, span, f){ let s = 0; const j0 = Math.floor(t/M.B); for(let j = j0 - Math.ceil((span + M.C + 200)/M.B); j <= j0; j++) s += f(j); return s; }
+
+/* ================= 图标 ================= */
+const SC = ['var(--breed)','var(--gest)','var(--farrow)','var(--nur)','var(--fin)'];
+function pig(x,y,sc,c,o={}){
+  const ry = o.preg ? 10.5 : o.fat ? 10 : 8.5, cy = o.preg ? 15.8 : 15;
+  const lab = o.label ? `<text x="17" y="${cy+0.5}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">${o.label}</text>` : '';
+  return `<g transform="translate(${x},${y}) scale(${sc})">
+  <path d="M6 12 q-5 -1 -3 -5 q2 -2 2 1" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="9" y="19" width="3.4" height="8" rx="1.3" fill="${c}"/><rect x="14.5" y="20" width="3.4" height="7" rx="1.3" fill="${c}"/>
+  <rect x="21" y="20" width="3.4" height="7" rx="1.3" fill="${c}"/><rect x="26" y="19" width="3.4" height="8" rx="1.3" fill="${c}"/>
+  <ellipse cx="18" cy="${cy}" rx="${o.fat?14:13}" ry="${ry}" fill="${c}"/>
+  <circle cx="30.5" cy="12.5" r="6.5" fill="${c}"/>
+  <path d="M27.5 7.8 L29.6 1.5 L33.2 7" fill="${c}"/>
+  <ellipse cx="36.6" cy="13.8" rx="2.8" ry="2.4" fill="${c}"/><ellipse cx="36.6" cy="13.8" rx="2.8" ry="2.4" fill="#fff" opacity=".4"/>
+  <circle cx="35.9" cy="13.6" r=".5" fill="#1b1b1b" opacity=".6"/><circle cx="37.4" cy="13.6" r=".5" fill="#1b1b1b" opacity=".6"/>
+  <circle cx="32.2" cy="10.8" r="1.1" fill="#1b1b1b"/>${lab}</g>`;
+}
+const heart = (x,y,sc=1) => `<path transform="translate(${x},${y}) scale(${sc})" d="M0 3 C0 -1 5 -1 5 3 C5 -1 10 -1 10 3 C10 7 5 9 5 11 C5 9 0 7 0 3Z" fill="#E0457B"/>`;
+const drop = (x,y) => `<path class="drop" d="M${x} ${y} c3 5 4 7 4 8.5 a4 4 0 0 1 -8 0 c0 -1.5 1 -3.5 4 -8.5z" fill="#4AA3DF"/>`;
+function zoneIcon(k){
+  const ink = 'var(--ink)';
+  if(k===0) return pig(4,8,1.05,SC[0]) + heart(46,2,1.3);
+  if(k===1) return pig(6,6,1.15,SC[1],{preg:true});
+  if(k===2) return pig(0,2,0.95,SC[2]) + pig(30,24,0.4,SC[2]) + pig(42,26,0.36,SC[2]) + pig(14,28,0.36,SC[2]);
+  if(k===3) return pig(2,12,0.55,SC[3]) + pig(22,6,0.55,SC[3]) + pig(36,16,0.55,SC[3]);
+  if(k===4) return pig(4,6,1.2,SC[4],{fat:true});
+  if(k===5) return pig(2,8,1.05,'#8C6BB1') + `<text x="52" y="12" font-size="16" font-weight="700" fill="#8C6BB1" text-anchor="middle">+</text>`;
+  if(k===6) return pig(2,10,0.8,'#C8414F') + pig(26,6,0.8,'#8C6BB1');
+  if(k===7) return pig(6,8,1.05,'#8A9491') + `<path d="M46 4 l10 10 M56 4 l-10 10" stroke="#8A9491" stroke-width="3" stroke-linecap="round"/>`;
+  return pig(0,8,1.05,SC[4],{fat:true}) + `<path d="M46 20 h12 m-5 -5 l5 5 l-5 5" fill="none" stroke="${ink}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+/* 栏舍图标：phase = pre | ai | g | pf(待产) | lact | nur | fin */
+function barn(k,state,g,phase){
+  const sc = SC[k];
+  const c = g != null ? col(g) : 'var(--line)';
+  const fill = state==='occ' ? `color-mix(in srgb, ${c} 14%, var(--panel))` : state==='wash' ? 'color-mix(in srgb, #4AA3DF 10%, var(--panel))' : 'var(--panel)';
+  let inside = '';
+  if(state==='occ'){
+    const L = g + 1;
+    if(phase==='pre' || phase==='ai'){ inside = pig(14,42,0.95,c,{label:L}) + pig(60,44,0.9,c); if(phase==='ai') inside += heart(98,36,1.1); }
+    else if(phase==='g') inside = pig(12,40,0.98,c,{preg:true,label:L}) + pig(58,42,0.95,c,{preg:true});
+    else if(phase==='pf') inside = pig(30,36,1.2,c,{preg:true,label:L});
+    else if(phase==='lact') inside = pig(10,36,1.05,c,{label:L}) + pig(56,62,0.42,c) + pig(73,60,0.42,c) + pig(90,63,0.42,c) + pig(64,48,0.38,c);
+    else if(phase==='nur') inside = pig(14,40,0.55,c,{label:L}) + pig(40,52,0.5,c) + pig(62,40,0.55,c) + pig(82,54,0.5,c);
+    else inside = pig(12,38,1.0,c,{fat:true,label:L}) + pig(60,42,0.9,c,{fat:true});
+  } else if(state==='wash'){
+    inside = `<path d="M40 38 h40 v5 h-40z" fill="var(--muted)"/><path d="M58 30 h4 v8 h-4z" fill="var(--muted)"/>`;
+    for(let i=0;i<6;i++) inside += drop(44 + i*6.5, 48 + (i%2)*4);
+  } else {
+    inside = `<text x="60" y="60" text-anchor="middle" font-size="13" fill="var(--muted)">空栏</text>`;
+  }
+  return `<polygon points="3,32 60,5 117,32" fill="${sc}"/>
+    <rect x="10" y="30" width="100" height="50" rx="2" fill="${fill}" stroke="${sc}" stroke-width="2"/>
+    <rect x="52" y="14" width="16" height="9" rx="1.5" fill="var(--panel)" opacity=".85"/>
+    ${inside}
+    <line x1="10" y1="80" x2="110" y2="80" stroke="${sc}" stroke-width="3"/>`;
+}
+
+/* ================= 平面图 ================= */
+function buildPlan(){
+  M.S.forEach((st,k) => {
+    const box = $('units-'+k); box.innerHTML = '';
+    for(let u=0; u<st.N; u++){
+      const el = document.createElement('div');
+      el.className = 'tile'; el.id = `tile-${k}-${u}`;
+      el.innerHTML = `<div class="tname">${unitName(k,u,st.N)}</div><svg class="barn" viewBox="0 0 120 84" aria-hidden="true"></svg><div class="tgroup"></div><div class="tsub"></div><div class="tcnt"></div><div class="bar"><i></i></div>`;
+      box.appendChild(el);
+    }
+    $('cnt-'+k).textContent = `${st.N} 个单元`;
+    box.classList.toggle('dense', st.N > 6);
+  });
+  $('zm-0').textContent = `断奶 → 输精 → 配后 ${M.cp} 天孕检（停留 ${M.S[0].dur} 天）`;
+  $('zm-1').textContent = `妊娠 ${M.cp} → ${M.fe - M.W} 天（停留 ${M.S[1].dur} 天）`;
+  const [a,b] = weanAgeRange();
+  $('zm-2').textContent = `产前 ${M.pre} 天进 + 哺乳 ${M.L} 天（断奶日龄 ${a}–${b} 天）`;
+  $('zm-3').textContent = `${P.nurD} 天，断奶日龄 ${M.L} → ${M.L + P.nurD} 天`;
+  $('zm-4').textContent = `${P.finD} 天，日龄 ${M.L + P.nurD} → ${M.L + P.nurD + P.finD} 天出栏`;
+  [['zi-0',0],['zi-1',1],['zi-2',2],['zi-3',3],['zi-3b',3],['zi-4',4],['zi-5',5],['zi-6',6],['zi-7',7],['zi-8',8]].forEach(([id,k]) => $(id).innerHTML = zoneIcon(k));
+}
+function phaseOf(k,s,lit){
+  if(k===0) return s >= M.W ? 'ai' : 'pre';
+  if(k===1) return 'g';
+  if(k===2) return lit > 0 ? 'lact' : 'pf';
+  return k===3 ? 'nur' : 'fin';
+}
+function renderPlan(t){
+  M.S.forEach((st,k) => {
+    for(let u=0; u<st.N; u++){
+      const el = $(`tile-${k}-${u}`);
+      const r = unitAt(k,u,t);
+      const svg = el.children[1], gE = el.children[2], sE = el.children[3], cE = el.children[4], bE = el.children[5].firstChild;
+      let key;
+      if(r.occ){
+        const s = st.down ? 0 : Math.floor(st.start + r.e);
+        const h = headcount(k, r.j, s, r.e);
+        const ph = phaseOf(k, s, h.lit);
+        key = `occ-${r.g}-${ph}`;
+        if(el._key !== key) svg.innerHTML = barn(k,'occ',r.g,ph);
+        el.dataset.state = 'occ'; el.style.setProperty('--gc', col(r.g));
+        gE.textContent = `第${r.g+1}群`;
+        sE.textContent = st.down ? (k===3 ? `保育第${Math.floor(r.e)}天` : `育肥第${Math.floor(r.e)}天`) : stageText(s);
+        cE.textContent = h.t;
+        bE.style.width = (r.e/st.dur*100).toFixed(1) + '%';
+      } else {
+        key = r.wash ? 'wash' : 'idle';
+        if(el._key !== key) svg.innerHTML = barn(k,key,null,null);
+        el.style.removeProperty('--gc');
+        el.dataset.state = key;
+        gE.textContent = r.wash ? '清洗消毒' : '空栏';
+        sE.textContent = r.wash ? `还需 ${Math.ceil(r.rem)} 天` : `${Math.ceil(r.rem)} 天后进猪`;
+        cE.textContent = '';
+        bE.style.width = '0%';
+      }
+      el._key = key;
+    }
+  });
+  const b = bufferAt(t);
+  $('bufTxt').textContent = `后备 ${b.gil} 头 · 返情 ${b.ret} 头`;
+  const t0 = Math.floor(t);
+  $('giltTxt').textContent = `近一年补入 ${windowSum(t0, 365, j => (j*M.B <= t0 && j*M.B > t0 - 365) ? bd(j).gilts : 0)} 头`;
+  $('cullTxt').textContent = `近一年淘汰 ${windowSum(t0, 365, j => ((j*M.B <= t0 && j*M.B > t0 - 365) ? bd(j).culls : 0) + ((j*M.B + M.fe <= t0 && j*M.B + M.fe > t0 - 365) ? bd(j).loss : 0))} 头`;
+  $('mktTxt').textContent = `近一年出栏 ${windowSum(t0, 365, j => { const tt = j*M.B + P.nurD + P.finD; return (tt <= t0 && tt > t0 - 365) ? bd(j - M.n).finOut : 0; })} 头`;
+}
+
+/* ================= 周期圆环 ================= */
+const RC = 160, RR = 110;
+function pt(r,s){ const a = s/M.C*2*Math.PI - Math.PI/2; return [RC + r*Math.cos(a), RC + r*Math.sin(a)]; }
+function arc(r,s0,s1){
+  const [x0,y0] = pt(r,s0), [x1,y1] = pt(r,s1), large = (s1-s0)/M.C > .5 ? 1 : 0;
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function buildRing(){
+  let h = '';
+  const cls = ['breed','gest','farrow'];
+  for(let k=0;k<3;k++){ const st = M.S[k]; h += `<path d="${arc(RR, st.start+.5, st.start+st.dur-.5)}" class="ringarc ring-${cls[k]}"/>`; }
+  for(let i=0; i<M.n; i++){
+    const [a,b] = pt(RR-15, i*M.B), [c,d] = pt(RR+15, i*M.B);
+    h += `<line x1="${a.toFixed(1)}" y1="${b.toFixed(1)}" x2="${c.toFixed(1)}" y2="${d.toFixed(1)}" class="slot"/>`;
+  }
+  [[0,'断奶',RR+30],[M.W,'输精',RR-30],[M.check,'孕检',RR+30],[M.fe,'进产房',RR+32],[M.fs,'分娩',RR-30]].forEach(([s,l,r]) => {
+    const [x,y] = pt(r,s);
+    h += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" class="evl" text-anchor="middle" dominant-baseline="central">${l}</text>`;
+  });
+  h += `<text x="160" y="152" class="rc1" text-anchor="middle">${M.n} 群 × ${M.B} 天</text>`;
+  h += `<text x="160" y="176" class="rc2" text-anchor="middle">= ${M.C} 天繁殖周期</text>`;
+  const r = M.n > 12 ? 8.5 : 11, fs = M.n > 12 ? 9.5 : 12;
+  for(let g=0; g<M.n; g++){
+    h += `<g id="dot-${g}"><circle r="${r}" fill="${col(g)}" stroke="var(--panel)" stroke-width="2"/><text class="dotl" style="font-size:${fs}px" text-anchor="middle" dominant-baseline="central">${g+1}</text></g>`;
+  }
+  $('ring').innerHTML = h;
+  $('legend').innerHTML = `<span><i style="background:var(--breed)"></i>配种舍 ${M.S[0].dur} 天</span><span><i style="background:var(--gest)"></i>妊娠舍 ${M.S[1].dur} 天</span><span><i style="background:var(--farrow)"></i>产房 ${M.S[2].dur} 天</span>`;
+}
+function renderRing(t){
+  for(let g=0; g<M.n; g++){
+    const [x,y] = pt(RR, mod(t - g*M.B, M.C));
+    $('dot-'+g).setAttribute('transform', `translate(${x.toFixed(2)},${y.toFixed(2)})`);
+  }
+}
+
+/* ================= 甘特图 ================= */
+const GX0 = 72, GW = 916;
+function buildGantt(ws){
+  gStart = ws;
+  const rows = M.N.reduce((a,b) => a+b, 0);
+  const RH = rows > 30 ? 13 : rows > 18 ? 16 : 20, RG = 3, SG = 12;
+  const gx = t => GX0 + (t - ws)/LOOP*GW;
+  let body = '', y = 26;
+  M.S.forEach((st,k) => {
+    const N = st.N;
+    for(let u=0; u<N; u++){
+      body += `<text x="${GX0-8}" y="${y+RH/2}" text-anchor="end" dominant-baseline="central" class="grl" style="font-size:${RH<16?10.5:12}px">${unitName(k,u,N)}</text>`;
+      body += `<rect x="${GX0}" y="${y}" width="${GW}" height="${RH}" class="grow"/>`;
+      let bars = '';
+      const jmin = Math.floor((ws - st.start - st.dur - st.wash)/M.B) - 1, jmax = Math.ceil((ws + LOOP - st.start)/M.B) + 1;
+      for(let j=jmin; j<=jmax; j++){
+        if(mod(j,N) !== u) continue;
+        const E = j*M.B + st.start, g = mod(j,M.n);
+        bars += `<rect x="${gx(E).toFixed(1)}" y="${y+1}" width="${(st.dur/LOOP*GW).toFixed(1)}" height="${RH-2}" rx="2" fill="${col(g)}"/>`;
+        if(st.wash > 0) bars += `<rect x="${gx(E+st.dur).toFixed(1)}" y="${y+1}" width="${(st.wash/LOOP*GW).toFixed(1)}" height="${RH-2}" fill="url(#hatch)"/>`;
+        const cx = gx(E + st.dur/2);
+        if(cx > GX0+8 && cx < GX0+GW-8) bars += `<text x="${cx.toFixed(1)}" y="${y+RH/2}" class="gbl" text-anchor="middle" dominant-baseline="central" style="font-size:${RH<16?9.5:11}px">${g+1}</text>`;
+      }
+      body += `<g clip-path="url(#gclip)">${bars}</g>`;
+      y += RH + RG;
+    }
+    y += SG - RG;
+    if(k===2){ body += `<line x1="0" x2="1000" y1="${y-SG/2}" y2="${y-SG/2}" stroke="var(--line)" stroke-dasharray="4 4"/>`; y += 4; }
+  });
+  const H = y + 2, lstep = M.B < 14 ? 2 : 1;
+  let ticks = '';
+  for(let i=0, d=0; d<=LOOP; d+=M.B, i++){
+    const x = gx(ws + d);
+    ticks += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="18" y2="${H}" class="gtick"/>`;
+    if(i % lstep === 0) ticks += `<text x="${x.toFixed(1)}" y="12" class="gtl" text-anchor="middle">${ws - T0 + d}</text>`;
+  }
+  const defs = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" class="hbg"/><line x1="0" y1="0" x2="0" y2="6" class="hln"/></pattern><clipPath id="gclip"><rect x="${GX0}" y="0" width="${GW}" height="${H}"/></clipPath></defs>`;
+  const svg = $('gantt');
+  svg.setAttribute('viewBox', `0 0 1000 ${H}`);
+  svg.innerHTML = defs + ticks + body + `<line id="gcur" y1="16" y2="${H}" class="gcur"/>`;
+  $('gnote').textContent = `显示第 ${ws - T0}–${ws - T0 + LOOP} 天（两个繁殖周期），竖线间隔 ${M.B} 天 = 一个批次间隔。虚线以上为母猪场，以下为保育、育肥。色块编号为母猪群（下游为该群所产仔猪），斜纹为清洗消毒。`;
+}
+function renderGantt(){
+  const ws = T0 + Math.floor((tu - T0)/LOOP)*LOOP;
+  if(ws !== gStart) buildGantt(ws);
+  const x = GX0 + (tu - ws)/LOOP*GW;
+  const c = $('gcur'); c.setAttribute('x1', x.toFixed(1)); c.setAttribute('x2', x.toFixed(1));
+}
+
+/* ================= 事件与飞行图标 ================= */
+function logEvent(d,g,txt){
+  const ul = $('log');
+  const li = document.createElement('li');
+  li.innerHTML = `<span class="d">D${d - T0}</span><i style="background:${g==null?'var(--muted)':col(g)}"></i><span>${g==null?'':`第${g+1}群 `}${txt}</span>`;
+  ul.prepend(li);
+  while(ul.children.length > 9) ul.lastChild.remove();
+}
+function tokSvg(kind,g){
+  const c = kind==='cull' ? '#8A9491' : kind==='gilt' ? '#8C6BB1' : kind==='ret' ? '#C8414F' : col(g);
+  if(kind==='piglet') return `<svg viewBox="0 0 54 24">${pig(0,6,0.45,c)}${pig(17,0,0.45,c)}${pig(34,7,0.45,c)}</svg>`;
+  const lab = kind==='ret' ? '返' : kind==='gilt' ? '后' : kind==='cull' ? '淘' : (g+1);
+  return `<svg viewBox="0 0 40 28">${pig(0,0,1,c,{fat:kind==='fin'})}<text x="17" y="15.5" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">${lab}</text></svg>`;
+}
+function flyTok(fromId,toId,kind,g){
+  if(reduce || activeTab !== 'anim') return;
+  const A = $(fromId), Bb = $(toId);
+  if(!A || !Bb) return;
+  const a = A.getBoundingClientRect(), b = Bb.getBoundingClientRect();
+  if(!a.width || ((a.bottom < 0 || a.top > innerHeight) && (b.bottom < 0 || b.top > innerHeight))) return;
+  const small = kind==='ret' || kind==='gilt' || kind==='cull';
+  const w = kind==='piglet' ? 54 : small ? 36 : 48, h = kind==='piglet' ? 24 : small ? 26 : 34;
+  const x1 = a.left + a.width/2 - w/2, y1 = a.top + a.height/2 - h/2, x2 = b.left + b.width/2 - w/2, y2 = b.top + b.height/2 - h/2;
+  const mx = (x1+x2)/2, my = Math.min(y1,y2) - 44;
+  const el = document.createElement('div');
+  el.className = 'tok'; el.style.width = w + 'px'; el.style.height = h + 'px';
+  el.innerHTML = tokSvg(kind,g);
+  document.body.appendChild(el);
+  const dur = Math.max(550, 1500 - speed*30);
+  el.animate([
+    {transform:`translate(${x1}px,${y1}px) scale(.5)`, opacity:0},
+    {transform:`translate(${(x1*3+mx)/4}px,${(y1*3+my)/4}px) scale(1) rotate(-4deg)`, opacity:1, offset:.2},
+    {transform:`translate(${mx}px,${my}px) scale(1.15) rotate(4deg)`, opacity:1, offset:.5},
+    {transform:`translate(${(x2*3+mx)/4}px,${(y2*3+my)/4}px) scale(1) rotate(-4deg)`, opacity:1, offset:.8},
+    {transform:`translate(${x2}px,${y2}px) scale(.7)`, opacity:0}
+  ], {duration:dur, easing:'ease-in-out'}).onfinish = () => el.remove();
+}
+function processDays(from,to){
+  const fly = (to - from) <= 3;
+  const F = (a,b,k,g) => { if(fly) flyTok(a,b,k,g); };
+  for(let d=from+1; d<=to; d++){
+    for(let g=0; g<M.n; g++){
+      const G = groupAt(g,d), s = G.s, nm = unitName(G.k, G.u, M.N[G.k]), j = G.j, D = bd(j);
+      if(s===0){
+        const P0 = groupAt(g,d-1), pn = unitName(P0.k, P0.u, M.N[P0.k]);
+        const nu = mod(j, M.N[3]), pd = bd(j - M.n);
+        logEvent(d,g,`断奶：${pn} → ${nm}（留用 ${D.kept}，淘汰 ${D.culls}），仔猪 ${pd.weaned} 头 → ${unitName(3,nu,M.N[3])}`);
+        F(`tile-${P0.k}-${P0.u}`, `tile-0-${G.u}`, 'sow', g);
+        F(`tile-${P0.k}-${P0.u}`, `tile-3-${nu}`, 'piglet', g);
+        if(D.culls > 0) F(`tile-${P0.k}-${P0.u}`, 'cullbox', 'cull', g);
+        if(D.gilts > 0) F('buffer', `tile-0-${G.u}`, 'gilt', g);
+        if(M.T !== 21 && D.rin > 0) F('buffer', `tile-0-${G.u}`, 'ret', g);
+      } else if(s===M.W){
+        logEvent(d,g,`定时输精 ${D.bred} 头（经产 ${D.kept}·后备 ${D.gilts}·返情 ${D.rin}）`);
+      }
+      if(s===M.W + 21 && D.ret > 0){
+        const tj = j + M.T/M.B;
+        if(M.T === 21){ const tg = mod(tj, M.n), tu2 = mod(tj, M.N[0]);
+          logEvent(d,g,`查出返情 ${D.ret} 头 → 随第${tg+1}群今日输精（${unitName(0,tu2,M.N[0])}）`);
+          F(`tile-0-${G.u}`, `tile-0-${tu2}`, 'ret', g);
+        } else {
+          logEvent(d,g,`查出返情 ${D.ret} 头 → 待配栏，${M.T === 42 ? '等第二情期自然发情' : '烯丙孕素调控'}，配后 ${M.T} 天并入第${mod(tj,M.n)+1}群`);
+          F(`tile-0-${G.u}`, 'buffer', 'ret', g);
+        }
+      }
+      if(s===M.check){
+        const P0 = groupAt(g,d-1);
+        logEvent(d,g,`孕检阳性 ${D.conc} 头：${unitName(0,P0.u,M.N[0])} → ${nm}`);
+        F(`tile-0-${P0.u}`, `tile-1-${G.u}`, 'sow', g);
+      } else if(s===M.fe){
+        const P0 = groupAt(g,d-1);
+        logEvent(d,g,`转入产房 ${D.far} 头：${unitName(1,P0.u,M.N[1])} → ${nm}${D.loss ? `；妊娠期损失 ${D.loss} 头淘汰` : ''}`);
+        F(`tile-1-${P0.u}`, `tile-2-${G.u}`, 'sow', g);
+        if(D.loss > 0) F(`tile-1-${P0.u}`, 'cullbox', 'cull', g);
+      } else if(s===M.fs){
+        logEvent(d,g,`分娩高峰（${nm}）：${P.induce ? '诱导后约 85% 在 2 天内产完' : '自然分娩，持续约 6 天'}`);
+      }
+    }
+    if((d + 21) % M.B === 0){ const j = (d + 21)/M.B, D = bd(j);
+      if(D.gilts > 0){ logEvent(d, mod(j,M.n), `后备 ${D.gilts} 头进待配栏，饲喂烯丙孕素同期`); F('giltsrc','buffer','gilt',mod(j,M.n)); } }
+    if((d - P.nurD) % M.B === 0){ const q = (d - P.nurD)/M.B, g = mod(q,M.n), pd = bd(q - M.n);
+      logEvent(d, g, `仔猪 ${pd.nurOut} 头：${unitName(3,mod(q,M.N[3]),M.N[3])} → ${unitName(4,mod(q,M.N[4]),M.N[4])}`);
+      F(`tile-3-${mod(q,M.N[3])}`, `tile-4-${mod(q,M.N[4])}`, 'sow', g); }
+    if((d - P.nurD - P.finD) % M.B === 0){ const q = (d - P.nurD - P.finD)/M.B, g = mod(q,M.n), pd = bd(q - M.n);
+      logEvent(d, g, `育肥猪 ${pd.finOut} 头出栏（${unitName(4,mod(q,M.N[4]),M.N[4])}）`);
+      F(`tile-4-${mod(q,M.N[4])}`, 'market', 'fin', g); }
+  }
+}
+
+/* ================= 时钟与循环 ================= */
+const WD = ['周日','周一','周二','周三','周四','周五','周六'];
+function calStart(){ const v = $('calStart').value; const d = v ? new Date(v + 'T00:00:00') : null; return d && !isNaN(d) ? d : null; }
+function dateOf(d){ const s = calStart(); if(!s) return null; const x = new Date(s); x.setDate(x.getDate() + (d - T0)); return x; }
+const fmtD = x => `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
+function renderClock(){
+  const d = Math.floor(tu - T0), dt = dateOf(Math.floor(tu));
+  $('day').textContent = `第 ${d} 天`;
+  $('cyc').textContent = `${dt ? fmtD(dt) + ' ' + WD[dt.getDay()] + ' · ' : ''}第 ${Math.floor(d/M.C)+1} 个繁殖周期 · 周期内第 ${d % M.C} 天`;
+}
+function render(){ renderPlan(tu); renderRing(tu); renderGantt(); renderClock(); }
+function frame(now){
+  const dt = Math.min(.1, (now - last)/1000); last = now;
+  if(activeTab === 'anim'){
+    if(playing) tu += dt*speed;
+    const day = Math.floor(tu);
+    if(prevDay === null) prevDay = day;
+    if(day > prevDay) processDays(prevDay, Math.min(day, prevDay + 150));
+    prevDay = day;
+    render();
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ================= 参数表 ================= */
+const pct = v => (v*100).toFixed(0) + '%';
+const R = Math.round;
+function returnRule(B){ if(21 % B === 0) return '配后 21 天自然随批'; if(42 % B === 0) return '配后 42 天第二情期自然随批'; return `烯丙孕素，配后 ${Math.ceil(42/B)*B} 天并批`; }
+function weekday(B){ return B % 7 === 0 ? '固定星期' : `每批顺延 ${B % 7} 天`; }
+function calc(md){
+  return withMode(md, () => {
+    const m = M, E = EXP, r = 1 + P.buf/100;
+    const u = k => m.S[k].dur/(m.S[k].N*m.B);
+    return {m, E, fS:Math.ceil(E.far*r), bS:Math.ceil(E.bred*r), gS:Math.ceil(E.bred*P.conc/100*r),
+      nS:Math.ceil(E.weaned*r), fiS:Math.ceil(E.nurOut*r),
+      ut:[0,1,2,3,4].map(u), fDown:m.S[2].N*m.B - m.S[2].dur, batches:365/m.B,
+      yWean:E.far*P.wean*365/m.B, yFin:E.finOut*365/m.B, gilts:E.gilts, wa:weanAgeRange()};
+  });
+}
+function renderParams(){
+  let h = `<tr><th>模式</th><th>群数</th><th>每批配种</th><th>其中后备</th><th>每批分娩</th><th>断奶日龄</th><th>每批断奶仔猪</th><th>产房</th><th>配种舍</th><th>妊娠舍</th><th>配怀栏合计</th><th>利用率<br>配/孕/产</th><th>产房清洗空栏</th><th>年批次</th><th>年断奶 / PSY</th><th>返情并批</th><th>作业日</th></tr>`;
+  MODES.forEach(md => {
+    const r = calc(md), m = r.m, E = r.E, cur = md.id === M.id ? ' class="cur"' : '';
+    h += `<tr${cur}><td><b>${md.label}</b></td><td class="v">${m.n}</td><td class="v">${E.bred}</td><td class="v">${E.gilts}</td><td class="v">${E.far} 窝</td><td class="v">${r.wa[0]}–${r.wa[1]} 天</td><td class="v">${E.weaned}</td>
+      <td class="v">${m.N[2]} × ${r.fS} = ${m.N[2]*r.fS}</td><td class="v">${m.N[0]} × ${r.bS} = ${m.N[0]*r.bS}</td><td class="v">${m.N[1]} × ${r.gS} = ${m.N[1]*r.gS}</td>
+      <td class="v">${m.N[0]*r.bS + m.N[1]*r.gS}</td><td class="v">${r.ut.slice(0,3).map(pct).join(' / ')}</td><td class="v">${r.fDown} 天</td><td class="v">${r.batches.toFixed(1)}</td>
+      <td class="v">${R(r.yWean)} / ${(r.yWean/P.N).toFixed(1)}</td><td class="f">${returnRule(md.B)}</td><td class="f">${weekday(md.B)}</td></tr>`;
+  });
+  $('ptable').innerHTML = h;
+
+  let d = `<tr><th>模式</th><th>每批断奶仔猪</th><th>保育单元 × 头位</th><th>保育利用率</th><th>保育空栏</th><th>每批转育肥</th><th>育肥单元 × 头位</th><th>育肥利用率</th><th>育肥空栏</th><th>每批出栏</th><th>年出栏</th><th>单批栋数</th><th>出栏日龄</th></tr>`;
+  MODES.forEach(md => {
+    const r = calc(md), m = r.m, E = r.E, cur = md.id === M.id ? ' class="cur"' : '';
+    const sites = E.finOut/P.cap;
+    d += `<tr${cur}><td><b>${md.label}</b></td><td class="v">${E.weaned}</td><td class="v">${m.N[3]} × ${r.nS} = ${m.N[3]*r.nS}</td><td class="v">${pct(r.ut[3])}</td><td class="v">${m.N[3]*m.B - P.nurD} 天</td>
+      <td class="v">${E.nurOut}</td><td class="v">${m.N[4]} × ${r.fiS} = ${m.N[4]*r.fiS}</td><td class="v">${pct(r.ut[4])}</td><td class="v">${m.N[4]*m.B - P.finD} 天</td>
+      <td class="v">${E.finOut}</td><td class="v">${R(r.yFin)}</td><td class="v ${sites>=1?'ok':'bad'}">${sites.toFixed(2)}</td><td class="v">${m.L + P.nurD + P.finD} 天</td></tr>`;
+  });
+  $('dtable2').innerHTML = d;
+}
+function renderDerivation(){
+  let h = `<tr><th>模式</th><th>B</th><th>哺乳 L</th><th>周期 C</th><th>群数 n</th><th>配种舍 D → 单元</th><th>妊娠舍 D → 单元</th><th>产房 D → 单元</th><th>保育 D → 单元</th><th>育肥 D → 单元</th></tr>`;
+  MODES.forEach(md => {
+    const m = withMode(md, () => M);
+    const cell = k => `${m.S[k].dur} 天 → ⌈${m.S[k].dur + m.S[k].minW}/${m.B}⌉ = ${m.S[k].N}（${pct(m.S[k].dur/(m.S[k].N*m.B))}）`;
+    h += `<tr><td><b>${md.label}</b></td><td class="v">${m.B}</td><td class="v">${m.L}</td><td class="v">${m.C}</td><td class="v">${m.n}</td>${[0,1,2,3,4].map(k => `<td class="v">${cell(k)}</td>`).join('')}</tr>`;
+  });
+  $('dtable').innerHTML = h;
+}
+function scheduleRows(){
+  const W = M.W, c = M.check, fe = M.fe, fs = M.fs;
+  const rows = [
+    [0,'—','产房 → 配种舍','断奶，母猪转配种舍，仔猪转保育舍；淘汰母猪出场；产房开始清洗消毒','key'],
+    [1,'—','配种舍','断奶后约 24 小时注射促卵泡发育激素（如孕马血清促性腺激素），具体按兽医方案',''],
+    [W-1,'—','配种舍','注射促排卵激素（GnRH 类）',''],
+    [W,'0','配种舍','定时输精；后备母猪与返情母猪同日输精','key'],
+    [W+21,'21','配种舍','查返情，按返情并批规则处理',''],
+    [c, `${c-W}`, '配种舍 → 妊娠舍', 'B 超孕检，阳性转妊娠舍；配种舍清洗',''],
+    [fe, `${fe-W}`, '妊娠舍 → 产房', '转入产房，妊娠舍单元清洗','']
+  ];
+  if(P.induce) rows.push([fs-1, `${fs-W-1}`, '产房', '未分娩母猪用前列腺素类药物诱导同期分娩','']);
+  rows.push([fs, `${fs-W}`, '产房', P.induce ? '分娩高峰，集中人手接产' : '自然分娩高峰（前后约 6 天）','key']);
+  return rows;
+}
+function renderSchedule(){
+  const rows = scheduleRows();
+  $('stable').innerHTML = `<tr><th>日程</th><th>妊娠日龄</th><th>地点</th><th>作业</th></tr>` +
+    rows.map(r => `<tr><td class="v">D${r[0]}</td><td class="v">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('') +
+    `<tr><td class="v">D${M.C} = 下一个 D0</td><td class="v">—</td><td>产房</td><td>哺乳 ${M.L} 天后断奶，循环重新开始</td></tr>`;
+  $('schedmode').textContent = `（当前：${M.label}）`;
+}
+
+/* ================= 优劣势对比 ================= */
+const DIMS = [
+  {k:'bio',  n:'生物安全', d:'产房单元越少、空栏越长，全进全出越彻底'},
+  {k:'lab',  n:'劳动均衡', d:'工作量在时间上分布越均匀越高'},
+  {k:'use',  n:'栏舍利用', d:'配怀与产房综合利用率'},
+  {k:'lot',  n:'单批规模', d:'单批断奶仔猪越多，越容易整栋填满下游'},
+  {k:'ease', n:'管理简易', d:'固定星期、日程容错度、技术成熟度'},
+  {k:'ret',  n:'返情并批', d:'返情母猪能否不用激素自然随批'}
+];
+const PROS = {
+  w1:{score:{bio:2,lab:5,use:4,lot:1,ease:3,ret:5}, tag:'小群高频',
+    pro:['每周固定同一天配种、分娩、断奶，人员可按工序专业分组','劳动负荷在全年最均衡，没有明显高峰','批次间隔 7 天整除 21，返情母猪 3 批后自然随批，无需激素','单批规模小，一批同期化或分娩失误对全年影响小','妊娠舍 12 个单元利用率约 96%'],
+    con:['产房 5 个单元同时存在不同日龄仔猪，病原容易在批次间循环，生物安全最弱','每批断奶仔猪少，下游很难做到单一来源、整栋全进全出','单元和隔墙数量最多，土建与设备投资最高','21 天断奶对仔猪断奶体重和保育管理要求高'],
+    fit:'母猪存栏大（约 3000 头以上）、人员充足、同场保育的一体化场。'},
+  w2:{score:{bio:3,lab:4,use:3,lot:2,ease:4,ret:2}, tag:'隔周作业',
+    pro:['作业固定在星期几，配种周与分娩周隔周交替，便于排班和轮休','单批规模是单周批的两倍，产房 3 个单元，日龄更集中','单元数比单周批少近一半，投资降低'],
+    con:['返情 21 天不能被 14 整除，返情母猪要等到配后 42 天第二情期才随批，每头多约 21 个非生产天','产房利用率偏低（停留 26 天占 42 天槽位，约 62%）','21 天断奶，仔猪断奶体重偏小','产房仍是多单元轮换，场内持续存在多日龄仔猪'],
+    fit:'中大型场（约 1000–3000 头），希望比单周批更集中但仍保持固定星期作业。'},
+  w3:{score:{bio:3,lab:3,use:4,lot:3,ease:5,ret:5}, tag:'与发情周期同步',
+    pro:['批次间隔等于 21 天发情周期，返情母猪自然进入下一批，最符合母猪生理节律','28 天断奶，仔猪断奶体重大，保育阶段更顺','作业固定星期，技术成熟、资料和经验最多','产房 2 个单元，每单元空栏约 9 天，清洗干燥较充分'],
+    con:['28 天哺乳使繁殖周期延长到 147 天，理论年产胎次约 2.48，低于 21 天断奶的 2.61','产房停留 33 天，同等规模下产床需求比 21 天断奶多','分娩周、断奶周劳动力相对集中'],
+    fit:'中小型场（约 300–1500 头），国内最普及、最稳妥的入门批次模式。'},
+  w4:{score:{bio:5,lab:2,use:4,lot:4,ease:2,ret:3}, tag:'单产房单元',
+    pro:['产房只需 1 个单元，整栋同日全进全出，生物安全好','单批规模大，利于多点式生产整栋填满保育、育肥场','妊娠舍 3 个单元利用率约 96%，产房约 86%','作业固定星期'],
+    con:['需要产前 3 天进产房、配后 30 天孕检两处精细调整，容错空间小','预产期偏差或推迟分娩的母猪处理难度大','配种舍需 2 个单元，利用率仅约 63%','劳动力高峰明显，21 天断奶'],
+    fit:'多点式生产、有外部育肥合作、追求高健康度且同期化技术成熟的场。'},
+  w5:{score:{bio:5,lab:1,use:3,lot:5,ease:4,ret:3}, tag:'大群低频',
+    pro:['产房 1 个单元且每轮空栏约 9 天，清洗消毒干燥最充分','4 个大群，管理对象少，单批仔猪数最多','作业固定星期，4–5 周一轮，人员可集中休整或跨场支援','母猪规模不大也能凑足一栋育肥的批量'],
+    con:['劳动力高峰最尖锐，分娩周通常需要临时增员','妊娠舍 3 个单元利用率约 77%，栏位投资偏高','单批失败（配种期疫病、同期化失败）会影响整季出栏','对同期发情、定时输精和诱导分娩的依赖最强'],
+    fit:'高健康种群、新建或净化场、多点式生产，以及需要整栋批量供猪的场。'},
+  d18:{score:{bio:3,lab:3,use:5,lot:3,ease:2,ret:3}, tag:'非周批 · 均衡型',
+    pro:['25 天断奶，仔猪断奶体重比 21 天断奶大，产房仍只需 2 个单元','妊娠舍利用率约 90%，配怀栏总数在同规模下最省之一','劳动量比 36 天批均匀'],
+    con:['作业日每批顺延 4 天，周末作业不可避免，排班复杂','返情需烯丙孕素隔一批并入','与疫苗、运输、屠宰等按周安排的外部计划不同步','国内应用案例少，可参考的经验有限'],
+    fit:'愿意尝试非周批，希望兼顾断奶日龄与栏舍效率的场。'},
+  d36:{score:{bio:5,lab:1,use:3,lot:5,ease:2,ret:3}, tag:'非周批 · 大批量',
+    pro:['产房 1 个单元，整栋全进全出，同时保留 25 天哺乳','4 个大群，单批仔猪数多、日龄整齐','返情母猪饲喂烯丙孕素后，配后 72 天并入隔一批'],
+    con:['妊娠舍利用率约 75%，配怀栏位比 18 天批多约 15%','劳动力高峰集中','作业日每批顺延 1 天，星期不固定','非周批，与外部按周计划不同步'],
+    fit:'多点式、需要大批量整齐仔猪，且能接受滚动排班的场。'}
+};
+function dots(v,cls){ let h = `<span class="dots ${cls}" aria-label="${v} 分">`; for(let i=1;i<=5;i++) h += `<i class="${i<=v?'on':''}"></i>`; return h + '</span>'; }
+function dotCls(v){ return v>=4 ? 'gd' : v>=3 ? 'md' : 'bd'; }
+function renderCompare(){
+  const list = MODES.filter(md => PROS[md.id]);
+  let h = `<tr><th>模式</th>${DIMS.map(d => `<th title="${d.d}">${d.n}</th>`).join('')}<th>理论年胎次</th><th>哺乳期</th></tr>`;
+  list.forEach(md => {
+    const C = 114 + md.L + 5, sc = PROS[md.id].score, cur = md.id === M.id ? ' class="cur"' : '';
+    h += `<tr data-id="${md.id}"${cur}><td><b>${md.label}</b></td>` +
+      DIMS.map(d => `<td class="sc">${dots(sc[d.k], dotCls(sc[d.k]))}<span class="scn">${sc[d.k]}</span></td>`).join('') +
+      `<td class="v">${(365/C).toFixed(2)}</td><td class="v">${md.L} 天</td></tr>`;
+  });
+  h += `<tr><td class="f" colspan="${DIMS.length+3}">${DIMS.map(d => `<b>${d.n}</b>：${d.d}`).join('；')}。</td></tr>`;
+  $('ctable').innerHTML = h;
+  $('pcards').innerHTML = list.map(md => {
+    const m = withMode(md, () => M), Pp = PROS[md.id];
+    return `<article class="pcard${md.id===M.id?' cur':''}" data-id="${md.id}" tabindex="0" role="button" aria-label="切换到${md.label}">
+      <h3>${md.label}<span class="tag">${Pp.tag}</span></h3>
+      <div class="kv"><span>间隔 <b>${m.B}</b> 天</span><span>群数 <b>${m.n}</b></span><span>哺乳 <b>${m.L}</b> 天</span><span>单元 配/孕/产 <b>${m.N.slice(0,3).join('/')}</b></span></div>
+      <h4 class="pro">优势</h4><ul>${Pp.pro.map(x => `<li>${x}</li>`).join('')}</ul>
+      <h4 class="con">劣势</h4><ul>${Pp.con.map(x => `<li>${x}</li>`).join('')}</ul>
+      <h4 class="fit">适用场景</h4><p class="fit">${Pp.fit}</p>
+    </article>`;
+  }).join('');
+}
+function pickFromCompare(e){
+  const el = e.target.closest('[data-id]'); if(!el) return;
+  if(e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+  if(e.type === 'keydown') e.preventDefault();
+  setMode(el.dataset.id); showTab('anim');
+  window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+}
+
+/* ================= 用工 ================= */
+const LCATS = [['配种','var(--breed)'],['分娩哺乳','var(--farrow)'],['转群断奶','var(--gest)'],['清洗消毒','#4AA3DF'],['日常饲喂','var(--hatch)']];
+function laborProfile(md){
+  return withMode(md, () => {
+    const E = EXP, C = M.C, W = M.W, r = 1 + P.buf/100, D = dist();
+    const LA = {ai:num('lAi',.3), far:num('lFar',1.5), lit:num('lLit',.15), rou:num('lRou',.03)};
+    const caps = [Math.ceil(E.bred*r)*0.15, Math.ceil(E.bred*P.conc/100*r)*0.15, Math.ceil(E.far*r)*1.0];
+    const days = [];
+    for(let d=0; d<C; d++){
+      const a = [0,0,0,0,0];
+      a[4] += P.N*LA.rou;
+      for(let g=0; g<M.n; g++){
+        const s = mod(d - g*M.B, C);
+        if(s===0) a[2] += (E.kept + E.culls)*0.08 + E.weaned*0.01 + E.gilts*0.06 + (M.T !== 21 ? E.rin*0.06 : 0);
+        if(s===1 || s===W-1) a[0] += E.bred*0.02;
+        if(s===W) a[0] += E.bred*LA.ai;
+        if(s >= W+18 && s <= W+24) a[0] += E.bred*0.01;
+        if(s===M.check){ a[0] += E.bred*0.03; a[2] += E.conc*0.06; }
+        if(s===M.fe) a[2] += E.far*0.08;
+        for(const [o,p] of D){ if(s===M.fs+o) a[1] += E.far*p*LA.far; if(s===M.fs+o+1) a[1] += E.far*p*0.4; }
+        if(P.induce && s===M.fs-1) a[1] += E.far*0.02;
+        if(s >= M.fs) a[1] += E.far*LA.lit*(s===M.fs ? 0.5 : 1);
+      }
+      for(let k=0;k<3;k++){ const st = M.S[k], sp = Math.min(3, st.wash);
+        for(let u=0;u<st.N;u++){ const x = unitAt(k,u,d); if(x.wash && x.a < sp) a[3] += caps[k]/sp; } }
+      days.push(a);
+    }
+    return {days, C, B:M.B};
+  });
+}
+function laborStats(prof){
+  const hrs = Math.max(1, num('lHrs',8));
+  const tot = prof.days.map(a => a.reduce((x,y) => x+y, 0));
+  const avg = tot.reduce((x,y) => x+y, 0)/tot.length, peak = Math.max(...tot);
+  return {tot, avg, peak, pd:tot.indexOf(peak), ratio:peak/avg, sAvg:Math.ceil(avg/hrs), sPeak:Math.ceil(peak/hrs),
+          over:tot.filter(v => v > avg*1.3).length, hrs};
+}
+function renderLabor(){
+  const prof = laborProfile(MODES.find(m => m.id === M.id)), st = laborStats(prof);
+  $('labmode').textContent = `（当前：${M.label}）`;
+  $('labkpi').innerHTML = [
+    ['平均日工时', `${st.avg.toFixed(0)} 时`], ['峰值日工时', `${st.peak.toFixed(0)} 时`], ['峰值 / 平均', st.ratio.toFixed(2) + ' 倍'],
+    ['按平均配置人数', `${st.sAvg} 人`], ['按峰值配置人数', `${st.sPeak} 人`], ['高峰天数（>1.3 倍均值）', `${st.over} 天 / 周期`]
+  ].map(([a,b]) => `<div class="kpi">${a}<b>${b}</b></div>`).join('');
+  $('lablgd').innerHTML = LCATS.map(([n,c]) => `<span><i style="background:${c}"></i>${n}</span>`).join('') +
+    `<span><i style="background:none;border-top:2px dashed var(--ink);height:0;border-radius:0"></i>按平均配置人员的工时上限</span>`;
+  const W = 1000, H = 280, X0 = 48, PW = 940, Y0 = 16, PH = 230;
+  const ymax = Math.max(st.peak, st.sAvg*st.hrs)*1.08, bw = PW/prof.C;
+  const y = v => Y0 + PH - v/ymax*PH;
+  let h = '';
+  for(let i=0;i<=4;i++){ const v = ymax*i/4; h += `<line x1="${X0}" x2="${X0+PW}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="gtick"/><text x="${X0-6}" y="${y(v).toFixed(1)}" class="gtl" text-anchor="end" dominant-baseline="central">${v.toFixed(0)}</text>`; }
+  prof.days.forEach((a,d) => {
+    let acc = 0, g = `<g><title>第 ${d} 天：共 ${st.tot[d].toFixed(1)} 时\n${a.map((v,i) => `${LCATS[i][0]} ${v.toFixed(1)}`).join('\n')}</title>`;
+    a.forEach((v,i) => { if(v <= 0) return; g += `<rect x="${(X0 + d*bw + bw*0.08).toFixed(2)}" y="${y(acc+v).toFixed(2)}" width="${(bw*0.84).toFixed(2)}" height="${(v/ymax*PH).toFixed(2)}" fill="${LCATS[i][1]}"/>`; acc += v; });
+    h += g + '</g>';
+  });
+  const cap = st.sAvg*st.hrs;
+  h += `<line x1="${X0}" x2="${X0+PW}" y1="${y(cap).toFixed(1)}" y2="${y(cap).toFixed(1)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 4"/>`;
+  const step = M.B < 14 ? M.B*2 : M.B;
+  for(let d=0; d<=prof.C; d+=step) h += `<text x="${(X0 + d*bw).toFixed(1)}" y="${Y0+PH+16}" class="gtl" text-anchor="middle">${d}</text>`;
+  h += `<text x="${X0+PW}" y="${Y0+PH+32}" class="gtl" text-anchor="end">周期内天数（以第 1 群断奶日为 0）</text><text x="4" y="10" class="gtl">工时</text>`;
+  $('labchart').setAttribute('viewBox', `0 0 ${W} ${H+20}`);
+  $('labchart').innerHTML = h;
+
+  let t = `<tr><th>模式</th><th>平均日工时</th><th>峰值日工时</th><th>峰值/平均</th><th>按平均人数</th><th>按峰值人数</th><th>高峰天数/周期</th><th>每头母猪年工时</th></tr>`;
+  MODES.forEach(md => {
+    const s = laborStats(laborProfile(md)), cur = md.id === M.id ? ' class="cur"' : '';
+    t += `<tr${cur}><td><b>${md.label}</b></td><td class="v">${s.avg.toFixed(0)}</td><td class="v">${s.peak.toFixed(0)}</td><td class="v">${s.ratio.toFixed(2)}</td><td class="v">${s.sAvg}</td><td class="v">${s.sPeak}</td><td class="v">${s.over}</td><td class="v">${(s.avg*365/P.N).toFixed(1)}</td></tr>`;
+  });
+  $('labtable').innerHTML = t;
+}
+
+/* ================= 作业日历 ================= */
+const CNY = {2025:'01-29',2026:'02-17',2027:'02-06',2028:'01-26',2029:'02-13',2030:'02-03',2031:'01-23',2032:'02-11',2033:'01-31'};
+function holiday(x){
+  const md = fmtD(x).slice(5), y = x.getFullYear();
+  if(md === '01-01') return '元旦';
+  if(md >= '05-01' && md <= '05-05') return '劳动节';
+  if(md >= '10-01' && md <= '10-07') return '国庆';
+  for(const yy of [y, y+1]){ const c = CNY[yy]; if(!c) continue;
+    const diff = Math.round((x - new Date(`${yy}-${c}T00:00:00`))/86400000); if(diff >= -1 && diff <= 6) return '春节'; }
+  return null;
+}
+function calEvents(){
+  if(!calStart()) return [];
+  const ev = [], W = M.W, N = M.N;
+  const push = (d,g,what,loc,cnt,key) => { const x = dateOf(d), hol = holiday(x), we = x.getDay()===0 || x.getDay()===6; ev.push({d,x,g,what,loc,cnt,key,hol,we}); };
+  for(let d=T0; d<T0+365; d++){
+    for(let g=0; g<M.n; g++){
+      const xx = d - g*M.B, s = mod(xx, M.C), j = Math.floor(xx/M.C)*M.n + g;
+      if(![0,1,W-1,W,W+21,M.check,M.fe,M.fs-1,M.fs].includes(s)) continue;
+      const D = bd(j), b = unitName(0,mod(j,N[0]),N[0]), ge = unitName(1,mod(j,N[1]),N[1]), f = unitName(2,mod(j,N[2]),N[2]);
+      if(s===0) push(d,g,'断奶转群',`${unitName(2,mod(j-M.n,N[2]),N[2])} → ${b}；仔猪 → ${unitName(3,mod(j,N[3]),N[3])}`,`母猪 ${D.kept+D.culls}，仔猪 ${bd(j-M.n).weaned}`,true);
+      if(s===1) push(d,g,'同期化注射（促卵泡）',b,`${D.kept+D.gilts}`,false);
+      if(s===W-1 && W-1 !== 1) push(d,g,'同期化注射（促排卵）',b,`${D.bred}`,false);
+      if(s===W) push(d,g,'定时输精',b,`${D.bred}`,true);
+      if(s===W+21) push(d,g,'查返情',b,`约 ${D.ret}`,false);
+      if(s===M.check) push(d,g,'孕检转栏',`${b} → ${ge}`,`${D.conc}`,false);
+      if(s===M.fe) push(d,g,'转入产房',`${ge} → ${f}`,`${D.far}`,false);
+      if(s===M.fs-1 && P.induce) push(d,g,'诱导分娩',f,`未产母猪`,false);
+      if(s===M.fs) push(d,g,'分娩高峰',f,`${D.far} 窝`,true);
+    }
+    if((d + 21) % M.B === 0){ const j = (d+21)/M.B, D = bd(j); if(D.gilts) push(d,mod(j,M.n),'后备进待配栏','待配栏',`${D.gilts}`,false); }
+    if((d - P.nurD) % M.B === 0){ const q = (d - P.nurD)/M.B; push(d,mod(q,M.n),'保育转育肥',`${unitName(3,mod(q,N[3]),N[3])} → ${unitName(4,mod(q,N[4]),N[4])}`,`${bd(q-M.n).nurOut}`,false); }
+    if((d - P.nurD - P.finD) % M.B === 0){ const q = (d - P.nurD - P.finD)/M.B; push(d,mod(q,M.n),'育肥出栏',unitName(4,mod(q,N[4]),N[4]),`${bd(q-M.n).finOut}`,false); }
+  }
+  return ev;
+}
+let CAL = [];
+function renderCalendar(){
+  $('calmode').textContent = `（当前：${M.label}）`;
+  CAL = calEvents();
+  const f = $('calFilter').value;
+  const list = CAL.filter(e => f === 'all' || (f === 'key' && e.key) || (f === 'flag' && (e.we || e.hol)));
+  const key = CAL.filter(e => e.key), weK = key.filter(e => e.we).length, holK = key.filter(e => e.hol).length;
+  $('calkpi').innerHTML = [
+    ['全年作业次数', `${CAL.length}`], ['其中关键作业', `${key.length}`],
+    ['周末作业', `${CAL.filter(e => e.we).length} 次`], ['关键作业落在周末', `${weK} 次（${key.length ? pct(weK/key.length) : '0%'}）`],
+    ['节假日作业', `${CAL.filter(e => e.hol).length} 次`], ['关键作业落在节假日', `${holK} 次`]
+  ].map(([a,b]) => `<div class="kpi">${a}<b>${b}</b></div>`).join('');
+  const cnt = [0,0,0,0,0,0,0]; key.forEach(e => cnt[(e.x.getDay()+6)%7]++);
+  const mx = Math.max(1, ...cnt); let h = '';
+  ['周一','周二','周三','周四','周五','周六','周日'].forEach((n,i) => {
+    const bh = cnt[i]/mx*80, x = 40 + i*80;
+    h += `<rect x="${x}" y="${112-bh}" width="50" height="${bh}" rx="3" fill="${i>=5?'#C8414F':'var(--breed)'}"/><text x="${x+25}" y="${106-bh}" class="gtl" text-anchor="middle">${cnt[i]}</text><text x="${x+25}" y="128" class="gtl" text-anchor="middle">${n}</text>`;
+  });
+  h += `<text x="4" y="12" class="gtl">关键作业（断奶、输精、分娩）的星期分布</text>`;
+  $('wkchart').setAttribute('viewBox','0 0 620 136'); $('wkchart').innerHTML = h;
+  if(!calStart()){ $('caltable').innerHTML = '<tr><td>请先选择第 1 群断奶日。</td></tr>'; return; }
+  $('caltable').innerHTML = `<tr><th>日期</th><th>星期</th><th>群</th><th>作业</th><th>地点</th><th>头数</th><th>标记</th></tr>` +
+    list.map(e => `<tr class="${e.hol ? 'hol' : e.we ? 'flag' : ''}"><td class="v">${fmtD(e.x)}</td><td>${WD[e.x.getDay()]}</td><td><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${col(e.g)};margin-right:5px"></i>第${e.g+1}群</td><td>${e.key ? '<b>' + e.what + '</b>' : e.what}</td><td>${e.loc}</td><td class="v">${e.cnt}</td><td>${e.hol ? `<span class="badge r">${e.hol}</span>` : ''}${e.we ? '<span class="badge">周末</span>' : ''}</td></tr>`).join('');
+}
+let DL = null;
+if(window.claude && typeof window.claude.use === 'function'){ window.claude.use('downloads').then(x => { DL = x; }).catch(() => {}); }
+async function exportCsv(){
+  const esc = v => `"${String(v).replace(/"/g,'""')}"`;
+  const lines = [['日期','星期','母猪群','作业','地点','头数','标记'].join(',')].concat(
+    CAL.map(e => [fmtD(e.x), WD[e.x.getDay()], `第${e.g+1}群`, e.what, e.loc, e.cnt, [e.hol, e.we ? '周末' : ''].filter(Boolean).join(' ')].map(esc).join(',')));
+  const csv = '\ufeff' + lines.join('\r\n'), name = `作业日历_${M.label.replace(/\s/g,'')}_${$('calStart').value}.csv`;
+  if(DL){
+    try { await DL.save({filename:name, data:csv}); $('calMsg').textContent = '已导出，可用 Excel 打开。'; }
+    catch(e){ $('calMsg').textContent = e && e.code === 'declined' ? '已取消导出。' : '当前环境无法导出，请用下载的 HTML 文件在浏览器中打开后导出。'; }
+    return;
+  }
+  if(window.claude){ $('calMsg').textContent = '当前环境无法导出，请用下载的 HTML 文件在浏览器中打开后导出。'; return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  $('calMsg').textContent = '已导出，可用 Excel 打开。';
+}
+function printCal(){ document.body.classList.add('printing'); window.print(); }
+window.addEventListener('afterprint', () => document.body.classList.remove('printing'));
+
+/* ================= 自定义模式 ================= */
+function customMd(){
+  return {id:'custom', label:'自定义', B:Math.round(num('cB',21)), L:Math.round(num('cL',28)), W:Math.round(num('cW',5)),
+          G:Math.round(num('cG',114)), pre:Math.round(num('cPre',5)), cp:Math.round(num('cCp',28))};
+}
+function renderCustom(){
+  const md = customMd(), C = md.G + md.L + md.W;
+  let h = '';
+  const errs = [];
+  if(md.B < 3) errs.push('批次间隔至少 3 天。');
+  if(C % md.B !== 0) errs.push(`繁殖周期 C = ${md.G} + ${md.L} + ${md.W} = ${C} 天，不能被 ${md.B} 整除，母猪群无法按 ${md.B} 天间隔稳定接力。`);
+  else if(C/md.B < 2) errs.push('群数少于 2，批次间隔过大。');
+  if(md.G - md.pre <= md.cp) errs.push('孕检转栏日必须早于进产房日。');
+  if(errs.length){
+    const Ls = [], Bs = [];
+    for(let l=16; l<=35; l++) if((md.G + l + md.W) % md.B === 0) Ls.push(l);
+    for(let b=5; b<=C/2; b++) if(C % b === 0) Bs.push(b);
+    h += `<div class="msg bad">${errs.join('<br>')}</div>`;
+    if(Ls.length) h += `<p class="note">保持间隔 ${md.B} 天，可改哺乳期为：</p><div class="chips">${Ls.map(l => `<button data-set="cL" data-v="${l}">哺乳 ${l} 天（C = ${md.G+l+md.W}）</button>`).join('')}</div>`;
+    if(Bs.length) h += `<p class="note" style="margin-top:8px">保持哺乳 ${md.L} 天，可改批次间隔为：</p><div class="chips">${Bs.map(b => `<button data-set="cB" data-v="${b}">${b} 天（${C/b} 群）</button>`).join('')}</div>`;
+    $('cout').innerHTML = h; return;
+  }
+  const warns = [];
+  if(md.L < 18) warns.push(`哺乳 ${md.L} 天偏短，断奶仔猪体重小，保育难度大。`);
+  if(md.L > 35) warns.push(`哺乳 ${md.L} 天偏长，年产胎次下降。`);
+  if(md.pre < 3) warns.push(`产前 ${md.pre} 天进产房偏晚，约 5% 母猪会在妊娠 ${md.G-2} 天提前分娩，可能产在妊娠舍。`);
+  if(md.cp < 23) warns.push(`配后 ${md.cp} 天孕检偏早，B 超准确率下降。`);
+  if(md.cp < 21) warns.push('孕检早于返情期，部分返情母猪会在妊娠舍才被发现。');
+  if(md.W < 4) warns.push('断奶至输精少于 4 天，同期化后发情排卵可能不整齐。');
+  const m = withMode(md, () => M), r = calc(md);
+  h += `<div class="msg ok">可行：繁殖周期 ${m.C} 天 = ${m.n} 群 × ${m.B} 天。${weekday(m.B)}；返情：${returnRule(m.B)}。</div>`;
+  if(warns.length) h += `<div class="msg warn">${warns.join('<br>')}</div>`;
+  h += `<div class="tscroll"><table><tr><th>栋舍</th><th>停留天数</th><th>单元数</th><th>利用率</th><th>每单元栏位</th><th>清洗空栏</th></tr>` +
+    [[0,r.bS],[1,r.gS],[2,r.fS],[3,r.nS],[4,r.fiS]].map(([k,sz]) => `<tr><td>${m.S[k].name}</td><td class="v">${m.S[k].dur} 天</td><td class="v">${m.S[k].N}</td><td class="v">${pct(r.ut[k])}</td><td class="v">${sz}</td><td class="v">${m.S[k].N*m.B - m.S[k].dur} 天</td></tr>`).join('') + '</table></div>';
+  h += `<div style="margin-top:12px"><button class="btn" id="cApply">加入模式列表并查看动画</button></div>`;
+  $('cout').innerHTML = h;
+  $('cApply').onclick = () => { MODES = BASE_MODES.concat([md]); buildModeButtons(); setMode('custom'); showTab('anim'); window.scrollTo({top:0}); };
+}
+$('cout').addEventListener('click', e => { const b = e.target.closest('[data-set]'); if(!b) return; $(b.dataset.set).value = b.dataset.v; renderCustom(); });
+
+/* ================= 现有栋舍反推 ================= */
+function renderBarn(){
+  const rooms = Math.max(1, Math.round(num('bRooms',8))), cpr = Math.max(1, num('bCpr',36)), stalls = Math.max(1, num('bStalls',1100)), parts = Math.max(1, Math.round(num('bParts',8)));
+  const buf = 1 + P.buf/100;
+  let h = `<tr><th>模式</th><th>产房分组</th><th>产房可支撑母猪</th><th>配怀需要单元</th><th>配怀可支撑母猪</th><th>最大基础母猪</th><th>目标 ${P.N} 头</th><th>缺口</th></tr>`;
+  const res = [];
+  MODES.forEach(md => {
+    const r = calc(md), m = r.m, Nf = m.N[2], rpu = Math.floor(rooms/Nf), cap = rpu*cpr, idle = rooms - rpu*Nf;
+    const NmaxF = rpu ? Math.floor(cap/buf/(P.far/100)*m.n) : 0;
+    const perBred = (m.N[0] + m.N[1]*P.conc/100)*buf;
+    const NmaxS = Math.floor(stalls/perBred*m.n);
+    const need = m.N[0] + m.N[1], partsOk = parts >= need;
+    const Nmax = Math.min(NmaxF, NmaxS);
+    const ok = rpu > 0 && partsOk && P.N <= Nmax;
+    const gapF = Math.max(0, Nf*r.fS - Nf*cap), gapS = Math.max(0, m.N[0]*r.bS + m.N[1]*r.gS - stalls);
+    const gaps = [];
+    if(!rpu) gaps.push(`产房房间不足（需至少 ${Nf} 间）`);
+    else if(gapF) gaps.push(`产床缺 ${gapF} 张`);
+    if(gapS) gaps.push(`配怀栏缺 ${gapS} 个`);
+    if(!partsOk) gaps.push(`配怀需再分隔 ${need - parts} 个单元`);
+    res.push({md, Nmax, ok});
+    h += `<tr${md.id===M.id?' class="cur"':''}><td><b>${md.label}</b></td>
+      <td>${rpu ? `${Nf} 单元 × ${rpu} 间 = 每单元 ${cap} 床${idle ? `（闲置 ${idle} 间）` : ''}` : `需 ${Nf} 个单元，房间不足`}</td>
+      <td class="v">${NmaxF}</td><td class="v ${partsOk?'':'bad'}">${need} 个（现有 ${parts}）</td><td class="v">${NmaxS}</td>
+      <td class="v">${partsOk ? Nmax : '—'}</td><td class="v ${ok?'ok':'bad'}">${ok ? '可行' : '不可行'}</td><td class="f">${gaps.join('；') || '无'}</td></tr>`;
+  });
+  $('btable').innerHTML = h;
+  const feas = res.filter(x => x.ok);
+  const best = res.filter(x => x.Nmax > 0).sort((a,b) => b.Nmax - a.Nmax)[0];
+  $('bout').innerHTML = feas.length
+    ? `<div class="msg ok">现有栋舍可以直接支撑目标 ${P.N} 头基础母猪的模式：${feas.map(x => x.md.label).join('、')}。${best ? `不改造时存栏上限最高的是${best.md.label}，约 ${best.Nmax} 头。` : ''}</div>`
+    : `<div class="msg bad">现有栋舍在任何模式下都不能直接支撑 ${P.N} 头基础母猪。${best ? `不改造时存栏上限最高的是${best.md.label}，约 ${best.Nmax} 头；可降低目标存栏或按缺口改造。` : ''}</div>`;
+}
+
+/* ================= 转批过渡 ================= */
+function transCalc(md){
+  return withMode(md, () => {
+    const B = M.B, adj = Math.max(0, Math.round(num('tAdj',3))), Lcur = Math.round(num('tLcur',24)), minAge = num('tMin',18);
+    let lac = 0, alt = 0, altDays = 0;
+    for(let x=0; x<B; x++){
+      const canShort = x <= adj && (Lcur - x) >= minAge, canExt = (B - x) <= adj;
+      if(canExt || canShort) lac++; else { alt++; altDays += B - x; }
+    }
+    const Ccur = 114 + Lcur + 5, perDay = P.N*P.far/100/Ccur;
+    const pass = P.N*P.far/100, fAlt = alt/B, avgAlt = alt ? altDays/alt : 0;
+    return {m:M, fLac:lac/B, fAlt, avgAlt, altSows:pass*fAlt, altSowDays:pass*fAlt*avgAlt, lost:pass*fAlt*avgAlt/M.C, Ccur, perDay, Lcur};
+  });
+}
+function renderTransition(){
+  const md = MODES.find(m => m.id === M.id), t = transCalc(md), m = t.m;
+  $('tmode').textContent = `（当前：${M.label}）`;
+  $('tkpi').innerHTML = [
+    ['过渡期', `约 ${Math.ceil(t.Ccur/7)} 周`], ['哺乳期调整即可对齐', pct(t.fLac)], ['需要烯丙孕素的母猪', `${R(t.altSows)} 头（${pct(t.fAlt)}）`],
+    ['平均用药天数', `${t.avgAlt.toFixed(1)} 天`], ['额外非生产天数', `${R(t.altSowDays)} 头·天`], ['约损失窝数', `${t.lost.toFixed(1)} 窝`]
+  ].map(([a,b]) => `<div class="kpi">${a}<b>${b}</b></div>`).join('');
+  let h = `<tr><th>模式</th><th>目标哺乳期</th><th>哺乳期调整可对齐</th><th>需烯丙孕素</th><th>平均用药天数</th><th>额外非生产天数</th><th>约损失窝数</th><th>备注</th></tr>`;
+  MODES.forEach(x => {
+    const r = transCalc(x), note = [];
+    if(x.L !== r.Lcur) note.push(`哺乳期由 ${r.Lcur} 天改为 ${x.L} 天`);
+    if(r.m.N[2] === 1) note.push('需把产房合并为 1 个全进全出单元');
+    h += `<tr${x.id===M.id?' class="cur"':''}><td><b>${x.label}</b></td><td class="v">${x.L} 天</td><td class="v">${pct(r.fLac)}</td><td class="v">${R(r.altSows)} 头</td><td class="v">${r.avgAlt.toFixed(1)}</td><td class="v">${R(r.altSowDays)}</td><td class="v">${r.lost.toFixed(1)}</td><td class="f">${note.join('；') || '—'}</td></tr>`;
+  });
+  $('ttable').innerHTML = h;
+
+  const weeks = Math.ceil((t.Ccur + 14)/7), firstFar = m.W + m.G;
+  let w = `<tr><th>周次</th><th>断奶母猪（估）</th><th>调整哺乳期对齐</th><th>烯丙孕素并批</th><th>本周组建的批次（输精日）</th><th>产房状态</th><th>重点工作</th></tr>`;
+  for(let i=0; i<weeks; i++){
+    const d0 = i*7, d1 = d0 + 6;
+    const wean = R(t.perDay*7), a = R(wean*t.fAlt);
+    const bs = []; for(let k=0; k*m.B + m.W <= d1; k++){ const ai = k*m.B + m.W; if(ai >= d0) bs.push(`第${mod(k,m.n)+1}群（第 ${ai} 天）`); }
+    const far = d1 < firstFar ? '旧母猪连续分娩' : d0 < t.Ccur ? '批次分娩开始，仍有连续分娩的旧母猪' : '完全批次分娩';
+    let job = '';
+    if(i===0) job = `确定批次日历与各群输精日；备好同期化激素和烯丙孕素；按新模式划分产房（${m.N[2]} 个单元）和配怀单元；后备母猪按批次提前饲喂烯丙孕素`;
+    else if(d0 <= firstFar && firstFar <= d1) job = '第一批成批分娩，集中人手接产；该产房单元断奶后首次全进全出清洗';
+    else if(d0 <= t.Ccur && t.Ccur <= d1) job = '最后一批旧母猪断奶归批，过渡完成，转入稳定批次生产';
+    else if(d1 < t.Ccur) job = '每天断奶母猪按规则归入最近批次；统计各批配种头数，不足部分用后备补齐';
+    else job = '按批次日历稳定运行，复核各批头数与栏位';
+    w += `<tr><td class="v">第 ${i+1} 周</td><td class="v">${d1 < t.Ccur ? wean : '—'}</td><td class="v">${d1 < t.Ccur ? wean - a : '—'}</td><td class="v">${d1 < t.Ccur ? a : '—'}</td><td>${bs.join('、') || '—'}</td><td>${far}</td><td class="f" style="color:var(--ink)">${job}</td></tr>`;
+  }
+  $('tweek').innerHTML = w;
+}
+
+/* ================= 页签、模式切换、初始化 ================= */
+function showTab(name){
+  activeTab = name;
+  ['anim','param','labor','plan'].forEach(n => { $('tab-'+n).hidden = n !== name; $('t-'+n).setAttribute('aria-selected', n === name); });
+  if(name === 'param'){ renderParams(); renderDerivation(); renderSchedule(); renderCompare(); }
+  if(name === 'labor'){ renderLabor(); renderCalendar(); }
+  if(name === 'plan'){ renderCustom(); renderBarn(); renderTransition(); }
+  last = performance.now();
+}
+document.querySelectorAll('.tabs [role=tab]').forEach(b => b.onclick = () => showTab(b.id.slice(2)));
+document.querySelector('.tabs').addEventListener('keydown', e => {
+  const ids = ['anim','param','labor','plan'], i = ids.indexOf(activeTab);
+  if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ const n = ids[mod(i + (e.key === 'ArrowRight' ? 1 : -1), 4)]; showTab(n); $('t-'+n).focus(); }
+});
+function buildModeButtons(){
+  const el = $('modes'); el.innerHTML = '';
+  MODES.forEach(md => { const b = document.createElement('button'); b.textContent = md.label; b.dataset.id = md.id; b.onclick = () => setMode(md.id); el.appendChild(b); });
+}
+function setMode(id, keepTime){
+  const md = MODES.find(m => m.id === id) || MODES[2];
+  const oldT = tu, oldT0 = T0;
+  M = makeMode(md); EXP = expected(); memo = new Map(); memoTop = -1;
+  T0 = 2*M.C; LOOP = 2*M.C;
+  tu = keepTime && oldT0 != null ? T0 + (oldT - oldT0) : T0; prevDay = null; gStart = null;
+  document.querySelectorAll('#modes button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === M.id));
+  if(!keepTime) $('log').innerHTML = '';
+  const [a,b] = weanAgeRange();
+  $('modeline').textContent = `${M.label}：哺乳 ${M.L} 天（断奶日龄 ${a}–${b} 天）· 繁殖周期 ${M.C} 天 = ${M.n} 群 × ${M.B} 天 · 单元数 配种 ${M.N[0]} / 妊娠 ${M.N[1]} / 产房 ${M.N[2]} / 保育 ${M.N[3]} / 育肥 ${M.N[4]} · 返情：${returnRule(M.B)} · 作业日${weekday(M.B)}`;
+  buildPlan(); buildRing(); render();
+  showTab(activeTab);
+}
+function onParams(){ readP(); setMode(M.id, true); }
+$('form').addEventListener('input', onParams);
+$('labform').addEventListener('input', () => { if(activeTab === 'labor') renderLabor(); });
+$('calStart').addEventListener('input', () => { renderClock(); if(activeTab === 'labor') renderCalendar(); });
+$('calFilter').addEventListener('input', renderCalendar);
+$('calCsv').onclick = exportCsv;
+$('calPrint').onclick = printCal;
+$('cform').addEventListener('input', renderCustom);
+$('bform').addEventListener('input', renderBarn);
+$('tform').addEventListener('input', renderTransition);
+$('ctable').addEventListener('click', pickFromCompare);
+$('pcards').addEventListener('click', pickFromCompare);
+$('pcards').addEventListener('keydown', pickFromCompare);
+
+const playBtn = $('play');
+function setPlaying(v){ playing = v; playBtn.textContent = v ? '暂停' : '播放'; playBtn.setAttribute('aria-label', v ? '暂停' : '播放'); }
+playBtn.onclick = () => setPlaying(!playing);
+$('fwd').onclick = () => { setPlaying(false); tu = Math.floor(tu) + 1; };
+$('back').onclick = () => { setPlaying(false); tu = Math.max(T0, Math.floor(tu) - 1); prevDay = Math.floor(tu); };
+const sp = $('speed');
+sp.oninput = () => { speed = +sp.value; $('speedv').textContent = `${speed} 天/秒`; };
+document.addEventListener('keydown', e => {
+  if(e.code === 'Space' && activeTab === 'anim' && !['INPUT','BUTTON','SELECT'].includes(document.activeElement.tagName)){ e.preventDefault(); setPlaying(!playing); }
+});
+
+(function init(){
+  const d = new Date(); d.setDate(d.getDate() + (((4 - d.getDay()) + 7) % 7 || 7));  // 默认下一个周四断奶，输精落在周二
+  $('calStart').value = fmtD(d);
+  readP(); buildModeButtons(); setMode('w3');
+  if(reduce) setPlaying(false);
+  requestAnimationFrame(frame);
+})();
+
+</script>
+</body>
+</html>
