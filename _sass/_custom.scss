@@ -166,34 +166,29 @@ html { font-size: 14px; }
   .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 1em; overflow-wrap: anywhere; }
 }
 
-/* 项目引用信息 */
+/* 项目引用信息：“引用”和其他链接放在同一行，点开才显示 */
+.project-list .cite-toggle,
+.project-list .cite-copy {
+  font: inherit;
+  color: var(--global-text-color-light);
+  background: none; border: none; padding: 0;
+  border-bottom: 1px solid var(--global-border-color);
+  border-radius: 0;
+  cursor: pointer;
+  line-height: inherit;
+}
+.project-list .cite-toggle:hover, .project-list .cite-copy:hover,
+.project-list .cite-toggle:focus-visible, .project-list .cite-copy:focus-visible,
+.project-list .cite-toggle[aria-expanded="true"] { color: var(--global-text-color); }
 .project-list .cite {
-  margin: 0.6em 0 0;
-  padding: 0.5em 0.8em;
-  border: 1px solid var(--global-border-color);
-  border-radius: 3px;
+  margin: 0.35em 0 0;
   font-size: 0.85em;
   line-height: 1.6;
-  color: var(--global-text-color);
-  .cite-label { color: var(--global-text-color-light); margin-right: 0.6em; }
-  .cite-text { overflow-wrap: anywhere; }
-  .cite-actions { display: inline-block; margin-left: 0.4em; }
-  .cite-copy {
-    font: inherit; font-size: 0.95em;
-    color: var(--global-text-color-light);
-    background: none; border: none; padding: 0; margin-right: 0.8em;
-    cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em;
-  }
-  .cite-copy:hover, .cite-copy:focus-visible { color: var(--global-text-color); }
-  details { margin-top: 0.3em; }
-  summary { cursor: pointer; color: var(--global-text-color-light); width: fit-content; }
-  pre {
-    margin: 0.4em 0 0; padding: 0.6em 0.8em;
-    font-size: 0.95em; line-height: 1.5;
-    background: var(--global-code-background-color);
-    overflow-x: auto; white-space: pre;
-  }
+  color: var(--global-text-color-light);
+  .cite-text { overflow-wrap: anywhere; margin-right: 0.6em; }
+  .cite-copy { margin-right: 0.8em; }
 }
+.project-list .cite[hidden], .project-list .cite-bib[hidden] { display: none !important; }
 
 @media (max-width: 600px) {
   .work-items li { flex-direction: column; gap: 0.1em; }
