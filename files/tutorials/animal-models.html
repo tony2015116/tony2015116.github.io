@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>育种动物模型图鉴</title>
+<meta name="description" content="从 P = A + D + I + E + e 出发，通俗讲解育种中 14 种常见动物模型的假设、方差组分与适用场景。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 单栏阅读流；开篇是彩色的全面模型公式，各效应颜色贯穿全页；模型按“拆遗传 / 拆环境 / 数据形态”分组成档案卡 */
+:root{
+  --bg:#f5f7f4; --surface:#ffffff; --ink:#18231f; --muted:#5d6b65; --line:#d8e0db;
+  --pine:#1f5c4a; --pine-soft:#e3efe9; --amber:#b5761b; --amber-soft:#f8ecd8;
+  --cP:#7a4fa3; --cA:#2f6db5; --cD:#c47510; --cI:#3a8a47; --cE:#c2453b; --ce:#77817c;
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#18211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3833;
+  --pine:#7cc4a9; --pine-soft:#1d3029; --amber:#e3a74f; --amber-soft:#33281a;
+  --cP:#bc9ce3; --cA:#82b2ee; --cD:#eda74e; --cI:#7fc98c; --cE:#f08b82; --ce:#a8b2ad; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#18211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3833;
+  --pine:#7cc4a9; --pine-soft:#1d3029; --amber:#e3a74f; --amber-soft:#33281a;
+  --cP:#bc9ce3; --cA:#82b2ee; --cD:#eda74e; --cI:#7fc98c; --cE:#f08b82; --ce:#a8b2ad; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+.back{font-size:.9rem;color:var(--pine);text-decoration:none;align-self:flex-start}
+.back:hover{text-decoration:underline}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+.wrap{max-width:880px;margin:0 auto;padding-block:40px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:60px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(1.9rem,5.5vw,2.8rem);font-weight:900}
+h2{font-size:1.6rem;font-weight:900;display:flex;align-items:baseline;gap:12px}
+h2 .tag{font-family:var(--f-mono);font-size:.8rem;color:var(--amber);font-weight:600;letter-spacing:.05em}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0;max-width:65ch}
+section{display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.12em;color:var(--pine);text-transform:uppercase}
+.lead{font-size:1.1rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-size:.92em}
+b.k{color:var(--pine)}
+.tA{color:var(--cA)} .tD{color:var(--cD)} .tI{color:var(--cI)} .tE{color:var(--cE)} .te{color:var(--ce)} .tP{color:var(--cP)}
+
+header{display:flex;flex-direction:column;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:30px}
+.big-eq{font-family:var(--f-display);font-weight:900;font-size:clamp(2.3rem,10vw,4.6rem);line-height:1.1;display:flex;flex-wrap:wrap;align-items:baseline;gap:.15em .28em}
+.big-eq .op{color:var(--muted);font-weight:600;font-size:.7em}
+
+.note{background:var(--amber-soft);border-left:4px solid var(--amber);padding:14px 18px;border-radius:0 6px 6px 0}
+.note p{max-width:none}
+
+/* 六项拆解 */
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.part{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start}
+.part .L{font-family:var(--f-display);font-weight:900;font-size:2.2rem;line-height:1;grid-row:span 3}
+.part strong{font-size:1.02rem}
+.part .sub{font-size:.88rem;color:var(--muted)}
+.part .use{font-size:.8rem;font-weight:700;letter-spacing:.04em}
+
+.formula{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.eq{font-family:var(--f-mono);font-size:clamp(1.15rem,4vw,1.6rem);font-weight:600;text-align:center;overflow-x:auto;white-space:nowrap}
+.eq span{padding:2px 6px;border-radius:4px}
+.eq-left{text-align:left;font-size:clamp(.9rem,2.8vw,1.08rem);line-height:2}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.term{display:flex;flex-direction:column;gap:2px;font-size:.92rem}
+.term .sym{font-family:var(--f-mono);font-weight:600;color:var(--pine)}
+
+.analogy{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.analogy div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+.analogy strong{font-size:1rem}
+
+.assume{display:flex;flex-direction:column;padding:0;margin:0;list-style:none}
+.assume li{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.assume li .mono{color:var(--pine);font-weight:600}
+
+/* 三条育种路径 */
+.paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.paths{grid-template-columns:minmax(0,1fr)}}
+.path{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;font-size:.93rem}
+.path .h{font-family:var(--f-display);font-weight:900;font-size:1.1rem}
+.path .goal{margin-top:auto;font-size:.82rem;font-weight:700;padding-top:8px;border-top:1px dashed var(--line)}
+
+/* 交互 */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 22px}
+.ctrl{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.ctrl label{display:flex;justify-content:space-between;gap:8px;font-size:.92rem}
+.ctrl output{font-family:var(--f-mono);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--pine)}
+input[type=range]:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+.stack{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.stack span{display:flex;align-items:center;justify-content:center;color:var(--bg);font-family:var(--f-mono);font-weight:600;font-size:.82rem;transition:flex-grow .25s;min-width:0;overflow:hidden}
+.brace{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:8px;background:var(--bg)}
+.stat .n{font-family:var(--f-mono);font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums}
+.stat .d{font-size:.82rem;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:7.5em minmax(0,1fr) 4.5em;gap:10px;align-items:center;font-size:.9rem}
+.bar .track{height:14px;background:var(--bg);border-radius:7px;overflow:hidden}
+.bar .fill{display:block;height:100%;border-radius:7px;transition:width .25s}
+.bar .val{font-family:var(--f-mono);text-align:right}
+@media (prefers-reduced-motion:reduce){.bar .fill,.stack span{transition:none}}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:640px){.split{grid-template-columns:minmax(0,1fr)}}
+.ped svg{width:100%;height:auto;max-width:320px}
+.ped text{font-family:var(--f-mono);fill:var(--ink)}
+.matrix{overflow-x:auto}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums}
+.matrix table{font-family:var(--f-mono);font-size:.95rem;margin:0 auto}
+.matrix th,.matrix td{padding:6px 12px;text-align:center}
+.matrix th{color:var(--muted);font-weight:400}
+.matrix td{border:1px solid var(--line);background:var(--surface)}
+.matrix td.diag{background:var(--pine-soft);font-weight:600}
+.matrix td.hot{background:var(--amber-soft);color:var(--amber);font-weight:600}
+.rel{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.rel table{width:100%;min-width:520px;background:var(--surface);font-size:.92rem}
+.rel th,.rel td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:center}
+.rel th:first-child,.rel td:first-child{text-align:left}
+.rel thead th{color:var(--muted);font-weight:500}
+.rel tbody tr:last-child td{border-bottom:none}
+.rel td{font-family:var(--f-mono)}
+.rel td:first-child{font-family:var(--f-body)}
+
+/* 模型卡 */
+.group{display:flex;flex-direction:column;gap:16px}
+.group-head{display:flex;flex-direction:column;gap:4px;padding-top:6px}
+.group-head .lbl{font-family:var(--f-mono);font-size:.8rem;letter-spacing:.1em}
+.models{display:flex;flex-direction:column;gap:16px}
+.model{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.model-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.model-head .en{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.model .m-eq{font-family:var(--f-mono);font-size:.98rem;background:var(--pine-soft);color:var(--pine);padding:10px 14px;border-radius:6px;overflow-x:auto;white-space:nowrap;line-height:1.9}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 20px;font-size:.93rem;margin:0}
+.facts div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.facts dt{font-size:.74rem;letter-spacing:.1em;color:var(--amber);font-weight:700}
+.facts dd{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-block;font-size:.75rem;padding:1px 9px;border-radius:999px;border:1px solid currentColor;font-weight:600;line-height:1.7}
+
+.cmp{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.cmp table{width:100%;min-width:700px;font-size:.9rem;background:var(--surface)}
+.cmp th,.cmp td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp thead th{background:var(--pine-soft);color:var(--pine);font-weight:700}
+.cmp tbody tr:last-child td{border-bottom:none}
+.cmp td.dots{font-family:var(--f-mono);white-space:nowrap;font-weight:600}
+.cmp tr.sep td{background:var(--bg);font-size:.78rem;letter-spacing:.08em;color:var(--muted);font-weight:700;padding:6px 12px}
+
+.guide{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.guide div{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.guide div span:last-child{font-weight:700;color:var(--pine)}
+@media (max-width:520px){.guide div{grid-template-columns:minmax(0,1fr);gap:2px}}
+
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="back" href="/portfolio/#tutorials">← 返回项目</a>
+  <div class="eyebrow">数量遗传学 · BLUP 育种值估计</div>
+  <h1>育种动物模型图鉴</h1>
+  <div class="big-eq" aria-label="P 等于 A 加 D 加 I 加 E 加 e">
+    <span class="tP">P</span><span class="op">=</span><span class="tA">A</span><span class="op">+</span><span class="tD">D</span><span class="op">+</span><span class="tI">I</span><span class="op">+</span><span class="tE">E</span><span class="op">+</span><span class="te">e</span>
+  </div>
+  <p class="lead">从这条“全面模型”出发：表型被拆成加性、显性、上位、环境和随机残差五块。各种动物模型的区别，就在于它们把哪几块单独拿出来估计，又把哪几块并进了残差。</p>
+</header>
+
+<section>
+  <h2><span class="tag">00</span>先对齐概念</h2>
+  <div class="note"><p>这里的“动物模型”指<b>动物育种中估计育种值（EBV）的线性混合模型</b>，不是医学实验里的小鼠模型。之所以叫“动物”模型，是因为模型里<b>每一头动物</b>（有没有自己的记录都算）都有一个属于自己的遗传效应，并通过亲缘关系互相“借信息”。</p></div>
+  <p>它要回答的问题很朴素：一头猪长得快，到底是因为<b class="k">基因好</b>，还是因为<b class="k">吃得好、栏舍好、运气好</b>？基因里还要再分：哪部分能稳定遗传给后代，哪部分只在特定配对时才出现。</p>
+</section>
+
+<section>
+  <h2><span class="tag">01</span>全面模型：表型的完整拆解</h2>
+  <div class="parts">
+    <div class="part"><span class="L tP">P</span><strong>表型值 Phenotype</strong><span class="sub">实际测到的数：日增重、产仔数、背膘厚</span><span class="use tP">观测值 y</span></div>
+    <div class="part"><span class="L tA">A</span><strong>加性效应（育种值）</strong><span class="sub">每个等位基因效应的简单累加。父母各传一半，能稳定遗传</span><span class="use tA">用于选种</span></div>
+    <div class="part"><span class="L tD">D</span><strong>显性效应</strong><span class="sub">同一位点两个等位基因的“搭配效果”，如 Aa 不等于 AA 和 aa 的平均。每代重新组合，不能直接遗传</span><span class="use tD">用于选配、杂交</span></div>
+    <div class="part"><span class="L tI">I</span><strong>上位效应</strong><span class="sub">不同位点基因之间的互作，一个基因的作用要看另一个基因的“脸色”。减数分裂时会被重组打散</span><span class="use tI">用于选配、配套系</span></div>
+    <div class="part"><span class="L tE">E</span><strong>环境效应</strong><span class="sub">可识别的系统环境：营养、栏舍、温湿度、光照、季节、母亲的哺育，以及基因与环境的互作 G×E</span><span class="use tE">用于环境调控</span></div>
+    <div class="part"><span class="L te">e</span><strong>随机残差</strong><span class="sub">无法识别、也无法重复的偶然因素，如测量误差、某天打架受伤</span><span class="use te">无法利用</span></div>
+  </div>
+
+  <h3>对应的方差分解</h3>
+  <p>如果各部分互不相关，表型方差也能相加：</p>
+  <div class="formula">
+    <div class="eq"><span class="tP">σ²P</span> = <span class="tA">σ²A</span> + <span class="tD">σ²D</span> + <span class="tI">σ²I</span> + <span class="tE">σ²E</span> + <span class="te">σ²e</span></div>
+    <div class="terms">
+      <div class="term"><span class="sym">h² = σ²A / σ²P</span>狭义遗传力：选种能利用的比例，决定选择反应</div>
+      <div class="term"><span class="sym">H² = σ²G / σ²P</span>广义遗传力，σ²G = σ²A + σ²D + σ²I：基因的全部贡献，含不能稳定遗传的部分</div>
+      <div class="term"><span class="sym">σ²I = σ²AA + σ²AD + σ²DD + …</span>上位方差还能细分为加×加、加×显、显×显等</div>
+    </div>
+  </div>
+
+  <h3>动手感受：方差构成决定育种策略</h3>
+  <div class="lab">
+    <div class="ctrls">
+      <div class="ctrl"><label for="vA"><span class="tA">σ²A 加性</span><output id="oA" class="tA">30</output></label><input id="vA" type="range" min="0" max="60" step="1" value="30"></div>
+      <div class="ctrl"><label for="vD"><span class="tD">σ²D 显性</span><output id="oD" class="tD">10</output></label><input id="vD" type="range" min="0" max="60" step="1" value="10"></div>
+      <div class="ctrl"><label for="vI"><span class="tI">σ²I 上位</span><output id="oI" class="tI">5</output></label><input id="vI" type="range" min="0" max="60" step="1" value="5"></div>
+      <div class="ctrl"><label for="vE"><span class="tE">σ²E 环境</span><output id="oE" class="tE">25</output></label><input id="vE" type="range" min="0" max="60" step="1" value="25"></div>
+      <div class="ctrl"><label for="ve"><span class="te">σ²e 残差</span><output id="oe" class="te">30</output></label><input id="ve" type="range" min="0" max="60" step="1" value="30"></div>
+    </div>
+    <div class="stack" aria-label="表型方差构成">
+      <span id="sA" style="background:var(--cA);flex-grow:30">A</span>
+      <span id="sD" style="background:var(--cD);flex-grow:10">D</span>
+      <span id="sI" style="background:var(--cI);flex-grow:5">I</span>
+      <span id="sE" style="background:var(--cE);flex-grow:25">E</span>
+      <span id="se" style="background:var(--ce);flex-grow:30">e</span>
+    </div>
+    <div class="brace">
+      <div class="stat"><span class="n tA" id="rh2">0.30</span><span class="d">狭义遗传力 h²</span></div>
+      <div class="stat"><span class="n tP" id="rH2">0.45</span><span class="d">广义遗传力 H²</span></div>
+      <div class="stat"><span class="n tD" id="rNA">0.15</span><span class="d">非加性占比 (D+I)/P</span></div>
+      <div class="stat"><span class="n tE" id="rE">0.25</span><span class="d">可调控环境占比 E/P</span></div>
+    </div>
+    <p class="muted" id="advice" style="font-size:.92rem"></p>
+  </div>
+
+  <h3>三条育种路径</h3>
+  <div class="paths">
+    <div class="path"><span class="h tA">1. 选种 · A</span><span>只有加性效应能稳定遗传，挑育种值高的种猪留种，好基因一代代累积。</span><span class="goal tA">育种核心：积累加性效应</span></div>
+    <div class="path"><span class="h tD">2. 选配 · D + I</span><span>显性和上位效应取决于“谁配谁”。通过杂交、配套系和选配方案，让下一代拿到好的基因组合，这就是杂种优势的来源。</span><span class="goal tD">杂交利用：优化基因组合</span></div>
+    <div class="path"><span class="h tE">3. 环境 · E</span><span>营养是核心，温湿度、光照、空气质量也会影响基因的表达和肠道菌群。不同基因型适合的环境还可能不同（G×E）。</span><span class="goal tE">环境调控：影响表型表达</span></div>
+  </div>
+
+  <h3>写成混合模型</h3>
+  <p>把上面的公式写成矩阵形式，每个随机效应配一个“个体之间有多像”的协方差矩阵：</p>
+  <div class="formula">
+    <div class="eq eq-left">
+      y = Xb + Z<span class="tA">a</span> + Z<span class="tD">d</span> + Z<span class="tI">i</span> + W<span class="tE">c</span> + <span class="te">e</span><br>
+      <span class="tA">a</span> ~ N(0, <b>A</b>σ²A)　　<span class="muted">谱系加性关系</span><br>
+      <span class="tD">d</span> ~ N(0, <b>D</b>σ²D)　　<span class="muted">显性关系</span><br>
+      <span class="tI">i</span> ~ N(0, (<b>A</b>⊙<b>A</b>)σ²AA + (<b>A</b>⊙<b>D</b>)σ²AD + (<b>D</b>⊙<b>D</b>)σ²DD)<br>
+      <span class="tE">c</span> ~ N(0, <b>I</b>σ²c)　　<span class="muted">永久环境 / 窝 / 母体环境</span><br>
+      <span class="te">e</span> ~ N(0, <b>I</b>σ²e)
+    </div>
+    <p class="muted" style="font-size:.9rem;max-width:none">⊙ 是哈达玛积（矩阵对应元素相乘）。图中的 E 在模型里分成两部分：可列举的环境分组（场、年、季、栏、营养方案）放进固定效应 <span class="mono">Xb</span>；跟着个体、窝或母亲走的环境放进随机效应 <span class="mono tE">c</span>。</p>
+  </div>
+  <p>这是“理论上的全面模型”。实际中几乎不会把所有项一次全估：显性和上位方差需要大量全同胞、近交个体或基因组数据才能分开，否则会混进残差或被加性效应“吸走”。于是有了下面各种取舍不同的模型。</p>
+</section>
+
+<section>
+  <h2><span class="tag">02</span>基本动物模型：只单独估计 A</h2>
+  <div class="formula">
+    <div class="eq">y = Xb + Z<span class="tA">a</span> + e</div>
+    <div class="terms">
+      <div class="term"><span class="sym">y</span>观测值向量：每条记录，如达 100 kg 日龄</div>
+      <div class="term"><span class="sym">b · X</span>固定效应及其关联矩阵：场、年、季、性别、批次</div>
+      <div class="term"><span class="sym">a · Z</span>加性遗传效应（育种值）及其关联矩阵，Z 把记录对应到动物</div>
+      <div class="term"><span class="sym">e</span>残差。在这个模型里，D、I 和随机环境都被并进了 e</div>
+    </div>
+  </div>
+  <p>换成学生考试的比喻：</p>
+  <div class="analogy">
+    <div><strong>成绩 y</strong><span class="muted">卷面分</span></div>
+    <div><strong>固定效应 Xb</strong><span class="muted">哪个学校、哪年的卷子难</span></div>
+    <div><strong>育种值 Za</strong><span class="muted">能传给孩子的“天赋”</span></div>
+    <div><strong>残差 e</strong><span class="muted">当天状态、蒙对几题</span></div>
+  </div>
+  <h3>模型背后的假设</h3>
+  <ul class="assume">
+    <li><span class="mono">a ~ N(0, Aσ²ₐ)</span>育种值服从正态分布，个体间协方差由<b>亲缘关系矩阵 A</b> 决定：亲缘越近，育种值越像。</li>
+    <li><span class="mono">e ~ N(0, Iσ²ₑ)</span>残差相互独立、方差相同。若 D、I 很大却被并进 e，这条假设会被破坏，因为全同胞之间的残差其实相关。</li>
+    <li><span class="mono">Cov(a, e) = 0</span>基因和偶然环境不相关，例如不会刻意把好基因的猪放进好栏舍。</li>
+    <li><span class="mono">无穷小模型</span>性状由大量微效基因加性控制，所以育种值近似正态。</li>
+    <li><span class="mono">方差组分已知</span>实际先用 REML 估出方差组分，再代入混合模型方程求 BLUP。</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="tag">03</span>关系矩阵：模型“借信息”的通道</h2>
+  <p>下面是一个四头动物的小谱系：1 和 2 是无亲缘的祖先，3 是它们的后代，4 是 1 与 3 回交的后代（近交个体）。</p>
+  <div class="split">
+    <div class="ped">
+      <svg viewBox="0 0 300 230" role="img" aria-label="四头动物谱系图">
+        <g stroke="var(--muted)" stroke-width="1.6" fill="none">
+          <line x1="70" y1="45" x2="150" y2="115"/><line x1="230" y1="45" x2="150" y2="115"/>
+          <line x1="70" y1="45" x2="110" y2="185"/><line x1="150" y1="115" x2="110" y2="185"/>
+        </g>
+        <rect x="45" y="22" width="50" height="46" rx="6" fill="var(--surface)" stroke="var(--pine)" stroke-width="2"/>
+        <circle cx="230" cy="45" r="24" fill="var(--surface)" stroke="var(--pine)" stroke-width="2"/>
+        <circle cx="150" cy="115" r="24" fill="var(--surface)" stroke="var(--pine)" stroke-width="2"/>
+        <rect x="85" y="162" width="50" height="46" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="70" y="51" text-anchor="middle" font-size="16" font-weight="600">1</text>
+        <text x="230" y="51" text-anchor="middle" font-size="16" font-weight="600">2</text>
+        <text x="150" y="121" text-anchor="middle" font-size="16" font-weight="600">3</text>
+        <text x="110" y="191" text-anchor="middle" font-size="16" font-weight="600">4</text>
+        <text x="145" y="200" font-size="11" fill="var(--muted)">F = 0.25</text>
+        <text x="10" y="225" font-size="10" fill="var(--muted)">□ 公　○ 母</text>
+      </svg>
+    </div>
+    <div class="matrix">
+      <table>
+        <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+        <tr><th>1</th><td class="diag">1</td><td>0</td><td>0.5</td><td>0.75</td></tr>
+        <tr><th>2</th><td>0</td><td class="diag">1</td><td>0.5</td><td>0.25</td></tr>
+        <tr><th>3</th><td>0.5</td><td>0.5</td><td class="diag">1</td><td>0.75</td></tr>
+        <tr><th>4</th><td>0.75</td><td>0.25</td><td>0.75</td><td class="hot">1.25</td></tr>
+      </table>
+    </div>
+  </div>
+  <p>A 矩阵读法：亲子之间是 0.5；对角线是 <span class="mono">1 + F</span>，个体 4 的近交系数 F = 0.25，所以是 1.25。规则只有两条：<span class="mono">aᵢⱼ = ½(aᵢ,父 + aᵢ,母)</span>，<span class="mono">aᵢᵢ = 1 + ½·a父,母</span>。</p>
+  <p>显性效应要看<b>两个等位基因同时相同</b>的概率，所以用另一套矩阵 <b>D</b>：<span class="mono">dᵢⱼ = ¼(a父ᵢ,父ⱼ·a母ᵢ,母ⱼ + a父ᵢ,母ⱼ·a母ᵢ,父ⱼ)</span>。上位效应则用 A、D 的哈达玛积近似。不同亲属在各类效应上的“相似度”如下：</p>
+  <div class="rel">
+    <table>
+      <thead><tr><th>亲属关系（非近交）</th><th class="tA">加性 A</th><th class="tD">显性 D</th><th class="tI">加×加 A⊙A</th><th class="tI">显×显 D⊙D</th></tr></thead>
+      <tbody>
+        <tr><td>同一个体</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td>亲子</td><td>0.5</td><td>0</td><td>0.25</td><td>0</td></tr>
+        <tr><td>全同胞</td><td>0.5</td><td>0.25</td><td>0.25</td><td>0.0625</td></tr>
+        <tr><td>半同胞</td><td>0.25</td><td>0</td><td>0.0625</td><td>0</td></tr>
+        <tr><td>祖孙</td><td>0.25</td><td>0</td><td>0.0625</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>表里能看出一个关键事实：<b>亲子间的显性相似度是 0</b>，父母传给后代的只是单个等位基因，而不是“搭配”。所以显性效应不能靠选种传下去；只有全同胞这类两边都共享的亲属，才会在显性上相似。要估 σ²D，数据里必须有足够多的全同胞。</p>
+</section>
+
+<section>
+  <h2><span class="tag">04</span>动手感受：遗传力决定“相信表型几分”</h2>
+  <p>最简单的情形：一头动物只有一条自己的记录，其育种值估计约等于 <span class="mono">EBV = h² × (表型 − 群体均值)</span>。</p>
+  <div class="lab">
+    <div class="ctrls">
+      <div class="ctrl"><label for="h2">遗传力 h²<output id="h2o" class="tA">0.30</output></label><input id="h2" type="range" min="0.05" max="0.9" step="0.05" value="0.3"></div>
+      <div class="ctrl"><label for="dev">比群体均值高出（g/天 日增重）<output id="devo">100</output></label><input id="dev" type="range" min="0" max="200" step="5" value="100"></div>
+    </div>
+    <div class="bars">
+      <div class="bar"><span>表型优势</span><span class="track"><span class="fill" id="fp" style="width:50%;background:var(--cP)"></span></span><span class="val" id="vp">100</span></div>
+      <div class="bar"><span>估计育种值</span><span class="track"><span class="fill" id="fa" style="width:15%;background:var(--cA)"></span></span><span class="val" id="va">30</span></div>
+      <div class="bar"><span>传给后代</span><span class="track"><span class="fill" id="fc" style="width:7.5%;background:var(--pine)"></span></span><span class="val" id="vc">15</span></div>
+    </div>
+    <p class="muted" id="msg" style="font-size:.9rem"></p>
+  </div>
+  <p>这就是 BLUP 的“收缩”：遗传力越低、信息越少，估计越向均值靠拢。亲属记录越多，估计越准，收缩越小。</p>
+</section>
+
+<section>
+  <h2><span class="tag">05</span>模型档案</h2>
+  <p>所有模型都可以看成从全面模型里<b>挑出几项单独估计、其余并进残差</b>。下面按它主要“拆”的是哪一块来分组。</p>
+
+  <div class="group">
+    <div class="group-head"><span class="lbl tA">第一组 · 拆遗传部分 A / D / I</span><p class="muted">回答：基因的贡献里，哪些能遗传、哪些靠配对。</p></div>
+    <div class="models">
+
+      <article class="model">
+        <div class="model-head"><h3>公畜模型</h3><span class="en">Sire model</span><div class="chips"><span class="chip tA">A 的 ¼</span></div></div>
+        <div class="m-eq">y = Xb + Zs + e　　s ~ N(0, Aₛσ²ₛ),　σ²ₛ = ¼σ²A</div>
+        <p>只给公畜设效应，用后代成绩评价父亲。计算量小，是早期奶牛后裔测定的主力。</p>
+        <dl class="facts">
+          <div><dt>优点</dt><dd>方程少、易计算</dd></div>
+          <div><dt>局限</dt><dd>忽略母亲的遗传贡献和选配，母畜和后代得不到育种值</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>单性状动物模型</h3><span class="en">Animal model</span><div class="chips"><span class="chip tA">A</span></div></div>
+        <div class="m-eq">y = Xb + Za + e　　a ~ N(0, Aσ²A)</div>
+        <p>每头动物都有育种值，利用父母、后代、同胞等全部亲缘信息。公、母、幼畜在同一尺度上比较。D、I 都被并进残差。</p>
+        <dl class="facts">
+          <div><dt>要估的方差</dt><dd>σ²A、σ²e</dd></div>
+          <div><dt>典型性状</dt><dd>日增重、背膘厚等一生只测一次的性状</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>加性–显性模型</h3><span class="en">Additive-dominance model</span><div class="chips"><span class="chip tA">A</span><span class="chip tD">D</span></div></div>
+        <div class="m-eq">y = Xb + βF + Za + Zd + e　　a ~ N(0, Aσ²A),　d ~ N(0, Dσ²D)</div>
+        <p>在动物模型上加一个显性效应 d。近交会让杂合位点变少，显性带来的好处随之减少，表现为<b>近交衰退</b>，所以常同时把近交系数 F 当作协变量放进固定效应。</p>
+        <dl class="facts">
+          <div><dt>新增方差</dt><dd>σ²D（显性遗传力 δ² = σ²D/σ²P）</dd></div>
+          <div><dt>能得到什么</dt><dd>育种值 a 用于选种；a + d 是个体的“总遗传值”，用于预测某个配对后代的表现</dd></div>
+          <div><dt>数据要求</dt><dd>大量全同胞家系；用 SNP 构建基因组显性矩阵 G_D 效果更好</dd></div>
+          <div><dt>典型性状</dt><dd>繁殖、存活、产仔数等低遗传力、杂种优势明显的性状</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>上位效应模型</h3><span class="en">Epistatic model</span><div class="chips"><span class="chip tA">A</span><span class="chip tD">D</span><span class="chip tI">I</span></div></div>
+        <div class="m-eq">y = Xb + Za + Zd + Z(aa) + Z(ad) + Z(dd) + e<br>aa ~ N(0, (A⊙A)σ²AA),　ad ~ N(0, (A⊙D)σ²AD),　dd ~ N(0, (D⊙D)σ²DD)</div>
+        <p>把基因间互作拆成加×加、加×显、显×显等成分，每种用关系矩阵的哈达玛积作协方差。基因组时代常用 G⊙G 这类“基因组上位核矩阵”，也可以换成 RKHS 等核方法。</p>
+        <dl class="facts">
+          <div><dt>新增方差</dt><dd>σ²AA、σ²AD、σ²DD</dd></div>
+          <div><dt>用途</dt><dd>提高个体总遗传值和配对后代的预测；配套系、杂交组合筛选</dd></div>
+          <div><dt>注意</dt><dd>各成分高度混杂、很难分开，通常只估 σ²AA；需要非常大的数据量</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>基因组模型 GBLUP / ssGBLUP</h3><span class="en">Genomic BLUP · Single-step</span><div class="chips"><span class="chip tA">A → G / H</span></div></div>
+        <div class="m-eq">a ~ N(0, Gσ²A)　或　a ~ N(0, Hσ²A)</div>
+        <p>公式不变，把谱系算出的 A 换成用 SNP 芯片算出的<b>基因组关系矩阵 G</b>。谱系只给“期望”的亲缘（全同胞都是 0.5），基因组能看到实际分到的基因（可能是 0.42，也可能是 0.58）。一步法 ssGBLUP 用 H 矩阵把有、无基因型的个体一起评估。显性、上位模型也都有对应的基因组版本。</p>
+        <dl class="facts">
+          <div><dt>好处</dt><dd>幼畜一出生就有较准的育种值，缩短世代间隔</dd></div>
+          <div><dt>相关方法</dt><dd>SNP-BLUP、BayesA/B/Cπ、BayesR：假设 SNP 效应分布不同</dd></div>
+          <div><dt>注意</dt><dd>G 与 A 尺度要对齐；需要足够大的参考群体</dd></div>
+        </dl>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="lbl tE">第二组 · 拆环境部分 E</span><p class="muted">回答：哪些环境影响会一直跟着某头动物、某一窝或某个母亲。</p></div>
+    <div class="models">
+
+      <article class="model">
+        <div class="model-head"><h3>重复力模型</h3><span class="en">Repeatability model</span><div class="chips"><span class="chip tA">A</span><span class="chip tE">E: pe</span></div></div>
+        <div class="m-eq">y = Xb + Za + Wpe + e　　pe ~ N(0, Iσ²pe)</div>
+        <p>同一头母猪生好几窝时，它的记录之间除了基因相同，还有一份一直跟着它的“底子”，这就是<b>永久环境效应 pe</b>，不能遗传。在全面模型里，D 和 I 也会被吸收进 pe，因为它们同样在个体内保持不变。</p>
+        <dl class="facts">
+          <div><dt>新增方差</dt><dd>σ²pe</dd></div>
+          <div><dt>重复力</dt><dd><span class="mono">r = (σ²A + σ²pe) / σ²P</span>，总是 ≥ h²</dd></div>
+          <div><dt>典型性状</dt><dd>窝产仔数、各胎次产奶量、多次称重</dd></div>
+          <div><dt>关键假设</dt><dd>各次记录是同一个性状，遗传相关为 1</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>共同环境（窝效应）模型</h3><span class="en">Common environment / litter model</span><div class="chips"><span class="chip tA">A</span><span class="chip tE">E: c</span></div></div>
+        <div class="m-eq">y = Xb + Za + Wc + e　　c ~ N(0, Iσ²c)</div>
+        <p>同一窝仔猪共享子宫环境、同一个妈妈的奶水和同一个栏，会比遗传关系预期的更相似。不把窝效应拿出来，全同胞间的这份相似会被误算成遗传，h² 就会偏高。</p>
+        <dl class="facts">
+          <div><dt>新增方差</dt><dd>σ²c，c² = σ²c / σ²P</dd></div>
+          <div><dt>注意</dt><dd>窝效应与显性效应都让全同胞相似，二者容易混杂，需要半同胞或交叉寄养数据来区分</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>母体效应模型</h3><span class="en">Maternal effects model</span><div class="chips"><span class="chip tA">A</span><span class="chip tA">母体 A</span><span class="chip tE">E: c</span></div></div>
+        <div class="m-eq">y = Xb + Z₁a + Z₂m + Wc + e　　Var[a; m] = [σ²A σAM; σAM σ²M] ⊗ A</div>
+        <p>仔猪断奶重不只取决于自己的基因，还取决于妈妈的奶水和带仔能力。妈妈的这种能力本身也可遗传，叫<b>母体遗传效应 m</b>；不可遗传的部分是<b>母体永久环境 c</b>。从仔猪角度看，m 属于“环境”；从妈妈角度看，它是一份育种值。</p>
+        <dl class="facts">
+          <div><dt>新增方差</dt><dd>σ²M、σAM（直接与母体的协方差，常为负）、σ²c</dd></div>
+          <div><dt>总遗传力</dt><dd><span class="mono">h²T = (σ²A + 0.5σ²M + 1.5σAM) / σ²P</span></dd></div>
+          <div><dt>典型性状</dt><dd>初生重、断奶重、羔羊早期生长</dd></div>
+          <div><dt>注意</dt><dd>要有母亲自身的记录，否则 σAM 估不准</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>基因型×环境互作模型</h3><span class="en">G×E · reaction norm</span><div class="chips"><span class="chip tA">A</span><span class="chip tE">E</span><span class="chip tI">A×E</span></div></div>
+        <div class="m-eq">多环境：把“环境1的日增重”“环境2的日增重”当两个性状，估遗传相关 rg<br>反应规范：y = Xb + a₀ + a₁·x + e　　Var[a₀; a₁] = K ⊗ A</div>
+        <p>好基因在好环境里好，换到热应激猪场就不一定。<b>多环境模型</b>看两个环境里的育种值排名是否一致，rg 低于约 0.8 就说明存在明显的重排。<b>反应规范模型</b>把环境量化成连续变量 x（如温湿指数 THI、猪群平均水平），每头动物有截距 a₀（平均水平）和斜率 a₁（对环境的敏感度）。</p>
+        <dl class="facts">
+          <div><dt>新增参数</dt><dd>环境间遗传相关，或截距与斜率的协方差矩阵 K</dd></div>
+          <div><dt>用途</dt><dd>为不同环境挑适合的种猪；选育耐热、抗逆、稳健的个体</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>社会遗传效应模型</h3><span class="en">Indirect genetic effects</span><div class="chips"><span class="chip tA">直接 A</span><span class="chip tE">同伴 A</span></div></div>
+        <div class="m-eq">y = Xb + Z_D a_D + Z_S a_S + Wg + e　　Var[a_D; a_S] = [σ²AD σADS; σADS σ²AS] ⊗ A</div>
+        <p>群养时，一头猪的生长还受同栏猪的影响：爱咬尾、爱抢食的同伴会拖累大家。<b>a_S</b> 是一头猪“对同伴”的遗传效应，对同伴来说是一种环境，但源头是这头猪的基因，所以可以选择。</p>
+        <dl class="facts">
+          <div><dt>总育种值</dt><dd><span class="mono">TBV = a_D + (n − 1)·a_S</span>，n 为每栏头数</dd></div>
+          <div><dt>典型性状</dt><dd>群养猪日增重、咬尾、鸡的啄羽与存活</dd></div>
+        </dl>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="lbl tP">第三组 · 适配数据形态 P</span><p class="muted">回答：表型是多个性状、一条曲线、几个类别，还是来自杂交群体。</p></div>
+    <div class="models">
+
+      <article class="model">
+        <div class="model-head"><h3>多性状动物模型</h3><span class="en">Multi-trait model</span><div class="chips"><span class="chip tA">A 矩阵化</span></div></div>
+        <div class="m-eq">Var(a) = G₀ ⊗ A,　Var(e) = R₀ ⊗ I</div>
+        <p>同时分析几个性状。G₀ 是性状间的<b>遗传协方差矩阵</b>，R₀ 是残差协方差矩阵，⊗ 是克罗内克积，把“性状间关系”和“个体间关系”拼在一起。</p>
+        <dl class="facts">
+          <div><dt>新增参数</dt><dd>遗传协方差、残差协方差，可算遗传相关 rg</dd></div>
+          <div><dt>好处</dt><dd>低遗传力性状借助高相关性状提高准确性；能校正选择偏差；是构建选择指数的基础</dd></div>
+          <div><dt>典型场景</dt><dd>生长与胴体性状联合；多国奶牛联合评估</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>随机回归模型</h3><span class="en">Random regression model</span><div class="chips"><span class="chip tA">A 随时间变</span><span class="chip tE">pe 随时间变</span></div></div>
+        <div class="m-eq">yₜ = Xb + Σₖ φₖ(t)·aₖ + Σₖ φₖ(t)·peₖ + e</div>
+        <p>测定日产奶量、生长曲线这类“一条线”的性状，每头动物不再是一个育种值，而是一组回归系数，描述它整条曲线相对群体的偏离。φₖ(t) 常用勒让德多项式或样条。</p>
+        <dl class="facts">
+          <div><dt>新增参数</dt><dd>回归系数的协方差矩阵 K（阶数决定曲线的灵活度）</dd></div>
+          <div><dt>好处</dt><dd>能估计任意时点的育种值和持续力，不用先折算成标准期</dd></div>
+          <div><dt>典型性状</dt><dd>测定日产奶量、体重曲线、采食量</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>阈模型</h3><span class="en">Threshold (liability) model</span><div class="chips"><span class="chip tA">A</span><span class="chip te">潜在尺度</span></div></div>
+        <div class="m-eq">l = Xb + Za + e,　e ~ N(0, 1)　　观测类别 = k，当 tₖ₋₁ &lt; l ≤ tₖ</div>
+        <p>难产、患病与否、乳头数等级这类“分类别”的性状不是正态的。阈模型假设背后有一个看不见的连续“易感性” l，超过阈值 t 就表现出某一类。模型在 l 的尺度上照常做动物模型。</p>
+        <dl class="facts">
+          <div><dt>注意</dt><dd>残差方差固定为 1；常用贝叶斯（吉布斯抽样）或 probit 链接求解</dd></div>
+          <div><dt>典型性状</dt><dd>难产、乳房炎、仔猪存活、肢蹄评分</dd></div>
+        </dl>
+      </article>
+
+      <article class="model">
+        <div class="model-head"><h3>杂交与多品种模型</h3><span class="en">Crossbred / breed-of-origin model</span><div class="chips"><span class="chip tA">A 分品种</span><span class="chip tD">杂种优势</span></div></div>
+        <div class="m-eq">y = Xb + h·het + Z_A a_A + Z_B a_B + e　　rpc = 纯种与杂种表现间的遗传相关</div>
+        <p>商品猪多是杜×长×大三元杂交。纯种核心群里的选择要最终体现在杂种后代身上。模型把杂种优势作为与品种杂合度成比例的固定效应 het，并按等位基因的品种来源（BOA）分别估计各品种的加性效应。</p>
+        <dl class="facts">
+          <div><dt>关键参数</dt><dd>rpc 越低，越需要用杂种的表型来选纯种</dd></div>
+          <div><dt>用途</dt><dd>对应选配路径：挑选最佳杂交组合与配套系</dd></div>
+        </dl>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="tag">06</span>一张表横向比较</h2>
+  <p class="muted" style="font-size:.9rem">● 单独估计　○ 并进残差或其他项　— 不涉及</p>
+  <div class="cmp">
+    <table>
+      <thead><tr><th>模型</th><th class="tA">A</th><th class="tD">D</th><th class="tI">I</th><th class="tE">E 随机</th><th>主要新增参数</th><th>适合的数据</th></tr></thead>
+      <tbody>
+        <tr class="sep"><td colspan="7">拆遗传</td></tr>
+        <tr><td>公畜模型</td><td class="dots tA">◐</td><td class="dots">○</td><td class="dots">○</td><td class="dots">○</td><td>σ²ₛ</td><td>大量半同胞后代</td></tr>
+        <tr><td>单性状动物模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots">○</td><td>σ²A</td><td>每头一条记录</td></tr>
+        <tr><td>加性–显性模型</td><td class="dots tA">●</td><td class="dots tD">●</td><td class="dots">○</td><td class="dots">○</td><td>σ²D、近交衰退</td><td>大量全同胞或 SNP</td></tr>
+        <tr><td>上位效应模型</td><td class="dots tA">●</td><td class="dots tD">●</td><td class="dots tI">●</td><td class="dots">○</td><td>σ²AA、σ²AD、σ²DD</td><td>超大基因组数据</td></tr>
+        <tr><td>GBLUP / ssGBLUP</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots">○</td><td>A 换成 G 或 H</td><td>有 SNP 基因型</td></tr>
+        <tr class="sep"><td colspan="7">拆环境</td></tr>
+        <tr><td>重复力模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>σ²pe</td><td>一畜多条同性状记录</td></tr>
+        <tr><td>共同环境模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>σ²c 窝效应</td><td>全同胞成窝记录</td></tr>
+        <tr><td>母体效应模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>σ²M、σAM、σ²c</td><td>早期生长性状</td></tr>
+        <tr><td>G×E 模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>环境间 rg 或 K</td><td>多场、多气候数据</td></tr>
+        <tr><td>社会遗传效应模型</td><td class="dots tA">●●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>σ²AS、σADS</td><td>群养、有栏位信息</td></tr>
+        <tr class="sep"><td colspan="7">适配数据</td></tr>
+        <tr><td>多性状模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots">可选</td><td>G₀、R₀</td><td>多个相关性状</td></tr>
+        <tr><td>随机回归模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots tE">●</td><td>K 矩阵</td><td>纵向重复测定</td></tr>
+        <tr><td>阈模型</td><td class="dots tA">●</td><td class="dots">○</td><td class="dots">○</td><td class="dots">可选</td><td>阈值 t</td><td>类别性状</td></tr>
+        <tr><td>杂交与多品种模型</td><td class="dots tA">●</td><td class="dots tD">◐</td><td class="dots">○</td><td class="dots">可选</td><td>杂种优势、rpc</td><td>纯种 + 杂种数据</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:.88rem">◐ 部分估计：公畜模型只估到 ¼σ²A；杂交模型把显性带来的杂种优势当作固定效应处理。●● 表示估计两套加性效应。</p>
+</section>
+
+<section>
+  <h2><span class="tag">07</span>怎么选</h2>
+  <div class="guide">
+    <div><span>每头动物只有一条记录，只想选种</span><span>单性状动物模型</span></div>
+    <div><span>性状遗传力低、杂种优势或近交衰退明显</span><span>加性–显性模型</span></div>
+    <div><span>要挑最佳配对组合，且有大规模基因组数据</span><span>上位效应模型</span></div>
+    <div><span>同一头动物有多胎、多次记录</span><span>重复力模型</span></div>
+    <div><span>同窝个体明显更相似</span><span>共同环境模型</span></div>
+    <div><span>性状受母亲哺育能力影响</span><span>母体效应模型</span></div>
+    <div><span>种猪要推广到气候、管理差异大的场</span><span>G×E 模型</span></div>
+    <div><span>群养，个体之间相互影响</span><span>社会遗传效应模型</span></div>
+    <div><span>想同时评几个相关性状</span><span>多性状模型</span></div>
+    <div><span>记录是随时间变化的一条曲线</span><span>随机回归模型</span></div>
+    <div><span>性状是“是/否”或等级</span><span>阈模型</span></div>
+    <div><span>选纯种是为了提高商品杂种</span><span>杂交与多品种模型</span></div>
+    <div><span>部分个体有 SNP 芯片数据</span><span>以上任一模型的基因组 / 一步法版本</span></div>
+  </div>
+  <p class="muted">实际工作中常组合使用，比如“多性状 + 母体效应 + 一步法基因组”。但每多一项都要多估方差组分，数据量和结构跟不上时，额外的项会估不准，甚至让模型不收敛。</p>
+</section>
+
+<section>
+  <h2><span class="tag">08</span>和线性代数的联系</h2>
+  <p>所有这些模型最终都要解 Henderson 混合模型方程组（MME）。以基本动物模型为例：</p>
+  <div class="formula">
+    <div class="eq" style="font-size:clamp(.95rem,3vw,1.25rem)">⎡X′X　　X′Z　　　　⎤⎡b̂⎤　⎡X′y⎤<br>⎣Z′X　　Z′Z + A⁻¹λ⎦⎣â⎦ = ⎣Z′y⎦</div>
+    <p style="text-align:center" class="muted">λ = σ²e / σ²A = (1 − h²) / h²</p>
+  </div>
+  <p>每加一个随机效应，系数矩阵就多一行一列的“块”，块的对角上加上它的协方差矩阵的逆乘以方差比：显性加 <span class="mono">D⁻¹·σ²e/σ²D</span>，永久环境加 <span class="mono">I·σ²e/σ²pe</span>，上位加 <span class="mono">(A⊙A)⁻¹·σ²e/σ²AA</span>。</p>
+  <ul class="assume">
+    <li><span class="mono">稀疏的逆</span>A⁻¹ 可以按谱系直接写出且非常稀疏，这让百万头动物的评估成为可能；D⁻¹ 和哈达玛积矩阵的逆却是稠密的，这是非加性模型难算的主要原因。</li>
+    <li><span class="mono">λ 是收缩力度</span>遗传力越低 λ 越大，估计越向 0 收缩。</li>
+    <li><span class="mono">⊗ 克罗内克积</span>把多性状、母体、社会效应的协方差结构组装成大矩阵。</li>
+    <li><span class="mono">⊙ 哈达玛积</span>两个半正定矩阵的哈达玛积仍是半正定（Schur 积定理），所以 A⊙A 能当协方差矩阵用。</li>
+  </ul>
+</section>
+
+<footer>符号约定：σ² 为方差，σ 为协方差；⊗ 为克罗内克积，⊙ 为哈达玛积；A 为谱系加性关系矩阵，D 为显性关系矩阵，G 为基因组关系矩阵，H 为谱系与基因组合并的关系矩阵。示例数值为教学用的简化情形。</footer>
+</div>
+
+<script>
+(function(){
+  function $(id){return document.getElementById(id)}
+  var keys=['A','D','I','E','e'];
+  function upd1(){
+    var v={},sum=0;
+    keys.forEach(function(k){v[k]=parseFloat($('v'+k).value);sum+=v[k];$('o'+k).textContent=v[k];$('s'+k).style.flexGrow=v[k];$('s'+k).textContent=v[k]>=6?k:'';});
+    if(sum<=0){sum=1}
+    var h2=v.A/sum,H2=(v.A+v.D+v.I)/sum,na=(v.D+v.I)/sum,e=v.E/sum;
+    $('rh2').textContent=h2.toFixed(2);$('rH2').textContent=H2.toFixed(2);
+    $('rNA').textContent=na.toFixed(2);$('rE').textContent=e.toFixed(2);
+    var t;
+    if(h2>=0.3&&h2>=na){t='加性方差占主导：通过选种就能取得稳定的遗传进展，单性状或多性状动物模型基本够用。'}
+    else if(na>h2){t='非加性方差比加性还大：单靠选种进展慢，值得用加性–显性模型并重视杂交、选配，像繁殖性状那样利用杂种优势。'}
+    else if(e>=0.3){t='可调控的环境方差很大：改善营养和饲养环境见效快，同时应检查是否存在 G×E。'}
+    else{t='遗传力偏低，表型里噪声多：需要更多亲属记录、多性状信息或基因组数据来提高育种值准确性。'}
+    $('advice').textContent='h² = '+h2.toFixed(2)+'，H² = '+H2.toFixed(2)+'。'+t;
+  }
+  keys.forEach(function(k){$('v'+k).addEventListener('input',upd1)});upd1();
+
+  function upd2(){
+    var h=parseFloat($('h2').value),d=parseFloat($('dev').value),a=h*d,c=a/2,max=200;
+    $('h2o').textContent=h.toFixed(2);$('devo').textContent=d;
+    $('fp').style.width=(d/max*100)+'%';$('fa').style.width=(a/max*100)+'%';$('fc').style.width=(c/max*100)+'%';
+    $('vp').textContent=d;$('va').textContent=Math.round(a);$('vc').textContent=Math.round(c);
+    $('msg').textContent='h² = '+h.toFixed(2)+' 时，'+d+' g/天 的优势里约 '+Math.round(a)+' g/天 被认为来自基因；后代只从它这里拿到一半，约 '+Math.round(c)+' g/天。';
+  }
+  $('h2').addEventListener('input',upd2);$('dev').addEventListener('input',upd2);upd2();
+})();
+</script>
+
+</body>
+</html>
