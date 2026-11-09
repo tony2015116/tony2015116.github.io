@@ -20,7 +20,7 @@
   items:
     - name: "mintyr"
       repo: "tony2015116/mintyr"
-      description: "基于 data.table 的分组 / 嵌套数据处理工具包：批量导入 Excel / CSV（含多行表头），按性状 × 分组重塑与嵌套，组内可复现的（分层）k 折交叉验证，生成可直接写进报告的描述统计，并为 HIBLUP、DMU、ASReml-R 导出输入文件。"
+      description: "基于 data.table 的分组数据处理：批量导入、分组重塑与交叉验证，并为 HIBLUP、DMU、ASReml-R 导出输入文件。"
       language: "R"
       year: "2024 – 至今"
       links:
@@ -39,7 +39,7 @@
         }
     - name: "tidypptsda"
       repo: "tony2015116/tidypptsda"
-      description: "种猪测定站（NEDAP、FIRE）采食记录的清洗与分析：按 Casey 等（2005）16 条标准识别饲喂器错误，稳健回归 + LOESS 清洗体重，Jiao 等（2014）线性混合模型校正采食量，补齐日体重与日采食后计算日增重（ADG）、日采食量（ADFI）和料肉比（FCR）；每头猪附可信度标记，删除的记录都写明原因。附测定站进苗规划工具：比较全进全出、衔接进苗、分组滚动（周批次）三种方案的每批进苗与上测头数、年测定头数、测定站利用率和排程，可保存参数、导出 PDF 和时间线图片。"
+      description: "种猪测定站（NEDAP、FIRE）采食数据的清洗与分析，算出日增重、日采食量和料肉比，删掉的每条记录都写明原因。"
       language: "R"
       year: "2025 – 至今"
       links:
@@ -58,7 +58,7 @@
         }
     - name: "tidypptsdm"
       repo: "tony2015116/tidypptsdm"
-      description: "种猪测定站（NEDAP、FIRE）测定期间的每日监控，是 tidypptsda 的日常搭档：按测定站、栋、猪和小时汇总最近几天的数据，列出最后一天的警报（测定站无访问、耳标读不到、采食量下降、猪不来吃料或吃得太少），生成可逐站浏览的离线 HTML 报告和带色阶的 Excel 工作簿，并可设为每天定时运行。"
+      description: "测定站每日监控：汇总最近几天的数据，列出当天警报，生成 HTML 报告和 Excel，可每天定时运行。"
       language: "R"
       year: "2026 – 至今"
       links:
@@ -77,7 +77,7 @@
         }
     - name: "pigheatmap"
       repo: "tony2015116/pigheatmap"
-      description: "猪场生产数据的性能热图：按胎次 × 月份（或场区、品系）汇总产仔数等指标，画成标注数值和窝数的热图；可按样本量调节格子透明度，一眼看出哪些结果不可靠；胎次、背膘厚、首配日龄等有经验最优区间的性状用分段色阶标出好坏区间；中文列名和标签开箱即用。"
+      description: "猪场生产数据的性能热图，按胎次 × 月份等维度汇总；样本少的格子自动变淡，一眼看出哪些结果可靠。"
       language: "R"
       year: "2026 – 至今"
       links:
@@ -100,7 +100,7 @@
   items:
     - name: "tidypptsdm（Python）"
       repo: "tony2015116/tidypptsdm-py"
-      description: "R 包 tidypptsdm 的 Python 版本，计算结果与 R 版逐表一致：读取 NEDAP / FIRE 测定站导出文件，生成每日汇总表、警报、中文 HTML 报告和 Excel 工作簿；可在 Python 中调用，也可用命令行 tidypptsdm 运行或设为每天定时任务（Windows 任务计划程序或 crontab）。"
+      description: "tidypptsdm 的 Python 版本，结果与 R 版逐表一致，可在 Python 或命令行中运行。"
       language: "Python"
       year: "2026 – 至今"
       links:
@@ -123,7 +123,7 @@
   items:
     - name: "tidypptsdm 测定站监控（Windows 桌面程序）"
       repo: "tony2015116/tidypptsdm-py"
-      description: "给测定站日常管理人员用的 Windows 桌面程序，不需要安装 R 或 Python：下载解压后双击 tidypptsdm.exe，选择导出文件夹和结果文件夹，点“运行监控”即生成中文报告（首页列出今日待办的测定站和猪）和 Excel 工作簿；点“设为每天定时”后每天自动运行。"
+      description: "给测定站管理人员用的桌面程序，不用安装 R 或 Python，双击即可生成每日报告，也能设为每天定时运行。"
       language: "Windows"
       year: "2026"
       links:
@@ -135,7 +135,7 @@
           url: "https://github.com/tony2015116/tidypptsdm-py/releases"
     - name: "影子科技数据下载器（Windows 桌面程序）"
       repo: "tony2015116/yingzi-downloader"
-      description: "影子科技（扬翔）养殖平台的数据批量下载工具：一个窗口完成母猪综合查询、猪只转移、母猪档案、遗传性状查询、育种值查询、系谱查询六种下载，自动登录、筛选、导出并按条件命名；超过导出上限自动按日期拆分，国标编码超过 400 个自动分批合并；支持记住登录、后台运行和每天定时下载。"
+      description: "扬翔养殖平台的数据批量下载工具：六类报表一个窗口导出，自动拆分、合并，支持每天定时下载。"
       language: "Python"
       year: "2026"
       links:
@@ -147,7 +147,7 @@
           url: "https://github.com/tony2015116/yingzi-downloader/releases"
     - name: "FPF 数据处理（Windows 桌面程序）"
       repo: "tony2015116/fpf-data-processor"
-      description: "影子科技数据下载器的下游工具：把下载的母猪综合查询、猪只转移、母猪档案 xlsx 批量读取合并、清洗，判定品种和品系（规则可在界面里编辑、导入导出），导出 R 可直接读取的 rds 或 csv；结果与原 R 脚本逐格比对一致。单个 exe，有图形界面，也可用命令行或从 R 调用。"
+      description: "数据下载器的下游工具：合并清洗母猪数据，判定品种和品系，导出 R 可直接读取的文件。"
       language: "Python"
       year: "2026"
       links:
@@ -158,37 +158,24 @@
         - title: "所有版本"
           url: "https://github.com/tony2015116/fpf-data-processor/releases"
 
-- category: "分析流程"
-  key: "pipelines"
-  items:
-    - name: "sample-pipeline"
-      repo: "yourname/sample-pipeline"
-      description: "论文《示例论文标题二》的全部分析代码与示例数据，可以从原始数据复现文中的所有图表。"
-      language: "Python"
-      year: "2026"
-
 - category: "小工具"
   key: "tools"
   items:
     - name: "猪场批次生产周转模拟"
       url: "/files/tools/pig-batch-production.html"
       url_title: "打开模拟"
-      description: "从妊娠期、哺乳期和断奶至配种间隔出发推导单周批到五周批、18 天与 36 天批的繁殖周期、母猪群数和配种舍 / 妊娠舍 / 产房 / 保育 / 育肥的全进全出单元数；用图标动画演示猪群周转、返情并批、后备补充与淘汰，并给出栏位参数、优劣势对比、每日用工曲线、可导出的全年作业日历、自定义批次检验、按现有栋舍反推和转批过渡方案。"
+      description: "从繁殖参数推算各种批次方案需要的母猪群数和栋舍单元数，用动画演示猪群怎么周转。"
       language: "HTML"
       year: "2026"
     - name: "测定站进苗规划"
       url: "/files/tools/station-planner.html"
       url_title: "打开规划"
-      description: "按测定站台数和每台头数规划进苗：比较全进全出、衔接进苗、分组滚动（母猪场单周批到五周批）三种方案的每批进苗与上测头数、年测定头数、测定站时间利用率、上测体重和安全裕度；分组滚动按测定站组的空闲时间自动排程，接不住的批次自动跳过并提示需要几组。给出按批次 / 按测定站的时间线、存栏图和可复制到 Excel 的排程表，可保存多套参数、导出 PDF 和时间线图片。"
+      description: "按测定站数量规划进苗，比较三种进苗方案的年测定头数和测定站利用率，并自动排程。"
       language: "HTML"
       year: "2026"
       links:
         - title: "tidypptsda"
           url: "https://tony2015116.github.io/tidypptsda/"
-    - name: "sample-scripts"
-      repo: "yourname/sample-scripts"
-      description: "日常处理数据时积累的一些脚本，例如批量转换格式、整理文件名。"
-      language: "Shell"
 
 - category: "教程"
   key: "tutorials"
@@ -196,13 +183,13 @@
     - name: "看得见的线性代数：从向量到动物模型"
       url: "/files/tutorials/linear-algebra-animal-model.html"
       url_title: "打开教程"
-      description: "用几何图形和可拖动的交互演示讲动物模型需要的线性代数：向量、矩阵变换、乘法、转置、行列式、逆与方程组、秩与广义逆、方差协方差椭圆与正定、亲缘矩阵 A 与 A⁻¹，再从模型假设推导 Var(y) = ZAZ′σₐ² + Iσₑ²、BLUP、PEV 与可靠性；以 Mrode 第 3 章 8 头犊牛为例，浏览器内实时求解混合模型方程。"
+      description: "用可拖动的图形讲动物模型用到的线性代数，最后在浏览器里亲手解一遍混合模型方程。"
       language: "HTML"
       year: "2026"
     - name: "育种动物模型图鉴：从 P = A + D + I + E + e 说起"
       url: "/files/tutorials/animal-models.html"
       url_title: "打开教程"
-      description: "以表型的完整拆分 P = A + D + I + E + e 为主线，通俗讲解加性、显性、上位与环境效应，以及对应的选种、选配和环境调控思路；拖动方差滑块可以看 h²、H² 如何变化。内容包括加性关系矩阵 A、显性关系矩阵 D 和亲属相似度对照表，并按“拆遗传 / 拆环境 / 适配数据”分组介绍 14 种模型：公畜模型、动物模型、加性–显性模型、上位效应模型、GBLUP / ssGBLUP、重复力模型、窝效应模型、母体效应模型、G×E 反应规范模型、社会遗传效应模型、多性状模型、随机回归模型、阈模型和杂交模型。最后附横向对比表和选型指南。"
+      description: "从 P = A + D + I + E + e 出发，图解 14 种常用育种模型，以及各自适合什么样的数据。"
       language: "HTML"
       year: "2026"
 
@@ -212,7 +199,7 @@
     - name: "HIBLUP 速查表"
       url: "/files/cheatsheets/hiblup.html"
       url_title: "打开速查表"
-      description: "HIBLUP（天权）使用方法与结果解读：输入文件、PBLUP / GBLUP / ssGBLUP 命令、方差组分与遗传力、遗传相关、SNP 效应、选配与 LDSC / SBLUP，附结果文件逐列解读和交叉验证。"
+      description: "HIBLUP（天权）的常用命令，以及结果文件的逐列解读。"
       language: "HIBLUP"
       year: "2026"
       links:
@@ -221,7 +208,7 @@
     - name: "ASReml-R 4.2 速查表"
       url: "/files/cheatsheets/asreml-r.html"
       url_title: "打开速查表"
-      description: "ASReml-R 4.2 与 ASRgenomics：v3→v4 迁移、模型公式与方差结构、试验设计模型库、动物模型与多性状、G×E、GBLUP / ssGBLUP、ASRgwas，附 vpredict() 代码生成器和勘误说明。"
+      description: "ASReml-R 4.2 的模型写法、方差结构和动物模型常用写法，附 v3 到 v4 的迁移说明。"
       language: "R"
       year: "2026"
       links:
@@ -230,7 +217,7 @@
     - name: "rMVP 速查表"
       url: "/files/cheatsheets/rmvp.html"
       url_title: "打开速查表"
-      description: "rMVP 全基因组关联分析：数据转换、MVP() 参数、GLM / MLM / FarmCPU、亲缘矩阵与主成分、曼哈顿图 / QQ 图配方、结果解读与排错。"
+      description: "rMVP 全基因组关联分析的参数设置、模型选择、作图和常见报错处理。"
       language: "R"
       year: "2026"
       links:
