@@ -28,11 +28,13 @@ redirect_from:
 
 ## 经历
 
+<!-- 经历在 _data/experience.yml 中编辑；教育和工作合在一起，按开始时间自动排序，最新的在最上面 -->
+{% assign all_exp = "" | split: "" %}
+{% if site.data.experience.education %}{% assign all_exp = all_exp | concat: site.data.experience.education %}{% endif %}
+{% if site.data.experience.work %}{% assign all_exp = all_exp | concat: site.data.experience.work %}{% endif %}
+{% assign all_exp = all_exp | sort: "time" | reverse %}
 <ul class="plain-list">
-{% for e in site.data.experience.education %}
-  <li><span class="when">{{ e.time }}</span><span class="what">{{ e.what }}，{{ e.where }}{% if e.note %}<span class="sub">{{ e.note }}</span>{% endif %}</span></li>
-{% endfor %}
-{% for e in site.data.experience.work %}
+{% for e in all_exp %}
   <li><span class="when">{{ e.time }}</span><span class="what">{{ e.what }}，{{ e.where }}{% if e.note %}<span class="sub">{{ e.note }}</span>{% endif %}</span></li>
 {% endfor %}
 </ul>
