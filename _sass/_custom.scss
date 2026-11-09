@@ -13,12 +13,22 @@
   --global-border-color: #e6e6e6;
 }
 html[data-theme="dark"] {
-  --global-text-color: #e2e2e2;
-  --global-text-color-light: #9a9a9a;
+  /* 深色模式：接近黑色的深灰底，柔和的浅灰正文，次要文字保持足够对比 */
+  --global-bg-color: #1c1d1f;
+  --global-footer-bg-color: #1c1d1f;
+  --global-text-color: #dcdcdc;
+  --global-text-color-light: #9c9c9c;
   --global-link-color: #8fb4d9;
   --global-link-color-hover: #b8d2ec;
   --global-link-color-visited: #a3b6cc;
-  --global-border-color: #3a3a3a;
+  --global-border-color: #34363a;
+  --global-dark-border-color: #2a2c2f;
+  --global-code-background-color: #26282b;
+  --global-code-text-color: #dcdcdc;
+  --global-masthead-link-color: #dcdcdc;
+  --global-masthead-link-color-hover: #ffffff;
+  --global-thead-color: #26282b;
+  --global-fig-caption-color: #9c9c9c;
 }
 
 /* 正文：舒适的行距，适合中文长段落阅读 */
