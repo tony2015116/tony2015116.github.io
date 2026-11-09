@@ -37,7 +37,7 @@ author:
   pronouns         : # example: "she/her"  
   bio              : "硕士 · 动物遗传育种与繁殖"   # TODO: 一句话简介
   location         : "中国 · 武汉"   # TODO
-  employer         : "某某大学 某某学院"   # TODO
+  employer         : "华中农业大学"   # TODO
   uri              : # URL
   email            : "tony2015116@163.com"   # TODO 
 
@@ -60,7 +60,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "yourname"   # TODO: GitHub 用户名
+  github           : "tony2015116"   # TODO: GitHub 用户名
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
