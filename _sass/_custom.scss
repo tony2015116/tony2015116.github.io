@@ -194,3 +194,15 @@ html { font-size: 14px; }
   .work-items li { flex-direction: column; gap: 0.1em; }
   .work-items .y { flex: none; }
 }
+
+/* ---------- 页脚：跟在内容后面，不再固定在窗口底部 ---------- */
+.page__footer {
+  position: relative !important;
+  bottom: auto !important;
+  margin-top: 4em;
+  background: transparent;
+  border-top: 1px solid var(--global-border-color);
+  animation: none;
+}
+/* 模板脚本会给 body 加上与页脚等高的底部留白，页脚不固定后不再需要 */
+body { margin-bottom: 0 !important; }
