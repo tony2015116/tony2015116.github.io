@@ -242,19 +242,19 @@ body {
 }
 
 /* 链接下划线：统一用 text-decoration，<a> 和“引用/复制”按钮对齐到同一位置 */
-.page__content .pub-links a,
-.page__content .pub-links button,
-.page__content .cite a,
-.page__content .cite button {
+.pub-links a,
+.pub-links button,
+.cite a,
+.cite button {
   border-bottom: none !important;
-  text-decoration: underline;
+  text-decoration: underline !important;
   text-decoration-color: var(--global-border-color);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.3em;
 }
-.page__content .pub-links a:hover,
-.page__content .pub-links button:hover,
-.page__content .cite a:hover,
-.page__content .cite button:hover {
+.pub-links a:hover,
+.pub-links button:hover,
+.cite a:hover,
+.cite button:hover {
   text-decoration-color: currentColor;
 }
