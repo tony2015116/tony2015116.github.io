@@ -3,13 +3,16 @@
    想改样式优先改这里，不要动模板原文件，方便以后同步上游更新
    ========================================================================== */
 
-/* 配色：墨色正文 + 沉稳的蓝色链接，不用鲜艳色 */
+/* 配色：墨色正文 + 一个低饱和的墨绿强调色，只用在链接、当前标签和少量点缀上 */
 :root {
+  --accent: #2f6b4f;
+  --accent-hover: #1f4a36;
+  --accent-soft: rgba(47, 107, 79, 0.1);
   --global-text-color: #2b2b2b;
-  --global-text-color-light: #777;
-  --global-link-color: #2c5a85;
-  --global-link-color-hover: #1a3a57;
-  --global-link-color-visited: #4a5f78;
+  --global-text-color-light: #6e6e6e;
+  --global-link-color: var(--accent);
+  --global-link-color-hover: var(--accent-hover);
+  --global-link-color-visited: var(--accent);
   --global-border-color: #e6e6e6;
 }
 html[data-theme="dark"] {
@@ -18,9 +21,12 @@ html[data-theme="dark"] {
   --global-footer-bg-color: #1c1d1f;
   --global-text-color: #dcdcdc;
   --global-text-color-light: #9c9c9c;
-  --global-link-color: #8fb4d9;
-  --global-link-color-hover: #b8d2ec;
-  --global-link-color-visited: #a3b6cc;
+  --accent: #7fc3a0;
+  --accent-hover: #a8dcc0;
+  --accent-soft: rgba(127, 195, 160, 0.14);
+  --global-link-color: var(--accent);
+  --global-link-color-hover: var(--accent-hover);
+  --global-link-color-visited: var(--accent);
   --global-border-color: #34363a;
   --global-dark-border-color: #2a2c2f;
   --global-code-background-color: #26282b;
@@ -176,30 +182,6 @@ html { font-size: 14px; }
   .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 1em; overflow-wrap: anywhere; }
 }
 
-/* 项目引用信息：“引用”和其他链接放在同一行，点开才显示 */
-.project-list .cite-toggle,
-.project-list .cite-copy {
-  font: inherit;
-  color: var(--global-text-color-light);
-  background: none; border: none; padding: 0; margin: 0;
-  border-radius: 0;
-  cursor: pointer;
-  line-height: inherit;
-  vertical-align: baseline;
-}
-.project-list .cite-toggle:hover, .project-list .cite-copy:hover,
-.project-list .cite-toggle:focus-visible, .project-list .cite-copy:focus-visible,
-.project-list .cite-toggle[aria-expanded="true"] { color: var(--global-text-color); }
-.project-list .cite {
-  margin: 0.35em 0 0;
-  font-size: 0.85em;
-  line-height: 1.6;
-  color: var(--global-text-color-light);
-  .cite-text { overflow-wrap: anywhere; margin-right: 0.6em; }
-  .cite-copy { margin-right: 0.8em; }
-}
-.project-list .cite[hidden], .project-list .cite-bib[hidden] { display: none !important; }
-
 @media (max-width: 600px) {
   .work-items li { flex-direction: column; gap: 0.1em; }
   .work-items .y { flex: none; }
@@ -244,8 +226,7 @@ body {
 /* 链接下划线：统一用 text-decoration，<a> 和“引用/复制”按钮对齐到同一位置 */
 .pub-links a,
 .pub-links button,
-.cite a,
-.cite button {
+.cite a {
   border-bottom: none !important;
   text-decoration: underline !important;
   text-decoration-color: var(--global-border-color);
@@ -254,7 +235,158 @@ body {
 }
 .pub-links a:hover,
 .pub-links button:hover,
-.cite a:hover,
-.cite button:hover {
+.cite a:hover {
   text-decoration-color: currentColor;
+}
+
+/* ==========================================================================
+   强调色的少量使用：当前导航、当前分类标签、选中文字
+   ========================================================================== */
+.masthead__menu-item.selected a,
+.masthead__menu-item.selected a:hover { border-bottom-color: var(--accent); }
+.work-tabs a.on { border-bottom-color: var(--accent) !important; }
+::selection { background: var(--accent-soft); }
+
+/* ==========================================================================
+   排版：标题用宋体（衬线），正文保持黑体；中英文之间自动留空
+   ========================================================================== */
+$serif-heading: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
+
+.page__title,
+.page__content h1,
+.page__content h2,
+.page__content h3,
+.archive h1,
+.archive h2,
+.sidebar .author__name {
+  font-family: $serif-heading;
+  font-weight: 700;
+}
+.page__title { letter-spacing: 0.02em; }
+
+/* 浏览器支持时（Chrome 140+、Safari 18.4+）在中文与英文、数字之间自动加细空 */
+body { text-autospace: normal; }
+
+/* 年份、时间列：更小更浅，不和标题抢视线 */
+.work-items .y,
+.plain-list .when { font-size: 0.86em; color: var(--global-text-color-light); opacity: 0.85; }
+.work-items .y { padding-top: 0.15em; }
+
+/* ==========================================================================
+   引用面板：“文本 / BibTeX”切换，一个复制按钮，复制后底部提示
+   ========================================================================== */
+.pub-links .cite-toggle {
+  font: inherit;
+  color: var(--global-text-color-light);
+  background: none; border: none; padding: 0; margin: 0;
+  border-radius: 0;
+  cursor: pointer;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+.pub-links .cite-toggle:hover,
+.pub-links .cite-toggle:focus-visible,
+.pub-links .cite-toggle[aria-expanded="true"] { color: var(--global-text-color); }
+
+.cite {
+  margin: 0.6em 0 0;
+  border: 1px solid var(--global-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.85em;
+  line-height: 1.65;
+}
+.cite[hidden], .cite-pane[hidden] { display: none !important; }
+.cite-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6em;
+  padding: 0.3em 0.4em;
+  border-bottom: 1px solid var(--global-border-color);
+  background: var(--accent-soft);
+}
+.cite-tabs { display: flex; gap: 0.2em; }
+.cite-tab, .cite-copy {
+  font: inherit;
+  margin: 0;
+  min-height: 2.2em;
+  padding: 0 0.85em;
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 1;
+}
+.cite-tab {
+  border: 0;
+  background: transparent;
+  color: var(--global-text-color-light);
+}
+.cite-tab:hover { color: var(--global-text-color); }
+.cite-tab[aria-selected="true"] {
+  background: var(--global-bg-color);
+  color: var(--global-text-color);
+  font-weight: 600;
+}
+.cite-copy {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  border: 1px solid var(--global-border-color);
+  background: var(--global-bg-color);
+  color: var(--global-text-color);
+}
+.cite-copy:hover { border-color: var(--accent); color: var(--accent); }
+.cite-pane {
+  margin: 0 !important;
+  padding: 0.8em 1em;
+  color: var(--global-text-color);
+  overflow-wrap: anywhere;
+}
+pre.cite-pane {
+  font-size: 0.95em;
+  white-space: pre-wrap;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.6em;
+  z-index: 1000;
+  transform: translate(-50%, 0.6em);
+  opacity: 0;
+  pointer-events: none;
+  padding: 0.6em 1.1em;
+  border-radius: 999px;
+  background: var(--global-text-color);
+  color: var(--global-bg-color);
+  font-size: 0.85em;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.copy-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ==========================================================================
+   手机端侧栏：头像、名字、简介收成一行，“联系方式”做成小按钮
+   ========================================================================== */
+@media screen and (max-width: #{$large - 1px}) {
+  .sidebar {
+    margin-bottom: 1.4em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--global-border-color);
+  }
+  .sidebar .author__avatar { width: 52px; vertical-align: middle; }
+  .sidebar .author__avatar img { width: 52px; height: 52px; object-fit: cover; }
+  .sidebar .author__content { vertical-align: middle; padding-left: 12px; padding-right: 12px; line-height: 1.4; }
+  .sidebar .author__name { font-size: 1.05em; }
+  .sidebar .author__bio { font-size: 0.82em; color: var(--global-text-color-light); margin-top: 0.2em; }
+  .sidebar .author__urls-wrapper { text-align: right; }
+  .sidebar .author__urls-wrapper > button {
+    font-size: 0.8em;
+    min-height: 36px;
+    padding: 0 0.9em;
+    border-radius: 999px;
+    border: 1px solid var(--global-border-color);
+    background: transparent;
+    color: var(--global-text-color);
+    white-space: nowrap;
+  }
+  .sidebar .author__urls { text-align: left; min-width: 10em; }
+  .sidebar .author__urls:after { border-color: var(--global-bg-color) transparent; }
 }

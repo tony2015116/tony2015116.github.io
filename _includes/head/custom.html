@@ -5,6 +5,11 @@
 <!-- Support for jQuery, this needs to be first so that it has a chance to load. -->
 <script src="{{ base_path }}/assets/js/lib/jquery-3.7.1.min.js"></script>
 
+<!-- 标题用的宋体（思源宋体 700），按字符分片加载，只下载页面用到的字。
+     先用国内的 npmmirror，失败时回退到 jsDelivr；都失败时退回系统宋体 -->
+<link rel="stylesheet" href="https://registry.npmmirror.com/@fontsource/noto-serif-sc/5.3.1/files/700.css"
+  onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.3.1/700.css'">
+
 <!-- Support for Academicons -->
 <!-- 本地加载，避免国外 CDN 在国内访问缓慢 -->
 <link rel="stylesheet" href="{{ base_path }}/assets/css/academicons.min.css">

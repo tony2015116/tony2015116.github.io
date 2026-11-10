@@ -37,9 +37,15 @@ author_profile: true
       </div>
       {% if p.citation or p.bibtex %}
       <div class="cite" hidden>
-        {% if p.citation %}<span class="cite-text">{{ p.citation }}</span>{% endif %}
-        {% if p.citation %}<button type="button" class="cite-copy" data-copy="{{ p.citation | escape }}">复制</button>{% endif %}
-        {% if p.bibtex %}<button type="button" class="cite-copy" data-copy-bibtex="1">复制 BibTeX</button><pre class="cite-bib" hidden>{{ p.bibtex | strip | escape }}</pre>{% endif %}
+        <div class="cite-bar">
+          <div class="cite-tabs" role="tablist" aria-label="引用格式">
+            {% if p.citation %}<button type="button" role="tab" class="cite-tab" data-fmt="text" aria-selected="true">文本</button>{% endif %}
+            {% if p.bibtex %}<button type="button" role="tab" class="cite-tab" data-fmt="bib" aria-selected="{% if p.citation %}false{% else %}true{% endif %}">BibTeX</button>{% endif %}
+          </div>
+          <button type="button" class="cite-copy"><i class="far fa-copy" aria-hidden="true"></i>复制</button>
+        </div>
+        {% if p.citation %}<p class="cite-pane" data-fmt="text">{{ p.citation }}</p>{% endif %}
+        {% if p.bibtex %}<pre class="cite-pane" data-fmt="bib"{% if p.citation %} hidden{% endif %}>{{ p.bibtex | strip | escape }}</pre>{% endif %}
       </div>
       {% endif %}
     </li>
@@ -56,7 +62,7 @@ author_profile: true
 {% include category-tabs.html %}
 
 <script>
-/* 点“引用”展开或收起引用信息 */
+/* 点“引用”展开或收起引用面板 */
 document.querySelectorAll('.cite-toggle').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var box = btn.closest('li').querySelector('.cite');
@@ -64,23 +70,51 @@ document.querySelectorAll('.cite-toggle').forEach(function (btn) {
     btn.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
   });
 });
-/* 复制引用：先用剪贴板接口，不可用时退回到选中文本 */
+
+/* 切换“文本 / BibTeX” */
+document.querySelectorAll('.cite-tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    var box = tab.closest('.cite');
+    box.querySelectorAll('.cite-tab').forEach(function (t) {
+      t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+    });
+    box.querySelectorAll('.cite-pane').forEach(function (p) {
+      p.hidden = p.getAttribute('data-fmt') !== tab.getAttribute('data-fmt');
+    });
+  });
+});
+
+/* 复制当前显示的格式，复制后在页面底部提示一下 */
+var toast = document.createElement('div');
+toast.className = 'copy-toast';
+toast.setAttribute('role', 'status');
+toast.setAttribute('aria-live', 'polite');
+document.body.appendChild(toast);
+var toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+}
+
 document.querySelectorAll('.cite-copy').forEach(function (btn) {
   btn.addEventListener('click', function () {
-    var pre = btn.closest('.cite').querySelector('.cite-bib');
-    var text = btn.hasAttribute('data-copy-bibtex') && pre ? pre.textContent : btn.getAttribute('data-copy');
-    var label = btn.textContent;
-    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = label; }, 1500); }
+    var box = btn.closest('.cite');
+    var pane = box.querySelector('.cite-pane:not([hidden])');
+    if (!pane) return;
+    var text = pane.textContent.trim();
+    var name = pane.getAttribute('data-fmt') === 'bib' ? ' BibTeX ' : '文本';
     function fallback() {
       var ta = document.createElement('textarea');
       ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'absolute'; ta.style.left = '-9999px';
       document.body.appendChild(ta); ta.select();
       var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
       document.body.removeChild(ta);
-      done(ok ? '已复制' : '请手动复制');
+      showToast(ok ? '已复制' + name + '引用' : '复制失败，请手动选中复制');
     }
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(function () { done('已复制'); }, fallback);
+      navigator.clipboard.writeText(text).then(function () { showToast('已复制' + name + '引用'); }, fallback);
     } else { fallback(); }
   });
 });
