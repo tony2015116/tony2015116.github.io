@@ -181,11 +181,11 @@ html { font-size: 14px; }
 .project-list .cite-copy {
   font: inherit;
   color: var(--global-text-color-light);
-  background: none; border: none; padding: 0;
-  border-bottom: 1px solid var(--global-border-color);
+  background: none; border: none; padding: 0; margin: 0;
   border-radius: 0;
   cursor: pointer;
   line-height: inherit;
+  vertical-align: baseline;
 }
 .project-list .cite-toggle:hover, .project-list .cite-copy:hover,
 .project-list .cite-toggle:focus-visible, .project-list .cite-copy:focus-visible,
@@ -216,3 +216,45 @@ html { font-size: 14px; }
 }
 /* 模板脚本会给 body 加上与页脚等高的底部留白，页脚不固定后不再需要 */
 body { margin-bottom: 0 !important; }
+
+/* 粘底页脚：内容少时页脚贴在窗口底部，内容多时被推到内容之后 */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#main {
+  flex: 1 0 auto;
+  width: 100%;          /* flex 列布局下保持原有宽度与居中 */
+}
+.page__footer { flex-shrink: 0; float: none; }
+
+/* 侧栏：原来是 position: fixed，脱离文档流，页脚会盖住它。
+   改为 sticky：仍随页面固定在顶部，但占据高度，页脚会排在它下面 */
+@media screen and (min-width: $sidebar-screen-min-width) {
+  .sidebar {
+    position: sticky;
+    top: $masthead-height;
+    bottom: auto;
+    padding-top: 0;
+    max-height: calc(100vh - #{$masthead-height});
+  }
+}
+
+/* 链接下划线：统一用 text-decoration，<a> 和“引用/复制”按钮对齐到同一位置 */
+.page__content .pub-links a,
+.page__content .pub-links button,
+.page__content .cite a,
+.page__content .cite button {
+  border-bottom: none !important;
+  text-decoration: underline;
+  text-decoration-color: var(--global-border-color);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+.page__content .pub-links a:hover,
+.page__content .pub-links button:hover,
+.page__content .cite a:hover,
+.page__content .cite button:hover {
+  text-decoration-color: currentColor;
+}
