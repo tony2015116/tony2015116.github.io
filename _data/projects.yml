@@ -204,6 +204,12 @@
       description: "跟着一头小猪从出生走到配种，用动画看早期选择的 8 个环节，再拖动参数比较传统选择和基因组早期选择的遗传进展。"
       language: "HTML"
       year: "2026"
+    - name: "遗传参数图解：一看就懂"
+      url: "/files/tutorials/genetic-parameters.html"
+      url_title: "打开教程"
+      description: "用比喻和动画讲清遗传力、重复力、遗传相关是什么，怎么用亲子回归、REML 和 A 矩阵估计，以及怎么用来预测选择进展，末尾附小测验。"
+      language: "HTML"
+      year: "2026"
 
 - category: "速查表"
   key: "cheatsheets"

@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="用比喻、图标和交互动画讲清遗传力、重复力、遗传相关等遗传参数，演示亲子回归、半同胞 REML、A 矩阵表格法，以及选择反应与育种值准确度。">
+<title>遗传参数图解 · 通俗版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital,wght@0,400;1,400&display=swap">
+<style>
+/* Layout: 单栏“图解课本”——每节 = 图标 + 问句标题 + 一句话 + 比喻 + 动画 + 可折叠公式 */
+:root{
+  --bg:#f2f6f5; --surface:#ffffff; --soft:#e6eeeb; --ink:#14231f; --muted:#56675f; --line:#d1dcd8;
+  --a:#0e7563; --a-soft:#d5ece6;   /* 基因 */
+  --e:#4f58b0; --e-soft:#e0e2f5;   /* 环境 */
+  --hi:#c2541c; --hi-soft:#f7e3d6; /* 选择 / 结果 */
+  --on-a:#ffffff;
+  --f-display:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-math:"STIX Two Text","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1614; --surface:#15201d; --soft:#1c2a26; --ink:#e2ebe8; --muted:#93a49e; --line:#2a3934;
+  --a:#3fc4a9; --a-soft:#173a33; --e:#949bec; --e-soft:#262b4d; --hi:#f0894a; --hi-soft:#3d2618; --on-a:#06201a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1614; --surface:#15201d; --soft:#1c2a26; --ink:#e2ebe8; --muted:#93a49e; --line:#2a3934;
+  --a:#3fc4a9; --a-soft:#173a33; --e:#949bec; --e-soft:#262b4d; --hi:#f0894a; --hi-soft:#3d2618; --on-a:#06201a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ic{width:1em;height:1em;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+nav.toc .wrap::-webkit-scrollbar{display:none}
+nav.toc a{flex:none;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--muted);text-decoration:none;padding:3px 10px;border-radius:999px;border:1px solid transparent}
+nav.toc a:hover{color:var(--ink);border-color:var(--line)}
+nav.toc a .ic{font-size:15px}
+
+header.hero{padding-block:40px 4px}
+.eyebrow{font-size:12px;letter-spacing:.16em;color:var(--a);font-weight:700}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,6vw,58px);line-height:1.15;margin:.15em 0 .3em;text-wrap:balance}
+.lede{max-width:38em;color:var(--muted);font-size:17px;margin:0}
+
+.equation{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:26px 0 6px}
+.chip{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:14px;background:var(--surface);border:1px solid var(--line);animation:pulse 4.8s ease-in-out infinite}
+.chip .ic{font-size:30px}
+.chip b{display:block;font-size:17px;line-height:1.2}
+.chip small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.chip.g{color:var(--a)} .chip.g b{color:var(--ink)}
+.chip.en{color:var(--e);animation-delay:.8s} .chip.en b{color:var(--ink)}
+.chip.p{color:var(--hi);animation-delay:1.6s} .chip.p b{color:var(--ink)}
+.op{font-size:28px;color:var(--muted);font-family:var(--f-math)}
+@keyframes pulse{0%,70%,100%{transform:none;box-shadow:none}20%{transform:translateY(-3px);box-shadow:0 6px 16px -8px currentColor}}
+
+section.sec{margin-top:56px}
+.part-band{margin-top:64px;padding-block:18px;border-top:2px solid var(--ink);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.part-band .no{font-weight:900;font-size:15px;color:var(--on-a);background:var(--a);border-radius:6px;padding:0 9px}
+.part-band h2{margin:0;font-size:clamp(24px,3.4vw,30px);font-weight:900}
+.part-band p{margin:0;color:var(--muted);font-size:14.5px}
+.sec-h{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:26px;background:var(--a-soft);color:var(--a)}
+.badge.e{background:var(--e-soft);color:var(--e)} .badge.h{background:var(--hi-soft);color:var(--hi)}
+h3{font-family:var(--f-display);font-size:clamp(20px,2.6vw,24px);margin:0;font-weight:900;text-wrap:balance;line-height:1.35}
+h3 small{display:block;font-size:13px;color:var(--muted);font-weight:400;letter-spacing:.04em}
+p{max-width:42em;margin:.55em 0}
+.muted{color:var(--muted)}
+.m{font-family:var(--f-math);font-style:italic}
+.eq{display:inline-block;font-family:var(--f-math);font-size:1.1em;background:var(--soft);padding:0 8px;border-radius:6px;white-space:nowrap}
+sub,sup{font-size:.7em;line-height:0}
+
+.oneline{display:flex;gap:12px;align-items:flex-start;background:var(--hi-soft);border-radius:12px;padding:12px 16px;margin:14px 0;max-width:46em}
+.oneline .ic{font-size:22px;color:var(--hi);margin-top:3px}
+.oneline b{display:block;font-size:12px;letter-spacing:.12em;color:var(--hi)}
+.oneline div{font-size:16.5px;line-height:1.65}
+.analogy{border-left:3px solid var(--e);padding:2px 0 2px 14px;margin:12px 0;max-width:44em;color:var(--ink)}
+.analogy::before{content:"打个比方";display:block;font-size:12px;letter-spacing:.12em;color:var(--e);font-weight:700}
+
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:16px 0 8px;min-width:0}
+.fig canvas{display:block;width:100%}
+.howto{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.howto .ic{color:var(--a)}
+.cap{font-size:13.5px;color:var(--muted);margin-top:8px;max-width:none}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:12px;font-size:14px}
+.ctrl{display:flex;align-items:center;gap:8px}
+.ctrl label{color:var(--muted);white-space:nowrap}
+input[type=range]{accent-color:var(--a);width:130px}
+select{font:inherit;font-size:14px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+output,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:13.5px}
+output{min-width:3.2em;display:inline-block}
+button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:5px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+button:hover{border-color:var(--muted)}
+button.primary{background:var(--a);color:var(--on-a);border-color:var(--a);font-weight:500}
+:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+.readout{font-size:14.5px;margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 22px}
+.readout span{color:var(--muted)}
+.readout b{color:var(--ink);font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.readout b.hi{color:var(--hi)} .readout b.a{color:var(--a)}
+.say{font-size:15px;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--soft)}
+.say b{color:var(--a)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;margin-top:10px}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;flex:none}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.card .top{display:flex;align-items:center;gap:10px}
+.card .top .ic{font-size:22px}
+.card h4{margin:0;font-size:16px}
+.card .plain{font-size:14.5px;margin:.45em 0 .3em;line-height:1.65}
+.card .eq{font-size:.98em}
+.card.ka .top{color:var(--a)} .card.ke .top{color:var(--e)} .card.kh .top{color:var(--hi)}
+.card .top h4{color:var(--ink)}
+
+details.deep{margin:14px 0;border:1px dashed var(--line);border-radius:12px;padding:4px 14px;max-width:100%}
+details.deep summary{cursor:pointer;font-size:14px;color:var(--muted);padding:6px 0;display:flex;align-items:center;gap:8px;list-style:none}
+details.deep summary::-webkit-details-marker{display:none}
+details.deep summary .ic{color:var(--e);font-size:17px}
+details.deep summary::after{content:"展开";margin-left:auto;font-size:12px;color:var(--e)}
+details.deep[open] summary::after{content:"收起"}
+.eq-block{font-family:var(--f-math);font-size:1.15em;background:var(--soft);padding:8px 14px;border-radius:8px;margin:10px 0;overflow-x:auto;max-width:100%}
+pre.mme{font-family:var(--f-mono);font-size:13px;line-height:1.6;background:var(--soft);border-radius:8px;padding:12px 16px;overflow-x:auto;margin:10px 0;max-width:100%}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px;align-items:start}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;font-size:14px}
+table.data{width:100%}
+table.data th,table.data td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.data th{font-size:12.5px;color:var(--muted);font-weight:500}
+table.data td.num{text-align:right}
+.stars{color:var(--hi);letter-spacing:2px;white-space:nowrap}
+.stars i{color:var(--line);font-style:normal}
+
+.amat{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:13px}
+.amat th,.amat td{width:56px;height:34px;text-align:center;border:1px solid var(--line)}
+.amat th{background:var(--soft);color:var(--muted);font-weight:600}
+.amat td{color:transparent;transition:background .25s,color .25s}
+.amat td.filled{color:var(--ink)}
+.amat td.diag.filled{font-weight:600}
+.amat td.ref{background:var(--e-soft);color:var(--ink)}
+.amat td.cur{background:var(--hi-soft);color:var(--hi);font-weight:700}
+.ped{font-family:var(--f-mono);font-size:13px}
+.ped th,.ped td{padding:3px 10px;border-bottom:1px solid var(--line);text-align:center}
+.ped th{color:var(--muted);font-weight:500}
+.ped tr.cur td{background:var(--hi-soft)}
+.formula{min-height:3.4em;font-family:var(--f-math);font-size:16.5px;background:var(--soft);border-radius:8px;padding:8px 12px;margin-top:10px;overflow-x:auto}
+.formula .plainf{display:block;font-family:var(--f-body);font-size:13.5px;color:var(--muted)}
+.pedsvg{width:100%;max-width:250px;height:auto;display:block}
+.pedsvg line{stroke:var(--line);stroke-width:2}
+.pedsvg line.on{stroke:var(--hi)}
+.pedsvg circle{fill:var(--surface);stroke:var(--muted);stroke-width:1.5}
+.pedsvg circle.on{fill:var(--hi);stroke:var(--hi)}
+.pedsvg circle.par{stroke:var(--e);stroke-width:3.5}
+.pedsvg text{font-family:var(--f-mono);font-size:13px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.pedsvg text.on{fill:var(--on-a)}
+.log{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);max-height:9.5em;overflow:auto;background:var(--soft);border-radius:8px;padding:6px 10px}
+.log div.last{color:var(--hi)}
+
+.htraits{display:grid;gap:8px;margin:14px 0}
+.ht{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr) 5.5em;gap:10px;align-items:center;font-size:14px}
+.ht .track{position:relative;height:14px;background:var(--soft);border-radius:7px}
+.ht .bar{position:absolute;top:0;bottom:0;border-radius:7px;transform-origin:left;animation:grow 1.1s ease-out both}
+.ht .bar.lo{background:var(--e)} .ht .bar.md{background:var(--a)} .ht .bar.hi{background:var(--hi)}
+.ht .v{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);text-align:right}
+.ht.axis .track{background:none;height:auto;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+@keyframes grow{from{transform:scaleX(.25);opacity:.6}to{transform:none;opacity:1}}
+@media (max-width:480px){.ht{grid-template-columns:minmax(0,6.5em) minmax(0,1fr) 4.6em;font-size:13px}}
+
+.quiz{display:grid;gap:14px;margin:16px 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.q p{margin:0 0 8px;font-weight:500}
+.q .opts{display:flex;flex-direction:column;gap:6px}
+.q .opts button{justify-content:flex-start;text-align:left;width:100%;background:var(--bg)}
+.q .opts button.right{background:var(--a-soft);border-color:var(--a)}
+.q .opts button.wrong{background:var(--hi-soft);border-color:var(--hi)}
+.q .fb{font-size:14px;color:var(--muted);margin-top:8px}
+.q .fb b{color:var(--ink)}
+#quiz-score{font-weight:700;color:var(--a)}
+
+.sheet{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px 24px;margin:10px 0 0}
+.sheet div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--line);padding:6px 0;font-size:14px;min-width:0;flex-wrap:wrap}
+.sheet .eq{background:none;padding:0}
+footer{margin-top:56px;padding-block:24px 48px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+nav.toc a.back{color:var(--a);font-weight:700}
+</style>
+<style>html,body{margin:0}footer a{color:var(--a)}</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dna" viewBox="0 0 24 24"><path d="M7 3c0 4.5 10 4.5 10 9s-10 4.5-10 9"/><path d="M17 3c0 4.5-10 4.5-10 9s10 4.5 10 9"/><path d="M9 5.5h6M9 18.5h6M10.5 9h3M10.5 15h3"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1.3"/><path d="M3 20h18"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h4l10 10h4M3 17h4l3-3M14 10l3-3h4M18 4l3 3-3 3M18 14l3 3-3 3"/></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24"><path d="M11 4a8.5 8.5 0 1 0 9 9h-9z"/><path d="M14 2.5A8 8 0 0 1 21.5 10H14z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></symbol>
+  <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M2.5 20l6-10 4 6 3.5-5 5.5 9z"/><path d="M16 11V4.5l3.5 1.6L16 7.7"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9.2h17M3.5 14.8h17M9.2 3.5v17M14.8 3.5v17"/></symbol>
+  <symbol id="i-family" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M6 7.5v3.5h12V7.5M12 11v5.5"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="i-sigma" viewBox="0 0 24 24"><path d="M18 5H6l6 7-6 7h12"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11M11 10V4a1.5 1.5 0 0 1 3 0v6M14 10V5.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6 7-2.5 0-4-1.2-5.5-3.5L3.8 15a1.5 1.5 0 0 1 2.4-1.8L8 15"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M4 7h16"/><path d="M4 7l-2.5 6a3 3 0 0 0 5 0zM20 7l-2.5 6a3 3 0 0 0 5 0z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2.5v3.5M15 2.5v3.5M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+</svg>
+
+<nav class="toc" aria-label="目录"><div class="wrap">
+  <a class="back" href="/portfolio/#tutorials">← 返回项目</a>
+  <a href="#s-inherit"><svg class="ic"><use href="#i-shuffle"/></svg>基因怎么传</a>
+  <a href="#s-decomp"><svg class="ic"><use href="#i-pie"/></svg>差异从哪来</a>
+  <a href="#s-rg"><svg class="ic"><use href="#i-link"/></svg>性状间的联动</a>
+  <a href="#s-reg"><svg class="ic"><use href="#i-search"/></svg>像不像父母</a>
+  <a href="#s-reml"><svg class="ic"><use href="#i-mountain"/></svg>爬山求最优</a>
+  <a href="#s-amat"><svg class="ic"><use href="#i-grid"/></svg>算亲戚有多亲</a>
+  <a href="#s-sel"><svg class="ic"><use href="#i-trend"/></svg>每代进步多少</a>
+  <a href="#s-acc"><svg class="ic"><use href="#i-target"/></svg>看得准不准</a>
+  <a href="#s-uses"><svg class="ic"><use href="#i-plan"/></svg>用途</a>
+  <a href="#s-quiz"><svg class="ic"><use href="#i-check"/></svg>小测验</a>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">数量遗传学 · 动物育种入门</div>
+  <h1>遗传参数，一看就懂</h1>
+  <p class="lede">同一个牛场里，有的牛一年产奶 12 吨，有的只有 7 吨。这些差别里，多少是“天生的”、能传给小牛？多少只是这头牛吃得好、运气好？遗传参数就是回答这个问题的一组数字。</p>
+  <div class="equation" aria-label="表现等于基因加环境">
+    <div class="chip g"><svg class="ic"><use href="#i-dna"/></svg><div><b>基因 A</b><small>能传给后代的“底子”</small></div></div>
+    <span class="op">+</span>
+    <div class="chip en"><svg class="ic"><use href="#i-sun"/></svg><div><b>环境 E</b><small>饲料、管理、运气</small></div></div>
+    <span class="op">=</span>
+    <div class="chip p"><svg class="ic"><use href="#i-gauge"/></svg><div><b>表现 P</b><small>我们实际量到的值</small></div></div>
+  </div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>看动画：每头牛的绿点（基因）和蓝点（环境）合在一起，就成了最下面的深色点（表现）。拖动滑块改变基因所占的比重。</div>
+    <canvas id="cv-hero" aria-label="动画：基因 A 加环境 E 得到表现 P"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="hero-h2">基因的比重 h²</label><input id="hero-h2" type="range" min="0.05" max="0.95" step="0.01" value="0.4"><output id="hero-h2-o">0.40</output></div>
+    </div>
+    <div class="say" id="hero-say"></div>
+  </div>
+</header>
+
+<div class="part-band"><span class="no">第一部分</span><h2>遗传参数是什么</h2><p>先弄清楚这些数字在描述什么</p></div>
+
+<!-- 基因传递 -->
+<section class="sec" id="s-inherit">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-shuffle"/></svg></div><h3><small>先打基础</small>基因是怎么传给下一代的？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>小牛从爸爸、妈妈那里各随机拿走一半基因。所以它的“底子”大致是父母的平均，但每头小牛都会带一点运气成分。</div></div>
+  <div class="analogy">像从爸爸、妈妈两副牌里各随机抽 4 张凑成新的一手牌。爸妈牌好，孩子大概率牌也好；但同一对父母的几个孩子，抽到的牌各不相同。</div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>绿色卡片代表“好基因（+）”。看小牛抽到几张，下方的点会记录每一头小牛的结果。</div>
+    <canvas id="cv-mend" aria-label="动画：小牛从父母各随机继承一半基因"></canvas>
+    <div class="ctrls">
+      <button class="primary" id="mend-next" type="button"><svg class="ic"><use href="#i-play"/></svg>再生一头小牛</button>
+      <button id="mend-new" type="button"><svg class="ic"><use href="#i-redo"/></svg>换一对父母</button>
+    </div>
+    <p class="cap">简化演示：每个亲本有 8 个基因位点卡片，随机传一半。真实动物有成千上万个位点，道理相同。父母平均值就是“育种值的期望”，围绕它的随机波动叫“孟德尔抽样”。</p>
+  </div>
+</section>
+
+<!-- 方差分解 -->
+<section class="sec" id="s-decomp">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-pie"/></svg></div><h3><small>核心概念</small>牛和牛之间的差异，都是从哪来的？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>把全群的差异（方差）看成一块蛋糕，切成几块。<strong>遗传力 h²</strong> 就是“能稳定遗传给后代的那一块”占整块蛋糕的比例。</div></div>
+  <p>注意：遗传力说的是<strong>群体中的差异</strong>，不是某头牛本身。h² = 0.3 不代表“一头牛 30% 的奶是基因给的”，而是“牛与牛之间产奶量的差别中，约 30% 来自可遗传的基因差别”。</p>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>拖动滑块改变每块蛋糕的大小，看三个参数怎么变。</div>
+    <canvas id="cv-var" aria-label="方差分解条形图"></canvas>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--a)"></i>A 加性基因（能遗传）</span>
+      <span><i class="sw" style="background:var(--a);opacity:.45"></i>D 基因搭配效应（不稳定遗传）</span>
+      <span><i class="sw" style="background:var(--e);opacity:.8"></i>pe 个体固定环境（如小时候的营养）</span>
+      <span><i class="sw" style="background:var(--e);opacity:.35"></i>e 每次测量的偶然因素</span>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label for="v-a">A</label><input id="v-a" type="range" min="0" max="60" step="1" value="30"><output id="v-a-o">30</output></div>
+      <div class="ctrl"><label for="v-d">D</label><input id="v-d" type="range" min="0" max="30" step="1" value="10"><output id="v-d-o">10</output></div>
+      <div class="ctrl"><label for="v-pe">pe</label><input id="v-pe" type="range" min="0" max="30" step="1" value="15"><output id="v-pe-o">15</output></div>
+      <div class="ctrl"><label for="v-e">e</label><input id="v-e" type="range" min="1" max="60" step="1" value="45"><output id="v-e-o">45</output></div>
+    </div>
+    <div class="readout" id="var-out"></div>
+  </div>
+
+  <div class="cards">
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-dna"/></svg><h4>遗传力 h²</h4></div><p class="plain">差异里能稳定传给后代的比例。<b>选种能不能见效</b>，主要看它。</p><span class="eq">h² = σ²<sub>A</sub> / σ²<sub>P</sub></span></div>
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-layers"/></svg><h4>广义遗传力 H²</h4></div><p class="plain">所有基因作用（含“搭配效应”）的比例。对克隆、扦插繁殖更有意义。</p><span class="eq">H² = σ²<sub>G</sub> / σ²<sub>P</sub></span></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-redo"/></svg><h4>重复力 r</h4></div><p class="plain">同一头牛这胎高产，下一胎还高产的程度。可用来<b>提前预测</b>以后的表现。</p><span class="eq">r = (σ²<sub>G</sub>+σ²<sub>pe</sub>) / σ²<sub>P</sub></span></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-family"/></svg><h4>共同环境 c²</h4></div><p class="plain">同一窝、同一个妈带大的个体，因为环境相同而变得相似的部分。</p><span class="eq">c² = σ²<sub>c</sub> / σ²<sub>P</sub></span></div>
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-link"/></svg><h4>遗传相关 r<sub>G</sub></h4></div><p class="plain">两个性状在基因上是“同涨同落”还是“此消彼长”。范围 −1 到 +1。</p><span class="eq">r<sub>G</sub> = cov(A<sub>1</sub>,A<sub>2</sub>)/(σ<sub>A1</sub>σ<sub>A2</sub>)</span></div>
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-gauge"/></svg><h4>表型相关 r<sub>P</sub></h4></div><p class="plain">肉眼看到的两个性状的相关，由基因、环境两条路叠加而成。</p><span class="eq">r<sub>P</sub> = h<sub>1</sub>h<sub>2</sub>r<sub>G</sub> + e<sub>1</sub>e<sub>2</sub>r<sub>E</sub></span></div>
+  </div>
+</section>
+
+<!-- 遗传相关 -->
+<section class="sec" id="s-rg">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-link"/></svg></div><h3><small>多个性状</small>选了这个，那个会跟着变吗？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>很多基因同时影响好几个性状。遗传相关为正，选一个会“顺带”改良另一个；为负，就会“按下葫芦浮起瓢”。</div></div>
+  <div class="analogy">奶牛的产奶量和繁殖力就是负相关的典型：只盯着产奶量选，几代之后母牛越来越难怀孕。所以育种目标里必须把两者一起考虑。</div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>每个点是一头牛。左边看“基因”，右边看“实际表现”。试试把 r<sub>G</sub> 拉高、遗传力拉低，右边的相关会被环境冲淡。</div>
+    <canvas id="cv-rg" aria-label="遗传相关与表型相关散点图"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="rg-g">遗传相关 r<sub>G</sub></label><input id="rg-g" type="range" min="-0.95" max="0.95" step="0.01" value="0.6"><output id="rg-g-o"></output></div>
+      <div class="ctrl"><label for="rg-e">环境相关 r<sub>E</sub></label><input id="rg-e" type="range" min="-0.95" max="0.95" step="0.01" value="-0.3"><output id="rg-e-o"></output></div>
+      <div class="ctrl"><label for="rg-h1">性状 1 的 h²</label><input id="rg-h1" type="range" min="0.05" max="0.9" step="0.01" value="0.3"><output id="rg-h1-o"></output></div>
+      <div class="ctrl"><label for="rg-h2">性状 2 的 h²</label><input id="rg-h2" type="range" min="0.05" max="0.9" step="0.01" value="0.5"><output id="rg-h2-o"></output></div>
+    </div>
+    <div class="readout" id="rg-out"></div>
+  </div>
+</section>
+
+<div class="part-band"><span class="no">第二部分</span><h2>遗传参数怎么算出来</h2><p>基因看不见，只能借亲戚之间的“相似程度”反推</p></div>
+<p>核心逻辑：亲戚之间共享一部分基因，所以表现会相似。<strong>共享的基因越多、表现却不怎么像</strong>，说明环境的影响大，遗传力低；反之遗传力高。</p>
+
+<!-- 亲子回归 -->
+<section class="sec" id="s-reg">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-search"/></svg></div><h3><small>方法 1 · 亲子回归</small>孩子像不像父母？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>把每头小牛的成绩和它父母的平均成绩画在一张图上，拉一条直线。<strong>直线的斜率就是遗传力</strong>。</div></div>
+  <p>父母比群体平均高 10 分，如果 h² = 0.4，小牛平均只会高 4 分：父母多出来的那 10 分里，只有 4 分是基因带来的，其余 6 分是父母自己的环境运气，传不下去。只用一个亲本时，小牛只拿到它一半基因，斜率就变成 ½h²。</p>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>点“重新抽样”反复试几次：家系少时，橙色线忽高忽低；家系多时，它稳定贴近虚线（真值）。</div>
+    <canvas id="cv-reg" aria-label="亲子回归散点图"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="reg-h2">真实 h²</label><input id="reg-h2" type="range" min="0.05" max="0.95" step="0.01" value="0.4"><output id="reg-h2-o"></output></div>
+      <div class="ctrl"><label for="reg-n">家系数</label><input id="reg-n" type="range" min="20" max="600" step="10" value="150"><output id="reg-n-o"></output></div>
+      <div class="ctrl"><label for="reg-mode">横轴</label><select id="reg-mode"><option value="mid">父母平均</option><option value="one">只看父亲</option></select></div>
+      <button class="primary" id="reg-go" type="button"><svg class="ic"><use href="#i-redo"/></svg>重新抽样</button>
+    </div>
+    <div class="readout" id="reg-out"></div>
+  </div>
+</section>
+
+<!-- REML -->
+<section class="sec" id="s-reml">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-mountain"/></svg></div><h3><small>方法 2 · 半同胞分析与 REML</small>同父兄妹有多像？爬山找最可能的答案</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>一头公牛有几十个孩子（同父异母的半同胞）。看“不同公牛的孩子之间差别大不大”，就能推出遗传力。REML 是把这个问题变成<strong>爬山</strong>：哪个 h² 让数据看起来最合理，就是山顶。</div></div>
+  <div class="analogy">如果“好爸爸”的孩子整体明显比“普通爸爸”的孩子好，说明爸爸的基因很重要，h² 高；如果各家孩子都差不多，h² 就低。半同胞共享约 ¼ 的可遗传方差，所以最后要乘 4。</div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>橙点是“登山者”的两个试探位置，绿色阴影是还没排除的区域，每步缩小约 38%。曲线越尖，说明数据越能确定答案。</div>
+    <canvas id="cv-reml" aria-label="REML 似然曲线与迭代搜索动画"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="reml-h2">真实 h²</label><input id="reml-h2" type="range" min="0.05" max="0.8" step="0.01" value="0.3"><output id="reml-h2-o"></output></div>
+      <div class="ctrl"><label for="reml-s">公牛数</label><input id="reml-s" type="range" min="10" max="300" step="5" value="40"><output id="reml-s-o"></output></div>
+      <div class="ctrl"><label for="reml-n">每头公牛的孩子</label><input id="reml-n" type="range" min="4" max="60" step="1" value="20"><output id="reml-n-o"></output></div>
+      <button class="primary" id="reml-go" type="button"><svg class="ic"><use href="#i-play"/></svg>重新抽样并爬山</button>
+    </div>
+    <div class="log" id="reml-log" aria-live="polite" style="margin-top:10px"></div>
+    <p class="cap">虚线 −1.92 以上的范围大约是 95% 置信区间。公牛越多、每头公牛孩子越多，区间越窄。</p>
+  </div>
+  <details class="deep"><summary><svg class="ic"><use href="#i-sigma"/></svg>给想深入的人：方差分析表与公式</summary>
+    <div class="tbl-wrap"><table class="data" id="reml-anova"></table></div>
+    <p class="muted" style="font-size:14px">平衡数据下，REML 的山顶恰好等于方差分析的结果；但 REML 能处理各公牛孩子数不同、有多个固定效应、用完整系谱等复杂情况，而且估计值不会跑到 0 以下。实际软件（ASReml、DMU、BLUPF90、HIBLUP）用 AI-REML、EM-REML 等更快的“登山法”。</p>
+  </details>
+</section>
+
+<!-- A 矩阵 -->
+<section class="sec" id="s-amat">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-grid"/></svg></div><h3><small>方法 3 · 动物模型</small>用家谱算出“亲戚有多亲”</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>现代育种把全场所有牛的家谱一次放进模型。先用家谱算出一张“亲缘关系表”（A 矩阵），表里每一格告诉我们两头牛共享多少基因。</div></div>
+  <div class="analogy">计算规则就像走亲戚：<strong>我和某头牛的关系 = 我爸和它的关系与我妈和它的关系，取平均</strong>。对角线是“自己和自己”，正常是 1；如果父母本身是亲戚（近亲繁殖），就会大于 1，多出来的部分就是近交系数。</div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>点“播放”看表格一格一格填满。橙色是正在算的格子，蓝色是它要用到的格子；左侧家谱同步高亮父母。</div>
+    <div class="two">
+      <div>
+        <svg class="pedsvg" viewBox="0 0 260 270" id="ped-svg" aria-label="系谱图">
+          <line id="e13" x1="60" y1="30" x2="140" y2="100"/><line id="e23" x1="210" y1="30" x2="140" y2="100"/>
+          <line id="e14" x1="60" y1="30" x2="45" y2="110"/><line id="e35" x1="140" y1="100" x2="95" y2="175"/>
+          <line id="e45" x1="45" y1="110" x2="95" y2="175"/><line id="e56" x1="95" y1="175" x2="170" y2="242"/>
+          <line id="e26" x1="210" y1="30" x2="170" y2="242"/>
+          <g id="n1"><circle cx="60" cy="30" r="15"/><text x="60" y="30">1</text></g>
+          <g id="n2"><circle cx="210" cy="30" r="15"/><text x="210" y="30">2</text></g>
+          <g id="n3"><circle cx="140" cy="100" r="15"/><text x="140" y="100">3</text></g>
+          <g id="n4"><circle cx="45" cy="110" r="15"/><text x="45" y="110">4</text></g>
+          <g id="n5"><circle cx="95" cy="175" r="15"/><text x="95" y="175">5</text></g>
+          <g id="n6"><circle cx="170" cy="242" r="15"/><text x="170" y="242">6</text></g>
+        </svg>
+        <table class="ped" id="ped-tbl"><thead><tr><th>个体</th><th>父</th><th>母</th></tr></thead><tbody></tbody></table>
+        <p class="cap">3 和 4 是同父异母（都来自 1），它们交配生下 5，所以 5 有点近亲；6 是 5 和 2 的后代，2 恰好是 5 的外婆。</p>
+      </div>
+      <div style="min-width:0">
+        <div class="tbl-wrap"><table class="amat" id="amat"></table></div>
+        <div class="formula" id="a-formula" aria-live="polite"></div>
+        <div class="ctrls">
+          <button class="primary" id="a-play" type="button"><svg class="ic"><use href="#i-play"/></svg><span>播放</span></button>
+          <button id="a-step" type="button">单步</button>
+          <button id="a-reset" type="button"><svg class="ic"><use href="#i-redo"/></svg>重置</button>
+          <span class="muted" id="a-prog" style="font-size:13px"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p>读表小技巧：父子、全同胞之间约 0.5，半同胞、祖孙约 0.25，堂表亲约 0.125。有了这张表，模型就知道哪些牛的成绩应该相似、相似到什么程度，从而把<strong>所有亲戚的信息</strong>都用上。</p>
+  <details class="deep"><summary><svg class="ic"><use href="#i-sigma"/></svg>给想深入的人：动物模型与混合模型方程</summary>
+    <div class="eq-block">y = Xb + Za + e，　a ~ N(0, <b>A</b>σ²<sub>a</sub>)，　e ~ N(0, <b>I</b>σ²<sub>e</sub>)</div>
+    <div class="eq-block" style="font-size:1.02em">表格法：a<sub>ii</sub> = 1 + ½a<sub>s,d</sub>，　a<sub>ij</sub> = ½(a<sub>j,s</sub> + a<sub>j,d</sub>)</div>
+<pre class="mme">┌ X'X    X'Z           ┐ ┌ b̂ ┐   ┌ X'y ┐
+│                      │ │   │ = │     │      λ = σ²e/σ²a = (1 − h²)/h²
+└ Z'X    Z'Z + A⁻¹·λ   ┘ └ â ┘   └ Z'y ┘</pre>
+    <p class="muted" style="font-size:14px">y 是成绩，b 是场、年、季节等固定效应，a 是每头牛的育种值。λ 体现了遗传力：h² 低时 λ 大，估出的育种值更“保守”地向平均值收缩。基因组时代把 A 换成由 SNP 芯片算出的 G 矩阵（GBLUP / GREML），两者合并则是 H 矩阵（一步法 ssGBLUP）。</p>
+  </details>
+</section>
+
+<section class="sec" id="s-cmp">
+  <div class="sec-h"><div class="badge e"><svg class="ic"><use href="#i-layers"/></svg></div><h3><small>一张表看懂</small>各种方法怎么选</h3></div>
+  <div class="tbl-wrap"><table class="data">
+    <thead><tr><th>方法</th><th>大白话</th><th>需要的数据</th><th>准确程度</th><th>主要短板</th></tr></thead>
+    <tbody>
+      <tr><td>亲子回归</td><td>孩子像不像父母</td><td>两代成绩</td><td class="stars">★★<i>★★★</i></td><td>父母与孩子环境相似时偏高</td></tr>
+      <tr><td>半同胞分析</td><td>同父兄妹像不像</td><td>公牛家系</td><td class="stars">★★★<i>★★</i></td><td>要求每家数量均衡</td></tr>
+      <tr><td>全同胞分析</td><td>同窝兄妹像不像</td><td>窝 / 家系</td><td class="stars">★★<i>★★★</i></td><td>同窝环境混在里面，常偏高</td></tr>
+      <tr><td>动物模型 REML</td><td>全家谱一起算</td><td>成绩 + 完整家谱</td><td class="stars">★★★★★</td><td>计算量大，模型要设对</td></tr>
+      <tr><td>贝叶斯方法</td><td>给出可能值的范围</td><td>同上</td><td class="stars">★★★★<i>★</i></td><td>需检查是否收敛</td></tr>
+      <tr><td>基因组 GREML</td><td>用 DNA 芯片算亲缘</td><td>成绩 + SNP 基因型</td><td class="stars">★★★★<i>★</i></td><td>芯片没覆盖的基因会漏掉</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="part-band"><span class="no">第三部分</span><h2>算出来有什么用</h2><p>遗传参数是设计育种方案的“说明书”</p></div>
+
+<section class="sec" id="s-sel">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-trend"/></svg></div><h3><small>用途 1 · 育种者方程</small>每选一代，能进步多少？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>选出来的种牛比平均好多少（选择差 S），乘上遗传力，就是下一代能真正提高的量：<span class="eq">R = h² × S</span>。</div></div>
+  <div class="analogy">考试前十名平均比全班高 20 分，但这 20 分里有考场发挥、有基础。如果“基础”只占三成，下一届（他们的“孩子”）只能比全班高 6 分。</div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>点“播放”连续选 10 代。试试把遗传力调低、把留种率调大，看看进步变慢多少。</div>
+    <canvas id="cv-sel" aria-label="截断选择与选择反应动画"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="sel-h2">遗传力 h²</label><input id="sel-h2" type="range" min="0.05" max="0.9" step="0.01" value="0.3"><output id="sel-h2-o"></output></div>
+      <div class="ctrl"><label for="sel-p">留种比例</label><input id="sel-p" type="range" min="0.02" max="0.8" step="0.01" value="0.2"><output id="sel-p-o"></output></div>
+      <button class="primary" id="sel-play" type="button"><svg class="ic"><use href="#i-play"/></svg>播放</button>
+      <button id="sel-step" type="button">下一代</button>
+      <button id="sel-reset" type="button"><svg class="ic"><use href="#i-redo"/></svg>重置</button>
+    </div>
+    <div class="readout" id="sel-out"></div>
+    <p class="cap">上：橙色阴影是被选为种畜的个体，绿色曲线是它们后代的分布。下：每一代的群体平均。单位是“标准差”，为了突出原理，假设每代差异大小不变。</p>
+  </div>
+  <details class="deep"><summary><svg class="ic"><use href="#i-sigma"/></svg>给想深入的人：按年计算的遗传进展</summary>
+    <div class="eq-block">ΔG / 年 = i · r<sub>IH</sub> · σ<sub>A</sub> / L</div>
+    <p class="muted" style="font-size:14px">i 是选择强度（选得越严越大），r<sub>IH</sub> 是育种值估计准确度，σ<sub>A</sub> 是群体遗传变异，L 是世代间隔。基因组选择之所以加快进展，主要是在小牛阶段就能获得较高的 r<sub>IH</sub>，从而大幅缩短 L。</p>
+  </details>
+</section>
+
+<section class="sec" id="s-acc">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-target"/></svg></div><h3><small>用途 2 · 育种值准确度</small>要看多少个孩子，才能看准一头公牛？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>遗传力低的性状，单看个体本身就像隔着毛玻璃。把很多孩子的成绩平均起来，环境的偶然因素互相抵消，基因的“真面目”就清楚了。</div></div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>拖动后代数，看四种遗传力下的准确度。繁殖性状（h² ≈ 0.05）需要上百个孩子才能达到 0.8。</div>
+    <canvas id="cv-acc" aria-label="后代测定准确度曲线"></canvas>
+    <div class="ctrls"><div class="ctrl"><label for="acc-n">后代数 n</label><input id="acc-n" type="range" min="1" max="200" step="1" value="40"><output id="acc-n-o"></output></div></div>
+    <div class="readout" id="acc-out"></div>
+  </div>
+  <details class="deep"><summary><svg class="ic"><use href="#i-sigma"/></svg>给想深入的人：准确度公式</summary>
+    <div class="eq-block">后代测定：r = √[ n / (n + k) ]，k = (4 − h²) / h²</div>
+    <div class="eq-block">个体自身一次记录：r = h；m 次记录：r = √[ m·h² / (1 + (m−1)·r<sub>重复力</sub>) ]</div>
+  </details>
+</section>
+
+<section class="sec" id="s-uses">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-plan"/></svg></div><h3><small>用途汇总</small>遗传参数还能帮我们做什么</h3></div>
+  <div class="cards">
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-target"/></svg><h4>给每头牛打分（BLUP 育种值）</h4></div><p class="plain">遗传力决定了“自己的成绩”和“亲戚的成绩”各占多大权重。参数不准，排名就会偏。</p></div>
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-link"/></svg><h4>曲线救国（间接选择）</h4></div><p class="plain">难测的性状（如肉质、抗病）可以选一个和它遗传相关高、又好测的性状来间接改良。</p><span class="eq">r<sub>G</sub>·h<sub>X</sub> &gt; h<sub>Y</sub> 时更划算</span></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-scale"/></svg><h4>综合打分（选择指数）</h4></div><p class="plain">产奶、乳成分、繁殖、健康……把多个性状按经济价值加权，配上遗传协方差，得到一个总分。</p><span class="eq">b = P⁻¹ G a</span></div>
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-dna"/></svg><h4>选对改良路子</h4></div><p class="plain">h² 高（生长、体型）：直接按个体成绩选就行。h² 低（繁殖、存活）：靠后代测定、基因组选择，再配合改善饲养管理、杂交利用。</p></div>
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-plan"/></svg><h4>设计育种方案</h4></div><p class="plain">比较不同测定规模、留种比例、世代间隔下每年能进步多少，同时控制近交别涨太快。</p></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-chip"/></svg><h4>评估基因组选择</h4></div><p class="plain">遗传力越低，需要的参考群越大。可以先用遗传参数估算要测多少头牛的 DNA。</p><span class="eq">r ≈ √[Nh²/(Nh²+M<sub>e</sub>)]</span></div>
+  </div>
+
+  <h4 style="margin:28px 0 4px;font-size:17px">常见性状的遗传力大概多少？</h4>
+  <p class="muted" style="font-size:14px;margin-top:0">条形表示教科书中的常见范围。<span style="color:var(--e)">蓝色</span>为低（&lt; 0.15），<span style="color:var(--a)">绿色</span>为中，<span style="color:var(--hi)">橙色</span>为高（&gt; 0.4）。</p>
+  <div class="htraits" id="htraits"></div>
+  <p class="cap">遗传参数随群体和环境而变，实际工作要用自己群体的数据重新估计。</p>
+</section>
+
+<section class="sec" id="s-quiz">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-check"/></svg></div><h3><small>检验一下</small>小测验</h3></div>
+  <div class="quiz" id="quiz"></div>
+  <p>得分：<span id="quiz-score">0 / 4</span></p>
+</section>
+
+<section class="sec" id="s-sheet">
+  <div class="sec-h"><div class="badge e"><svg class="ic"><use href="#i-sigma"/></svg></div><h3><small>收藏备用</small>公式速查</h3></div>
+  <div class="sheet">
+    <div><span>遗传力</span><span class="eq">h² = σ²<sub>A</sub>/σ²<sub>P</sub></span></div>
+    <div><span>重复力</span><span class="eq">r = (σ²<sub>G</sub>+σ²<sub>pe</sub>)/σ²<sub>P</sub></span></div>
+    <div><span>对父母平均回归</span><span class="eq">b = h²</span></div>
+    <div><span>对单个亲本回归</span><span class="eq">b = ½h²</span></div>
+    <div><span>半同胞组内相关</span><span class="eq">h² = 4t</span></div>
+    <div><span>全同胞组内相关</span><span class="eq">2t = h² + 2c² + …</span></div>
+    <div><span>选择反应</span><span class="eq">R = h²S = i·h²·σ<sub>P</sub></span></div>
+    <div><span>选择强度</span><span class="eq">i = φ(x)/p</span></div>
+    <div><span>相关反应</span><span class="eq">CR<sub>Y</sub> = i·h<sub>X</sub>·r<sub>G</sub>·σ<sub>AY</sub></span></div>
+    <div><span>表型相关</span><span class="eq">r<sub>P</sub> = h<sub>1</sub>h<sub>2</sub>r<sub>G</sub> + e<sub>1</sub>e<sub>2</sub>r<sub>E</sub></span></div>
+    <div><span>后代测定准确度</span><span class="eq">r = √[n/(n+(4−h²)/h²)]</span></div>
+    <div><span>年遗传进展</span><span class="eq">ΔG = i·r·σ<sub>A</sub>/L</span></div>
+  </div>
+</section>
+
+<footer>页面中所有动画数据都是按设定参数随机模拟的，用于演示原理。相关教程：<a href="/files/tutorials/linear-algebra-animal-model.html">看得见的线性代数</a> · <a href="/files/tutorials/animal-models.html">育种动物模型图鉴</a> · <a href="/portfolio/#tutorials">全部教程</a></footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const root=document.documentElement;
+const RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pal={};
+function readPal(){const s=getComputedStyle(root);['bg','surface','soft','ink','muted','line','a','e','hi','a-soft','e-soft','hi-soft'].forEach(k=>pal[k]=s.getPropertyValue('--'+k).trim());}
+readPal();
+const F_SANS='"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+const F_MONO='"JetBrains Mono",ui-monospace,Menlo,monospace';
+const F_MATH='"STIX Two Text","Times New Roman",serif';
+const stages=[];
+function redrawAll(){readPal();stages.forEach(s=>s.render());}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redrawAll);}catch(_){}
+new MutationObserver(redrawAll).observe(root,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redrawAll);
+
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const dnorm=x=>Math.exp(-(x*x)/2)/Math.sqrt(2*Math.PI);
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function normal(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function qnorm(p){const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.357751867269,-30.66479806614716,2.506628277459239],b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572],c=[-.007784894002430293,-.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783],d=[.007784695709041462,.3224671290700398,2.445134137142996,3.754408661907416];const pl=.02425;let q,r;
+ if(p<pl){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+ if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+ q=p-.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+const f2=v=>v.toFixed(2), f3=v=>v.toFixed(3);
+
+class Stage{
+  constructor(cv,opt){this.cv=cv;this.ctx=cv.getContext('2d');this.opt=opt;this.visible=false;this.w=0;this.h=0;stages.push(this);
+    if('ResizeObserver' in window)new ResizeObserver(()=>this.fit()).observe(cv.parentElement);else addEventListener('resize',()=>this.fit());
+    if('IntersectionObserver' in window)new IntersectionObserver(es=>{this.visible=es[es.length-1].isIntersecting;if(this.visible&&opt.onShow)opt.onShow();}).observe(cv);else this.visible=true;
+    this.fit();}
+  fit(){const w=Math.floor(this.cv.parentElement.clientWidth);if(!w)return;const asp=typeof this.opt.aspect==='function'?this.opt.aspect(w):this.opt.aspect;
+    const h=Math.round(Math.min(this.opt.maxH||600,Math.max(this.opt.minH||220,w*asp)));if(w===this.w&&h===this.h)return;
+    const dpr=window.devicePixelRatio||1;this.cv.width=Math.round(w*dpr);this.cv.height=Math.round(h*dpr);this.cv.style.height=h+'px';this.ctx.setTransform(dpr,0,0,dpr,0,0);this.w=w;this.h=h;this.render();}
+  render(){if(!this.w)return;const c=this.ctx;c.clearRect(0,0,this.w,this.h);c.save();this.opt.draw(c,this.w,this.h);c.restore();}
+}
+let last=performance.now();
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;for(const s of stages){if(s.opt.tick&&s.visible){if(s.opt.tick(dt)!==false)s.render();}}requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+
+function bindRange(id,fmt,cb){const el=document.getElementById(id),o=document.getElementById(id+'-o');const up=()=>{o.textContent=fmt(+el.value);cb&&cb(+el.value);};el.addEventListener('input',up);o.textContent=fmt(+el.value);return el;}
+function normCurve(c,X,base,mu,sd,amp,x0,x1){c.beginPath();for(let px=x0;px<=x1;px+=2){const v=X.inv(px);const z=(v-mu)/sd;const y=base-amp*Math.exp(-(z*z)/2);px===x0?c.moveTo(px,y):c.lineTo(px,y);}}
+function txt(c,s,x,y,font,color,align,base){c.font=font;c.fillStyle=color;c.textAlign=align||'left';c.textBaseline=base||'alphabetic';c.fillText(s,x,y);}
+function arrow(c,x0,y,x1,color,lw){c.strokeStyle=color;c.fillStyle=color;c.lineWidth=lw||2;c.beginPath();c.moveTo(x0,y);c.lineTo(x1,y);c.stroke();const d=Math.sign(x1-x0)||1;if(Math.abs(x1-x0)>6){c.beginPath();c.moveTo(x1,y);c.lineTo(x1-7*d,y-4.5);c.lineTo(x1-7*d,y+4.5);c.closePath();c.fill();}}
+function scaleX(d0,d1,p0,p1){const f=v=>p0+(v-d0)/(d1-d0)*(p1-p0);f.inv=p=>d0+(p-p0)/(p1-p0)*(d1-d0);return f;}
+function rrect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+
+/* ---------- Hero: P = A + E ---------- */
+(function(){
+  const cv=document.getElementById('cv-hero');const N=170;let h2=.4,t=RM?4.5:0,seed=11,dots=[];const CYC=7.2;
+  function sample(){const r=rng(seed++);dots=[];for(let i=0;i<N;i++)dots.push({z1:normal(r),z2:normal(r),j:r()-.5,jp:r()-.5,d:r()});}
+  sample();
+  function say(){const pct=Math.round(h2*100);document.getElementById('hero-say').innerHTML=`h² = <b>${f2(h2)}</b>：牛与牛之间的差异里，约 <b>${pct}%</b> 来自能遗传的基因，${100-pct}% 来自环境。${h2>=.4?'基因比重大，最下面的分布基本跟着绿点走，按表现挑种牛很靠谱。':h2>=.15?'基因和环境都有分量，按表现挑种牛有效，但会看走眼。':'环境占绝对主导，表现好的牛很可能只是运气好，单看表现挑种牛效果很差。'}`;}
+  bindRange('hero-h2',f2,v=>{h2=v;say();st.render();});say();
+  function draw(c,w,h){
+    const X=scaleX(-3.6,3.6,16,w-16);const sa=Math.sqrt(h2),se=Math.sqrt(1-h2);
+    const yA=h*.28,yE=h*.55,yP=h*.9;
+    const rows=[[yA,sa,pal.a,'A 基因','差异 '+f2(h2)],[yE,se,pal.e,'E 环境','差异 '+f2(1-h2)],[yP,1,pal.ink,'P 表现','差异 1.00']];
+    const pAlpha=RM?1:clamp((t-3.3)/.8)*(1-clamp((t-6.4)/.7));
+    rows.forEach(([y,sd,col,L,lab],k)=>{
+      c.strokeStyle=pal.line;c.lineWidth=1;c.beginPath();c.moveTo(16,y+.5);c.lineTo(w-16,y+.5);c.stroke();
+      const amp=Math.min(h*.2,h*.14/sd);
+      c.globalAlpha=k===2?pAlpha:1;
+      normCurve(c,X,y,0,sd,amp,16,w-16);c.strokeStyle=col;c.lineWidth=k===2?2.2:1.6;c.stroke();
+      c.lineTo(w-16,y);c.lineTo(16,y);c.closePath();c.globalAlpha*=.08;c.fillStyle=col;c.fill();c.globalAlpha=1;
+      txt(c,L,18,y-h*.12,'700 '+Math.round(Math.min(17,h*.05))+'px '+F_SANS,col);
+      txt(c,lab,18,y-h*.12+16,'12px '+F_MONO,pal.muted);
+    });
+    const fadeIn=RM?1:clamp(t/.8),fadeOut=RM?1:1-clamp((t-6.4)/.7);
+    for(const dd of dots){
+      const a=dd.z1*sa,e=dd.z2*se;const p=RM?1:ease(clamp((t-1-dd.d*1.7)/1.3));
+      const ya=yA-9+dd.j*12,ye=yE-9+dd.j*12,yp=yP-10+dd.jp*14;
+      c.globalAlpha=fadeIn*fadeOut;
+      if(p>0){c.globalAlpha*=.22;c.fillStyle=pal.a;c.beginPath();c.arc(X(a),ya,2.6,0,7);c.fill();c.fillStyle=pal.e;c.beginPath();c.arc(X(e),ye,2.6,0,7);c.fill();c.globalAlpha=fadeIn*fadeOut;}
+      if(p>=1){c.fillStyle=pal.ink;c.beginPath();c.arc(X(a+e),yp,3,0,7);c.fill();}
+      else{c.fillStyle=pal.a;c.beginPath();c.arc(X(lerp(a,a+e,p)),lerp(ya,yp,p),3,0,7);c.fill();
+           c.fillStyle=pal.e;c.beginPath();c.arc(X(lerp(e,a+e,p)),lerp(ye,yp,p),3,0,7);c.fill();}
+    }
+    c.globalAlpha=1;
+    txt(c,'← 差   好 →',w-18,h-4,'11px '+F_SANS,pal.muted,'right');
+  }
+  const st=new Stage(cv,{aspect:.42,minH:300,maxH:430,draw,tick(dt){if(RM)return false;t+=dt;if(t>=CYC){t=0;sample();}}});
+})();
+
+/* ---------- 基因传递（孟德尔抽样） ---------- */
+(function(){
+  const cv=document.getElementById('cv-mend');let r=rng(77);
+  let sire=[1,1,0,1,1,0,1,1],dam=[1,0,0,1,0,1,0,0];let pickS=[],pickD=[],t=RM?4:0,kids=[],logged=false,kidNo=0;
+  function choose4(){const idx=[0,1,2,3,4,5,6,7];for(let i=7;i>0;i--){const j=Math.floor(r()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}return idx.slice(0,4).sort((a,b)=>a-b);}
+  function newKid(){pickS=choose4();pickD=choose4();t=RM?4:0;logged=false;kidNo++;if(RM)logKid();st&&st.render();}
+  function logKid(){if(logged)return;logged=true;const n=pickS.reduce((s,i)=>s+sire[i],0)+pickD.reduce((s,i)=>s+dam[i],0);kids.push(n);if(kids.length>24)kids.shift();}
+  function newParents(){const g=()=>Array.from({length:8},()=>r()<.55?1:0);sire=g();dam=g();kids=[];kidNo=0;newKid();}
+  document.getElementById('mend-next').addEventListener('click',newKid);
+  document.getElementById('mend-new').addEventListener('click',newParents);
+  const sum=a=>a.reduce((s,v)=>s+v,0);
+  function card(c,x,y,s,good,alpha){c.globalAlpha=alpha;rrect(c,x,y,s,s*1.3,4);c.fillStyle=good?pal.a:pal.soft;c.fill();c.strokeStyle=good?pal.a:pal.line;c.lineWidth=1;c.stroke();
+    txt(c,good?'+':'−',x+s/2,y+s*.68,'700 '+Math.round(s*.6)+'px '+F_SANS,good?pal.surface:pal.muted,'center','middle');c.globalAlpha=1;}
+  function draw(c,w,h){
+    const gap=4,half=(w-48)/2,s=Math.min(30,(half-7*gap)/8);const blockW=8*s+7*gap;
+    const xS=16+(half-blockW)/2,xD=w/2+8+(half-blockW)/2,yPar=h*.12,yKid=h*.47,xK=(w-blockW)/2;
+    const nS=sum(sire),nD=sum(dam),exp=(nS+nD)/2;
+    txt(c,'父亲  +'+nS,xS,yPar-10,'600 14px '+F_SANS,pal.ink);txt(c,'母亲  +'+nD,xD,yPar-10,'600 14px '+F_SANS,pal.ink);
+    const chosen=t>.8;
+    for(let i=0;i<8;i++){const ds=pickS.includes(i),dd=pickD.includes(i);
+      card(c,xS+i*(s+gap),yPar,s,sire[i],chosen&&!ds?.35:1);card(c,xD+i*(s+gap),yPar,s,dam[i],chosen&&!dd?.35:1);}
+    // flying cards
+    txt(c,'小牛 #'+kidNo,xK,yKid-10,'600 14px '+F_SANS,pal.hi);
+    for(let k=0;k<8;k++){rrect(c,xK+k*(s+gap),yKid,s,s*1.3,4);c.strokeStyle=pal.line;c.setLineDash([3,3]);c.stroke();c.setLineDash([]);}
+    const src=[...pickS.map(i=>[xS+i*(s+gap),sire[i]]),...pickD.map(i=>[xD+i*(s+gap),dam[i]])];
+    src.forEach(([sx,g],k)=>{const p=RM?1:ease(clamp((t-1-k*.17)/.75));if(p<=0)return;const tx=xK+k*(s+gap);
+      const x=lerp(sx,tx,p),y=lerp(yPar,yKid,p)-Math.sin(p*Math.PI)*h*.05;card(c,x,y,s,g,1);});
+    // tally
+    const nK=sum(pickS.map(i=>sire[i]))+sum(pickD.map(i=>dam[i]));
+    const showT=RM?1:clamp((t-2.9)/.4);
+    if(showT>0){c.globalAlpha=showT;const d=nK-exp;
+      txt(c,`得到 +${nK}　父母平均 ${exp}　运气 ${d>=0?'+':''}${d}`,w/2,yKid+s*1.3+24,'600 14px '+F_SANS,d>0?pal.a:d<0?pal.hi:pal.ink,'center');c.globalAlpha=1;}
+    // number line
+    const yL=h*.88,X=scaleX(0,8,40,w-40);c.strokeStyle=pal.line;c.lineWidth=1;c.beginPath();c.moveTo(X(0),yL);c.lineTo(X(8),yL);c.stroke();
+    for(let v=0;v<=8;v++){c.beginPath();c.moveTo(X(v),yL);c.lineTo(X(v),yL+5);c.stroke();txt(c,String(v),X(v),yL+17,'11px '+F_MONO,pal.muted,'center');}
+    c.fillStyle=pal.hi;c.beginPath();c.moveTo(X(exp),yL+2);c.lineTo(X(exp)-6,yL+11);c.lineTo(X(exp)+6,yL+11);c.closePath();c.fill();
+    const counts={};kids.forEach((n,i)=>{const k=counts[n]=(counts[n]||0)+1;c.fillStyle=pal.a;c.globalAlpha=i===kids.length-1?1:.55;c.beginPath();c.arc(X(n),yL-6-(k-1)*9,4,0,7);c.fill();});c.globalAlpha=1;
+    txt(c,'兄弟姐妹们的“好基因”数（▲ 父母平均）',16,yL-h*.13,'12px '+F_SANS,pal.muted);
+  }
+  const st=new Stage(cv,{aspect:.55,minH:320,maxH:440,draw,tick(dt){if(RM)return false;if(t<5.2){t+=dt;if(t>3.1)logKid();if(t>=5.2&&kidNo<6){newKid();}return true;}return false;}});
+  newKid();
+})();
+
+/* ---------- 方差分解 ---------- */
+(function(){
+  const ids=['v-a','v-d','v-pe','v-e'];const tgt={},cur={};let st=null;
+  ids.forEach(id=>bindRange(id,v=>String(v),read));
+  function read(){ids.forEach(id=>tgt[id]=+document.getElementById(id).value);if(RM)Object.assign(cur,tgt);out();st&&st.render();}
+  function out(){const A=tgt['v-a'],D=tgt['v-d'],PE=tgt['v-pe'],E=tgt['v-e'],P=A+D+PE+E;
+    document.getElementById('var-out').innerHTML=`<span>遗传力 h² = <b class="a">${f2(A/P)}</b></span><span>广义遗传力 H² = <b class="a">${f2((A+D)/P)}</b></span><span>重复力 r = <b>${f2((A+D+PE)/P)}</b></span><span style="flex-basis:100%">总是 h² ≤ H² ≤ r：重复力是遗传力的“天花板”。</span>`;}
+  ids.forEach(id=>{tgt[id]=+document.getElementById(id).value;cur[id]=tgt[id];});
+  function draw(c,w,h){
+    const vals=ids.map(id=>cur[id]);const P=vals.reduce((s,v)=>s+v,0)||1;const x0=16,x1=w-16,W=x1-x0;
+    const bh=Math.min(54,h*.22),by=h*.44-bh/2;
+    const cols=[[pal.a,1],[pal.a,.45],[pal.e,.8],[pal.e,.35]];const labs=['A','D','pe','e'];
+    let x=x0;const xs=[x0];
+    vals.forEach((v,k)=>{const ww=v/P*W;c.globalAlpha=cols[k][1];c.fillStyle=cols[k][0];c.fillRect(x,by,ww,bh);c.globalAlpha=1;
+      if(ww>36){const dark=k===0||k===2;txt(c,labs[k],x+ww/2,by+bh/2-6,'600 15px '+F_SANS,dark?pal.surface:pal.ink,'center','middle');txt(c,(v/P*100).toFixed(0)+'%',x+ww/2,by+bh/2+12,'11px '+F_MONO,dark?pal.surface:pal.ink,'center','middle');}
+      x+=ww;xs.push(x);});
+    c.strokeStyle=pal.surface;c.lineWidth=2;xs.slice(1,-1).forEach(px=>{c.beginPath();c.moveTo(px,by);c.lineTo(px,by+bh);c.stroke();});
+    function bracket(xa,xb,y,dir,label,col){c.strokeStyle=col;c.lineWidth=1.6;c.beginPath();c.moveTo(xa+1,y+5*dir);c.lineTo(xa+1,y);c.lineTo(xb-1,y);c.lineTo(xb-1,y+5*dir);c.stroke();
+      const tx=clamp((xa+xb)/2,x0+70,x1-70);txt(c,label,tx,y-(dir>0?6:-16),'13px '+F_SANS,col,'center');}
+    const A=cur['v-a'],D=cur['v-d'],PE=cur['v-pe'];
+    if(A>0)bracket(xs[0],xs[1],by-12,1,'遗传力 h² = '+f2(A/P),pal.a);
+    bracket(xs[0],xs[2],by-46,1,'广义遗传力 H² = '+f2((A+D)/P),pal.a);
+    bracket(xs[0],xs[3],by+bh+12,-1,'重复力 r = '+f2((A+D+PE)/P),pal.e);
+    bracket(xs[0],xs[4],by+bh+50,-1,'整块蛋糕：全部差异 σ²P',pal.muted);
+  }
+  st=new Stage(document.getElementById('cv-var'),{aspect:.3,minH:240,maxH:300,draw,tick(dt){let moving=false;ids.forEach(id=>{const d=tgt[id]-cur[id];if(Math.abs(d)>.01){cur[id]+=d*Math.min(1,dt*9);moving=true;}else cur[id]=tgt[id];});return moving;}});
+  out();
+})();
+
+/* ---------- 遗传相关 ---------- */
+(function(){
+  const N=320;const r=rng(5);const pts=[];for(let i=0;i<N;i++)pts.push([normal(r),normal(r),normal(r),normal(r)]);
+  const P={g:.6,e:-.3,h1:.3,h2:.5};let st=null;
+  const f=v=>(v>=0?'+':'')+f2(v);
+  bindRange('rg-g',f,v=>{P.g=v;upd();});bindRange('rg-e',f,v=>{P.e=v;upd();});bindRange('rg-h1',f2,v=>{P.h1=v;upd();});bindRange('rg-h2',f2,v=>{P.h2=v;upd();});
+  function rP(){return Math.sqrt(P.h1*P.h2)*P.g+Math.sqrt((1-P.h1)*(1-P.h2))*P.e;}
+  function upd(){const rp=rP(),eff=P.g*Math.sqrt(P.h1)/Math.sqrt(P.h2);
+    const word=P.g>.3?'同涨同落':P.g<-.3?'此消彼长':'关系不大';
+    document.getElementById('rg-out').innerHTML=`<span>基因层面：<b class="a">${word}</b></span><span>基因通路 = <b class="a">${f(Math.sqrt(P.h1*P.h2)*P.g)}</b></span><span>环境通路 = <b>${f(Math.sqrt((1-P.h1)*(1-P.h2))*P.e)}</b></span><span>看到的表型相关 r<sub>P</sub> = <b class="hi">${f(rp)}</b></span><span>选性状 1 去改良性状 2，效率是直接选的 <b>${f2(eff)}</b> 倍</span>`;st&&st.render();}
+  function panel(c,x,y,w,h,title,rho,col,get){
+    const s=Math.min(w-30,h-40);const cx=x+w/2,cy=y+28+s/2;const X=v=>cx+v/3.3*s/2,Y=v=>cy-v/3.3*s/2;
+    c.strokeStyle=pal.line;c.lineWidth=1;c.strokeRect(cx-s/2+.5,cy-s/2+.5,s,s);
+    c.beginPath();c.moveTo(cx,cy-s/2);c.lineTo(cx,cy+s/2);c.moveTo(cx-s/2,cy);c.lineTo(cx+s/2,cy);c.stroke();
+    c.fillStyle=col;c.globalAlpha=.55;for(const p of pts){const [u,v]=get(p);if(Math.abs(u)<3.3&&Math.abs(v)<3.3){c.beginPath();c.arc(X(u),Y(v),2.2,0,7);c.fill();}}c.globalAlpha=1;
+    c.beginPath();for(let k=0;k<=72;k++){const th=k/72*2*Math.PI;const u=2*Math.cos(th),v=2*(rho*Math.cos(th)+Math.sqrt(1-rho*rho)*Math.sin(th));k?c.lineTo(X(u),Y(v)):c.moveTo(X(u),Y(v));}c.strokeStyle=col;c.lineWidth=2;c.stroke();
+    txt(c,title,cx-s/2,y+16,'600 14px '+F_SANS,pal.ink);txt(c,'r = '+f2(rho),cx+s/2,y+16,'600 13px '+F_MONO,col,'right');
+    txt(c,'性状 1 →',cx+s/2-2,cy+s/2-6,'11px '+F_SANS,pal.muted,'right');
+    c.save();c.translate(cx-s/2+12,cy-s/2+4);c.rotate(-Math.PI/2);txt(c,'性状 2 →',0,0,'11px '+F_SANS,pal.muted,'right','top');c.restore();
+  }
+  function draw(c,w,h){
+    const g=P.g,e=P.e,h1=Math.sqrt(P.h1),h2=Math.sqrt(P.h2),e1=Math.sqrt(1-P.h1),e2=Math.sqrt(1-P.h2);
+    const getA=p=>[p[0],g*p[0]+Math.sqrt(1-g*g)*p[1]];
+    const getP=p=>{const a=getA(p),E1=p[2],E2=e*p[2]+Math.sqrt(1-e*e)*p[3];return[h1*a[0]+e1*E1,h2*a[1]+e2*E2];};
+    if(w<560){panel(c,0,0,w,h/2,'基因（育种值）',g,pal.a,getA);panel(c,0,h/2,w,h/2,'实际表现（表型）',rP(),pal.hi,getP);}
+    else{panel(c,0,0,w/2,h,'基因（育种值）',g,pal.a,getA);panel(c,w/2,0,w/2,h,'实际表现（表型）',rP(),pal.hi,getP);}
+  }
+  st=new Stage(document.getElementById('cv-rg'),{aspect:w=>w<560?1.9:.52,minH:300,maxH:900,draw});
+  upd();
+})();
+
+/* ---------- 亲子回归 ---------- */
+(function(){
+  let h2=.4,n=150,mode='mid',seed=21,fam=[],shown=0,line=0,st=null;const maxN=600;
+  function gen(){const r=rng(seed);fam=[];for(let i=0;i<maxN;i++)fam.push([normal(r),normal(r),normal(r),normal(r),normal(r),normal(r)]);}
+  function data(){const sa=Math.sqrt(h2),se=Math.sqrt(1-h2),xs=[],ys=[];
+    for(let i=0;i<n;i++){const f=fam[i];const As=f[0]*sa,Ad=f[1]*sa,Ps=As+f[2]*se,Pd=Ad+f[3]*se;const Ao=(As+Ad)/2+f[4]*sa*Math.SQRT1_2,Po=Ao+f[5]*se;xs.push(mode==='mid'?(Ps+Pd)/2:Ps);ys.push(Po);}
+    let mx=0,my=0;xs.forEach((x,i)=>{mx+=x;my+=ys[i];});mx/=n;my/=n;let sxx=0,sxy=0;xs.forEach((x,i)=>{sxx+=(x-mx)*(x-mx);sxy+=(x-mx)*(ys[i]-my);});
+    const b=sxy/sxx,a=my-b*mx;let rss=0;xs.forEach((x,i)=>{const d=ys[i]-a-b*x;rss+=d*d;});const se_b=Math.sqrt(rss/(n-2)/sxx);return{xs,ys,a,b,se_b};}
+  let D;
+  function upd(anim){D=data();if(anim&&!RM){shown=0;line=0;}else{shown=n;line=1;}
+    const k=mode==='mid'?1:2;document.getElementById('reg-out').innerHTML=`<span>直线斜率 = <b>${f3(D.b)}</b></span><span>估计的遗传力 = <b class="hi">${f2(k*D.b)} ± ${f2(k*D.se_b)}</b></span><span>真实值 = <b class="a">${f2(h2)}</b></span>`;st&&st.render();}
+  bindRange('reg-h2',f2,v=>{h2=v;upd(false);});bindRange('reg-n',v=>String(v),v=>{n=v;upd(false);});
+  document.getElementById('reg-mode').addEventListener('change',e=>{mode=e.target.value;upd(true);});
+  document.getElementById('reg-go').addEventListener('click',()=>{seed++;gen();upd(true);});
+  function draw(c,w,h){
+    const L=44,R=14,T=12,B=40;const X=scaleX(-3,3,L,w-R),Y=scaleX(-3.4,3.4,h-B,T);
+    c.strokeStyle=pal.line;c.lineWidth=1;
+    for(let v=-3;v<=3;v++){c.beginPath();c.moveTo(X(v),T);c.lineTo(X(v),h-B);c.stroke();txt(c,String(v),X(v),h-B+14,'11px '+F_MONO,pal.muted,'center');}
+    for(let v=-3;v<=3;v++){c.beginPath();c.moveTo(L,Y(v));c.lineTo(w-R,Y(v));c.stroke();txt(c,String(v),L-6,Y(v)+4,'11px '+F_MONO,pal.muted,'right');}
+    txt(c,mode==='mid'?'父母的平均表现 →':'父亲的表现 →',(L+w-R)/2,h-6,'12px '+F_SANS,pal.muted,'center');
+    c.save();c.translate(13,(T+h-B)/2);c.rotate(-Math.PI/2);txt(c,'小牛的表现 →',0,0,'12px '+F_SANS,pal.muted,'center','middle');c.restore();
+    c.save();c.beginPath();c.rect(L,T,w-R-L,h-B-T);c.clip();
+    c.fillStyle=pal.a;c.globalAlpha=.55;const m=Math.floor(shown);for(let i=0;i<m;i++){c.beginPath();c.arc(X(D.xs[i]),Y(D.ys[i]),2.6,0,7);c.fill();}c.globalAlpha=1;
+    const kExp=mode==='mid'?h2:h2/2;c.setLineDash([5,5]);c.strokeStyle=pal.muted;c.lineWidth=1.3;c.beginPath();c.moveTo(X(-3),Y(-3*kExp));c.lineTo(X(3),Y(3*kExp));c.stroke();c.setLineDash([]);
+    if(line>0){const xe=lerp(-3,3,ease(line));c.strokeStyle=pal.hi;c.lineWidth=2.6;c.beginPath();c.moveTo(X(-3),Y(D.a-3*D.b));c.lineTo(X(xe),Y(D.a+xe*D.b));c.stroke();}
+    c.restore();
+    txt(c,'— 数据拟合的直线',w-R-8,T+16,'12px '+F_SANS,pal.hi,'right');txt(c,'- - 理论值 '+(mode==='mid'?'h²':'½h²'),w-R-8,T+32,'12px '+F_SANS,pal.muted,'right');
+  }
+  gen();
+  st=new Stage(document.getElementById('cv-reg'),{aspect:.55,minH:300,maxH:480,draw,tick(dt){if(shown<n){shown=Math.min(n,shown+dt*n/1.3);return true;}if(line<1){line=Math.min(1,line+dt/.7);return true;}return false;}});
+  upd(false);
+})();
+
+/* ---------- 半同胞 ANOVA / REML ---------- */
+(function(){
+  let h2t=.3,S=40,Nn=20,seed=31,R=null,k=0,acc=0,st=null;
+  function sim(){const r=rng(seed);const vs=h2t/4,vw=1-vs;let SSW=0,tot=0;const means=[];
+    for(let i=0;i<S;i++){const si=normal(r)*Math.sqrt(vs);let sum=0;const ys=[];for(let j=0;j<Nn;j++){const y=si+normal(r)*Math.sqrt(vw);ys.push(y);sum+=y;}const m=sum/Nn;means.push(m);tot+=sum;ys.forEach(y=>{SSW+=(y-m)*(y-m);});}
+    const gm=tot/(S*Nn);let SSB=0;means.forEach(m=>{SSB+=Nn*(m-gm)*(m-gm);});const dfb=S-1,dfw=S*(Nn-1);const MSB=SSB/dfb,MSW=SSW/dfw;
+    const ss=(MSB-MSW)/Nn,tA=ss/(ss+MSW),h2A=4*tA;
+    const ll=h=>{const t=h/4,g=t/(1-t);const sw=(SSB/(1+Nn*g)+SSW)/(dfb+dfw);return-.5*(dfb*Math.log(1+Nn*g)+(dfb+dfw)*Math.log(sw));};
+    const grid=[];let mx=-Infinity;for(let i=0;i<=300;i++){const h=.001+i/300*.998;const v=ll(h);grid.push([h,v]);if(v>mx)mx=v;}
+    const its=[];let lo=.001,hi=.999;const gr=(Math.sqrt(5)-1)/2;let x1=hi-gr*(hi-lo),x2=lo+gr*(hi-lo),f1=ll(x1),f2v=ll(x2);its.push({lo,hi,x1,x2});
+    while(hi-lo>.002&&its.length<30){if(f1<f2v){lo=x1;x1=x2;f1=f2v;x2=lo+gr*(hi-lo);f2v=ll(x2);}else{hi=x2;x2=x1;f2v=f1;x1=hi-gr*(hi-lo);f1=ll(x1);}its.push({lo,hi,x1,x2});}
+    R={SSB,SSW,dfb,dfw,MSB,MSW,ss,h2A,grid,mx,its,est:(lo+hi)/2};}
+  function table(){const r=R;const cell=v=>`<td class="num">${v}</td>`;
+    document.getElementById('reml-anova').innerHTML=`<thead><tr><th>来源</th><th style="text-align:right">自由度</th><th style="text-align:right">平方和</th><th style="text-align:right">均方</th><th>期望均方</th></tr></thead><tbody>
+    <tr><td>公牛之间</td>${cell(r.dfb)}${cell(r.SSB.toFixed(1))}${cell(r.MSB.toFixed(3))}<td>σ²<sub>w</sub> + ${Nn}σ²<sub>s</sub></td></tr>
+    <tr><td>公牛内部</td>${cell(r.dfw)}${cell(r.SSW.toFixed(1))}${cell(r.MSW.toFixed(3))}<td>σ²<sub>w</sub></td></tr>
+    <tr><td colspan="5" style="color:var(--muted)">σ̂²<sub>s</sub> = (MS<sub>B</sub>−MS<sub>W</sub>)/${Nn} = <b class="num" style="color:var(--ink)">${r.ss.toFixed(4)}</b>，ĥ² = 4σ̂²<sub>s</sub>/(σ̂²<sub>s</sub>+σ̂²<sub>w</sub>) = <b class="num" style="color:var(--e)">${f3(r.h2A)}</b>${r.h2A<0?'（小于 0，超出合理范围；REML 会停在 0 附近）':''}</td></tr></tbody>`;}
+  function log(){const el=document.getElementById('reml-log');let s='<div>在 0 到 1 之间爬山找 h²</div>';
+    for(let i=1;i<=k&&i<R.its.length;i++){const it=R.its[i];s+=`<div${i===k?' class="last"':''}>第 ${String(i).padStart(2,' ')} 步：答案在 [${f3(it.lo)}, ${f3(it.hi)}] 之间</div>`;}
+    if(k>=R.its.length-1)s+=`<div class="last">到山顶了：REML 估计 ĥ² = ${f3(R.est)}（方差分析 ${f3(R.h2A)}，真值 ${f2(h2t)}）</div>`;el.innerHTML=s;el.scrollTop=el.scrollHeight;}
+  function run(anim){sim();table();k=(anim&&!RM)?0:R.its.length-1;acc=0;log();st&&st.render();}
+  bindRange('reml-h2',f2,v=>{h2t=v;run(false);});bindRange('reml-s',v=>String(v),v=>{S=v;run(false);});bindRange('reml-n',v=>String(v),v=>{Nn=v;run(false);});
+  document.getElementById('reml-go').addEventListener('click',()=>{seed++;run(true);});
+  function draw(c,w,h){
+    const L=48,Rr=14,T=16,B=40;const X=scaleX(0,1,L,w-Rr);const ymin=Math.max(-14,Math.min(-4,Math.min(...R.grid.map(g=>g[1]-R.mx))));const Y=scaleX(ymin,.8,h-B,T);
+    c.strokeStyle=pal.line;c.lineWidth=1;
+    for(let v=0;v<=1.001;v+=.2){c.beginPath();c.moveTo(X(v),T);c.lineTo(X(v),h-B);c.stroke();txt(c,v.toFixed(1),X(v),h-B+14,'11px '+F_MONO,pal.muted,'center');}
+    for(let v=0;v>=ymin;v-=2){c.beginPath();c.moveTo(L,Y(v));c.lineTo(w-Rr,Y(v));c.stroke();txt(c,String(v),L-6,Y(v)+4,'11px '+F_MONO,pal.muted,'right');}
+    txt(c,'h²（遗传力的候选值）',(L+w-Rr)/2,h-6,'12px '+F_SANS,pal.muted,'center');
+    c.save();c.translate(14,(T+h-B)/2);c.rotate(-Math.PI/2);txt(c,'合理程度（对数似然）',0,0,'12px '+F_SANS,pal.muted,'center','middle');c.restore();
+    c.setLineDash([4,4]);c.strokeStyle=pal.muted;c.beginPath();c.moveTo(L,Y(-1.92));c.lineTo(w-Rr,Y(-1.92));c.stroke();c.setLineDash([]);
+    txt(c,'−1.92',w-Rr-4,Y(-1.92)-5,'11px '+F_MONO,pal.muted,'right');
+    const it=R.its[Math.min(k,R.its.length-1)];
+    c.fillStyle=pal.a;c.globalAlpha=.13;c.fillRect(X(it.lo),T,X(it.hi)-X(it.lo),h-B-T);c.globalAlpha=1;
+    c.save();c.beginPath();c.rect(L,T,w-Rr-L,h-B-T);c.clip();
+    c.beginPath();R.grid.forEach(([x,v],i)=>{const px=X(x),py=Y(v-R.mx);i?c.lineTo(px,py):c.moveTo(px,py);});c.strokeStyle=pal.ink;c.lineWidth=2.2;c.stroke();
+    c.restore();
+    const ll=x=>{const a=R.grid[Math.round((x-.001)/.998*300)];return a?a[1]-R.mx:ymin;};
+    if(k<R.its.length-1){[it.x1,it.x2].forEach(x=>{c.fillStyle=pal.hi;c.beginPath();c.arc(X(x),Y(Math.max(ymin,ll(x))),5,0,7);c.fill();});}
+    else{c.strokeStyle=pal.hi;c.lineWidth=2;c.beginPath();c.moveTo(X(R.est),T);c.lineTo(X(R.est),h-B);c.stroke();
+      c.fillStyle=pal.hi;c.beginPath();c.moveTo(X(R.est),Y(0)-2);c.lineTo(X(R.est),Y(0)-22);c.lineTo(X(R.est)+13,Y(0)-17);c.lineTo(X(R.est),Y(0)-12);c.closePath();c.fill();
+      const right=X(R.est)>w*.7;txt(c,'山顶 ĥ² = '+f3(R.est),X(R.est)+(right?-8:16),T+14,'600 13px '+F_MONO,pal.hi,right?'right':'left');}
+    c.fillStyle=pal.a;c.beginPath();c.moveTo(X(h2t),h-B);c.lineTo(X(h2t)-6,h-B+9);c.lineTo(X(h2t)+6,h-B+9);c.closePath();c.fill();
+    txt(c,'▲ 真值',L+6,T+14,'11px '+F_SANS,pal.a);
+  }
+  sim();table();k=R.its.length-1;log();
+  st=new Stage(document.getElementById('cv-reml'),{aspect:.45,minH:280,maxH:420,draw,tick(dt){if(k<R.its.length-1){acc+=dt;if(acc>.42){acc=0;k++;log();}return true;}return false;}});
+})();
+
+/* ---------- A 矩阵表格法 ---------- */
+(function(){
+  const ped=[[1,0,0],[2,0,0],[3,1,2],[4,1,0],[5,3,4],[6,5,2]];const n=6;
+  const A=[...Array(n)].map(()=>Array(n).fill(0));const steps=[];
+  const fmt=v=>String(+v.toFixed(4));const sub=(i,j)=>`a<sub>${i},${j}</sub>`;
+  for(let i=0;i<n;i++){const s=ped[i][1],d=ped[i][2];
+    const asd=(s&&d)?A[s-1][d-1]:0;A[i][i]=1+.5*asd;
+    steps.push({i,j:i,refs:(s&&d)?[[s-1,d-1]]:[],par:[s,d],
+      t:(s&&d)?`${sub(i+1,i+1)} = 1 + ½${sub(s,d)} = 1 + ½×${fmt(asd)} = <b>${fmt(A[i][i])}</b><span class="plainf">${i+1} 和自己的关系：1 加上父母 ${s}、${d} 之间关系的一半。${asd>0?`父母是亲戚，所以 ${i+1} 的近交系数 F = ${fmt(A[i][i]-1)}`:'父母不是亲戚，没有近交'}</span>`
+        :`${sub(i+1,i+1)} = 1<span class="plainf">${i+1} 和自己的关系为 1（${!s&&!d?'父母都不在家谱里':'有一个亲本未知'}，不近交）</span>`});
+    for(let j=0;j<i;j++){const vs=s?A[j][s-1]:0,vd=d?A[j][d-1]:0;const v=.5*(vs+vd);A[i][j]=A[j][i]=v;
+      const refs=[];if(s)refs.push([j,s-1]);if(d)refs.push([j,d-1]);
+      steps.push({i,j,refs,par:[s,d],t:(s||d)?`${sub(i+1,j+1)} = ½(${s?sub(j+1,s):'0'} + ${d?sub(j+1,d):'0'}) = ½(${fmt(vs)} + ${fmt(vd)}) = <b>${fmt(v)}</b><span class="plainf">${i+1} 和 ${j+1} 的关系 = ${s?`父亲 ${s}`:'未知父亲(0)'}与 ${j+1} 的关系、${d?`母亲 ${d}`:'未知母亲(0)'}与 ${j+1} 的关系，两者取平均</span>`
+        :`${sub(i+1,j+1)} = 0<span class="plainf">${i+1} 是基础群，与 ${j+1} 没有已知亲缘</span>`});}
+  }
+  const tb=document.getElementById('amat');let h='<thead><tr><th></th>'+ped.map(p=>`<th>${p[0]}</th>`).join('')+'</tr></thead><tbody>';
+  for(let i=0;i<n;i++){h+=`<tr><th>${i+1}</th>`;for(let j=0;j<n;j++)h+=`<td id="c${i}${j}" class="${i===j?'diag':''}">${fmt(A[i][j])}</td>`;h+='</tr>';}tb.innerHTML=h+'</tbody>';
+  document.querySelector('#ped-tbl tbody').innerHTML=ped.map(p=>`<tr id="pr${p[0]}"><td>${p[0]}</td><td>${p[1]||'–'}</td><td>${p[2]||'–'}</td></tr>`).join('');
+  const edges={3:['e13','e23'],4:['e14'],5:['e35','e45'],6:['e56','e26']};
+  let k=-1,timer=null;
+  const cell=(i,j)=>document.getElementById('c'+i+j);
+  function show(){document.querySelectorAll('.amat td').forEach(td=>td.classList.remove('filled','cur','ref'));
+    document.querySelectorAll('#ped-svg .on,#ped-svg .par').forEach(e=>e.classList.remove('on','par'));document.querySelectorAll('#ped-tbl tr').forEach(r=>r.classList.remove('cur'));
+    for(let q=0;q<=k&&q<steps.length;q++){const s=steps[q];cell(s.i,s.j).classList.add('filled');cell(s.j,s.i).classList.add('filled');}
+    const F=document.getElementById('a-formula');
+    if(k>=0&&k<steps.length){const s=steps[k];cell(s.i,s.j).classList.add('cur');cell(s.j,s.i).classList.add('cur');s.refs.forEach(([a,b])=>cell(a,b).classList.add('ref'));
+      const g=document.getElementById('n'+(s.i+1));g.querySelector('circle').classList.add('on');g.querySelector('text').classList.add('on');
+      s.par.forEach(p=>{if(p)document.getElementById('n'+p).querySelector('circle').classList.add('par');});(edges[s.i+1]||[]).forEach(id=>document.getElementById(id).classList.add('on'));
+      document.getElementById('pr'+(s.i+1)).classList.add('cur');F.innerHTML=s.t;}
+    else if(k>=steps.length){F.innerHTML='完成！<span class="plainf">对角线上 5 和 6 都是 1.125，说明它们各有 12.5% 的近交。表格左右对称，可以直接放进动物模型。</span>';}
+    else F.innerHTML='准备好了。<span class="plainf">点“播放”，一格一格算出所有牛两两之间的亲缘关系。</span>';
+    document.getElementById('a-prog').textContent=`${Math.max(0,Math.min(k+1,steps.length))} / ${steps.length}`;}
+  const playBtn=document.getElementById('a-play'),playLbl=playBtn.querySelector('span');
+  function stop(){clearInterval(timer);timer=null;playLbl.textContent='播放';}
+  function step(){if(k>=steps.length){stop();return;}k++;show();if(k>=steps.length)stop();}
+  playBtn.addEventListener('click',()=>{if(timer){stop();return;}if(k>=steps.length)k=-1;playLbl.textContent='暂停';step();timer=setInterval(step,RM?1600:1200);});
+  document.getElementById('a-step').addEventListener('click',()=>{stop();if(k>=steps.length)k=-1;step();});
+  document.getElementById('a-reset').addEventListener('click',()=>{stop();k=-1;show();});
+  k=steps.length;show();
+})();
+
+/* ---------- 选择反应 ---------- */
+(function(){
+  let h2=.3,p=.2,mu=0,gen=0,runTo=0,ph=1.4,cx=.9,hist=[0],st=null;const MAXG=10;
+  const xT=()=>qnorm(1-p),I=()=>dnorm(xT())/p,Rr=()=>h2*I();
+  function out(){document.getElementById('sel-out').innerHTML=`<span>种畜比平均好 S = <b class="hi">${f2(I())}</b></span><span>每代进步 R = h² × S = <b class="a">${f2(Rr())}</b></span><span>已选 <b>${gen}</b> 代，累计进步 <b class="a">${f2(mu)}</b> 个标准差</span>`;}
+  bindRange('sel-h2',f2,v=>{h2=v;out();st.render();});bindRange('sel-p',v=>'前 '+(v*100).toFixed(0)+'%',v=>{p=v;out();st.render();});
+  function commit(){mu+=Rr();gen++;hist.push(mu);}
+  function go(to){runTo=Math.min(MAXG,to);if(RM){while(gen<runTo)commit();ph=1.4;out();st.render();}}
+  document.getElementById('sel-play').addEventListener('click',()=>{if(gen>=MAXG)reset();go(MAXG);});
+  document.getElementById('sel-step').addEventListener('click',()=>{if(gen<MAXG)go(gen+1);});
+  function reset(){mu=0;gen=0;runTo=0;ph=1.4;hist=[0];out();st.render();}
+  document.getElementById('sel-reset').addEventListener('click',reset);
+  function draw(c,w,h){
+    const R=Rr(),i=I(),T=mu+xT();const y0=h*.56,amp=h*.38;const X=scaleX(cx-4.3,cx+4.3,16,w-16);
+    c.strokeStyle=pal.line;c.lineWidth=1;c.beginPath();c.moveTo(16,y0+.5);c.lineTo(w-16,y0+.5);c.stroke();
+    for(let v=Math.ceil(cx-4.3);v<=cx+4.3;v++){c.beginPath();c.moveTo(X(v),y0);c.lineTo(X(v),y0+5);c.stroke();txt(c,String(v),X(v),y0+17,'11px '+F_MONO,pal.muted,'center');}
+    normCurve(c,X,y0,mu,1,amp,16,w-16);c.lineTo(w-16,y0);c.lineTo(16,y0);c.closePath();c.fillStyle=pal.ink;c.globalAlpha=.07;c.fill();c.globalAlpha=1;
+    normCurve(c,X,y0,mu,1,amp,16,w-16);c.strokeStyle=pal.ink;c.lineWidth=1.8;c.stroke();
+    const busy=gen<runTo||ph<1.4;const tg=busy?ease(clamp(ph/.7)):1;
+    if(X(T)<w-16){c.beginPath();c.moveTo(X(T),y0);for(let px=X(T);px<=w-16;px+=2){const z=X.inv(px)-mu;c.lineTo(px,y0-amp*Math.exp(-(z*z)/2));}c.lineTo(w-16,y0);c.closePath();c.fillStyle=pal.hi;c.globalAlpha=.4*tg;c.fill();c.globalAlpha=1;}
+    c.globalAlpha=tg;c.strokeStyle=pal.hi;c.lineWidth=1.2;c.setLineDash([3,3]);c.beginPath();c.moveTo(X(T),y0);c.lineTo(X(T),y0-amp*1.02);c.stroke();c.setLineDash([]);
+    txt(c,'留作种畜',X(T)+4,y0-amp*1.02+10,'11px '+F_SANS,pal.hi);c.globalAlpha=1;
+    c.strokeStyle=pal.ink;c.lineWidth=1;c.setLineDash([2,3]);c.beginPath();c.moveTo(X(mu),y0);c.lineTo(X(mu),h*.08);c.stroke();c.setLineDash([]);
+    const sp=busy?ease(clamp((ph-.7)/.7)):1;const ys=h*.1;
+    if(sp>0){arrow(c,X(mu),ys,X(mu+i*sp),pal.hi,2);c.globalAlpha=sp;c.strokeStyle=pal.hi;c.setLineDash([2,3]);c.beginPath();c.moveTo(X(mu+i),ys);c.lineTo(X(mu+i),y0);c.stroke();c.setLineDash([]);
+      txt(c,'S = '+f2(i),X(mu+i)+6,ys+4,'600 12px '+F_MONO,pal.hi);c.globalAlpha=1;}
+    const q=ph>1.4?ease(clamp((ph-1.4)/1.2)):0;
+    if(q>0){const m2=mu+R*q;c.globalAlpha=clamp(q*3);normCurve(c,X,y0,m2,1,amp,16,w-16);c.strokeStyle=pal.a;c.lineWidth=2.6;c.stroke();
+      arrow(c,X(mu),h*.2,X(m2),pal.a,2.4);txt(c,'R = '+f2(R),X(m2)+6,h*.2+4,'600 12px '+F_MONO,pal.a);c.globalAlpha=1;}
+    else txt(c,'这一代',X(mu)-6,y0-amp-6,'12px '+F_SANS,pal.ink,'right');
+    const top=h*.7,bot=h-22,L=48,Rx=w-16;const ymax=Math.max(1,Math.ceil((Math.max(...hist)+R)*1.05));const GX=scaleX(0,MAXG,L,Rx),GY=scaleX(0,ymax,bot,top);
+    c.strokeStyle=pal.line;c.lineWidth=1;c.beginPath();c.moveTo(L,bot+.5);c.lineTo(Rx,bot+.5);c.moveTo(L+.5,top);c.lineTo(L+.5,bot);c.stroke();
+    for(let g=0;g<=MAXG;g+=2)txt(c,String(g),GX(g),bot+14,'11px '+F_MONO,pal.muted,'center');
+    txt(c,String(ymax),L-6,top+8,'11px '+F_MONO,pal.muted,'right');txt(c,'0',L-6,bot,'11px '+F_MONO,pal.muted,'right');
+    txt(c,'平均',L-6,(top+bot)/2+4,'11px '+F_SANS,pal.muted,'right');txt(c,'第几代 →',Rx,top+10,'11px '+F_SANS,pal.muted,'right');
+    c.beginPath();hist.forEach((m,g)=>{g?c.lineTo(GX(g),GY(m)):c.moveTo(GX(g),GY(m));});if(q>0)c.lineTo(GX(gen+q),GY(mu+R*q));c.strokeStyle=pal.a;c.lineWidth=2.2;c.stroke();
+    c.fillStyle=pal.a;hist.forEach((m,g)=>{c.beginPath();c.arc(GX(g),GY(m),3.2,0,7);c.fill();});
+  }
+  st=new Stage(document.getElementById('cv-sel'),{aspect:.55,minH:340,maxH:480,draw,tick(dt){
+    const target=mu+(ph>1.4?Rr()*.5:0)+.9;let moved=false;if(Math.abs(target-cx)>.002){cx+=(target-cx)*Math.min(1,dt*2.5);moved=true;}
+    if(RM){cx=target;return moved;}
+    if(gen<runTo||ph<1.4){ph+=dt*1.05;if(ph>=2.6){commit();ph=0;out();}else if(gen>=runTo&&ph>=1.4){ph=1.4;}return true;}
+    return moved;}});
+  out();
+})();
+
+/* ---------- 准确度曲线 ---------- */
+(function(){
+  const H=[[.5,'a'],[.25,'e'],[.1,'hi'],[.05,'muted']];let nCur=40,prog=RM?1:0,shown=false,st=null;
+  const acc=(n,h)=>Math.sqrt(n/(n+(4-h)/h));
+  function out(){document.getElementById('acc-out').innerHTML=H.map(([h,k])=>`<span>h² = ${h}：<b style="color:var(--${k==='muted'?'ink':k})">${f2(acc(nCur,h))}</b></span>`).join('')+`<span style="flex-basis:100%">对比：只看个体自己一次成绩，准确度只有 ${H.map(([h])=>f2(Math.sqrt(h))).join(' / ')}</span>`;}
+  bindRange('acc-n',v=>String(v),v=>{nCur=v;out();st.render();});
+  function draw(c,w,h){
+    const L=44,R=58,T=14,B=36;const X=scaleX(0,200,L,w-R),Y=scaleX(0,1,h-B,T);
+    c.strokeStyle=pal.line;c.lineWidth=1;
+    for(let v=0;v<=200;v+=50){c.beginPath();c.moveTo(X(v),T);c.lineTo(X(v),h-B);c.stroke();txt(c,String(v),X(v),h-B+14,'11px '+F_MONO,pal.muted,'center');}
+    for(let v=0;v<=1.001;v+=.25){c.beginPath();c.moveTo(L,Y(v));c.lineTo(w-R,Y(v));c.stroke();txt(c,v.toFixed(2),L-6,Y(v)+4,'11px '+F_MONO,pal.muted,'right');}
+    txt(c,'测定的后代数 →',(L+w-R)/2,h-6,'12px '+F_SANS,pal.muted,'center');
+    c.save();c.translate(12,(T+h-B)/2);c.rotate(-Math.PI/2);txt(c,'准确度 →',0,0,'12px '+F_SANS,pal.muted,'center','middle');c.restore();
+    const nmax=200*ease(prog);
+    H.forEach(([hh,k])=>{c.beginPath();for(let n=0;n<=nmax;n+=1){const px=X(n),py=Y(acc(n,hh));n?c.lineTo(px,py):c.moveTo(px,py);}c.strokeStyle=pal[k];c.lineWidth=2.4;c.stroke();
+      if(prog>=1)txt(c,'h² '+hh,w-R+6,Y(acc(200,hh))+4,'600 12px '+F_MONO,pal[k]);});
+    if(prog>=1){c.strokeStyle=pal.ink;c.setLineDash([3,3]);c.lineWidth=1;c.beginPath();c.moveTo(X(nCur),T);c.lineTo(X(nCur),h-B);c.stroke();c.setLineDash([]);
+      H.forEach(([hh,k])=>{c.fillStyle=pal[k];c.beginPath();c.arc(X(nCur),Y(acc(nCur,hh)),4.5,0,7);c.fill();});}
+  }
+  st=new Stage(document.getElementById('cv-acc'),{aspect:.45,minH:280,maxH:400,draw,onShow(){shown=true;},tick(dt){if(shown&&prog<1){prog=Math.min(1,prog+dt/1.6);return true;}return false;}});
+  out();
+})();
+
+/* ---------- 常见遗传力 ---------- */
+(function(){
+  const T=[['奶牛 受胎率',.02,.07],['猪 总产仔数',.08,.12],['蛋鸡 产蛋数',.15,.3],['奶牛 产奶量',.25,.35],['猪 日增重',.25,.4],['肉鸡 体重',.3,.5],['猪 背膘厚',.4,.6],['奶牛 乳脂率',.4,.6]];
+  const el=document.getElementById('htraits');
+  el.innerHTML=T.map(([n,a,b],i)=>{const m=(a+b)/2,cls=m<.15?'lo':m>.4?'hi':'md';return`<div class="ht"><span>${n}</span><div class="track"><div class="bar ${cls}" style="left:${a*100}%;width:${(b-a)*100}%;animation-delay:${i*.08}s"></div></div><span class="v">${a.toFixed(2)}–${b.toFixed(2)}</span></div>`;}).join('')
+    +'<div class="ht axis"><span></span><div class="track"><span>0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1</span></div><span></span></div>';
+})();
+
+/* ---------- 小测验 ---------- */
+(function(){
+  const Q=[
+    {q:'某性状遗传力 h² = 0.3，下面哪种说法正确？',o:['每头牛的这个性状有 30% 由基因决定','群体中个体间差异的约 30% 来自可遗传的基因差异','有 30% 的牛携带了好基因'],a:1,x:'遗传力描述的是群体差异的来源，不能拆到某一头牛身上。'},
+    {q:'繁殖性状遗传力只有 0.05，想更快改良，最有效的是？',o:['只按母牛自己的繁殖成绩挑','用大量女儿成绩或基因组信息评估公牛','遗传力低就不用管遗传了'],a:1,x:'低遗传力性状单看个体像隔着毛玻璃，要靠大量亲属信息或基因组来提高准确度，同时改善管理。'},
+    {q:'性状 1 和性状 2 遗传相关为 −0.5，只选性状 1 会怎样？',o:['性状 2 也跟着变好','性状 2 不受影响','性状 2 往相反方向变差'],a:2,x:'负的遗传相关意味着“此消彼长”，所以需要把两个性状一起放进育种目标。'},
+    {q:'选择差 S 不变，遗传力从 0.2 提高到 0.4，每代进步会？',o:['不变','大约翻一倍','增加 0.2'],a:1,x:'R = h² × S，h² 翻倍，R 也翻倍。'}];
+  const box=document.getElementById('quiz');let score=0;
+  Q.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';
+    d.innerHTML=`<p>${qi+1}. ${it.q}</p><div class="opts">${it.o.map((o,i)=>`<button type="button" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div><div class="fb" hidden></div>`;
+    let done=false;
+    d.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(done)return;done=true;const i=+b.dataset.i;
+      d.querySelectorAll('button')[it.a].classList.add('right');if(i!==it.a)b.classList.add('wrong');else score++;
+      const fb=d.querySelector('.fb');fb.hidden=false;fb.innerHTML=`<b>${i===it.a?'答对了。':'正确答案是 '+String.fromCharCode(65+it.a)+'。'}</b>${it.x}`;
+      document.getElementById('quiz-score').textContent=score+' / '+Q.length;}));
+    box.appendChild(d);});
+})();
+})();
+</script>
+
+</body>
+</html>
