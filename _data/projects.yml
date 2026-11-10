@@ -192,6 +192,12 @@
       description: "从 P = A + D + I + E + e 出发，图解 14 种常用育种模型，以及各自适合什么样的数据。"
       language: "HTML"
       year: "2026"
+    - name: "基因组选择全流程图解"
+      url: "/files/tutorials/genomic-selection.html"
+      url_title: "打开教程"
+      description: "用动画走一遍基因组选择的 8 个步骤，从采样分型到选择迭代，再亲手算 GEBV、看参考群规模和世代间隔怎么影响进展。"
+      language: "HTML"
+      year: "2026"
 
 - category: "速查表"
   key: "cheatsheets"

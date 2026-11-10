@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>基因组选择全流程图解</title>
+<meta name="description" content="用动画和可交互小实验，通俗讲解基因组选择从采样、分型、建模到选择迭代的 8 个步骤。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 一张“实验流程单”——顶部双螺旋开场，中间是可播放的 8 步流程舞台，下面是三个可动手的小实验 */
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --chip:#e6ece9; --ink:#17251f; --muted:#5a6a63; --line:#d3ddd8;
+  --accent:#1d6b5c; --accent-soft:#d5ebe5; --on-accent:#ffffff;
+  --g0:#4b6fa8; --g1:#d18f1c; --g2:#c4553f; --miss:#b9c4bf; --warn:#c0392b;
+  --cow:#3b4a44; --snout:#e8c7b8;
+  --f-display:"Noto Serif SC","Songti SC","STSong",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1513; --surface:#151f1c; --chip:#1f2b27; --ink:#e3ebe7; --muted:#93a39c; --line:#2b3934;
+  --accent:#5cc2a8; --accent-soft:#1c3a33; --on-accent:#08241d;
+  --g0:#7c9fd8; --g1:#e8b34f; --g2:#e07a63; --miss:#3d4a45; --warn:#ef6f5e;
+  --cow:#c7d3ce; --snout:#a7837a; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0e1513; --surface:#151f1c; --chip:#1f2b27; --ink:#e3ebe7; --muted:#93a39c; --line:#2b3934;
+  --accent:#5cc2a8; --accent-soft:#1c3a33; --on-accent:#08241d;
+  --g0:#7c9fd8; --g1:#e8b34f; --g2:#e07a63; --miss:#3d4a45; --warn:#ef6f5e;
+  --cow:#c7d3ce; --snout:#a7837a; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.3;margin:0;text-wrap:balance;font-weight:900}
+h1{font-size:clamp(32px,5.4vw,54px);letter-spacing:.02em}
+h2{font-size:clamp(22px,3vw,30px)}
+h3{font-size:18px;font-weight:600}
+p{margin:0}
+b{font-weight:700;color:var(--ink)}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.lead{color:var(--muted);max-width:62ch}
+.mono{font-family:var(--f-mono)}
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:28px;max-width:70ch}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:48px 40px}
+.hero-text{display:grid;gap:18px}
+.hero canvas{width:100%;height:260px;display:block}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.fact{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13.5px}
+.fact .ico{color:var(--accent)}
+.geno-key{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.geno-key span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.hero canvas{height:190px}}
+
+/* rail */
+.rail-wrap{position:relative;margin-bottom:18px}
+.rail{position:relative;display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.step-btn{flex:1 0 124px;display:grid;gap:6px;text-align:left;padding:12px 12px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.step-btn:hover{border-color:var(--accent)}
+.step-btn .row{display:flex;align-items:center;justify-content:space-between;color:var(--muted)}
+.step-btn .n{font-family:var(--f-mono);font-size:12px}
+.step-btn .t{font-size:13.5px;font-weight:500;line-height:1.4}
+.step-btn[aria-current="step"]{background:var(--accent-soft);border-color:var(--accent)}
+.step-btn[aria-current="step"] .row{color:var(--accent)}
+.step-btn.done .row{color:var(--accent)}
+.track{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:2px 2px 0}
+.track i{display:block;height:100%;background:var(--accent);width:12.5%;transition:width .5s ease}
+
+/* stage */
+.stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+@media (max-width:880px){.stage{grid-template-columns:1fr;padding:16px}}
+.scene{background:var(--bg);border-radius:10px;padding:10px;min-width:0}
+.scene svg{width:100%;height:auto;display:block}
+.scene text{font-family:var(--f-body);fill:var(--ink);font-size:12px}
+.scene .m{font-family:var(--f-mono)}
+.scene .mu{fill:var(--muted)}
+.info{display:grid;gap:14px;align-content:start;min-width:0}
+.info .num{font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.info .sub{color:var(--muted);font-size:14.5px}
+.analogy{display:flex;gap:10px;padding:12px 14px;background:var(--accent-soft);border-radius:10px;font-size:14.5px}
+.analogy .ico{color:var(--accent);margin-top:3px}
+.points{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:14.5px}
+.points li::marker{color:var(--accent)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{color:var(--on-accent);filter:brightness(1.08)}
+.autobar{flex:1 1 80px;height:3px;background:var(--line);border-radius:2px;overflow:hidden;min-width:60px}
+.autobar i{display:block;height:100%;width:0;background:var(--accent)}
+.autobar i.run{animation:fill 8s linear forwards}
+@keyframes fill{to{width:100%}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* scene animations (resting state = final frame) */
+.a-pop{transform-box:fill-box;transform-origin:center;animation:pop .5s cubic-bezier(.2,.8,.3,1.3) both}
+.a-grow{transform-box:fill-box;transform-origin:bottom;animation:grow .7s ease-out both}
+.a-growd{transform-box:fill-box;transform-origin:top;animation:grow .7s ease-out both}
+.a-fade{animation:fade .7s ease both}
+.a-draw{stroke-dasharray:440;animation:draw 1.4s ease-out both}
+.a-cell{animation:cellOn 6s linear infinite both}
+.a-scan{opacity:0;animation:scan 6s linear infinite}
+.a-fold{animation:foldOn 5s linear infinite}
+.a-foldt{animation:foldT 5s linear infinite}
+.qc-col{opacity:.12;animation:qcCol 7s ease infinite}
+.qc-row{opacity:.12;animation:qcRow 7s ease infinite}
+.qc-flag{opacity:0;animation:qcFlag 7s ease infinite}
+.qc-rflag{opacity:0;animation:qcRFlag 7s ease infinite}
+.qc-fill{animation:qcFill 7s ease infinite both}
+.cap1{opacity:0;animation:cap1 7s ease infinite}
+.cap2{opacity:0;animation:cap2 7s ease infinite}
+.cap3{animation:cap3 7s ease infinite}
+.a-pulse{animation:pulse 6s linear infinite}
+.sel-g{transition:transform .9s cubic-bezier(.6,0,.2,1)}
+.sel-bar{transform-box:fill-box;transform-origin:bottom;transition:transform .6s ease,fill .4s}
+.sel-tag{opacity:0;transition:opacity .4s,transform .6s ease}
+.sel-g.top .sel-bar{fill:var(--accent)}
+.sel-g.top .sel-tag{opacity:1}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes fade{from{opacity:0}}
+@keyframes draw{from{stroke-dashoffset:440}}
+@keyframes cellOn{0%{opacity:0}4%,90%{opacity:1}100%{opacity:0}}
+@keyframes scan{0%{opacity:1;transform:translateX(0)}50%{opacity:1;transform:translateX(288px)}51%,100%{opacity:0;transform:translateX(288px)}}
+@keyframes foldOn{0%,19.9%{fill:var(--accent)}20%,100%{fill:var(--chip)}}
+@keyframes foldT{0%,19.9%{fill:var(--on-accent)}20%,100%{fill:var(--ink)}}
+@keyframes qcCol{0%,28%{opacity:1}40%,100%{opacity:.12}}
+@keyframes qcFlag{0%,12%{opacity:0}18%,36%{opacity:1}44%,100%{opacity:0}}
+@keyframes qcRow{0%,52%{opacity:1}64%,100%{opacity:.12}}
+@keyframes qcRFlag{0%,40%{opacity:0}46%,60%{opacity:1}68%,100%{opacity:0}}
+@keyframes qcFill{0%,72%{opacity:0}82%,100%{opacity:1}}
+@keyframes cap1{0%,10%{opacity:0}14%,38%{opacity:1}42%,100%{opacity:0}}
+@keyframes cap2{0%,40%{opacity:0}44%,64%{opacity:1}68%,100%{opacity:0}}
+@keyframes cap3{0%,66%{opacity:0}70%,100%{opacity:1}}
+@keyframes pulse{0%,9%{fill:var(--accent-soft)}16%,100%{fill:var(--surface)}}
+
+/* calculator */
+.lab{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px}
+@media (max-width:880px){.lab{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.tbl-scroll{overflow-x:auto}
+.gtbl{border-collapse:separate;border-spacing:4px;font-variant-numeric:tabular-nums;margin:0 auto}
+.gtbl th{font-weight:500;font-size:12px;color:var(--muted);padding:2px 4px;white-space:nowrap}
+.gtbl th.eff{font-family:var(--f-mono);font-size:12px}
+.gtbl td.name{font-size:13.5px;padding-right:6px;white-space:nowrap;text-align:right}
+.gcell{width:38px;height:38px;border:0;border-radius:8px;font-family:var(--f-mono);font-size:15px;font-weight:600;color:var(--surface);cursor:pointer;transition:transform .15s,background .25s}
+.gcell:hover{transform:scale(1.08)}
+.gcell[data-g="0"]{background:var(--g0)} .gcell[data-g="1"]{background:var(--g1)} .gcell[data-g="2"]{background:var(--g2)}
+tr.focus td.name{color:var(--accent);font-weight:700}
+.hint{font-size:13px;color:var(--muted);margin-top:10px}
+.formula{margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:10px;font-family:var(--f-mono);font-size:13px;line-height:1.8;overflow-x:auto;white-space:nowrap}
+.rank{display:grid;gap:14px}
+.rk{display:grid;gap:6px}
+.rk .top{display:flex;justify-content:space-between;font-size:14px}
+.rk .val{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.rk .bar{position:relative;height:14px;background:var(--chip);border-radius:7px;overflow:hidden}
+.rk .bar i{position:absolute;top:0;bottom:0;background:var(--muted);border-radius:7px;transition:left .5s,width .5s,background .3s}
+.rk .bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.5}
+.rk.win .bar i{background:var(--accent)}
+.badge{font-size:11.5px;padding:1px 8px;border-radius:99px;background:var(--accent);color:var(--on-accent);margin-left:6px}
+
+/* sliders */
+.ctrls{display:grid;gap:14px}
+.ctrl{display:grid;gap:4px}
+.ctrl label{display:flex;justify-content:space-between;font-size:14px}
+.ctrl output{font-family:var(--f-mono);color:var(--accent);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.readout{display:grid;gap:4px;padding:14px;background:var(--accent-soft);border-radius:10px;font-size:14px}
+.readout .big{font-family:var(--f-mono);font-size:30px;color:var(--accent);line-height:1.2}
+.chart-scroll{overflow-x:auto}
+.chart svg{width:100%;min-width:420px;height:auto;display:block}
+.chart text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+
+/* gain */
+.lanes{display:grid;gap:22px}
+.lane{display:grid;gap:8px}
+.lane-h{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:14px}
+.lane-h .mono{color:var(--muted)}
+.tl{position:relative;height:44px;border-bottom:2px solid var(--line);margin-inline:12px}
+.tl .mk{position:absolute;bottom:0;width:26px;height:30px;margin-left:-13px;color:var(--cow);animation:pop .4s both;transition:left .4s}
+.tl .mk svg{width:100%;height:100%}
+.tl.gs .mk{color:var(--accent)}
+.yrs{position:relative;height:18px;margin-inline:12px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.yrs span{position:absolute;transform:translateX(-50%)}
+.gbars{display:grid;gap:8px;margin-top:6px}
+.gbar{display:grid;grid-template-columns:7em minmax(0,1fr) 4.5em;gap:10px;align-items:center;font-size:13.5px}
+.gbar .b{height:12px;background:var(--chip);border-radius:6px;overflow:hidden}
+.gbar .b i{display:block;height:100%;background:var(--muted);border-radius:6px;transition:width .5s}
+.gbar.gs .b i{background:var(--accent)}
+.gbar .v{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+
+/* A vs G */
+.mats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:700px){.mats{grid-template-columns:1fr}}
+.mat{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:4px;font-variant-numeric:tabular-nums;margin-top:12px}
+.mat .h{font-size:12px;color:var(--muted);text-align:center;align-self:end}
+.mat .rh{font-size:12px;color:var(--muted);text-align:right;padding-right:4px;align-self:center;white-space:nowrap}
+.mat .c{font-family:var(--f-mono);font-size:13px;text-align:center;padding:8px 0;border-radius:6px}
+.mat .c.hl{outline:2px solid var(--g2);outline-offset:-2px;font-weight:600}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.term{padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:grid;gap:4px}
+.term dt{font-weight:700;display:flex;gap:8px;align-items:baseline}
+.term dt small{font-family:var(--f-mono);color:var(--accent);font-weight:400;font-size:12px}
+.term dd{margin:0;font-size:14px;color:var(--muted)}
+footer{padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.back{font-size:.9rem;color:var(--accent);text-decoration:none;justify-self:start}
+.back:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cow" viewBox="0 0 40 40">
+      <path d="M11 9C8 6 7 4 8 2M29 9C32 6 33 4 32 2" stroke="var(--muted)" fill="none" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="7" cy="15" rx="6" ry="3" fill="var(--cow)" transform="rotate(-20 7 15)"/>
+      <ellipse cx="33" cy="15" rx="6" ry="3" fill="var(--cow)" transform="rotate(20 33 15)"/>
+      <rect x="10" y="7" width="20" height="26" rx="10" fill="var(--cow)"/>
+      <ellipse cx="20" cy="30" rx="8" ry="6" fill="var(--snout)"/>
+      <circle cx="15.5" cy="17" r="1.8" fill="var(--bg)"/><circle cx="24.5" cy="17" r="1.8" fill="var(--bg)"/>
+      <circle cx="17" cy="30" r="1.2" fill="var(--cow)"/><circle cx="23" cy="30" r="1.2" fill="var(--cow)"/>
+    </symbol>
+    <symbol id="cowc" viewBox="0 0 40 40">
+      <ellipse cx="7" cy="15" rx="6" ry="3" fill="currentColor" transform="rotate(-20 7 15)"/>
+      <ellipse cx="33" cy="15" rx="6" ry="3" fill="currentColor" transform="rotate(20 33 15)"/>
+      <rect x="10" y="7" width="20" height="26" rx="10" fill="currentColor"/>
+      <circle cx="15.5" cy="17" r="1.8" fill="var(--bg)"/><circle cx="24.5" cy="17" r="1.8" fill="var(--bg)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="hero-text">
+    <a class="back" href="/portfolio/#tutorials">← 返回项目</a>
+    <div class="kicker">动物育种 · 入门图解</div>
+    <h1>基因组选择全流程</h1>
+    <p class="lead">一句话讲清楚：先用一大批<b>既有生产成绩、又测了基因型</b>的个体“训练”一个模型，再用这个模型给<b>只有基因型</b>的年轻个体估算基因组育种值（GEBV），在它出生时就挑出好种畜。</p>
+    <div class="facts">
+      <span class="fact"><svg class="ico" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>每头约 5 万个 SNP</span>
+      <span class="fact"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>出生即可估值</span>
+      <span class="fact"><svg class="ico" viewBox="0 0 24 24"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg>世代间隔缩短一半以上</span>
+    </div>
+    <div class="geno-key" aria-label="基因型颜色说明">
+      <span><i class="sw" style="background:var(--g0)"></i>0 = AA</span>
+      <span><i class="sw" style="background:var(--g1)"></i>1 = AB</span>
+      <span><i class="sw" style="background:var(--g2)"></i>2 = BB</span>
+      <span>（数字 = 携带 B 等位基因的个数）</span>
+    </div>
+  </div>
+  <canvas id="helix" aria-label="旋转的 DNA 双螺旋，横档颜色代表 SNP 基因型 0、1、2"></canvas>
+</header>
+
+<section id="flow">
+  <div class="sec-head">
+    <div class="kicker">Pipeline · 8 步</div>
+    <h2>从一滴血到一个育种值</h2>
+    <p class="lead">点任意一步查看动画和讲解，或让它自动播放。</p>
+  </div>
+  <div class="rail-wrap">
+    <div class="rail" id="rail" role="tablist" aria-label="流程步骤"></div>
+    <div class="track"><i id="track"></i></div>
+  </div>
+  <div class="stage">
+    <div class="scene" id="scene" aria-live="polite"></div>
+    <div class="info">
+      <div class="num" id="sNum">01 / 08</div>
+      <h3 id="sTitle"></h3>
+      <p class="sub" id="sSub"></p>
+      <div class="analogy"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg><p id="sAna"></p></div>
+      <ul class="points" id="sPts"></ul>
+      <div class="controls">
+        <button class="btn" id="prev" type="button" aria-label="上一步"><svg class="ico" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>上一步</button>
+        <button class="btn primary" id="play" type="button"></button>
+        <button class="btn" id="next" type="button" aria-label="下一步">下一步<svg class="ico" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        <div class="autobar" aria-hidden="true"><i id="autobar"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calc">
+  <div class="sec-head">
+    <div class="kicker">动手 1</div>
+    <h2>GEBV 是怎么算出来的</h2>
+    <p class="lead">模型训练好后，每个 SNP 都有一个效应值 a（表头那一行）。三头犊牛还没有任何生产记录，只要把各自的基因型乘上效应再加起来，就得到 GEBV。点格子改基因型（0→1→2），看看排名怎么变。</p>
+  </div>
+  <div class="lab">
+    <div class="panel">
+      <div class="tbl-scroll"><table class="gtbl" id="gtbl"></table></div>
+      <p class="hint">提示：效应为正的位点，多携带一个 B 就加分；效应为负的位点则扣分。</p>
+      <div class="formula" id="formula"></div>
+    </div>
+    <div class="panel">
+      <h3 style="margin-bottom:14px">GEBV 排名</h3>
+      <div class="rank" id="rank"></div>
+      <p class="note" style="margin-top:14px">竖线为 0（群体平均水平）。真实评估中有几万个位点，单个位点效应都很小。</p>
+    </div>
+  </div>
+</section>
+
+<section id="acc">
+  <div class="sec-head">
+    <div class="kicker">动手 2</div>
+    <h2>参考群要多大才够准</h2>
+    <p class="lead">准确性主要由三件事决定：参考群有多少头（N）、性状遗传力多高（h²）、群体的基因组有多“复杂”（独立染色体片段数 Me）。下图用 Daetwyler 等（2008）的公式：r = √( N·h² / (N·h² + Me) )。</p>
+  </div>
+  <div class="lab">
+    <div class="panel chart">
+      <div class="chart-scroll"><svg id="accChart" viewBox="0 0 600 320" role="img" aria-label="参考群规模与预测准确性的关系曲线"></svg></div>
+    </div>
+    <div class="panel ctrls">
+      <div class="ctrl"><label for="nR">参考群规模 N<output id="nO"></output></label><input id="nR" type="range" min="2" max="5" step="0.01" value="3.7"></div>
+      <div class="ctrl"><label for="hR">遗传力 h²<output id="hO"></output></label><input id="hR" type="range" min="0.05" max="0.8" step="0.01" value="0.3"></div>
+      <div class="ctrl"><label for="mR">独立片段数 Me<output id="mO"></output></label><input id="mR" type="range" min="300" max="6000" step="50" value="1500"></div>
+      <div class="readout"><span>预测准确性 r</span><span class="big" id="rO"></span><span id="needO"></span></div>
+      <p class="note">低遗传力性状（如繁殖、抗病）需要大得多的参考群；Me 与有效群体大小和基因组长度大致成正比，品种越“杂”，Me 越大。</p>
+    </div>
+  </div>
+</section>
+
+<section id="gain">
+  <div class="sec-head">
+    <div class="kicker">动手 3</div>
+    <h2>为什么能加快遗传进展</h2>
+    <p class="lead">每年遗传进展 ΔG = i · r · σ<sub>A</sub> / L。基因组选择的准确性 r 未必比后裔测定高，但世代间隔 L 大幅缩短，年进展反而更快。下面以奶牛公牛选择为例（示意数值），时间轴上每个图标代表一次世代更替。</p>
+  </div>
+  <div class="lab">
+    <div class="panel lanes">
+      <div class="lane">
+        <div class="lane-h"><b>传统后裔测定</b><span class="mono">r = 0.90 · L = 6.5 年</span></div>
+        <div class="tl" id="tlA"></div>
+        <div class="yrs" id="yrA"></div>
+      </div>
+      <div class="lane">
+        <div class="lane-h"><b>基因组选择</b><span class="mono" id="gsLbl"></span></div>
+        <div class="tl gs" id="tlB"></div>
+        <div class="yrs" id="yrB"></div>
+      </div>
+      <div class="gbars">
+        <div class="gbar"><span>传统</span><span class="b"><i id="barA"></i></span><span class="v" id="vA"></span></div>
+        <div class="gbar gs"><span>基因组选择</span><span class="b"><i id="barB"></i></span><span class="v" id="vB"></span></div>
+      </div>
+    </div>
+    <div class="panel ctrls">
+      <div class="ctrl"><label for="grR">基因组选择准确性 r<output id="grO"></output></label><input id="grR" type="range" min="0.4" max="0.9" step="0.01" value="0.7"></div>
+      <div class="ctrl"><label for="glR">基因组选择世代间隔 L（年）<output id="glO"></output></label><input id="glR" type="range" min="1.5" max="6.5" step="0.1" value="2.5"></div>
+      <div class="readout"><span>每年遗传进展是传统方法的</span><span class="big" id="ratioO"></span><span class="note">假定选择强度 i 与 σ<sub>A</sub> 相同，只比较 r / L。</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="ag">
+  <div class="sec-head">
+    <div class="kicker">和动物模型的关系</div>
+    <h2>把系谱矩阵 A 换成基因组矩阵 G</h2>
+    <p class="lead">GBLUP 就是你熟悉的动物模型 y = Xb + Zu + e，唯一的变化是 u 的协方差从 Aσ²<sub>a</sub> 换成 Gσ²<sub>g</sub>。系谱只知道全同胞“平均”共享一半基因，标记却能看到他们实际分到了多少（孟德尔抽样）。</p>
+  </div>
+  <div class="mats">
+    <div class="panel"><h3>A 矩阵 · 按系谱推算</h3><div class="mat" id="matA"></div><p class="note" style="margin-top:10px">任何一对全同胞都是 0.50，分不出谁更像谁。</p></div>
+    <div class="panel"><h3>G 矩阵 · 按 SNP 实测</h3><div class="mat" id="matG"></div><p class="note" style="margin-top:10px">这对全同胞实际相似度 0.62，比期望高；选择时能区分同一家系里的好坏个体。</p></div>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="sec-head"><div class="kicker">术语速查</div><h2>看到这些词不再犯怵</h2></div>
+  <dl class="gloss">
+    <div class="term"><dt>SNP <small>single nucleotide polymorphism</small></dt><dd>单核苷酸多态性，基因组上某一个碱基位置的差异，是最常用的分子标记。</dd></div>
+    <div class="term"><dt>基因型编码 <small>0 / 1 / 2</small></dt><dd>个体在某个 SNP 上携带“B”等位基因的个数，组成标记矩阵 M。</dd></div>
+    <div class="term"><dt>表型 <small>y</small></dt><dd>实际测定的性状记录，如产奶量、日增重、背膘厚。</dd></div>
+    <div class="term"><dt>EBV / GEBV</dt><dd>估计育种值 / 基因组估计育种值。后者利用了基因组信息，年轻个体也能算。</dd></div>
+    <div class="term"><dt>参考群 <small>training</small></dt><dd>有表型又有基因型的个体，用来估计模型参数。</dd></div>
+    <div class="term"><dt>候选群 <small>candidates</small></dt><dd>只有基因型、等待选择的个体，通常是新出生的公畜。</dd></div>
+    <div class="term"><dt>连锁不平衡 <small>LD</small></dt><dd>标记与真正影响性状的基因位点“结伴遗传”，这是 SNP 能代替未知基因的原因。</dd></div>
+    <div class="term"><dt>遗传力 <small>h²</small></dt><dd>表型差异中由加性遗传造成的比例，越高越容易预测。</dd></div>
+    <div class="term"><dt>世代间隔 <small>L</small></dt><dd>后代出生时父母的平均年龄。L 越短，单位时间遗传进展越快。</dd></div>
+    <div class="term"><dt>ssGBLUP</dt><dd>一步法，把系谱 A 和基因组 G 合成 H 矩阵，同时评估有、无基因型的个体。</dd></div>
+  </dl>
+</section>
+
+<footer>页面中的群体、效应值与准确性均为教学示意数值，帮助理解流程，不代表任何具体品种的评估结果。</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rng(seed){let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
+const svg=(inner,label)=>`<svg viewBox="0 0 480 260" role="img" aria-label="${label}">${inner}</svg>`;
+
+/* ---------- step scenes ---------- */
+function sceneRef(){
+  const r=rng(7);let s='',k=0;
+  for(let row=0;row<3;row++)for(let c=0;c<4;c++){
+    const x=22+c*116,y=10+row*76,h=12+Math.round(r()*32);
+    s+=`<use href="#cow" x="${x}" y="${y}" width="44" height="44" class="a-pop" style="animation-delay:${k*.08}s"/>`;
+    s+=`<rect x="${x+54}" y="${y+48-h}" width="12" height="${h}" rx="2" fill="var(--accent)" class="a-grow" style="animation-delay:${.6+k*.08}s"/>`;
+    for(let t=0;t<6;t++){const g=Math.floor(r()*3);
+      s+=`<rect x="${x+2+t*8}" y="${y+52}" width="6" height="9" rx="1.5" fill="var(--g${g})" class="a-pop" style="animation-delay:${1.2+k*.06+t*.03}s"/>`;}
+    k++;}
+  s+=`<rect x="120" y="242" width="10" height="12" rx="2" fill="var(--accent)"/><text x="136" y="252">表型记录</text>`;
+  s+=`<rect x="232" y="244" width="5" height="9" rx="1" fill="var(--g0)"/><rect x="239" y="244" width="5" height="9" rx="1" fill="var(--g1)"/><rect x="246" y="244" width="5" height="9" rx="1" fill="var(--g2)"/><text x="258" y="252">基因型</text>`;
+  return svg(s,'12 头参考群个体，每头都有表型柱和基因型条');
+}
+function sceneGeno(){
+  const r=rng(11);let s='';
+  s+=`<path d="M48 66C48 66 28 92 28 106a20 20 0 0 0 40 0C68 92 48 66 48 66Z" fill="var(--g2)" class="a-pop"/>`;
+  s+=`<text x="48" y="148" text-anchor="middle" class="mu">血样 / 耳组织</text>`;
+  s+=`<path d="M76 108h20" stroke="var(--muted)" stroke-width="2" marker-end="url(#ah)"/>`;
+  s+=`<rect x="100" y="90" width="48" height="36" rx="6" fill="var(--chip)" stroke="var(--line)"/><text x="124" y="113" text-anchor="middle" class="m">DNA</text>`;
+  s+=`<path d="M150 108h12" stroke="var(--muted)" stroke-width="2"/>`;
+  s+=`<rect x="164" y="16" width="302" height="206" rx="10" fill="var(--chip)" stroke="var(--line)"/>`;
+  for(let c=0;c<12;c++)for(let w=0;w<8;w++){
+    const x=170+c*24,y=22+w*24,g=Math.floor(r()*3);
+    s+=`<rect x="${x}" y="${y}" width="22" height="22" rx="4" fill="var(--line)"/>`;
+    s+=`<rect x="${x}" y="${y}" width="22" height="22" rx="4" fill="var(--g${g})" class="a-cell" style="animation-delay:${c*.25}s"/>`;}
+  s+=`<rect x="168" y="18" width="3" height="200" rx="1.5" fill="var(--accent)" class="a-scan"/>`;
+  s+=`<text x="315" y="246" text-anchor="middle" class="mu">基因型矩阵 M：行 = 个体，列 = SNP，颜色 = 0 / 1 / 2</text>`;
+  s+=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>`;
+  return svg(s,'样品提取 DNA 后上芯片，逐列读出基因型');
+}
+function sceneQC(){
+  const r=rng(23),badC=4,badR=5;let norm='',colG='',rowG='';
+  const miss=new Set(['1-2','3-9','6-1','7-11','0-12','4-7']);
+  [1,3,6,8,10,12,13].forEach(c=>miss.add(badR+'-'+c));
+  for(let w=0;w<8;w++)for(let c=0;c<14;c++){
+    const x=50+c*26,y=18+w*26,g=c===badC?0:Math.floor(r()*3),key=w+'-'+c;let cell;
+    if(miss.has(key)&&c!==badC){
+      cell=`<rect x="${x}" y="${y}" width="24" height="24" rx="4" fill="var(--miss)"/><text x="${x+12}" y="${y+16}" text-anchor="middle" class="m mu">?</text>`;
+      if(w!==badR)cell+=`<rect x="${x}" y="${y}" width="24" height="24" rx="4" fill="var(--g${g})" class="qc-fill"/>`;
+    }else cell=`<rect x="${x}" y="${y}" width="24" height="24" rx="4" fill="var(--g${g})"/>`;
+    if(c===badC)colG+=cell;else if(w===badR)rowG+=cell;else norm+=cell;}
+  let s=norm+`<g class="qc-col">${colG}</g><g class="qc-row">${rowG}</g>`;
+  s+=`<rect x="${50+badC*26-3}" y="15" width="30" height="210" rx="6" fill="none" stroke="var(--warn)" stroke-width="2.5" class="qc-flag"/>`;
+  s+=`<rect x="47" y="${18+badR*26-3}" width="366" height="30" rx="6" fill="none" stroke="var(--warn)" stroke-width="2.5" class="qc-rflag"/>`;
+  s+=`<text x="240" y="250" text-anchor="middle" class="cap1">① 这一列所有个体都一样（MAF≈0），没信息，剔除</text>`;
+  s+=`<text x="240" y="250" text-anchor="middle" class="cap2">② 这个样本缺失太多（检出率低），剔除</text>`;
+  s+=`<text x="240" y="250" text-anchor="middle" class="cap3">③ 零星缺失用单倍型推断“填充”补齐</text>`;
+  return svg(s,'质控：剔除低频位点、低检出率个体，并填充缺失');
+}
+function sceneModel(){
+  const r=rng(5),fam=[0,0,1,1,1,2,2,3];let s='';
+  s+=`<text x="16" y="56" class="m" style="font-size:22px;font-weight:600">y = Xb + Zg + e</text>`;
+  s+=`<text x="16" y="90" class="m" style="font-size:15px">g ~ N(0, G·σ²g)</text>`;
+  s+=`<text x="16" y="124" class="mu">y 表型；b 固定效应（场、年、季）</text>`;
+  s+=`<text x="16" y="144" class="mu">g 基因组育种值；e 残差</text>`;
+  s+=`<text x="16" y="182" class="m" style="font-size:13px;fill:var(--accent)">G = MM′ / 2Σpᵢ(1−pᵢ)</text>`;
+  s+=`<text x="16" y="202" class="mu" style="font-size:11px">VanRaden 法，M 已按等位基因频率中心化</text>`;
+  const V=[];for(let i=0;i<8;i++){V[i]=[];for(let j=0;j<8;j++){
+    if(j<i){V[i][j]=V[j][i];continue;}
+    V[i][j]=i===j?.92+r()*.16:fam[i]===fam[j]?.4+r()*.2:r()*.12;}}
+  for(let i=0;i<8;i++)for(let j=0;j<8;j++){
+    s+=`<rect x="${276+j*23}" y="${24+i*23}" width="21" height="21" rx="3" fill="var(--accent)" fill-opacity="${Math.max(.08,Math.min(1,V[i][j])).toFixed(2)}" class="a-fade" style="animation-delay:${(i+j)*.07}s"/>`;}
+  s+=`<text x="368" y="232" text-anchor="middle" class="mu">G：个体两两之间的实际遗传相似度</text>`;
+  s+=`<text x="368" y="250" text-anchor="middle" class="mu" style="font-size:11px">颜色越深越相似，对角线是自身</text>`;
+  return svg(s,'GBLUP 方程与 G 矩阵热图');
+}
+function sceneCV(){
+  const r=rng(31);let s='';
+  for(let i=0;i<5;i++){const x=40+i*82;
+    s+=`<rect x="${x}" y="14" width="76" height="34" rx="6" fill="var(--chip)" class="a-fold" style="animation-delay:${i}s"/>`;
+    s+=`<text x="${x+38}" y="36" text-anchor="middle" class="a-foldt" style="animation-delay:${i}s">第 ${i+1} 份</text>`;}
+  s+=`<text x="240" y="70" text-anchor="middle" class="mu" style="font-size:11px">深色 = 遮住表型去预测（验证集），浅色 = 用来训练</text>`;
+  s+=`<path d="M70 92V232H450" stroke="var(--line)" stroke-width="1.5" fill="none"/>`;
+  for(let i=0;i<26;i++){const x=r(),y=Math.max(.02,Math.min(.98,.15+.65*x+(r()-.5)*.36));
+    s+=`<circle cx="${(80+x*360).toFixed(1)}" cy="${(232-y*136).toFixed(1)}" r="4.5" fill="var(--g0)" fill-opacity=".85" class="a-pop" style="animation-delay:${.3+i*.06}s"/>`;}
+  s+=`<path d="M80 ${(232-.15*136).toFixed(1)}L440 ${(232-.8*136).toFixed(1)}" stroke="var(--accent)" stroke-width="2.5" fill="none" class="a-draw" style="animation-delay:1.9s"/>`;
+  s+=`<text x="450" y="250" text-anchor="end" class="mu">预测的 GEBV →</text>`;
+  s+=`<text x="76" y="100" class="mu">↑ 实际表现</text>`;
+  s+=`<text x="440" y="110" text-anchor="end" class="m a-fade" style="font-size:15px;fill:var(--accent);animation-delay:2.4s">r ≈ 0.6</text>`;
+  return svg(s,'五折交叉验证与预测值—真实值散点图');
+}
+function scenePred(){
+  const G=[2,1,0,2,1,1,0,2,1,0],E=[.32,-.15,.41,.18,-.26,.22,.09,-.08,.35,.12];let s='',sum=0;
+  s+=`<text x="92" y="50" text-anchor="end" class="mu">基因型 x</text><text x="92" y="88" text-anchor="end" class="mu">效应 a</text><text x="92" y="164" text-anchor="end" class="mu">x·a</text>`;
+  s+=`<path d="M98 160H462" stroke="var(--line)" stroke-width="1.5"/>`;
+  for(let i=0;i<10;i++){const x=100+i*36,c=G[i]*E[i];sum+=c;
+    s+=`<rect x="${x}" y="28" width="30" height="30" rx="6" fill="var(--g${G[i]})" class="a-pop" style="animation-delay:${i*.06}s"/>`;
+    s+=`<text x="${x+15}" y="48" text-anchor="middle" class="m" style="fill:var(--surface);font-weight:600;font-size:14px">${G[i]}</text>`;
+    s+=`<text x="${x+15}" y="88" text-anchor="middle" class="m a-fade" style="font-size:10.5px;animation-delay:${.7+i*.05}s">${E[i]>0?'+':''}${E[i].toFixed(2)}</text>`;
+    const h=Math.abs(c)*70;
+    if(h>0)s+=`<rect x="${x+5}" y="${c>0?160-h:160}" width="20" height="${h.toFixed(1)}" rx="2" fill="${c>0?'var(--accent)':'var(--g2)'}" class="${c>0?'a-grow':'a-growd'}" style="animation-delay:${1.3+i*.08}s"/>`;}
+  s+=`<use href="#cow" x="14" y="186" width="56" height="56" class="a-pop"/>`;
+  s+=`<text x="100" y="222" class="m a-fade" style="font-size:17px;font-weight:600;animation-delay:2.5s">GEBV = Σ xᵢ·aᵢ = <tspan style="fill:var(--accent)">${sum>=0?'+':''}${sum.toFixed(2)}</tspan></text>`;
+  s+=`<text x="100" y="244" class="mu a-fade" style="animation-delay:2.7s">刚出生的犊牛：没有任何生产记录，也能估分</text>`;
+  return svg(s,'候选犊牛的基因型乘以位点效应求和得到 GEBV');
+}
+function sceneSelect(){
+  let s='';
+  for(let i=0;i<10;i++){
+    s+=`<g class="sel-g" data-i="${i}" style="transform:translateX(${i*42}px)">`+
+       `<rect class="sel-bar" x="34" y="56" width="30" height="150" rx="3" fill="var(--muted)" style="transform:scaleY(.5)"/>`+
+       `<text class="sel-tag" x="49" y="48" text-anchor="middle" style="fill:var(--accent);font-weight:700">入选</text>`+
+       `<text x="49" y="224" text-anchor="middle" class="m mu" style="font-size:10.5px">#${String(i+1).padStart(2,'0')}</text></g>`;}
+  s+=`<path d="M28 206H456" stroke="var(--line)" stroke-width="1.5"/>`;
+  s+=`<text x="240" y="250" text-anchor="middle" class="mu">按 GEBV 从高到低排序，前 3 名留作种用</text>`;
+  return svg(s,'候选个体按 GEBV 排序，前三名入选');
+}
+function afterSelect(root,T){
+  const gs=[...root.querySelectorAll('.sel-g')];let vals=[];
+  const set=()=>{const r=Math.random;vals=gs.map(()=>.15+r()*.85);
+    gs.forEach((g,i)=>{g.classList.remove('top');g.querySelector('.sel-bar').style.transform=`scaleY(${vals[i].toFixed(3)})`;
+      g.querySelector('.sel-tag').style.transform=`translateY(${((1-vals[i])*150).toFixed(1)}px)`;});};
+  const sort=()=>{const ord=vals.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);
+    ord.forEach(([,i],pos)=>{gs[i].style.transform=`translateX(${pos*42}px)`;});
+    T.push(setTimeout(()=>ord.slice(0,3).forEach(([,i])=>gs[i].classList.add('top')),1000));};
+  const loop=()=>{set();T.push(setTimeout(sort,1300));T.push(setTimeout(loop,5200));};
+  if(reduce){set();sort();return;}
+  loop();
+}
+function sceneUpdate(){
+  const cx=240,cy=130,R=90,labs=['参考群','训练模型','预测GEBV','选择留种','新表型'];let s='';
+  const path=`M${cx} ${cy-R}a${R} ${R} 0 1 1 0 ${2*R}a${R} ${R} 0 1 1 0 ${-2*R}`;
+  s+=`<path d="${path}" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 6"/>`;
+  labs.forEach((l,i)=>{const a=(-90+i*72)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="32" fill="var(--surface)" stroke="var(--accent)" stroke-width="2" class="a-pulse" style="animation-delay:${i*1.2}s"/>`;
+    s+=`<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" style="font-size:${l.length>4?11:12}px;font-weight:500">${l}</text>`;});
+  if(!reduce)s+=`<circle r="7" fill="var(--accent)"><animateMotion dur="6s" repeatCount="indefinite" path="${path}"/></circle>`;
+  s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" style="font-family:var(--f-display);font-size:18px;font-weight:900;fill:var(--accent)">越用越准</text>`;
+  s+=`<text x="${cx}" y="${cy+18}" text-anchor="middle" class="mu" style="font-size:11px">参考群每代都在扩大</text>`;
+  return svg(s,'参考群—训练—预测—选择—新表型的循环');
+}
+
+const IC={
+  ref:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M15 14.5c3 0 6 1.8 6 5.5"/>',
+  geno:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+  qc:'<path d="M3 4h18l-7 9v6l-4 2v-8z"/>',
+  model:'<path d="M18 4H6l6 8-6 8h12"/>',
+  cv:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+  pred:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/>',
+  select:'<path d="M3 20h18M5 20v-5h4v5M10 20V9h4v11M15 20v-3h4v3M12 3l1 2 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2L9 5.3 11 5z"/>',
+  update:'<path d="M20 11A8 8 0 0 0 5.5 6.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16M20 20v-4h-4"/>'
+};
+const STEPS=[
+ {k:'ref',t:'建立参考群体',sub:'找一批“既考过试、又交了答题卡”的个体。',ana:'就像先收集几千名学生的考试成绩和他们的学习习惯，后面才能总结出“什么习惯对应高分”。',
+  pts:['每个个体同时拥有<b>表型</b>（产奶量、日增重、抗病力等测定记录）和<b>基因型</b>','规模通常几千到几万头，越大预测越准','参考群和候选群亲缘越近，预测越准'],scene:sceneRef},
+ {k:'geno',t:'采样与基因分型',sub:'从一滴血或一小块耳组织里读出几万个 SNP。',ana:'SNP 芯片像一张答题卡，每个位点只记一个数字：0、1 或 2，表示携带几个“B”等位基因。',
+  pts:['常用 50K 中密度芯片；也可用低密度芯片 + 填充来降低成本','每个位点编码为 0 / 1 / 2（AA / AB / BB）','最终得到“个体 × 位点”的大矩阵 M'],scene:sceneGeno},
+ {k:'qc',t:'质控与基因型填充',sub:'把答题卡上的污渍擦掉，空白处合理补上。',ana:'有些位点几乎人人一样，没有信息量；有些样本读出来大半是空白。这些要剔除，零星缺失再用连锁关系推断补齐。',
+  pts:['剔除位点：检出率 &lt; 90%、MAF &lt; 0.01~0.05、严重偏离哈代-温伯格平衡','剔除个体：检出率过低的样本','填充：用 Beagle 等软件按单倍型推断缺失基因型'],scene:sceneQC},
+ {k:'model',t:'构建模型并训练',sub:'把基因型和表型联系起来，学出规律。',ana:'这一步就是动物模型：把原来靠系谱算的亲缘矩阵 A，换成用标记算的基因组关系矩阵 G。',
+  pts:['<b>GBLUP</b>：y = Xb + Zg + e，g ~ N(0, Gσ²g)','<b>SNP-BLUP / 贝叶斯法</b>（BayesA、BayesB、BayesCπ）直接估计每个 SNP 的效应','<b>ssGBLUP</b> 一步法：用 H 矩阵同时纳入有、无基因型的个体'],scene:sceneModel},
+ {k:'cv',t:'交叉验证评估准确性',sub:'先做“模拟考”，看模型靠不靠谱。',ana:'把参考群分成 5 份，轮流遮住其中 1 份的成绩，用另外 4 份训练去预测它，再和真实成绩对照打分。',
+  pts:['准确性：预测值与校正表型（或 EBV）的相关系数 r','无偏性：回归系数 b 越接近 1 越好','常用 5 折交叉验证，或按出生年份做前瞻性验证'],scene:sceneCV},
+ {k:'pred',t:'预测候选个体',sub:'刚出生的犊牛，测个基因型就能“估分”。',ana:'候选个体还没有自己的生产记录，但它的答题卡（基因型）可以直接对照学到的规律，得出 GEBV。',
+  pts:['GEBV = Σ xᵢ · aᵢ：每个位点的基因型乘以该位点效应，再求和','不用等它自己产奶，也不用等女儿的记录','早期选择让世代间隔大幅缩短'],scene:scenePred},
+ {k:'select',t:'排序选择与选配',sub:'按 GEBV 排队，优中选优。',ana:'像按模拟考成绩排名录取：分数高的公畜进入种用，同时考虑亲缘，避免近交。',
+  pts:['多个性状时，按综合选择指数排序','留种时控制近交系数，保住遗传多样性','可用最优贡献选择（OCS）平衡进展与近交'],scene:sceneSelect,after:afterSelect},
+ {k:'update',t:'更新参考群，循环迭代',sub:'每一代都把新成绩加回题库。',ana:'被选中的个体和它们的后代产生新的表型记录，再补充进参考群，模型越用越准。',
+  pts:['参考群持续扩大，准确性随之提高','定期重新训练模型，避免预测“过期”','世代越远，旧参考群与新候选群关系越弱，所以必须持续更新'],scene:sceneUpdate}
+];
+
+/* ---------- stage logic ---------- */
+const rail=$('#rail');
+rail.innerHTML=STEPS.map((s,i)=>`<button class="step-btn" type="button" role="tab" data-i="${i}"><span class="row"><span class="n">${String(i+1).padStart(2,'0')}</span><svg class="ico" viewBox="0 0 24 24">${IC[s.k]}</svg></span><span class="t">${s.t}</span></button>`).join('');
+const btns=[...rail.children];
+let cur=0,playing=!reduce,timer=null,T=[];
+function restartBar(){const b=$('#autobar');b.classList.remove('run');void b.offsetWidth;if(playing)b.classList.add('run');}
+function render(i){
+  cur=i;T.forEach(clearTimeout);T=[];
+  const st=STEPS[i],sc=$('#scene');sc.innerHTML=st.scene();if(st.after)st.after(sc,T);
+  $('#sNum').textContent=String(i+1).padStart(2,'0')+' / 08';
+  $('#sTitle').textContent=st.t;$('#sSub').textContent=st.sub;$('#sAna').textContent=st.ana;
+  $('#sPts').innerHTML=st.pts.map(p=>`<li>${p}</li>`).join('');
+  btns.forEach((b,j)=>{if(j===i)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.classList.toggle('done',j<i);b.setAttribute('aria-selected',j===i);});
+  $('#track').style.width=((i+1)/8*100)+'%';
+  const b=btns[i];rail.scrollTo({left:b.offsetLeft-rail.clientWidth/2+b.clientWidth/2,behavior:reduce?'auto':'smooth'});
+  restartBar();
+}
+function schedule(){clearInterval(timer);if(playing)timer=setInterval(()=>render((cur+1)%8),8000);}
+function setPlay(p){playing=p;$('#play').innerHTML=p?'<svg class="ico" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>暂停':'<svg class="ico" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>自动播放';schedule();restartBar();}
+btns.forEach(b=>b.addEventListener('click',()=>{render(+b.dataset.i);schedule();}));
+$('#prev').onclick=()=>{render((cur+7)%8);schedule();};
+$('#next').onclick=()=>{render((cur+1)%8);schedule();};
+$('#play').onclick=()=>setPlay(!playing);
+render(0);setPlay(playing);
+
+/* ---------- helix ---------- */
+const cv=$('#helix'),ctx=cv.getContext('2d');let ph=0;
+const GP=[0,2,1,1,0,2,2,1,0,1,2,0,1,1,2,0,2,1,0,0,1,2,1,0,2,1,1,0,2,0];
+function draw(){
+  const dpr=devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim();
+  const acc=col('--accent'),gc=[col('--g0'),col('--g1'),col('--g2')],A=H*.32,k=2*Math.PI/260,mid=H/2,step=22;
+  for(let i=0,x=10;x<W-6;x+=step,i++){
+    const a=k*x+ph,y1=mid+A*Math.sin(a),y2=mid+A*Math.sin(a+Math.PI),d=(Math.cos(a)+1)/2;
+    ctx.globalAlpha=.35+.65*d;ctx.strokeStyle=gc[GP[i%GP.length]];ctx.lineWidth=5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x,y1);ctx.lineTo(x,y2);ctx.stroke();}
+  ctx.globalAlpha=1;
+  for(const off of [0,Math.PI]){ctx.beginPath();for(let x=0;x<=W;x+=4){const y=mid+A*Math.sin(k*x+ph+off);x?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+    ctx.strokeStyle=acc;ctx.lineWidth=3;ctx.stroke();}
+  if(!reduce){ph+=.012;requestAnimationFrame(draw);}
+}
+draw();if(reduce)addEventListener('resize',draw);
+
+/* ---------- calculator ---------- */
+const EFF=[.40,-.25,.30,.15,-.10,.35,-.20,.25];
+const CAND=[{n:'犊牛 A',g:[2,0,1,1,0,2,1,1]},{n:'犊牛 B',g:[1,2,0,2,1,1,0,2]},{n:'犊牛 C',g:[0,1,2,0,2,1,2,0]}];
+let focus=0;
+const gtbl=$('#gtbl');
+function gebv(c){return c.g.reduce((s,x,i)=>s+x*EFF[i],0);}
+function fmt(v){return (v>=0?'+':'−')+Math.abs(v).toFixed(2);}
+function drawTbl(){
+  let h='<tr><th></th>'+EFF.map((_,i)=>`<th>SNP${i+1}</th>`).join('')+'</tr>';
+  h+='<tr><th style="text-align:right">效应 a</th>'+EFF.map(e=>`<th class="eff" style="color:${e>0?'var(--accent)':'var(--g2)'}">${fmt(e)}</th>`).join('')+'</tr>';
+  CAND.forEach((c,r)=>{h+=`<tr class="${r===focus?'focus':''}"><td class="name">${c.n}</td>`+c.g.map((g,i)=>`<td><button class="gcell" type="button" data-r="${r}" data-i="${i}" data-g="${g}" aria-label="${c.n} SNP${i+1} 基因型 ${g}，点击切换">${g}</button></td>`).join('')+'</tr>';});
+  gtbl.innerHTML=h;
+}
+gtbl.addEventListener('click',e=>{const b=e.target.closest('.gcell');if(!b)return;const r=+b.dataset.r,i=+b.dataset.i;
+  CAND[r].g[i]=(CAND[r].g[i]+1)%3;focus=r;drawTbl();drawRank();
+  const nb=gtbl.querySelector(`.gcell[data-r="${r}"][data-i="${i}"]`);nb&&nb.focus();});
+function drawRank(){
+  const lo=-1.2,hi=3,pct=v=>(v-lo)/(hi-lo)*100,z=pct(0);
+  const list=CAND.map((c,i)=>({...c,i,v:gebv(c)})).sort((a,b)=>b.v-a.v);
+  $('#rank').innerHTML=list.map((c,p)=>{const a=pct(Math.min(0,c.v)),w=Math.abs(pct(c.v)-z);
+    return `<div class="rk ${p===0?'win':''}"><div class="top"><span>${c.n}${p===0?'<span class="badge">首选</span>':''}</span><span class="val">${fmt(c.v)}</span></div><div class="bar"><i style="left:${a}%;width:${w}%"></i><b style="left:${z}%"></b></div></div>`;}).join('');
+  const c=CAND[focus];
+  $('#formula').innerHTML=`${c.n}：`+c.g.map((g,i)=>`${g}×(${fmt(EFF[i])})`).join(' + ')+` = <b style="color:var(--accent)">${fmt(gebv(c))}</b>`;
+}
+drawTbl();drawRank();
+
+/* ---------- accuracy chart ---------- */
+const ac=$('#accChart'),L=56,R=20,Tp=18,B=46,W2=600,H2=320,pw=W2-L-R,phh=H2-Tp-B;
+const xs=lg=>L+(lg-2)/3*pw,ys=v=>Tp+(1-v)*phh;
+const acc=(N,h,M)=>Math.sqrt(N*h/(N*h+M));
+function nice(n){return n>=10000?(n/10000).toFixed(n>=100000?0:1).replace(/\.0$/,'')+' 万':Math.round(n).toLocaleString('zh-CN');}
+function drawAcc(){
+  const lg=+$('#nR').value,N=Math.pow(10,lg),h=+$('#hR').value,M=+$('#mR').value,r=acc(N,h,M);
+  $('#nO').textContent=nice(N)+' 头';$('#hO').textContent=h.toFixed(2);$('#mO').textContent=M;
+  $('#rO').textContent=r.toFixed(2);
+  const need=.49*M/(h*.51);$('#needO').textContent=`要达到 r = 0.70，大约需要 ${nice(need)} 头参考群`;
+  let s='';
+  [0,.2,.4,.6,.8,1].forEach(v=>{s+=`<line x1="${L}" x2="${W2-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${ys(v)+4}" text-anchor="end">${v.toFixed(1)}</text>`;});
+  [[2,'100'],[3,'1 千'],[4,'1 万'],[5,'10 万']].forEach(([v,t])=>{s+=`<line x1="${xs(v)}" x2="${xs(v)}" y1="${Tp}" y2="${Tp+phh}" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 4"/><text x="${xs(v)}" y="${H2-B+18}" text-anchor="middle">${t}</text>`;});
+  s+=`<text x="${L+pw/2}" y="${H2-6}" text-anchor="middle">参考群规模 N（对数刻度）</text>`;
+  s+=`<text x="14" y="${Tp+phh/2}" text-anchor="middle" transform="rotate(-90 14 ${Tp+phh/2})">准确性 r</text>`;
+  s+=`<line x1="${L}" x2="${W2-R}" y1="${ys(.7)}" y2="${ys(.7)}" stroke="var(--g1)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${W2-R-4}" y="${ys(.7)-6}" text-anchor="end" style="fill:var(--g1)">r = 0.70</text>`;
+  let d='',area='';for(let i=0;i<=120;i++){const l=2+3*i/120,v=acc(Math.pow(10,l),h,M);d+=(i?'L':'M')+xs(l).toFixed(1)+' '+ys(v).toFixed(1);}
+  area=d+`L${xs(5)} ${ys(0)}L${xs(2)} ${ys(0)}Z`;
+  s+=`<path d="${area}" fill="var(--accent)" fill-opacity=".1"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`;
+  const px=xs(lg),py=ys(r);
+  s+=`<line x1="${px}" x2="${px}" y1="${py}" y2="${ys(0)}" stroke="var(--accent)" stroke-dasharray="3 3"/><circle cx="${px}" cy="${py}" r="6" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+  s+=`<text x="${Math.min(px+10,W2-R-70)}" y="${py-10}" style="fill:var(--ink);font-size:12px">r = ${r.toFixed(2)}</text>`;
+  ac.innerHTML=s;
+}
+['#nR','#hR','#mR'].forEach(id=>$(id).addEventListener('input',drawAcc));drawAcc();
+
+/* ---------- gain ---------- */
+const YRS=20,calf='<svg viewBox="0 0 40 40"><use href="#cowc"/></svg>';
+function lane(el,yr,Lg){
+  let h='';for(let k=0;k*Lg<=YRS+1e-6;k++)h+=`<span class="mk" style="left:${k*Lg/YRS*100}%;animation-delay:${k*.06}s">${calf}</span>`;
+  el.innerHTML=h;yr.innerHTML=[0,5,10,15,20].map(y=>`<span style="left:${y/YRS*100}%">${y} 年</span>`).join('');
+}
+function drawGain(){
+  const rA=.9,LA=6.5,rB=+$('#grR').value,LB=+$('#glR').value,gA=rA/LA,gB=rB/LB,mx=Math.max(gA,gB);
+  $('#grO').textContent=rB.toFixed(2);$('#glO').textContent=LB.toFixed(1);
+  $('#gsLbl').textContent=`r = ${rB.toFixed(2)} · L = ${LB.toFixed(1)} 年`;
+  lane($('#tlA'),$('#yrA'),LA);lane($('#tlB'),$('#yrB'),LB);
+  $('#barA').style.width=(gA/mx*100)+'%';$('#barB').style.width=(gB/mx*100)+'%';
+  $('#vA').textContent=gA.toFixed(3);$('#vB').textContent=gB.toFixed(3);
+  $('#ratioO').textContent=(gB/gA).toFixed(1)+' 倍';
+}
+['#grR','#glR'].forEach(id=>$(id).addEventListener('input',drawGain));drawGain();
+
+/* ---------- A vs G ---------- */
+const who=['父','母','同胞 1','同胞 2'];
+const Am=[[1,0,.5,.5],[0,1,.5,.5],[.5,.5,1,.5],[.5,.5,.5,1]];
+const Gm=[[1.02,.03,.47,.55],[.03,.98,.53,.46],[.47,.53,1.04,.62],[.55,.46,.62,.99]];
+function mat(el,M){let h='<span></span>'+who.map(w=>`<span class="h">${w}</span>`).join('');
+  M.forEach((row,i)=>{h+=`<span class="rh">${who[i]}</span>`+row.map((v,j)=>{const p=Math.round(Math.min(1,v)*70);
+    return `<span class="c ${(i===2&&j===3)||(i===3&&j===2)?'hl':''}" style="background:color-mix(in srgb,var(--accent) ${p}%,var(--surface));color:${p>45?'var(--on-accent)':'var(--ink)'}">${v.toFixed(2)}</span>`;}).join('');});
+  el.innerHTML=h;}
+mat($('#matA'),Am);mat($('#matG'),Gm);
+})();
+</script>
+</body>
+</html>
