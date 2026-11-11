@@ -210,6 +210,12 @@
       description: "用比喻和动画讲清遗传力、重复力、遗传相关是什么，怎么用亲子回归、REML 和 A 矩阵估计，以及怎么用来预测选择进展，末尾附小测验。"
       language: "HTML"
       year: "2026"
+    - name: "思维导图：遗传评估与种猪选留"
+      url: "/files/tutorials/breeding-evaluation-mindmap.html"
+      url_title: "打开导图"
+      description: "把张勤《遗传评估与种猪选留》整理成可折叠的思维导图：遗传评估原则、BLUP 模型、选择指数、留种率与选择差、选配和遗传进展。"
+      language: "HTML"
+      year: "2026"
 
 - category: "速查表"
   key: "cheatsheets"
