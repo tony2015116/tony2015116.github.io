@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="图解张勤《遗传评估与种猪选留》：遗传评估三原则、动物模型 BLUP、选择指数、留种率与选择差、选配与遗传进展，附交互图和小测验。">
+<title>遗传评估与种猪选留 · 图解笔记</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital,wght@0,400;1,400&display=swap">
+<style>
+/* Layout: 单栏“图解课本”——每节 = 图标 + 问句标题 + 一句话 + 比喻 + 动画 + 可折叠公式 */
+:root{
+  --bg:#f2f6f5; --surface:#ffffff; --soft:#e6eeeb; --ink:#14231f; --muted:#56675f; --line:#d1dcd8;
+  --a:#0e7563; --a-soft:#d5ece6;   /* 基因 */
+  --e:#4f58b0; --e-soft:#e0e2f5;   /* 环境 */
+  --hi:#c2541c; --hi-soft:#f7e3d6; /* 选择 / 结果 */
+  --on-a:#ffffff;
+  --f-display:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-math:"STIX Two Text","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1614; --surface:#15201d; --soft:#1c2a26; --ink:#e2ebe8; --muted:#93a49e; --line:#2a3934;
+  --a:#3fc4a9; --a-soft:#173a33; --e:#949bec; --e-soft:#262b4d; --hi:#f0894a; --hi-soft:#3d2618; --on-a:#06201a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1614; --surface:#15201d; --soft:#1c2a26; --ink:#e2ebe8; --muted:#93a49e; --line:#2a3934;
+  --a:#3fc4a9; --a-soft:#173a33; --e:#949bec; --e-soft:#262b4d; --hi:#f0894a; --hi-soft:#3d2618; --on-a:#06201a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ic{width:1em;height:1em;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+nav.toc .wrap::-webkit-scrollbar{display:none}
+nav.toc a{flex:none;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--muted);text-decoration:none;padding:3px 10px;border-radius:999px;border:1px solid transparent}
+nav.toc a:hover{color:var(--ink);border-color:var(--line)}
+nav.toc a .ic{font-size:15px}
+
+header.hero{padding-block:40px 4px}
+.eyebrow{font-size:12px;letter-spacing:.16em;color:var(--a);font-weight:700}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,6vw,58px);line-height:1.15;margin:.15em 0 .3em;text-wrap:balance}
+.lede{max-width:38em;color:var(--muted);font-size:17px;margin:0}
+
+.equation{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:26px 0 6px}
+.chip{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:14px;background:var(--surface);border:1px solid var(--line);animation:pulse 4.8s ease-in-out infinite}
+.chip .ic{font-size:30px}
+.chip b{display:block;font-size:17px;line-height:1.2}
+.chip small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.chip.g{color:var(--a)} .chip.g b{color:var(--ink)}
+.chip.en{color:var(--e);animation-delay:.8s} .chip.en b{color:var(--ink)}
+.chip.p{color:var(--hi);animation-delay:1.6s} .chip.p b{color:var(--ink)}
+.op{font-size:28px;color:var(--muted);font-family:var(--f-math)}
+@keyframes pulse{0%,70%,100%{transform:none;box-shadow:none}20%{transform:translateY(-3px);box-shadow:0 6px 16px -8px currentColor}}
+
+section.sec{margin-top:56px}
+.part-band{margin-top:64px;padding-block:18px;border-top:2px solid var(--ink);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.part-band .no{font-weight:900;font-size:15px;color:var(--on-a);background:var(--a);border-radius:6px;padding:0 9px}
+.part-band h2{margin:0;font-size:clamp(24px,3.4vw,30px);font-weight:900}
+.part-band p{margin:0;color:var(--muted);font-size:14.5px}
+.sec-h{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:26px;background:var(--a-soft);color:var(--a)}
+.badge.e{background:var(--e-soft);color:var(--e)} .badge.h{background:var(--hi-soft);color:var(--hi)}
+h3{font-family:var(--f-display);font-size:clamp(20px,2.6vw,24px);margin:0;font-weight:900;text-wrap:balance;line-height:1.35}
+h3 small{display:block;font-size:13px;color:var(--muted);font-weight:400;letter-spacing:.04em}
+p{max-width:42em;margin:.55em 0}
+.muted{color:var(--muted)}
+.m{font-family:var(--f-math);font-style:italic}
+.eq{display:inline-block;font-family:var(--f-math);font-size:1.1em;background:var(--soft);padding:0 8px;border-radius:6px;white-space:nowrap}
+sub,sup{font-size:.7em;line-height:0}
+
+.oneline{display:flex;gap:12px;align-items:flex-start;background:var(--hi-soft);border-radius:12px;padding:12px 16px;margin:14px 0;max-width:46em}
+.oneline .ic{font-size:22px;color:var(--hi);margin-top:3px}
+.oneline b{display:block;font-size:12px;letter-spacing:.12em;color:var(--hi)}
+.oneline div{font-size:16.5px;line-height:1.65}
+.analogy{border-left:3px solid var(--e);padding:2px 0 2px 14px;margin:12px 0;max-width:44em;color:var(--ink)}
+.analogy::before{content:"打个比方";display:block;font-size:12px;letter-spacing:.12em;color:var(--e);font-weight:700}
+
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:16px 0 8px;min-width:0}
+.fig canvas{display:block;width:100%}
+.howto{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.howto .ic{color:var(--a)}
+.cap{font-size:13.5px;color:var(--muted);margin-top:8px;max-width:none}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:12px;font-size:14px}
+.ctrl{display:flex;align-items:center;gap:8px}
+.ctrl label{color:var(--muted);white-space:nowrap}
+input[type=range]{accent-color:var(--a);width:130px}
+select{font:inherit;font-size:14px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+output,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:13.5px}
+output{min-width:3.2em;display:inline-block}
+button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:5px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+button:hover{border-color:var(--muted)}
+button.primary{background:var(--a);color:var(--on-a);border-color:var(--a);font-weight:500}
+:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+.readout{font-size:14.5px;margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 22px}
+.readout span{color:var(--muted)}
+.readout b{color:var(--ink);font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.readout b.hi{color:var(--hi)} .readout b.a{color:var(--a)}
+.say{font-size:15px;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--soft)}
+.say b{color:var(--a)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;margin-top:10px}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;flex:none}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.card .top{display:flex;align-items:center;gap:10px}
+.card .top .ic{font-size:22px}
+.card h4{margin:0;font-size:16px}
+.card .plain{font-size:14.5px;margin:.45em 0 .3em;line-height:1.65}
+.card .eq{font-size:.98em}
+.card.ka .top{color:var(--a)} .card.ke .top{color:var(--e)} .card.kh .top{color:var(--hi)}
+.card .top h4{color:var(--ink)}
+
+details.deep{margin:14px 0;border:1px dashed var(--line);border-radius:12px;padding:4px 14px;max-width:100%}
+details.deep summary{cursor:pointer;font-size:14px;color:var(--muted);padding:6px 0;display:flex;align-items:center;gap:8px;list-style:none}
+details.deep summary::-webkit-details-marker{display:none}
+details.deep summary .ic{color:var(--e);font-size:17px}
+details.deep summary::after{content:"展开";margin-left:auto;font-size:12px;color:var(--e)}
+details.deep[open] summary::after{content:"收起"}
+.eq-block{font-family:var(--f-math);font-size:1.15em;background:var(--soft);padding:8px 14px;border-radius:8px;margin:10px 0;overflow-x:auto;max-width:100%}
+pre.mme{font-family:var(--f-mono);font-size:13px;line-height:1.6;background:var(--soft);border-radius:8px;padding:12px 16px;overflow-x:auto;margin:10px 0;max-width:100%}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px;align-items:start}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;font-size:14px}
+table.data{width:100%}
+table.data th,table.data td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.data th{font-size:12.5px;color:var(--muted);font-weight:500}
+table.data td.num{text-align:right}
+.stars{color:var(--hi);letter-spacing:2px;white-space:nowrap}
+.stars i{color:var(--line);font-style:normal}
+
+.amat{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:13px}
+.amat th,.amat td{width:56px;height:34px;text-align:center;border:1px solid var(--line)}
+.amat th{background:var(--soft);color:var(--muted);font-weight:600}
+.amat td{color:transparent;transition:background .25s,color .25s}
+.amat td.filled{color:var(--ink)}
+.amat td.diag.filled{font-weight:600}
+.amat td.ref{background:var(--e-soft);color:var(--ink)}
+.amat td.cur{background:var(--hi-soft);color:var(--hi);font-weight:700}
+.ped{font-family:var(--f-mono);font-size:13px}
+.ped th,.ped td{padding:3px 10px;border-bottom:1px solid var(--line);text-align:center}
+.ped th{color:var(--muted);font-weight:500}
+.ped tr.cur td{background:var(--hi-soft)}
+.formula{min-height:3.4em;font-family:var(--f-math);font-size:16.5px;background:var(--soft);border-radius:8px;padding:8px 12px;margin-top:10px;overflow-x:auto}
+.formula .plainf{display:block;font-family:var(--f-body);font-size:13.5px;color:var(--muted)}
+.pedsvg{width:100%;max-width:250px;height:auto;display:block}
+.pedsvg line{stroke:var(--line);stroke-width:2}
+.pedsvg line.on{stroke:var(--hi)}
+.pedsvg circle{fill:var(--surface);stroke:var(--muted);stroke-width:1.5}
+.pedsvg circle.on{fill:var(--hi);stroke:var(--hi)}
+.pedsvg circle.par{stroke:var(--e);stroke-width:3.5}
+.pedsvg text{font-family:var(--f-mono);font-size:13px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.pedsvg text.on{fill:var(--on-a)}
+.log{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);max-height:9.5em;overflow:auto;background:var(--soft);border-radius:8px;padding:6px 10px}
+.log div.last{color:var(--hi)}
+
+.htraits{display:grid;gap:8px;margin:14px 0}
+.ht{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr) 5.5em;gap:10px;align-items:center;font-size:14px}
+.ht .track{position:relative;height:14px;background:var(--soft);border-radius:7px}
+.ht .bar{position:absolute;top:0;bottom:0;border-radius:7px;transform-origin:left;animation:grow 1.1s ease-out both}
+.ht .bar.lo{background:var(--e)} .ht .bar.md{background:var(--a)} .ht .bar.hi{background:var(--hi)}
+.ht .v{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);text-align:right}
+.ht.axis .track{background:none;height:auto;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+@keyframes grow{from{transform:scaleX(.25);opacity:.6}to{transform:none;opacity:1}}
+@media (max-width:480px){.ht{grid-template-columns:minmax(0,6.5em) minmax(0,1fr) 4.6em;font-size:13px}}
+
+.quiz{display:grid;gap:14px;margin:16px 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.q p{margin:0 0 8px;font-weight:500}
+.q .opts{display:flex;flex-direction:column;gap:6px}
+.q .opts button{justify-content:flex-start;text-align:left;width:100%;background:var(--bg)}
+.q .opts button.right{background:var(--a-soft);border-color:var(--a)}
+.q .opts button.wrong{background:var(--hi-soft);border-color:var(--hi)}
+.q .fb{font-size:14px;color:var(--muted);margin-top:8px}
+.q .fb b{color:var(--ink)}
+#quiz-score{font-weight:700;color:var(--a)}
+
+.sheet{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px 24px;margin:10px 0 0}
+.sheet div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--line);padding:6px 0;font-size:14px;min-width:0;flex-wrap:wrap}
+.sheet .eq{background:none;padding:0}
+footer{margin-top:56px;padding-block:24px 48px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+nav.toc a.back{color:var(--a);font-weight:700}
+</style>
+<style>html,body{margin:0}footer a{color:var(--a)}</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dna" viewBox="0 0 24 24"><path d="M7 3c0 4.5 10 4.5 10 9s-10 4.5-10 9"/><path d="M17 3c0 4.5-10 4.5-10 9s10 4.5 10 9"/><path d="M9 5.5h6M9 18.5h6M10.5 9h3M10.5 15h3"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1.3"/><path d="M3 20h18"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h4l10 10h4M3 17h4l3-3M14 10l3-3h4M18 4l3 3-3 3M18 14l3 3-3 3"/></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24"><path d="M11 4a8.5 8.5 0 1 0 9 9h-9z"/><path d="M14 2.5A8 8 0 0 1 21.5 10H14z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></symbol>
+  <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M2.5 20l6-10 4 6 3.5-5 5.5 9z"/><path d="M16 11V4.5l3.5 1.6L16 7.7"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9.2h17M3.5 14.8h17M9.2 3.5v17M14.8 3.5v17"/></symbol>
+  <symbol id="i-family" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M6 7.5v3.5h12V7.5M12 11v5.5"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="i-sigma" viewBox="0 0 24 24"><path d="M18 5H6l6 7-6 7h12"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11M11 10V4a1.5 1.5 0 0 1 3 0v6M14 10V5.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6 7-2.5 0-4-1.2-5.5-3.5L3.8 15a1.5 1.5 0 0 1 2.4-1.8L8 15"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M4 7h16"/><path d="M4 7l-2.5 6a3 3 0 0 0 5 0zM20 7l-2.5 6a3 3 0 0 0 5 0z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2.5v3.5M15 2.5v3.5M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+</svg>
+<style>
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:16px 0}
+.flow .step{flex:1 1 150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.flow .step b{display:block;font-size:14.5px}
+.flow .step small{display:block;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:2px}
+.flow .step .n{font-family:var(--f-mono);font-size:11px;color:var(--a);font-weight:600}
+.flow .arr{align-self:center;color:var(--muted);font-size:18px}
+@media (max-width:640px){.flow .arr{display:none}}
+.model{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 6px}
+.term{border-radius:10px;padding:6px 12px;line-height:1.35;border:1px solid transparent}
+.term small{display:block;font-size:11.5px;opacity:.85}
+.term.y{background:var(--hi-soft);color:var(--hi);font-weight:700}
+.term.env{background:var(--e-soft);color:var(--ink);border-color:color-mix(in srgb,var(--e) 35%,transparent)}
+.term.gen{background:var(--a);color:var(--on-a);font-weight:700}
+.wbar{display:flex;height:40px;border-radius:10px;overflow:hidden;margin:10px 0 4px;font-size:13px;font-weight:600}
+.wbar div{display:flex;align-items:center;justify-content:center;color:var(--on-a);white-space:nowrap;overflow:hidden;animation:grow 1s ease-out both;transform-origin:left}
+.rule{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dotted var(--line);max-width:46em}
+.rule .k{flex:none;width:28px;height:28px;border-radius:50%;background:var(--a);color:var(--on-a);display:grid;place-items:center;font-weight:900;font-size:14px}
+.rule b{display:block}
+.rule span{color:var(--muted);font-size:14.5px}
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+.vs .card.ok{border-color:var(--a)} .vs .card.bad{border-color:var(--hi)}
+.vs .tag{font-size:12px;font-weight:700;letter-spacing:.1em}
+.vs .ok .tag{color:var(--a)} .vs .bad .tag{color:var(--hi)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:14px;line-height:1.35;margin:0 4px}
+.frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{border:none;border-radius:0}
+.seg button.on{background:var(--a);color:var(--on-a)}
+.matesvg{width:100%;height:auto;display:block}
+</style>
+
+<nav class="toc" aria-label="目录"><div class="wrap">
+  <a class="back" href="/portfolio/#tutorials">← 返回项目</a>
+  <a href="#s-why"><svg class="ic"><use href="#i-trend"/></svg>为什么评估</a>
+  <a href="#s-rule"><svg class="ic"><use href="#i-family"/></svg>三条原则</a>
+  <a href="#s-blup"><svg class="ic"><use href="#i-layers"/></svg>BLUP 模型</a>
+  <a href="#s-index"><svg class="ic"><use href="#i-scale"/></svg>选择指数</a>
+  <a href="#s-howmany"><svg class="ic"><use href="#i-target"/></svg>留多少</a>
+  <a href="#s-which"><svg class="ic"><use href="#i-check"/></svg>留哪些</a>
+  <a href="#s-case"><svg class="ic"><use href="#i-search"/></svg>反面案例</a>
+  <a href="#s-mate"><svg class="ic"><use href="#i-shuffle"/></svg>选配与进展</a>
+  <a href="#s-quiz"><svg class="ic"><use href="#i-check"/></svg>小测验</a>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">读书笔记 · 张勤《遗传评估与种猪选留》</div>
+  <h1>遗传评估与种猪选留</h1>
+  <p class="lede">一头猪长得快、背膘薄，可能是它基因好，也可能只是它住得好、吃得好。遗传评估要把两者分开，算出它当种猪能给后代留下多少好东西；种猪选留则要决定留多少、留哪些。整套工作都是为了让下面这个公式的结果更大。</p>
+  <div class="equation" aria-label="遗传进展公式">
+    <div class="chip p"><svg class="ic"><use href="#i-target"/></svg><div><b>选择强度</b><small>留得越少越强</small></div></div>
+    <span class="op">×</span>
+    <div class="chip g"><svg class="ic"><use href="#i-search"/></svg><div><b>选择准确性</b><small>最关键的一项</small></div></div>
+    <span class="op">×</span>
+    <div class="chip en"><svg class="ic"><use href="#i-dna"/></svg><div><b>遗传变异</b><small>群体里差异多大</small></div></div>
+    <span class="op">÷</span>
+    <div class="chip en"><svg class="ic"><use href="#i-redo"/></svg><div><b>世代间隔</b><small>越短越好</small></div></div>
+    <span class="op">=</span>
+    <div class="chip g"><svg class="ic"><use href="#i-trend"/></svg><div><b>遗传进展 ΔG</b><small>每年进步多少</small></div></div>
+  </div>
+  <p class="cap">原文出处：张勤（中国农业大学），《北方牧业》“读深”栏目，2024 年第 13–14 版。本页内容按原文整理，图中数据除注明者外均为示意。</p>
+</header>
+
+<div class="part-band"><span class="no">第一部分</span><h2>遗传评估</h2><p>评的是种用价值，不是商业价值</p></div>
+
+<section class="sec" id="s-why">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-trend"/></svg></div><h3><small>出发点</small>为什么要做遗传评估？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>四个因素里准确性最关键：选不准，其他三项做得再好也没用。而表型好不等于遗传好，只有遗传评估才能判断一头猪遗传上是否优秀。</div></div>
+  <div class="analogy">考试成绩好的学生，可能是真有本事，也可能是请了好家教、考前押中了题。招生时想要的是“真本事”，就得把家教、押题这些因素扣掉再比。</div>
+  <div class="cards">
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-dna"/></svg><h4>评什么</h4></div><p class="plain">个体的<strong>种用价值</strong>：留下来做种猪，对后代的遗传贡献有多大。</p></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-plan"/></svg><h4>用来做什么</h4></div><p class="plain">为选种、选配提供科学依据；育种若干年后，检验育种效果。</p></div>
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-layers"/></svg><h4>产出什么</h4></div><p class="plain">每个性状一个<strong>估计育种值 EBV</strong>；再按育种目标加权成一个<strong>综合选择指数</strong>。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="s-rule">
+  <div class="sec-h"><div class="badge e"><svg class="ic"><use href="#i-family"/></svg></div><h3><small>基本原则</small>怎样才算评得准？三条原则</h3></div>
+  <div class="rule"><div class="k">1</div><div><b>尽可能消除环境影响</b><span>饲料、营养水平、性别、猪舍、管理方式、饲养员、疫病、母猪泌乳和护仔能力……有的能控制，有的控制不了，但要尽量保持一致，减少个体间的环境差异。</span></div></div>
+  <div class="rule"><div class="k">2</div><div><b>尽可能利用各种可利用的信息</b><span>除了个体自身表型，还要用亲属的表现。信息越多越准；亲缘越近，信息价值越高。</span></div></div>
+  <div class="rule"><div class="k">3</div><div><b>采用科学的育种值估计方法</b><span>充分利用所有信息、有效校正环境，使估计值与真实育种值的相关最大。现在用的就是<strong>动物模型 BLUP</strong>。</span></div></div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-family"/></svg>不同亲属提供的信息价值（以个体本身 = 1 计，按原文）</div>
+    <div class="htraits">
+      <div class="ht"><span>个体本身</span><div class="track"><div class="bar hi" style="width:100%"></div></div><span class="v">1</span></div>
+      <div class="ht"><span>父母 / 后代 / 全同胞</span><div class="track"><div class="bar md" style="width:50%"></div></div><span class="v">1/2</span></div>
+      <div class="ht"><span>半同胞 / 祖代</span><div class="track"><div class="bar md" style="width:25%"></div></div><span class="v">1/4</span></div>
+      <div class="ht"><span>曾祖代</span><div class="track"><div class="bar lo" style="width:12.5%"></div></div><span class="v">1/8</span></div>
+    </div>
+    <p class="cap">这些数字就是亲缘系数。每远一代，价值减半，但仍值得利用。</p>
+  </div>
+  <h3 style="font-size:18px;margin-top:26px">评估的基本流程</h3>
+  <div class="flow">
+    <div class="step"><span class="n">01</span><b>数据准备</b><small>反映个体真实性能和群体真实水平；完整、连续、足量</small></div><span class="arr">→</span>
+    <div class="step"><span class="n">02</span><b>数据检查</b><small>性状值检查、记录完整性检查、系谱检查</small></div><span class="arr">→</span>
+    <div class="step"><span class="n">03</span><b>估计育种值</b><small>动物模型 BLUP，得到各性状 EBV</small></div><span class="arr">→</span>
+    <div class="step"><span class="n">04</span><b>计算选择指数</b><small>按育种目标加权 EBV</small></div><span class="arr">→</span>
+    <div class="step"><span class="n">05</span><b>选种 · 选配</b><small>决定留谁、怎么配，并分析遗传进展</small></div>
+  </div>
+</section>
+
+<div class="part-band"><span class="no">第二部分</span><h2>育种值估计</h2><p>动物模型 BLUP：目前世界公认最好、各国普遍采用的方法</p></div>
+
+<section class="sec" id="s-blup">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-layers"/></svg></div><h3><small>模型</small>把一头猪的表现拆成几块</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>模型就是“表型值 = 各影响因素之和”的线性表达式。蓝色块都是环境，只有绿色块是遗传，BLUP 要估计的就是绿色那块。</div></div>
+
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-gauge"/></svg>生长性状：达100kg日龄、背膘厚（日增重、饲料利用率、眼肌面积可照此建模）</div>
+    <div class="model">
+      <span class="term y">日龄 / 背膘厚<small>表型值</small></span><span class="op">=</span>
+      <span class="term env">场-年-季-性别<small>测定时的场、年份、季节、性别</small></span><span class="op">+</span>
+      <span class="term env">窝效应<small>同母同胎次：母猪泌乳力、窝内小环境</small></span><span class="op">+</span>
+      <span class="term gen">个体育种值<small>遗传</small></span><span class="op">+</span>
+      <span class="term env">残差<small>未知、无法控制的因素</small></span>
+    </div>
+  </div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-family"/></svg>繁殖性状：总产仔数（产活仔数、出生重均匀度、断奶仔猪数、21日龄窝重、断奶至发情间隔可照此建模）</div>
+    <div class="model">
+      <span class="term y">产仔数<small>表型值</small></span><span class="op">=</span>
+      <span class="term env">场-年-季<small>产仔时的场、年份、季节</small></span><span class="op">+</span>
+      <span class="term env">持久环境<small>同一母猪各胎次共有的环境影响</small></span><span class="op">+</span>
+      <span class="term gen">个体育种值<small>遗传</small></span><span class="op">+</span>
+      <span class="term env">残差</span>
+    </div>
+    <p class="cap">为什么繁殖性状多一个“持久环境”？因为一头母猪会产很多胎，每胎都有产仔数记录，有些环境影响会跟着这头母猪反复出现。</p>
+  </div>
+  <details class="deep"><summary><svg class="ic"><use href="#i-sigma"/></svg>补充（非原文）：写成矩阵形式</summary>
+    <div class="eq-block">y = Xb + Za + Wc + e</div>
+    <p>y：表型向量；b：固定效应（场-年-季-性别）；a：个体育种值，方差为 Aσ²<sub>a</sub>，A 为亲缘关系矩阵；c：窝效应或持久环境效应；e：残差。正是 A 矩阵把亲属信息“自动”带进了每头猪的育种值估计，这对应上面第 2 条原则。</p>
+  </details>
+</section>
+
+<section class="sec" id="s-index">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-scale"/></svg></div><h3><small>选择指数</small>多个性状，怎么合成一个分数？</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>指数 = 各性状 EBV 按相对重要性加权求和。它就是育种目标的数学表达：选哪些性状、各占多重。</div></div>
+  <div class="eq-block">I = Σ W<sub>i</sub> × EBV<sub>i</sub> / SD(EBV<sub>i</sub>)</div>
+  <p>权重常按<strong>经济重要性</strong>定：性状每改进一个单位能带来多少钱。产仔数多一头、日龄少一天、背膘薄一毫米，价值显然不一样。</p>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-scale"/></svg>全国种猪遗传评估中心的两个指数</div>
+    <p style="margin:4px 0 0"><b>父系指数</b> <span class="muted">· 目标性状：达100kg日龄、背膘厚</span></p>
+    <div class="wbar"><div style="flex:1;background:var(--a)">日龄</div><div style="flex:1;background:var(--e)">背膘厚</div></div>
+    <p class="cap" style="margin-top:0">原文未列出父系指数的具体权重，此处只表示包含这两个性状。</p>
+    <p style="margin:14px 0 0"><b>母系指数</b> <span class="muted">· 目标性状：日龄、背膘厚、总产仔数</span></p>
+    <div class="wbar"><div style="flex:30;background:var(--a)">日龄 30%</div><div style="flex:10;background:var(--e)">10%</div><div style="flex:60;background:var(--hi)">总产仔数 60%</div></div>
+    <p class="cap" style="margin-top:0">母系指数中产仔数权重最大，背膘厚只占 10%。</p>
+  </div>
+  <div class="cards">
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-gauge"/></svg><h4>标准化</h4></div><p class="plain">指数再转换成群体<strong>平均 100、标准差 25</strong>。只是换个刻度，不改变排名，用起来更直观：125 分就是高出平均一个标准差。</p></div>
+  </div>
+</section>
+
+<div class="part-band"><span class="no">第三部分</span><h2>种猪选留</h2><p>留多少，决定选择强度和世代间隔；留哪些，决定准确性和遗传变异</p></div>
+
+<section class="sec" id="s-howmany">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-target"/></svg></div><h3><small>留多少</small>留种率越小，选择差越大</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b><strong>选择差</strong> = 留种群平均 − 测定群平均。留种率越小，留下的越是“尖子”，选择差和选择强度就越大。</div></div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>拖动滑块改变留种率，看留下的部分（绿色）和选择强度怎么变。横轴是指数，以标准差为单位。</div>
+    <canvas id="cv-sel" aria-label="正态分布下的截断选择示意"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label for="sel-p">留种率</label><input id="sel-p" type="range" min="0.5" max="80" step="0.5" value="20"><output id="sel-p-o">20%</output></div>
+      <button type="button" data-p="1">1%</button>
+      <button type="button" data-p="5">公猪 5%</button>
+      <button type="button" data-p="20">母猪 20%</button>
+    </div>
+    <div class="readout"><span>截断点 <b id="sel-z">—</b></span><span>选择强度 i <b class="hi" id="sel-i">—</b></span><span>每 100 头测定留 <b class="a" id="sel-n">—</b> 头</span></div>
+    <p class="cap">原文举例：留种率 1% 时，选择强度约为 2.67。选择强度就是以标准差为单位的选择差。</p>
+  </div>
+  <h3 style="font-size:18px;margin-top:26px">留种率怎么算？</h3>
+  <div class="eq-block" style="font-family:var(--f-body);font-size:16px">留种率 = <span class="frac"><span>选留的后备种猪数</span><span>测定个体数（参加遗传评估的个体数）</span></span></div>
+  <div class="vs">
+    <div class="card bad"><span class="tag">✗ 常见错误 1</span><p class="plain">分母用“这一年生了多少头仔猪”。没测定的猪没有参与评估，不能算进去。</p></div>
+    <div class="card bad"><span class="tag">✗ 常见错误 2</span><p class="plain">分子用“最终真正作种用的头数”。后备猪还会再淘汰一部分，被淘汰的不一定是指数低的。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="s-which">
+  <div class="sec-h"><div class="badge"><svg class="ic"><use href="#i-check"/></svg></div><h3><small>留哪些</small>留什么样的猪？五条标准</h3></div>
+  <div class="rule"><div class="k">1</div><div><b>必须经过性能测定</b><span>不测定也能凭系谱算 EBV，但准确性低。公猪没有产仔记录，繁殖性状只能靠亲属；生长性能则公母都必须测定。</span></div></div>
+  <div class="rule"><div class="k">2</div><div><b>优先看指数大小</b><span>按需要选留指数最高的个体。</span></div></div>
+  <div class="rule"><div class="k">3</div><div><b>参考单性状 EBV</b><span>某个性状特别突出、指数不够高的猪也可以留，但它其他性状至少要在平均水平以上，别把好基因和坏基因一起留下。</span></div></div>
+  <div class="rule"><div class="k">4</div><div><b>兼顾体型、血统和健康状况</b></div></div>
+  <div class="rule"><div class="k">5</div><div><b>保持足够的公猪血统，防止近交</b><span>必要时可淘汰最差的血统；血统不够时，引进外场优秀公猪。</span></div></div>
+  <div class="cards">
+    <div class="card kh"><div class="top"><svg class="ic"><use href="#i-target"/></svg><h4>作者给的底线</h4></div><p class="plain">留种<strong>母猪指数在前 40%</strong>，留种<strong>公猪指数至少在前 20%</strong>。</p></div>
+    <div class="card ke"><div class="top"><svg class="ic"><use href="#i-scale"/></svg><h4>为什么比留种率宽？</h4></div><p class="plain">期望留种率是公猪 5% 以下、母猪约 20%。前 40% / 20% 的范围给体型、血统、健康留出了调整余地。</p></div>
+    <div class="card ka"><div class="top"><svg class="ic"><use href="#i-search"/></svg><h4>真正要看的</h4></div><p class="plain">不管留种率报得多低，<strong>最终要看实际选择差有多大</strong>。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="s-case">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-search"/></svg></div><h3><small>反面案例</small>选了，但跟没选差不多</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>原文数据</b>某场测定母猪达100kg日龄平均 170 天，留种母猪平均 168 天，<strong>选择差不到 2 天</strong>；日龄 180、200 天以上的猪也被留了下来。按前 40% 的要求，界限应在 160 天左右。</div></div>
+  <div class="fig">
+    <div class="howto"><svg class="ic"><use href="#i-hand"/></svg>切换两种留种方式对比。日龄越小越好，好猪在左边。</div>
+    <canvas id="cv-case" aria-label="测定母猪与留种母猪的日龄分布对比"></canvas>
+    <div class="ctrls"><div class="seg"><button type="button" id="case-real" class="on">该场的实际留种</button><button type="button" id="case-ideal">按 160 天界限留种</button></div></div>
+    <div class="say" id="case-say"></div>
+    <p class="cap">平均数 170、168 和界限 160 来自原文，分布形状为示意。</p>
+  </div>
+</section>
+
+<div class="part-band"><span class="no">第四部分</span><h2>选配与遗传进展</h2><p>评估结果的另外两个用途</p></div>
+
+<section class="sec" id="s-mate">
+  <div class="sec-h"><div class="badge e"><svg class="ic"><use href="#i-shuffle"/></svg></div><h3><small>选配</small>先避近交，再按性能配</h3></div>
+  <div class="oneline"><svg class="ic"><use href="#i-bulb"/></svg><div><b>一句话</b>第一步看公母猪的亲缘系数，避免近交（育种软件一般都有这个功能）；第二步按性能选配，核心群以同质选配为主。</div></div>
+  <div class="fig">
+    <svg class="matesvg" id="svg-mate" viewBox="0 0 760 230" role="img" aria-label="同质选配与异质选配后代分布对比"></svg>
+  </div>
+  <div class="vs">
+    <div class="card ok"><span class="tag">同质选配 · 主要方式</span><p class="plain">好公猪配好母猪，差配差。后代群体<strong>变异更大</strong>，更有机会出现极端优秀的个体；优秀公猪可以适当多配。</p></div>
+    <div class="card"><span class="tag" style="color:var(--muted)">异质选配 · 核心群很少用</span><p class="plain">好公猪配差母猪。目的是让后代群体<strong>更整齐一致</strong>。</p></div>
+  </div>
+
+  <div class="sec-h" style="margin-top:40px"><div class="badge"><svg class="ic"><use href="#i-trend"/></svg></div><h3><small>检验效果</small>遗传进展：看趋势是否持续稳定</h3></div>
+  <p><strong>遗传进展</strong>是参加评估的猪按出生年份统计的平均 EBV（或平均指数）的变化趋势；<strong>表型进展</strong>是各年度出生猪平均表型值的变化趋势。表型会随年份上下波动，但育种工作有效时，遗传趋势应该持续、稳定地朝一个方向走。</p>
+  <div class="fig">
+    <canvas id="cv-trend" aria-label="遗传趋势与表型趋势示意图"></canvas>
+    <div class="legend"><span><i class="sw" style="background:var(--a)"></i>平均 EBV（遗传趋势）</span><span><i class="sw" style="background:var(--e)"></i>平均表型值（表型趋势）</span></div>
+    <p class="cap">示意数据：以达100kg日龄为例，两条线都在下降（变好），遗传线平稳，表型线随年份环境波动。</p>
+  </div>
+</section>
+
+<section class="sec" id="s-quiz">
+  <div class="sec-h"><div class="badge h"><svg class="ic"><use href="#i-check"/></svg></div><h3><small>检验一下</small>小测验</h3></div>
+  <p>得分：<span id="quiz-score">0</span> / 5</p>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+<footer>本页整理自张勤《遗传评估与种猪选留》（《北方牧业》2024，第13–14版）。相关教程：<a href="/files/tutorials/genetic-parameters.html">遗传参数图解</a> · <a href="/files/tutorials/animal-models.html">育种动物模型图鉴</a> · <a href="/files/tutorials/linear-algebra-animal-model.html">看得见的线性代数</a> · <a href="/portfolio/#tutorials">全部教程</a></footer>
+</div>
+
+<script>
+const root=document.documentElement;
+const css=n=>getComputedStyle(root).getPropertyValue(n).trim();
+function setup(cv,h){const dpr=window.devicePixelRatio||1,w=cv.clientWidth;cv.width=w*dpr;cv.height=h*dpr;cv.style.height=h+'px';const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return{c,w,h};}
+const phi=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);
+function Phi(x){const t=1/(1+0.2316419*Math.abs(x));const d=phi(x)*t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));return x>0?1-d:d;}
+function zUpper(p){let lo=-6,hi=6;for(let k=0;k<60;k++){const m=(lo+hi)/2;(1-Phi(m)>p)?lo=m:hi=m;}return (lo+hi)/2;}
+function font(c,s,w){c.font=`${w||400} ${s}px ${css('--f-body')}`;}
+
+/* 选择强度 */
+const pIn=document.getElementById('sel-p');
+function drawSel(){
+  const cv=document.getElementById('cv-sel');const {c,w,h}=setup(cv,cv.clientWidth<520?220:260);
+  const p=+pIn.value/100, z=zUpper(p), i=phi(z)/p;
+  document.getElementById('sel-p-o').textContent=(+pIn.value)+'%';
+  document.getElementById('sel-z').textContent='+'+z.toFixed(2)+' SD';
+  document.getElementById('sel-i').textContent=i.toFixed(2);
+  document.getElementById('sel-n').textContent=(p*100).toFixed(p<0.1?1:0);
+  const L=24,R=w-16,T=34,B=h-34,X=v=>L+(v+3.6)/7.2*(R-L),Y=v=>B-v/0.42*(B-T);
+  c.clearRect(0,0,w,h);
+  c.beginPath();c.moveTo(X(Math.max(z,-3.6)),B);for(let v=Math.max(z,-3.6);v<=3.6;v+=0.02)c.lineTo(X(v),Y(phi(v)));c.lineTo(X(3.6),B);c.closePath();c.fillStyle=css('--a-soft');c.fill();
+  c.beginPath();for(let v=-3.6;v<=3.6;v+=0.02){v===-3.6?c.moveTo(X(v),Y(phi(v))):c.lineTo(X(v),Y(phi(v)));}c.strokeStyle=css('--ink');c.lineWidth=1.6;c.stroke();
+  c.strokeStyle=css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,B);c.lineTo(R,B);c.stroke();
+  c.setLineDash([4,4]);c.strokeStyle=css('--a');c.beginPath();c.moveTo(X(z),B);c.lineTo(X(z),T-6);c.stroke();c.setLineDash([]);
+  font(c,12);c.fillStyle=css('--muted');c.textAlign='center';
+  for(let v=-3;v<=3;v++)c.fillText(v,X(v),B+16);
+  c.fillText('测定群平均',X(0),B+30);
+  // 选择差箭头
+  const ay=T+4;c.strokeStyle=css('--hi');c.fillStyle=css('--hi');c.lineWidth=2;
+  c.beginPath();c.moveTo(X(0),ay);c.lineTo(X(i),ay);c.stroke();
+  c.beginPath();c.moveTo(X(i),ay);c.lineTo(X(i)-7,ay-4);c.lineTo(X(i)-7,ay+4);c.fill();
+  c.setLineDash([2,3]);c.lineWidth=1;c.beginPath();c.moveTo(X(0),ay);c.lineTo(X(0),B);c.moveTo(X(i),ay);c.lineTo(X(i),B);c.stroke();c.setLineDash([]);
+  font(c,12.5,700);c.fillText('选择差 = '+i.toFixed(2)+' SD',(X(0)+X(i))/2,ay-8);
+  font(c,12,700);c.fillStyle=css('--a');c.textAlign='left';
+  if(X(z)+6<R-60)c.fillText('留下 '+(+pIn.value)+'%',X(z)+6,B-8);
+}
+pIn.addEventListener('input',drawSel);
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{pIn.value=b.dataset.p;drawSel();});
+
+/* 反面案例 */
+let caseMode='real';
+function drawCase(){
+  const cv=document.getElementById('cv-case');const {c,w,h}=setup(cv,cv.clientWidth<520?230:270);
+  const lo=120,hi=225,L=24,R=w-16,T=26,B=h-36,X=v=>L+(v-lo)/(hi-lo)*(R-L);
+  const sd=16,g=(v,m,s)=>Math.exp(-(((v-m)/s)**2)/2)/(s*Math.sqrt(2*Math.PI));
+  const sel=caseMode==='real'?(v=>0.4*g(v,168,15.5)):(v=>v<=160?g(v,170,sd):0);
+  const ymax=g(170,170,sd)*1.1,Y=v=>B-v/ymax*(B-T);
+  c.clearRect(0,0,w,h);
+  c.beginPath();c.moveTo(X(lo),B);for(let v=lo;v<=hi;v+=0.5)c.lineTo(X(v),Y(sel(v)));c.lineTo(X(hi),B);c.closePath();
+  c.fillStyle=caseMode==='real'?css('--hi-soft'):css('--a-soft');c.fill();
+  c.beginPath();for(let v=lo;v<=hi;v+=0.5){v===lo?c.moveTo(X(v),Y(g(v,170,sd))):c.lineTo(X(v),Y(g(v,170,sd)));}c.strokeStyle=css('--ink');c.lineWidth=1.6;c.stroke();
+  c.strokeStyle=css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,B);c.lineTo(R,B);c.stroke();
+  font(c,12);c.fillStyle=css('--muted');c.textAlign='center';
+  for(let v=130;v<=220;v+=10)c.fillText(v,X(v),B+16);c.fillText('达100kg日龄（天）  ← 越小越好',X(172),B+31);
+  // 160 line
+  c.setLineDash([4,4]);c.strokeStyle=css('--a');c.beginPath();c.moveTo(X(160),B);c.lineTo(X(160),T);c.stroke();c.setLineDash([]);
+  font(c,12,700);c.fillStyle=css('--a');c.textAlign='right';c.fillText('前40%界限 ≈160',X(160)-4,T+10);
+  // means
+  const selMean=caseMode==='real'?168:(()=>{let s=0,n=0;for(let v=lo;v<=160;v+=0.1){s+=v*g(v,170,sd);n+=g(v,170,sd);}return s/n;})();
+  c.strokeStyle=css('--ink');c.setLineDash([2,3]);c.beginPath();c.moveTo(X(170),Y(g(170,170,sd)));c.lineTo(X(170),B);c.stroke();
+  c.strokeStyle=css('--hi');c.beginPath();c.moveTo(X(selMean),T+40);c.lineTo(X(selMean),B);c.stroke();c.setLineDash([]);
+  font(c,12,700);c.textAlign='left';c.fillStyle=css('--ink');c.fillText('测定群 170',X(170)+4,Y(g(170,170,sd))+2);
+  {const tx='留种群 '+selMean.toFixed(0),tw=c.measureText(tx).width,lx=X(selMean)-6-tw,ly=B-14;c.fillStyle=css('--surface');c.fillRect(lx-3,ly-13,tw+6,18);c.fillStyle=css('--hi');c.textAlign='left';c.fillText(tx,lx,ly);}
+  if(caseMode==='real'){c.textAlign='left';c.fillStyle=css('--hi');c.fillText('180、200 天以上的也留了',X(186),Y(0.4*g(186,168,15.5))-8);}
+  document.getElementById('case-say').innerHTML=caseMode==='real'
+    ?'留种群平均 <b>168</b> 天，比测定群只少 <b>2</b> 天。好猪留了，差猪也留了，分布和随机留种几乎一样，<b>不要期望有遗传进展</b>。'
+    :'只留 160 天以下的猪，留种群平均约 <b>'+selMean.toFixed(0)+'</b> 天，选择差约 <b>'+(170-selMean).toFixed(0)+'</b> 天，约为原来的 '+Math.round((170-selMean)/2)+' 倍。（示意分布下的计算）';
+}
+document.getElementById('case-real').onclick=e=>{caseMode='real';e.target.classList.add('on');document.getElementById('case-ideal').classList.remove('on');drawCase();};
+document.getElementById('case-ideal').onclick=e=>{caseMode='ideal';e.target.classList.add('on');document.getElementById('case-real').classList.remove('on');drawCase();};
+
+/* 选配 SVG */
+function drawMate(){
+  const s=document.getElementById('svg-mate');
+  const curve=(cx,sd,base,amp,col,fill)=>{let d='';for(let x=-150;x<=150;x+=3){const y=base-amp*Math.exp(-((x/sd)**2)/2);d+=(x===-150?'M':'L')+(cx+x)+','+y.toFixed(1);}return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.2"/>`;};
+  const pig=(x,y,lab,col)=>`<circle cx="${x}" cy="${y}" r="19" fill="${col}"/><text x="${x}" y="${y}" fill="var(--on-a)" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="central">${lab}</text>`;
+  const t=(x,y,str,col,sz,w)=>`<text x="${x}" y="${y}" fill="${col||'var(--ink)'}" font-size="${sz||14}" font-weight="${w||400}" text-anchor="middle">${str}</text>`;
+  s.innerHTML=
+    t(190,22,'同质选配：好×好、差×差','var(--a)',15,700)+
+    pig(120,62,'好♂','var(--a)')+pig(165,62,'好♀','var(--a)')+pig(215,62,'差♂','var(--e)')+pig(260,62,'差♀','var(--e)')+
+    curve(190,62,200,80,'var(--a)')+t(190,222,'后代分布宽：两头都有极端个体','var(--muted)',12.5)+
+    `<line x1="380" y1="20" x2="380" y2="215" stroke="var(--line)"/>`+
+    t(570,22,'异质选配：好×差','var(--muted)',15,700)+
+    pig(500,62,'好♂','var(--a)')+pig(545,62,'差♀','var(--e)')+pig(595,62,'差♂','var(--e)')+pig(640,62,'好♀','var(--a)')+
+    curve(570,30,200,110,'var(--e)')+t(570,222,'后代分布窄：整齐一致','var(--muted)',12.5);
+}
+
+/* 遗传趋势 */
+function drawTrend(){
+  const cv=document.getElementById('cv-trend');const {c,w,h}=setup(cv,240);
+  const yrs=[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+  const gen=yrs.map((_,k)=>-1.1*k), noise=[0,4,-3,5,-4,2,6,-2,3,-1], ph=yrs.map((_,k)=>172-1.1*k+noise[k]);
+  const L=44,R=w-44,T=16,B=h-30,X=k=>L+k/(yrs.length-1)*(R-L);
+  const Yp=v=>B-(v-158)/(182-158)*(B-T), Yg=v=>B-(v+12)/(2+12)*(B-T);
+  c.clearRect(0,0,w,h);c.strokeStyle=css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,B);c.lineTo(R,B);c.stroke();
+  font(c,11.5);c.fillStyle=css('--muted');c.textAlign='center';
+  yrs.forEach((y,k)=>{if(w>520||k%2===0)c.fillText(y,X(k),B+16);});
+  c.textAlign='right';c.fillStyle=css('--e');c.fillText('表型(天)',L-4,T+4);[160,170,180].forEach(v=>c.fillText(v,L-6,Yp(v)+4));
+  c.textAlign='left';c.fillStyle=css('--a');c.fillText('EBV',R+6,T+4);[0,-5,-10].forEach(v=>c.fillText(v,R+6,Yg(v)+4));
+  const line=(arr,Yf,col,wd)=>{c.beginPath();arr.forEach((v,k)=>k?c.lineTo(X(k),Yf(v)):c.moveTo(X(k),Yf(v)));c.strokeStyle=col;c.lineWidth=wd;c.stroke();arr.forEach((v,k)=>{c.beginPath();c.arc(X(k),Yf(v),3,0,7);c.fillStyle=col;c.fill();});};
+  line(ph,Yp,css('--e'),1.6);line(gen,Yg,css('--a'),2.6);
+}
+
+/* 测验 */
+const Q=[
+  {q:'遗传进展公式的四个因素中，哪一个最关键？',o:['选择强度','选择准确性','遗传变异','世代间隔'],a:1,e:'选得不准，其他因素做了也没用。'},
+  {q:'计算留种率时，分子应该用什么？',o:['最终实际作种用的头数','当年出生的仔猪数','选留的后备种猪数','测定个体数'],a:2,e:'分子是后备种猪数，分母是测定（参加评估）的个体数。'},
+  {q:'全国种猪遗传评估中心的母系指数里，总产仔数的权重是多少？',o:['0.1','0.3','0.5','0.6'],a:3,e:'日龄 0.3、背膘厚 0.1、总产仔数 0.6。'},
+  {q:'测定群日龄平均 170 天、留种群 168 天，说明什么？',o:['选择差太小，近似随机留种','留种率太低','环境影响被消除了','遗传进展很大'],a:0,e:'选择差不到 2 天，好猪差猪都留了，难有遗传进展。'},
+  {q:'育种核心群主要采用同质选配，目的是什么？',o:['让后代更整齐一致','增大后代变异，更可能出现极端优秀个体','避免近交','减少世代间隔'],a:1,e:'好配好能扩大后代变异；整齐一致是异质选配的目的。'}
+];
+let score=0;const qz=document.getElementById('quiz');
+Q.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';d.innerHTML=`<p>${qi+1}. ${it.q}</p><div class="opts"></div><div class="fb"></div>`;
+  const op=d.querySelector('.opts');it.o.forEach((t,k)=>{const b=document.createElement('button');b.type='button';b.textContent=t;
+    b.onclick=()=>{if(d.dataset.done)return;d.dataset.done=1;op.children[it.a].classList.add('right');if(k!==it.a)b.classList.add('wrong');else{score++;document.getElementById('quiz-score').textContent=score;}
+      d.querySelector('.fb').innerHTML=(k===it.a?'<b>答对了。</b>':'<b>正确答案：'+it.o[it.a]+'。</b>')+it.e;};op.appendChild(b);});qz.appendChild(d);});
+
+function redrawAll(){drawSel();drawCase();drawMate();drawTrend();}
+redrawAll();
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(redrawAll,120);});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redrawAll);
+document.fonts&&document.fonts.ready.then(redrawAll);
+</script>
+</body>
+</html>
