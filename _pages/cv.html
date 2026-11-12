@@ -1,0 +1,244 @@
+---
+layout: null
+permalink: /cv/
+title: "CV"
+sitemap: true
+---
+{%- comment -%}
+  CV 页：独立的 A4 页面，可直接打印或“另存为 PDF”。
+  文字内容在 _data/cv.yml 中编辑；“研究成果”自动读取 _publications。
+{%- endcomment -%}
+{%- assign cv = site.data.cv -%}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ cv.name }} - CV</title>
+<meta name="description" content="{{ cv.name }}的个人简历">
+<link rel="icon" href="{{ '/images/profile.png' | relative_url }}">
+<style>
+  :root {
+    --green: #2c5e4a;
+    --bar: #eef2f0;
+    --ink: #1f2420;
+    --ink-2: #3c423e;
+    --muted: #6a716c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #e6e8e6;
+    color: var(--ink);
+    font-family: "Barlow", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+    font-size: 9.8pt;
+    line-height: 1.48;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* 屏幕上的工具栏（打印时隐藏） */
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 210mm; margin: 0 auto; padding: 12px 2px;
+    font-size: 14px;
+  }
+  .toolbar a { color: var(--green); }
+  .toolbar a:hover { text-decoration: underline; }
+  .toolbar button {
+    font: inherit; font-size: 14px; cursor: pointer;
+    color: #fff; background: var(--green);
+    border: 0; border-radius: 4px; padding: 7px 14px;
+  }
+  .toolbar button:hover { background: #234c3c; }
+
+  /* A4 纸 */
+  .sheet {
+    width: 210mm; min-height: 297mm;
+    margin: 0 auto 32px;
+    padding: 13mm 17mm 11mm;
+    background: #fff;
+    box-shadow: 0 2px 14px rgba(0,0,0,.12);
+  }
+
+  /* 页眉 */
+  .name {
+    margin: 0; color: var(--green);
+    font-size: 25pt; font-weight: 700; letter-spacing: .04em; line-height: 1.15;
+  }
+  .headline { margin: 1mm 0 0; font-size: 13.5pt; font-weight: 400; color: var(--ink); }
+  .contact {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 8mm;
+    margin: 4mm 0 0; padding: 0; list-style: none;
+    font-size: 9.8pt; color: var(--ink-2);
+  }
+  .contact li { display: flex; align-items: center; gap: 3mm; }
+  .contact svg { width: 4mm; height: 4mm; flex: none; fill: var(--green); }
+
+  /* 分节标题：浅色通栏 + 居中绿色字 */
+  h2 {
+    margin: 4.2mm 0 2.4mm; padding: 1mm 0;
+    background: var(--bar); color: var(--green);
+    text-align: center; font-size: 11pt; font-weight: 700; letter-spacing: .35em;
+    text-indent: .35em; /* 抵消末字后的字距，让文字真正居中 */
+  }
+  .summary { margin: 0; color: var(--ink-2); text-align: justify; }
+
+  /* 左时间 / 右内容 两栏 */
+  .row {
+    display: grid; grid-template-columns: 36mm 1fr; column-gap: 4mm;
+    margin-bottom: 2.6mm; break-inside: avoid;
+  }
+  .row:last-child { margin-bottom: 0; }
+  .when { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .where { color: var(--ink-2); }
+  .what { font-weight: 700; }
+  .org { color: var(--ink-2); }
+  .row ul { margin: .6mm 0 0; padding-left: 4.2mm; }
+  .row li { margin: .2mm 0; padding-left: .5mm; color: var(--ink-2); }
+  .row li::marker { color: var(--ink); }
+
+  /* 研究成果 */
+  .pub .what { font-weight: 600; }
+  .pub .meta { color: var(--muted); font-size: 9pt; line-height: 1.35; }
+  .pub { margin-bottom: 2mm; }
+  .pub .meta strong { color: var(--ink-2); font-weight: 700; }
+
+  /* 技能 / 语言：两列圆点列表 */
+  .cols {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm 6mm;
+    margin: 0; padding-left: 4.2mm; color: var(--ink-2);
+  }
+  .cols li { padding-left: .5mm; }
+
+  /* 打印：去掉背景和工具栏，正好一页 A4 */
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .sheet { margin: 0; box-shadow: none; zoom: 1; width: 210mm; height: 297mm; overflow: hidden; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="{{ '/' | relative_url }}">← 返回{{ site.title }}</a>
+  <button type="button" onclick="window.print()">打印 / 保存为 PDF</button>
+</div>
+
+<main class="sheet">
+  <header>
+    <h1 class="name">{{ cv.name }}</h1>
+    <p class="headline">{{ cv.headline }}</p>
+    <ul class="contact">
+    {%- for c in cv.contact -%}
+      {%- if c.text and c.text != "" -%}
+      <li>
+        {%- case c.type -%}
+          {%- when "email" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v.4l-10 6.2L2 6.4V6a1 1 0 0 1 1-1zm-1 3.7 9.5 5.9a1 1 0 0 0 1 0L22 8.7V18a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>
+          {%- when "phone" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
+          {%- when "location" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+          {%- when "github" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+          {%- else -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.95a15.6 15.6 0 0 0-1.38-3.56A8 8 0 0 1 18.9 8zM12 4.04A14 14 0 0 1 13.91 8h-3.82A14 14 0 0 1 12 4.04zM4.26 14a8.2 8.2 0 0 1 0-4h3.38a16.5 16.5 0 0 0 0 4zm.82 2h2.95a15.6 15.6 0 0 0 1.38 3.56A8 8 0 0 1 5.08 16zm2.95-8H5.08a8 8 0 0 1 4.33-3.56A15.6 15.6 0 0 0 8.03 8zM12 19.96A14 14 0 0 1 10.09 16h3.82A14 14 0 0 1 12 19.96zM14.34 14H9.66a14.7 14.7 0 0 1 0-4h4.68a14.7 14.7 0 0 1 0 4zm.25 5.56A15.6 15.6 0 0 0 15.97 16h2.95a8 8 0 0 1-4.33 3.56zM16.36 14a16.5 16.5 0 0 0 0-4h3.38a8.2 8.2 0 0 1 0 4z"/></svg>
+        {%- endcase -%}
+        {%- if c.url -%}<a href="{{ c.url }}">{{ c.text }}</a>{%- else -%}<span>{{ c.text }}</span>{%- endif -%}
+      </li>
+      {%- endif -%}
+    {%- endfor -%}
+    </ul>
+  </header>
+
+  {%- if cv.summary %}
+  <section>
+    <h2>个人简介</h2>
+    <p class="summary">{{ cv.summary }}</p>
+  </section>
+  {%- endif %}
+
+  {%- if cv.experience %}
+  <section>
+    <h2>工作经历</h2>
+    {%- for e in cv.experience %}
+    <div class="row">
+      <div><div class="when">{{ e.time }}</div>{% if e.place %}<div class="where">{{ e.place }}</div>{% endif %}</div>
+      <div>
+        <div class="what">{{ e.title }}</div>
+        <div class="org">{{ e.org }}</div>
+        {%- if e.bullets %}
+        <ul>{% for b in e.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+        {%- endif %}
+      </div>
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- if cv.education %}
+  <section>
+    <h2>教育背景</h2>
+    {%- for e in cv.education %}
+    <div class="row">
+      <div><div class="when">{{ e.time }}</div>{% if e.place %}<div class="where">{{ e.place }}</div>{% endif %}</div>
+      <div>
+        <div class="what">{{ e.degree }}</div>
+        <div class="org">{{ e.school }}</div>
+      </div>
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- assign pubs = site.publications | sort: "date" | reverse %}
+  {%- if pubs.size > 0 %}
+  <section>
+    <h2>研究成果</h2>
+    {%- for p in pubs %}
+    {%- assign cat = site.publication_category[p.category].title | default: p.category %}
+    <div class="row pub">
+      <div><div class="when">{{ p.date | date: "%Y" }}</div><div class="where">{{ cat }}</div></div>
+      <div>
+        <div class="what">{{ p.title }}</div>
+        <div class="meta">{% if p.authors %}{% include highlight-authors.html text=p.authors %} · {% endif %}{{ p.venue }}{% if p.category == "manuscripts" and p.number %}，{{ p.number }}{% endif %}</div>
+      </div>
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- if cv.skills %}
+  <section>
+    <h2>专业技能</h2>
+    <ul class="cols">{% for s in cv.skills %}<li>{{ s }}</li>{% endfor %}</ul>
+  </section>
+  {%- endif %}
+
+  {%- if cv.languages %}
+  <section>
+    <h2>语言</h2>
+    <ul class="cols">{% for s in cv.languages %}<li>{{ s }}</li>{% endfor %}</ul>
+  </section>
+  {%- endif %}
+</main>
+
+<script>
+/* 手机等窄屏上把整张 A4 按比例缩小显示；打印时不受影响 */
+(function () {
+  var sheet = document.querySelector('.sheet');
+  function fit() {
+    sheet.style.zoom = '';
+    var k = Math.min(1, (document.documentElement.clientWidth - 16) / sheet.offsetWidth);
+    if (k < 1) sheet.style.zoom = k;
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('beforeprint', function () { sheet.style.zoom = ''; });
+  window.addEventListener('afterprint', fit);
+})();
+</script>
+
+</body>
+</html>

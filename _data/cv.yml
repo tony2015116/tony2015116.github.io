@@ -1,0 +1,56 @@
+# CV 页（/cv/）的内容。版式在 _pages/cv.html，这里只改文字即可。
+# 研究成果一节会自动读取 _publications 里的条目，不用在这里写。
+# 内容尽量控制在一页 A4 内；改完后在浏览器里点“打印 / 保存为 PDF”预览是否超页。
+
+name: "郭猛"
+headline: "育种经理 · 猪遗传育种"
+
+# 联系方式：type 决定图标，可选 email / phone / location / web / github
+contact:
+  - type: email
+    text: "tony2015116@163.com"
+    url: "mailto:tony2015116@163.com"
+  - type: phone
+    text: ""            # TODO: 需要的话填手机号，留空则不显示
+  - type: location
+    text: "中国 · 广西"   # TODO: 按需改成具体城市
+  - type: web
+    text: "mguo.dpdns.org"
+    url: "https://mguo.dpdns.org"
+  - type: github
+    text: "github.com/tony2015116"
+    url: "https://github.com/tony2015116"
+
+# 一段话即可；中文不要在句中换行，否则会多出空格
+summary: "从事猪遗传育种工作七年，负责种猪场的育种方案与遗传评估，关注如何用科学的方法选留优秀种猪。研究方向包括基因组选择与饲料效率等性状的遗传改良；工作中常用的数据清洗与分析方法，已整理为多个开源 R 包、Windows 桌面程序和教程。"
+
+# 工作经历：最新的写在最上面
+experience:
+  - time: "2019.07 – 至今"
+    place: "广西"
+    title: "育种经理"
+    org: "广西扬翔集团有限公司"
+    bullets:
+      - "负责扬翔农牧有限责任公司的育种工作"
+      - "开展杜洛克公猪饲料效率相关性状的基因组选择研究，利用杜长大商品猪群体提高选择准确性"
+      - "开发种猪测定站（NEDAP、FIRE）数据清洗与每日监控工具 tidypptsda、tidypptsdm，并提供 Python 版和 Windows 桌面程序"
+      - "参与发现并申请与长白猪总乳头数、猪日增重相关的 SNP 分子标记发明专利 2 项"
+
+education:
+  - time: "2016.09 – 2019.06"
+    place: "湖北 · 武汉"
+    degree: "硕士，动物遗传育种与繁殖"
+    school: "华中农业大学"
+  # TODO: 如需写本科，照上面的格式再加一条
+
+skills:
+  - "基因组选择与遗传评估（BLUP）"
+  - "全基因组关联分析（GWAS）"
+  - "HIBLUP / DMU / ASReml-R"
+  - "R 包开发（data.table）"
+  - "Python 桌面工具开发"
+  - "测定站数据清洗与监控"
+
+languages:
+  - "中文（母语）"
+  - "英语"

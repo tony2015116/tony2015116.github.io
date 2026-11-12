@@ -5,3 +5,6 @@ main:
 
   - title: "项目"
     url: /portfolio/
+
+  - title: "CV"
+    url: /cv/

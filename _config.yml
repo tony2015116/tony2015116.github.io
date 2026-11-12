@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "zh-CN"
 site_theme               : "default" # 可选主题配色： The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
-title                    : "郭猛的个人主页"   # TODO: 网站标题（显示在导航栏最左侧）
+title                    : "MGUO的个人主页"   # TODO: 网站标题（显示在导航栏最左侧）
 title_separator          : "-"
 name                     : &name "郭猛"   # TODO: 你的名字
 description              : &description "郭猛的个人学术主页"   # TODO   # Update this with a general description of your site, this is the default if not overridden by a page

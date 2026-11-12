@@ -58,14 +58,20 @@
         }
     - name: "tidypptsdm"
       repo: "tony2015116/tidypptsdm"
-      description: "测定站每日监控：汇总最近几天的数据，列出当天警报，生成 HTML 报告和 Excel，可每天定时运行。"
-      language: "R"
+      description: "测定站每日监控：汇总最近几天的数据，列出当天警报，生成 HTML 报告和 Excel，可每天定时运行。另有结果与 R 版逐表一致的 Python 版，可在 Python 或命令行中运行。"
+      language: "R / Python"
       year: "2026 – 至今"
       links:
         - title: "文档"
           url: "https://tony2015116.github.io/tidypptsdm/"
         - title: "快速入门"
           url: "https://tony2015116.github.io/tidypptsdm/articles/tidypptsdm-zh.html"
+        - title: "Python 版"
+          url: "https://github.com/tony2015116/tidypptsdm-py"
+        - title: "Python 文档"
+          url: "https://tony2015116.github.io/tidypptsdm-py/"
+        - title: "PyPI"
+          url: "https://pypi.org/project/tidypptsdm/"
       citation: "Guo M (2026). tidypptsdm: Daily Monitoring of Pig Performance Testing Stations. R package version 1.1.1, https://github.com/tony2015116/tidypptsdm."
       bibtex: |
         @Manual{tidypptsdm,
@@ -93,29 +99,6 @@
           year = {2026},
           note = {R package version 0.2.0},
           url = {https://github.com/tony2015116/pigheatmap},
-        }
-
-- category: "Python 包"
-  key: "python-packages"
-  items:
-    - name: "tidypptsdm（Python）"
-      repo: "tony2015116/tidypptsdm-py"
-      description: "tidypptsdm 的 Python 版本，结果与 R 版逐表一致，可在 Python 或命令行中运行。"
-      language: "Python"
-      year: "2026 – 至今"
-      links:
-        - title: "文档"
-          url: "https://tony2015116.github.io/tidypptsdm-py/"
-        - title: "PyPI"
-          url: "https://pypi.org/project/tidypptsdm/"
-      citation: "Guo M (2026). tidypptsdm: Daily Monitoring of Pig Performance Testing Stations. Python package version 1.1.5, https://github.com/tony2015116/tidypptsdm-py."
-      bibtex: |
-        @Manual{tidypptsdm_py,
-          title = {tidypptsdm: Daily Monitoring of Pig Performance Testing Stations},
-          author = {Meng Guo},
-          year = {2026},
-          note = {Python package version 1.1.5},
-          url = {https://github.com/tony2015116/tidypptsdm-py},
         }
 
 - category: "软件"
