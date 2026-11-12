@@ -35,9 +35,9 @@ author:
   avatar           : "profile.png"
   name             : "郭猛"   # TODO
   pronouns         : # example: "she/her"  
-  bio              : "硕士 · 动物遗传育种与繁殖"   # TODO: 一句话简介
-  location         : "中国 · 武汉"   # TODO
-  employer         : "华中农业大学"   # TODO
+  bio              : "育种经理 · 猪遗传育种"   # TODO: 一句话简介
+  location         : "中国 · 广西"   # TODO
+  employer         : "广西扬翔集团"   # TODO
   uri              : # URL
   email            : "tony2015116@163.com"   # TODO 
 
@@ -159,7 +159,7 @@ facebook:
   app_id                 :
   publisher              :
 og_image                 : og-image.png   # Social media default site image (lives in /images/)
-og_description           :  # Social media default site image description
+og_description           : "郭猛，育种经理 · 猪遗传育种。用数据选种 · 开源 R 包 · 桌面工具。"  # 分享链接时的默认描述
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
 social:
