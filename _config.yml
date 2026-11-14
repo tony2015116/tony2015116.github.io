@@ -92,7 +92,7 @@ author:
   zhihu            : # 知乎用户ID，例如 people/后面那段
   bilibili         : # B站空间数字ID，例如 space.bilibili.com/后面的数字
   wechat           : # 微信公众号名称（仅显示文字）
-  cnki             : # 知网学者主页完整链接 URL
+  cnki             : "https://au.cnki.net/author/personalInfo/000079747139"
 
 # Publication Category - The following the list of publication categories and their headings
 publication_category:
