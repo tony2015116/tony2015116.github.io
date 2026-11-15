@@ -6,7 +6,7 @@ sitemap: true
 ---
 {%- comment -%}
   CV 页：独立的 A4 页面，可直接打印或“另存为 PDF”。
-  文字内容在 _data/cv.yml 中编辑；“研究成果”自动读取 _publications。
+  文字内容在 _data/cv.yml 中编辑。
 {%- endcomment -%}
 {%- assign cv = site.data.cv -%}
 <!doctype html>
@@ -15,7 +15,7 @@ sitemap: true
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ cv.name }} - 简历</title>
-<meta name="description" content="{{ cv.name }}（Meng Guo）简历：广西扬翔集团育种经理，从事猪遗传育种与基因组选择，含工作经历、教育背景与研究成果。">
+<meta name="description" content="{{ cv.name }}（Meng Guo）简历：广西扬翔育种经理，从事猪遗传育种与基因组选择，含工作经历、教育背景与专业技能。">
 <link rel="icon" type="image/svg+xml" href="{{ '/images/favicon.svg' | relative_url }}">
 <style>
   :root {
@@ -98,12 +98,6 @@ sitemap: true
   .row li { margin: .2mm 0; padding-left: .5mm; color: var(--ink-2); }
   .row li::marker { color: var(--ink); }
 
-  /* 研究成果 */
-  .pub .what { font-weight: 600; }
-  .pub .meta { color: var(--muted); font-size: 9pt; line-height: 1.35; }
-  .pub { margin-bottom: 2mm; }
-  .pub .meta strong { color: var(--ink-2); font-weight: 700; }
-
   /* 技能 / 语言：两列圆点列表 */
   .cols {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm 6mm;
@@ -128,7 +122,6 @@ sitemap: true
     .where { display: inline; margin-left: 8px; font-size: 12.5px; }
     .row ul { padding-left: 18px; }
     .cols { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
-    .pub .meta { font-size: 12.5px; }
   }
 
   /* 打印：A4 纸张和页边距由打印样式控制 */
@@ -155,6 +148,7 @@ sitemap: true
       {%- if c.text and c.text != "" -%}
       <li>
         {%- case c.type -%}
+          {%- when "birth" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M6 2h2v3h8V2h2v3h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2V2Zm-2 9v9h16v-9H4Z"/></svg>
           {%- when "email" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v.4l-10 6.2L2 6.4V6a1 1 0 0 1 1-1zm-1 3.7 9.5 5.9a1 1 0 0 0 1 0L22 8.7V18a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>
           {%- when "phone" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
           {%- when "location" -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
@@ -202,23 +196,6 @@ sitemap: true
       <div>
         <div class="what">{{ e.degree }}</div>
         <div class="org">{{ e.school }}</div>
-      </div>
-    </div>
-    {%- endfor %}
-  </section>
-  {%- endif %}
-
-  {%- assign pubs = site.publications | sort: "date" | reverse %}
-  {%- if pubs.size > 0 %}
-  <section>
-    <h2>研究成果</h2>
-    {%- for p in pubs %}
-    {%- assign cat = site.publication_category[p.category].title | default: p.category %}
-    <div class="row pub">
-      <div><div class="when">{{ p.date | date: "%Y" }}</div><div class="where">{{ cat }}</div></div>
-      <div>
-        <div class="what">{{ p.title }}</div>
-        <div class="meta">{% if p.authors %}{% include highlight-authors.html text=p.authors %} · {% endif %}{{ p.venue }}{% if p.category == "manuscripts" and p.number %}，{{ p.number }}{% endif %}</div>
       </div>
     </div>
     {%- endfor %}
