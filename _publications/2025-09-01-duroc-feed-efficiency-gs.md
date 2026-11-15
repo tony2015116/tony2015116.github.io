@@ -7,4 +7,5 @@ authors: "郭猛, 夏攀洁, 周光亮, 袁仁强, 赵云翔"
 venue: "中国畜牧兽医"
 number: "2025(9)"
 doi: "10.16431/j.cnki.1671-7236.2025.09.014"
+pdfurl: "/files/publications/2025-duroc-feed-efficiency.pdf"
 ---

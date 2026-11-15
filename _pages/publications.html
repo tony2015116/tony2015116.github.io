@@ -29,10 +29,11 @@ author_profile: true
         <div class="t">{{ p.title }}</div>
         <div class="m">{% if p.authors %}{% include highlight-authors.html text=p.authors %}{% endif %}</div>
         <div class="m">{{ p.venue }}{% if p.number %}，{{ p.number }}{% endif %}
-          {% if p.paperurl or p.codeurl or p.doi %}<span class="pub-links">
+          {% if p.paperurl or p.codeurl or p.doi or p.pdfurl %}<span class="pub-links">
             {% if p.paperurl %}<a href="{{ p.paperurl }}">全文</a>{% endif %}
             {% if p.codeurl %}<a href="{{ p.codeurl }}">代码</a>{% endif %}
             {% if p.doi %}<a href="https://doi.org/{{ p.doi }}">DOI</a>{% endif %}
+            {% if p.pdfurl %}<a href="{{ p.pdfurl | relative_url }}">PDF 全文</a>{% endif %}
           </span>{% endif %}
         </div>
       </div>
