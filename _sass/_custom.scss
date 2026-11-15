@@ -244,6 +244,21 @@ body {
    ========================================================================== */
 .masthead__menu-item.selected a,
 .masthead__menu-item.selected a:hover { border-bottom-color: var(--accent); }
+
+/* 窄屏收紧导航内边距，给站点标题留出单行所需的宽度 */
+@media (max-width: 768px) {
+  .masthead__inner-wrap { padding: 0.5em 0.75em; }
+  .masthead__menu-item--lg { padding-right: 0.9em; }
+  .greedy-nav a { margin: 0 0.6rem; }
+}
+
+/* 极窄屏（Galaxy Fold 外屏 280px、老款 320px）：再压一档，
+   保证即使折叠脚本未生效、导航项全部展开，深浅色按钮也不会被挤出可视区 */
+@media (max-width: 340px) {
+  .masthead__inner-wrap { padding: 0.5em 0.6em; }
+  .masthead__menu-item--lg { padding-right: 0.6em; }
+  .greedy-nav a { margin: 0 0.4rem; font-size: 0.9em; }
+}
 .work-tabs a.on { border-bottom-color: var(--accent) !important; }
 ::selection { background: var(--accent-soft); }
 

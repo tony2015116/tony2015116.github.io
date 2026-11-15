@@ -211,7 +211,9 @@
 
       &:first-child {
         font-weight: bold;
-        text-wrap: wrap;
+        /* 站点标题始终单行：text-wrap 是 white-space 的简写属性，
+           wrap 会覆盖 .masthead__menu-item 的 nowrap，导致窄屏标题被拆成两行 */
+        text-wrap: nowrap;
 
         a {
           margin-left: 0;
