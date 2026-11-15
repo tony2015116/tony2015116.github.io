@@ -4,7 +4,7 @@
 
 这是基于 [AcademicPages](https://github.com/academicpages/academicpages.github.io) 和 Jekyll 搭建的中文学术主页，用于展示猪遗传育种研究成果、开源工具和个人简历。网站通过 GitHub Actions 构建并部署到 GitHub Pages。
 
-## 常用修改入口
+## 一、常用修改入口
 
 | 想改什么 | 到哪里改 |
 | --- | --- |
@@ -24,7 +24,7 @@
 - **调整导航**时编辑 `_data/navigation.yml` 中的 `main` 列表。修改 `title` 可改菜单文字，调整条目顺序可改显示顺序。要隐藏某个入口，可以移除该条导航。
 - **更换主题**时修改 `site_theme`。可选 `default`、`air`、`sunrise`、`mint`、`dirt` 和 `contrast`。
 
-## 添加论文和 PDF
+## 二、添加论文和 PDF
 
 1. 复制一份[现有论文条目](_publications/2025-09-01-duroc-feed-efficiency-gs.md)，按 `YYYY-MM-DD-英文短名.md` 命名。保留开头和结尾的 `---`。
 2. 将 `collection` 设为 `publications`，将 `category` 设为 `manuscripts`。填写题目 `title`、日期 `date`、作者 `authors`、期刊 `venue`，以及可用的卷期页码 `number` 和 DOI。
@@ -43,20 +43,20 @@ pdfurl: "/files/publications/2025-duroc-feed-efficiency.pdf"
 
 成果条目还可按需填写 `paperurl` 和 `codeurl`，分别显示「全文」和「代码」。`authors` 里的姓名若匹配 `_config.yml` 中的 `highlight_authors`，会在列表中加粗。
 
-## 添加项目、工具或教程
+## 三、添加项目、工具或教程
 
 打开 `_data/projects.yml`，在对应分类的 `items` 下复制一条现有记录，修改名称和简介。页面按 YAML 中的顺序展示，想让项目靠前就把记录放在该分类的前面。
 
 - **GitHub 项目**填写 `repo: "用户名/仓库名"`。可在 `links` 增加文档、CRAN 或下载链接。
 - **站内 HTML**放到相应文件夹，再填 `url`。例如，HIBLUP 速查表放在 `files/cheatsheets/hiblup.html`，项目条目填 `url: "/files/cheatsheets/hiblup.html"`。教程和小工具分别放在 `files/tutorials/` 和 `files/tools/`。
 
-## 更新经历和简历
+## 四、更新经历和简历
 
 - **首页经历**在 `_data/experience.yml` 中更新。工作经历写在 `work` 下，教育经历写在 `education` 下。沿用现有时间格式，例如 `2012.09 – 2016.07`。
 - **简历**在 `_data/cv.yml` 中更新。首页与简历各有自己的经历数据。需要两处同步时，两个文件都要改。简历的研究成果从 `_publications/` 自动读取。
 - **导出简历**打开 [简历页](https://mguo.dpdns.org/cv/)，点击「打印 / 保存为 PDF」，在浏览器中选择「另存为 PDF」，检查纸张为 A4，并核对预览页数。
 
-## 提交、发布和检查
+## 五、提交、发布和检查
 
 **用 GitHub 网页改单个文字文件**时，打开文件，点铅笔图标，编辑后提交。需要同时改多个文件或上传附件时，用 RStudio 更容易一次提交相关改动。如果是第一次使用 RStudio，选 **File → New Project → Version Control → Git**，填入仓库地址 `https://github.com/tony2015116/tony2015116.github.io.git`。
 
@@ -81,7 +81,7 @@ git push
 | 首页经历改了，简历还是旧的 | 也更新 `_data/cv.yml` |
 | YAML 修改后构建报错 | 核对缩进、引号和键名，参照同文件里的现有条目 |
 
-## 首次上线或复用本站
+## 六、首次上线或复用本站
 
 已经在维护本站时，可以直接从上面的日常操作开始。如果要用这套源码搭一个新的个人主页：
 
@@ -90,7 +90,7 @@ git push
 3. 保留 [Jekyll 部署工作流](.github/workflows/jekyll.yml)。在新仓库的 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。当前工作流会在推送到 `main` 或 `master` 时运行，也可以在 **Actions** 手动运行。
 4. 部署成功后打开自己的站点，检查导航、头像和附件。使用自定义域名时，另外在仓库的 **Pages** 设置和域名服务商处完成配置，并将 `_config.yml` 的 `url` 设为最终访问地址。
 
-## 本地预览与部署配置
+## 七、本地预览与部署配置
 
 安装 Ruby 和 Bundler 后，在仓库根目录运行：
 
@@ -103,7 +103,7 @@ bundle exec jekyll serve --livereload
 
 部署设置在仓库的 **Settings → Pages → Build and deployment**。本站使用 **GitHub Actions**，工作流见 [`.github/workflows/jekyll.yml`](.github/workflows/jekyll.yml)。调整站点自定义样式时，查看 [`_sass/_custom.scss`](_sass/_custom.scss)。
 
-## 相对 AcademicPages 原模板的改动
+## 八、相对 AcademicPages 原模板的改动
 
 | 部分 | 本站的做法 |
 | --- | --- |
@@ -114,6 +114,6 @@ bundle exec jekyll serve --livereload
 | 简历 | 提供独立的网页简历，支持 A4 打印和保存为 PDF |
 | 侧栏和资源 | 支持中国知网、哔哩哔哩和微信公众号等入口。jQuery 和 Academicons 使用站内资源，`baidu_analytics` 可选填写 |
 
-## 参考文档
+## 九、参考文档
 
 [GitHub 网页编辑文件](https://docs.github.com/en/repositories/working-with-files/managing-files/editing-files) · [GitHub Pages 部署设置](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) · [Jekyll 本地预览](https://jekyllrb.com/docs/)
