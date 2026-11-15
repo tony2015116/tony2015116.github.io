@@ -17,9 +17,9 @@ contact:
   - type: web
     text: "mguo.dpdns.org"
     url: "https://mguo.dpdns.org"
-  - type: github
-    text: "github.com/tony2015116"
-    url: "https://github.com/tony2015116"
+  - type: web
+    text: "中国知网（CNKI）"
+    url: "https://au.cnki.net/author/personalInfo/000079747139"
 
 # 一段话即可；中文不要在句中换行，否则会多出空格
 summary: "从事猪遗传育种工作七年，负责种猪场的育种方案与遗传评估，关注如何用科学的方法选留优秀种猪。研究方向包括基因组选择与饲料效率等性状的遗传改良；工作中常用的数据清洗与分析方法，已整理为多个开源 R 包、Windows 桌面程序和教程。"
