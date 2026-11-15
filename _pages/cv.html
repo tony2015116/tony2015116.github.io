@@ -1,7 +1,7 @@
 ---
 layout: null
 permalink: /cv/
-title: "CV"
+title: "简历"
 sitemap: true
 ---
 {%- comment -%}
@@ -14,7 +14,7 @@ sitemap: true
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ cv.name }} - CV</title>
+<title>{{ cv.name }} - 简历</title>
 <meta name="description" content="{{ cv.name }}（Meng Guo）简历：广西扬翔集团育种经理，从事猪遗传育种与基因组选择，含工作经历、教育背景与研究成果。">
 <link rel="icon" type="image/svg+xml" href="{{ '/images/favicon.svg' | relative_url }}">
 <style>
@@ -28,7 +28,7 @@ sitemap: true
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: #e6e8e6;
+    background: #fff;
     color: var(--ink);
     font-family: "Barlow", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB",
                  "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
@@ -42,7 +42,7 @@ sitemap: true
   /* 屏幕上的工具栏（打印时隐藏） */
   .toolbar {
     display: flex; justify-content: space-between; align-items: center;
-    max-width: 210mm; margin: 0 auto; padding: 12px 2px;
+    max-width: 210mm; margin: 0 auto; padding: 12px 17mm;
     font-size: 14px;
   }
   .toolbar a { color: var(--green); }
@@ -54,13 +54,11 @@ sitemap: true
   }
   .toolbar button:hover { background: #234c3c; }
 
-  /* A4 纸 */
+  /* 屏幕上的简历正文 */
   .sheet {
-    width: 210mm; min-height: 297mm;
-    margin: 0 auto 32px;
+    max-width: 210mm;
+    margin: 0 auto;
     padding: 13mm 17mm 11mm;
-    background: #fff;
-    box-shadow: 0 2px 14px rgba(0,0,0,.12);
   }
 
   /* 页眉 */
@@ -113,18 +111,12 @@ sitemap: true
   }
   .cols li { padding-left: .5mm; }
 
-  /* 窄屏：A4 版式改为单栏流式排版
-     （A4 宽 210mm ≈ 794px，视口不足 820px 时整张纸会被压得过小，改用流式阅读；
-       打印与宽屏仍保持 A4，不影响“另存为 PDF”） */
+  /* 窄屏：使用流式排版，保持正文可读 */
   @media screen and (max-width: 820px) {
-    body { background: #fff; font-size: 13.5px; line-height: 1.65; }
+    body { font-size: 13.5px; line-height: 1.65; }
     .toolbar { max-width: none; padding: 10px 18px; }
     .toolbar button { padding: 6px 12px; }
-    .sheet {
-      width: auto; min-height: 0;
-      margin: 0; padding: 8px 18px 32px;
-      box-shadow: none;
-    }
+    .sheet { padding: 8px 18px 32px; }
     .name { font-size: 24px; }
     .headline { font-size: 14px; margin-top: 2px; }
     .contact { grid-template-columns: 1fr; gap: 6px; margin-top: 12px; font-size: 13px; }
@@ -139,12 +131,11 @@ sitemap: true
     .pub .meta { font-size: 12.5px; }
   }
 
-  /* 打印：去掉背景和工具栏，正好一页 A4 */
-  @page { size: A4; margin: 0; }
+  /* 打印：A4 纸张和页边距由打印样式控制 */
+  @page { size: A4; margin: 13mm 17mm 11mm; }
   @media print {
-    body { background: #fff; }
     .toolbar { display: none; }
-    .sheet { margin: 0; box-shadow: none; width: 210mm; min-height: 297mm; height: auto; overflow: visible; }
+    .sheet { max-width: none; margin: 0; padding: 0; }
   }
 </style>
 </head>
