@@ -245,6 +245,17 @@ body {
 .masthead__menu-item.selected a,
 .masthead__menu-item.selected a:hover { border-bottom-color: var(--accent); }
 
+/* 鼠标点击只显示当前栏目标记，键盘导航保留清晰的焦点边框。 */
+.greedy-nav a[href]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.greedy-nav a[href]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
 /* 窄屏收紧导航内边距，给站点标题留出单行所需的宽度 */
 @media (max-width: 768px) {
   .masthead__inner-wrap { padding: 0.5em 0.75em; }
