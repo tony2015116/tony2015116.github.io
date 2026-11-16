@@ -245,15 +245,22 @@ body {
 .masthead__menu-item.selected a,
 .masthead__menu-item.selected a:hover { border-bottom-color: var(--accent); }
 
-/* 鼠标点击只显示当前栏目标记，键盘导航保留清晰的焦点边框。 */
-.greedy-nav a[href]:focus:not(:focus-visible) {
+/* 鼠标点击导航链接时隐藏焦点边框，键盘导航时显示。 */
+.greedy-nav a[href]:focus:not(:focus-visible),
+.sidebar a[href]:focus:not(:focus-visible) {
   outline: none;
 }
 
-.greedy-nav a[href]:focus-visible {
+.greedy-nav a[href]:focus-visible,
+.sidebar a[href]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
   border-radius: 4px;
+}
+
+/* 侧边栏可滚动，将边框画在链接内侧以免被裁切。 */
+.sidebar a[href]:focus-visible {
+  outline-offset: -2px;
 }
 
 /* 窄屏收紧导航内边距，给站点标题留出单行所需的宽度 */
