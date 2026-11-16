@@ -7,4 +7,5 @@ authors: "Fang Fang, Jielin Li, Meng Guo, Quanshun Mei, Mei Yu, Huiming Liu, And
 venue: "Journal of Animal Science"
 number: "100(7): skac174"
 doi: "10.1093/jas/skac174"
+pdfurl: "https://europepmc.org/articles/PMC9259599?pdf=render"
 ---
