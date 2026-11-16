@@ -8,4 +8,5 @@ venue: "中国畜牧兽医"
 number: "2025(9)"
 doi: "10.16431/j.cnki.1671-7236.2025.09.014"
 pdfurl: "/files/publications/2025-duroc-feed-efficiency.pdf"
+key_finding: "将杜长大商品猪纳入参考群后，杜洛克公猪的日增重、日采食量和料重比的基因组预测准确性均提高。"
 ---

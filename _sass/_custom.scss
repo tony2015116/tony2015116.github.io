@@ -164,6 +164,13 @@ html { font-size: 14px; }
   .body { flex: 1; min-width: 0; }
   .t { color: var(--global-text-color); font-weight: 500; line-height: 1.6; }
   .m { color: var(--global-text-color); font-size: 0.92em; line-height: 1.6; }
+  .work-summary {
+    margin: 0.45em 0 0.12em;
+    color: var(--global-text-color-light);
+    font-size: 0.91em;
+    line-height: 1.7;
+  }
+  .work-summary strong { color: var(--global-text-color); }
   .pub-links { margin-left: 0.6em; }
   .pub-links a { color: var(--global-text-color-light); border-bottom-color: var(--global-border-color); margin-right: 0.7em; }
 }

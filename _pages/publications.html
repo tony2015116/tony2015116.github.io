@@ -36,6 +36,9 @@ author_profile: true
             {% if p.pdfurl %}<a href="{{ p.pdfurl | relative_url }}">PDF</a>{% endif %}
           </span>{% endif %}
         </div>
+        {% if p.key_finding %}
+        <p class="work-summary"><strong>要点</strong>　{{ p.key_finding | escape }}</p>
+        {% endif %}
       </div>
     </li>
   {% endfor %}
