@@ -1,0 +1,23 @@
+name = "mguo-guestbook"
+main = "worker.mjs"
+compatibility_date = "2026-08-01"
+workers_dev = true
+preview_urls = false
+
+[vars]
+PUBLIC_ORIGIN = "https://mguo.dpdns.org"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mguo-guestbook"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[[ratelimits]]
+name = "SUBMISSIONS"
+namespace_id = "85191"
+simple = { limit = 3, period = 60 }
+
+[[ratelimits]]
+name = "ADMIN_ATTEMPTS"
+namespace_id = "85192"
+simple = { limit = 8, period = 60 }

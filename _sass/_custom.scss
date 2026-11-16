@@ -432,3 +432,72 @@ pre.cite-pane {
   .sidebar .author__urls { text-align: left; min-width: 10em; }
   .sidebar .author__urls:after { border-color: var(--global-bg-color) transparent; }
 }
+
+/* 留言板使用正文排版与成果列表的日期列。 */
+.guestbook {
+  .guestbook-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1em;
+  }
+
+  label {
+    font-size: 0.94em;
+    font-weight: 600;
+    small { font-size: 0.85em; font-weight: 400; }
+  }
+
+  small, .guestbook-note, .guestbook-meta { color: var(--global-text-color-light); }
+  .guestbook-note, .guestbook-meta { font-size: 0.87em; }
+  .guestbook-note:empty { display: none; }
+  .guestbook-meta { display: flex; gap: 0.5em; justify-content: space-between; }
+
+  input, textarea {
+    background: var(--global-bg-color);
+    color: var(--global-text-color);
+    border: 1px solid var(--global-border-color);
+    box-shadow: none;
+    font: inherit;
+    font-weight: 400;
+    padding: 0.4em 0.6em;
+  }
+  textarea { resize: vertical; }
+
+  .guestbook-button {
+    margin: 0.65em 0;
+    padding: 0.32em 0.8em;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--accent);
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+  .guestbook-button:disabled { opacity: 0.6; cursor: default; }
+
+  .guestbook-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: grid;
+      grid-template-columns: 6.5em minmax(0, 1fr);
+      gap: 0 1em;
+      padding: 0.65em 0;
+      border-top: 1px solid var(--global-border-color);
+    }
+
+    time {
+      color: var(--global-text-color-light);
+      font-size: 0.88em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  }
+
+  @media (max-width: 480px) {
+    .guestbook-fields, .guestbook-list li { grid-template-columns: 1fr; }
+  }
+}

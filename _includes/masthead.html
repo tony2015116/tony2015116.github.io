@@ -9,6 +9,7 @@
             <a href="{{ base_path }}/">{{ site.title }}</a>
           </li>
           {% for link in site.data.navigation.main %}
+            {% if link.requires_guestbook and site.guestbook_api == blank %}{% continue %}{% endif %}
             {% if link.url contains 'http' %}
               {% assign domain = '' %}
             {% else %}

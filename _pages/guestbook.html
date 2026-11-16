@@ -1,0 +1,48 @@
+---
+layout: single
+title: "留言板"
+permalink: /guestbook/
+author_profile: true
+---
+
+<p>欢迎交流猪遗传育种、数据分析和 R 工具，也欢迎反馈网站问题。</p>
+
+{% if site.guestbook_api == blank %}
+  <p>留言板暂未开放，可通过<a href="mailto:{{ site.author.email }}">邮件联系我</a>。</p>
+{% else %}
+<div class="guestbook" data-guestbook-api="{{ site.guestbook_api | escape }}">
+  <section aria-labelledby="guestbook-write">
+    <h2 id="guestbook-write">写留言</h2>
+    <p class="guestbook-note">留言审核通过后会在此页公开展示。</p>
+    <form id="guestbook-form" method="post">
+      <div class="guestbook-fields">
+        <label for="guestbook-name">称呼 <small>选填</small>
+          <input id="guestbook-name" name="name" autocomplete="nickname" maxlength="40">
+        </label>
+        <label for="guestbook-email">邮箱 <small>选填</small>
+          <input id="guestbook-email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="guestbook-privacy" placeholder="需要回复时填写">
+        </label>
+      </div>
+      <label for="guestbook-message">留言内容 <small>必填</small>
+        <textarea id="guestbook-message" name="message" rows="4" maxlength="500" required aria-describedby="guestbook-count"></textarea>
+      </label>
+      <div hidden><label>网站 <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="guestbook-meta">
+        <span id="guestbook-privacy">邮箱仅站主可见。</span>
+        <span id="guestbook-count">0 / 500 字</span>
+      </div>
+      <button type="submit" class="guestbook-button" disabled>提交留言</button>
+      <p id="guestbook-status" class="guestbook-note" role="status"></p>
+      <noscript><p>请启用 JavaScript 后使用留言板。</p></noscript>
+    </form>
+  </section>
+
+  <section aria-labelledby="guestbook-public">
+    <h2 id="guestbook-public">公开留言</h2>
+    <p id="guestbook-list-status" class="guestbook-note" role="status">正在读取留言…</p>
+    <ol id="guestbook-list" class="guestbook-list"></ol>
+    <button id="guestbook-more" class="guestbook-button" type="button" hidden>加载更多</button>
+  </section>
+</div>
+<script src="{{ '/assets/js/guestbook.js' | relative_url }}" defer></script>
+{% endif %}
