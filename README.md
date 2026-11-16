@@ -15,6 +15,7 @@
 | 新增 R 包、软件、小工具、教程或速查表 | [`_data/projects.yml`](_data/projects.yml) |
 | 修改简历文字、教育背景、联系方式 | [`_data/cv.yml`](_data/cv.yml) |
 | 修改侧栏个人信息、中国知网链接、主题或作者加粗名单 | [`_config.yml`](_config.yml) |
+| 发布审核通过的留言 | [`_data/guestbook.yml`](_data/guestbook.yml) |
 | 换头像、调整顶部导航 | [`images/profile.png`](images/profile.png)、[`_data/navigation.yml`](_data/navigation.yml) |
 
 ### 常改的站点设置
@@ -55,6 +56,19 @@ pdfurl: "/files/publications/2025-duroc-feed-efficiency.pdf"
 - **首页经历**在 `_data/experience.yml` 中更新。工作经历写在 `work` 下，教育经历写在 `education` 下。沿用现有时间格式，例如 `2012.09 – 2016.07`。
 - **简历**在 `_data/cv.yml` 中更新。首页与简历各有自己的经历数据。需要两处同步时，两个文件都要改。简历的研究成果从 `_publications/` 自动读取。
 - **导出简历**打开 [简历页](https://mguo.dpdns.org/cv/)，点击「打印 / 保存为 PDF」，在浏览器中选择「另存为 PDF」，检查纸张为 A4，并核对预览页数。
+
+### 审核并发布留言
+
+访客从留言板打开邮件草稿，确认后发送到 `_config.yml` 中 `author.email` 配置的邮箱。只发布访客同意公开的留言。首次发布时，将 [`_data/guestbook.yml`](_data/guestbook.yml) 中的 `[]` 替换为下列格式，随后每条留言追加一个条目。
+
+```yaml
+- date: "2026-11-16"
+  name: "访客"
+  message: |-
+    感谢分享育种数据分析的资料。
+```
+
+文件内容会随公开仓库发布，只写入同意公开的日期、称呼和正文。提交到 `main` 后，GitHub Pages 会重新构建网站。公开留言按日期从新到旧排列。撤下留言时从该文件删掉对应条目并提交，历史提交仍保留记录。
 
 ## 五、提交、发布和检查
 

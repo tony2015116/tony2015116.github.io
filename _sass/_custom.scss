@@ -433,24 +433,18 @@ pre.cite-pane {
   .sidebar .author__urls:after { border-color: var(--global-bg-color) transparent; }
 }
 
-/* 留言板使用正文排版与成果列表的日期列。 */
+/* 留言板沿用正文排版和成果列表的日期列。 */
 .guestbook {
-  .guestbook-fields {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 1em;
-  }
+  small, .guestbook-note, .guestbook-count { color: var(--global-text-color-light); }
+  .guestbook-note, .guestbook-count { font-size: 0.87em; }
+  .guestbook-note:empty, form[hidden] { display: none; }
+  p.guestbook-count { margin: 0 0 0.55em; text-align: right; }
 
   label {
     font-size: 0.94em;
     font-weight: 600;
     small { font-size: 0.85em; font-weight: 400; }
   }
-
-  small, .guestbook-note, .guestbook-meta { color: var(--global-text-color-light); }
-  .guestbook-note, .guestbook-meta { font-size: 0.87em; }
-  .guestbook-note:empty { display: none; }
-  .guestbook-meta { display: flex; gap: 0.5em; justify-content: space-between; }
 
   input, textarea {
     background: var(--global-bg-color);
@@ -464,7 +458,7 @@ pre.cite-pane {
   textarea { resize: vertical; }
 
   .guestbook-button {
-    margin: 0.65em 0;
+    margin: 0 0 0.75em;
     padding: 0.32em 0.8em;
     border: 1px solid var(--accent);
     border-radius: 3px;
@@ -473,7 +467,6 @@ pre.cite-pane {
     font-size: 0.9em;
     cursor: pointer;
   }
-  .guestbook-button:disabled { opacity: 0.6; cursor: default; }
 
   .guestbook-list {
     list-style: none;
@@ -498,6 +491,6 @@ pre.cite-pane {
   }
 
   @media (max-width: 480px) {
-    .guestbook-fields, .guestbook-list li { grid-template-columns: 1fr; }
+    .guestbook-list li { grid-template-columns: 1fr; }
   }
 }
