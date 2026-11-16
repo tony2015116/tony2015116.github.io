@@ -254,12 +254,14 @@ body {
 
 /* 鼠标点击导航链接时隐藏焦点边框，键盘导航时显示。 */
 .greedy-nav a[href]:focus:not(:focus-visible),
-.sidebar a[href]:focus:not(:focus-visible) {
+.sidebar a[href]:focus:not(:focus-visible),
+.work-tabs a[href]:focus:not(:focus-visible) {
   outline: none;
 }
 
 .greedy-nav a[href]:focus-visible,
-.sidebar a[href]:focus-visible {
+.sidebar a[href]:focus-visible,
+.work-tabs a[href]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
   border-radius: 4px;
