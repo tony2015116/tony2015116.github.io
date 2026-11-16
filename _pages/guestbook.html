@@ -1,0 +1,48 @@
+---
+layout: single
+title: "留言板"
+permalink: /guestbook/
+author_profile: true
+---
+
+<p>欢迎交流猪遗传育种、数据分析和 R 工具，也欢迎反馈网站问题。</p>
+
+<div class="guestbook">
+  <section aria-labelledby="guestbook-write">
+    <h2 id="guestbook-write">写留言</h2>
+    <p class="guestbook-note">留言通过邮件发送。经你同意并由我审核后，称呼和留言内容会在此页公开，邮箱仅用于收件和回复。</p>
+    <form id="guestbook-form" hidden>
+      <label for="guestbook-name">称呼 <small>选填</small>
+        <input id="guestbook-name" autocomplete="nickname" maxlength="40" placeholder="留空时显示为访客">
+      </label>
+      <label for="guestbook-message">留言内容 <small>必填</small>
+        <textarea id="guestbook-message" rows="4" maxlength="500" required aria-describedby="guestbook-count"></textarea>
+      </label>
+      <p id="guestbook-count" class="guestbook-count">0 / 500 字</p>
+      <button type="submit" class="guestbook-button">打开邮件草稿</button>
+      <p id="guestbook-status" class="guestbook-note" role="status"></p>
+    </form>
+    <p class="guestbook-note">也可直接写信至 <a id="guestbook-email" href="mailto:{{ site.author.email | escape }}?subject={{ '主页留言' | url_encode }}">{{ site.author.email | escape }}</a>，并注明是否同意公开。</p>
+  </section>
+
+  <section aria-labelledby="guestbook-public">
+    <h2 id="guestbook-public">公开留言</h2>
+    {% assign entries = site.data.guestbook | sort: 'date' | reverse %}
+    {% if entries.size > 0 %}
+      <ol class="guestbook-list" role="list">
+        {% for entry in entries %}
+        <li>
+          <time datetime="{{ entry.date | escape }}">{{ entry.date | escape }}</time>
+          <div>
+            <strong>{{ entry.name | default: '访客' | escape }}</strong>
+            <p>{{ entry.message | escape }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p class="guestbook-note">还没有公开留言。</p>
+    {% endif %}
+  </section>
+</div>
+<script src="{{ '/assets/js/guestbook.js' | relative_url }}" defer></script>
