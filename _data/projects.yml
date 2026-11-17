@@ -28,13 +28,13 @@
           url: "https://tony2015116.github.io/mintyr/"
         - title: "CRAN"
           url: "https://CRAN.R-project.org/package=mintyr"
-      citation: "Guo M (2026). mintyr: Grouped and Nested Data Pipelines Built on 'data.table'. R package version 0.2.0, https://CRAN.R-project.org/package=mintyr."
+      citation: "Guo M (2026). mintyr: Grouped and Nested Data Pipelines Built on 'data.table'. R package version 0.2.1, https://CRAN.R-project.org/package=mintyr."
       bibtex: |
         @Manual{mintyr,
           title = {mintyr: Grouped and Nested Data Pipelines Built on 'data.table'},
           author = {Meng Guo},
           year = {2026},
-          note = {R package version 0.2.0},
+          note = {R package version 0.2.1},
           url = {https://CRAN.R-project.org/package=mintyr},
         }
     - name: "tidypptsda"
@@ -47,13 +47,13 @@
           url: "https://tony2015116.github.io/tidypptsda/"
         - title: "进苗规划"
           url: "https://tony2015116.github.io/tidypptsda/planner.html"
-      citation: "Guo M (2026). tidypptsda: Process and Analyse Pig Performance Testing Station Data. R package version 1.6.2, https://github.com/tony2015116/tidypptsda."
+      citation: "Guo M (2026). tidypptsda: Process and Analyse Pig Performance Testing Station Data. R package version 1.6.5, https://github.com/tony2015116/tidypptsda."
       bibtex: |
         @Manual{tidypptsda,
           title = {tidypptsda: Process and Analyse Pig Performance Testing Station Data},
           author = {Meng Guo},
           year = {2026},
-          note = {R package version 1.6.2},
+          note = {R package version 1.6.5},
           url = {https://github.com/tony2015116/tidypptsda},
         }
     - name: "tidypptsdm"

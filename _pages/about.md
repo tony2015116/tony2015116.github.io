@@ -3,7 +3,7 @@ permalink: /
 title: "关于我"
 # 以下是给搜索引擎看的：页面正文里仍显示“关于我”，搜索结果里显示下面这两行
 seo_title: "郭猛（Meng Guo）· 育种经理，猪遗传育种"
-description: "郭猛（Meng Guo），广西扬翔农牧育种经理，从事猪遗传育种与基因组选择。发表国内核心期刊论文、发明专利多项；开源 mintyr、tidypptsda 等 R 包与种猪测定站监控工具。"
+description: "郭猛（Meng Guo），广西扬翔集团育种经理，从事猪遗传育种与基因组选择。发表国内核心期刊论文、发明专利多项；开源 mintyr、tidypptsda 等 R 包与种猪测定站监控工具。"
 author_profile: true
 redirect_from:
   - /about/
@@ -12,7 +12,7 @@ redirect_from:
 
 {% include base_path %}
 
-我叫郭猛，现任广西扬翔育种经理。
+我叫郭猛，现任广西扬翔集团育种经理。
 
 我主要从事种猪选留、性能测定和遗传评估，也负责推进核心育种场和试验场的育种工作。我在种猪性能测定站管理和数据分析方面积累了多年经验。
 
