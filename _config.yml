@@ -207,6 +207,19 @@ exclude:
   - README
   - tmp
   - vendor
+  # 模板/开发残留，不对外发布
+  - AGENTS.md
+  - docker-compose.yaml
+  - "*.Rproj"
+  - talkmap
+  - talkmap.py
+  - talkmap.ipynb
+  - talkmap_out.ipynb
+  - markdown_generator
+  - scripts
+  - images/500x300.png
+  - images/editing-talk.png
+  - images/themes
 keep_files:
   - .git
   - .svn

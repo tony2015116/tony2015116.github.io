@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="用比喻、图标和交互动画讲清遗传力、重复力、遗传相关等遗传参数，演示亲子回归、半同胞 REML、A 矩阵表格法，以及选择反应与育种值准确度。">
 <title>遗传参数图解 · 通俗版</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital,wght@0,400;1,400&display=swap">
 <style>
 /* Layout: 单栏“图解课本”——每节 = 图标 + 问句标题 + 一句话 + 比喻 + 动画 + 可折叠公式 */
 :root{
@@ -16,10 +13,10 @@
   --e:#4f58b0; --e-soft:#e0e2f5;   /* 环境 */
   --hi:#c2541c; --hi-soft:#f7e3d6; /* 选择 / 结果 */
   --on-a:#ffffff;
-  --f-display:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  --f-math:"STIX Two Text","Times New Roman",serif;
+  --f-display:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --f-body:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Cascadia Mono",monospace;
+  --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e1614; --surface:#15201d; --soft:#1c2a26; --ink:#e2ebe8; --muted:#93a49e; --line:#2a3934;
@@ -523,8 +520,8 @@ const RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pal={};
 function readPal(){const s=getComputedStyle(root);['bg','surface','soft','ink','muted','line','a','e','hi','a-soft','e-soft','hi-soft'].forEach(k=>pal[k]=s.getPropertyValue('--'+k).trim());}
 readPal();
-const F_SANS='"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
-const F_MONO='"JetBrains Mono",ui-monospace,Menlo,monospace';
+const F_SANS='-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif';
+const F_MONO='ui-monospace,"SF Mono",Menlo,Consolas,monospace';
 const F_MATH='"STIX Two Text","Times New Roman",serif';
 const stages=[];
 function redrawAll(){readPal();stages.forEach(s=>s.render());}
