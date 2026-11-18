@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f7f0">
+<meta name="description" content="给动物育种学习者的中文线性代数互动教程，从可拖动的向量一路走到设计矩阵、系谱关系矩阵和 BLUP。">
+<title>动物模型线性代数教程</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzI0NGEzYyIvPjxwYXRoIGQ9Ik04IDIzVjltMCAxNGgxNk0xMSAyMGwxMC0xMW0tNSAwaDV2NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTJlYmQxIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+Cg==" type="image/svg+xml">
+<style>
+:root{--ink:#20362b;--green:#234d3d;--deep:#193b30;--muted:#51645a;--paper:#f7f7f0;--white:#fffefa;--line:#d8ded1;--pale:#e7ede0;--light:#f0f2e9;--rust:#a8492e;--orange:#f4c2a0;--mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;--serif:"Songti SC","Noto Serif CJK SC","SimSun",serif;--sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;color:var(--ink);background:var(--paper);font:16px/1.7 var(--sans)}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #b7653e;outline-offset:4px}
+[tabindex="-1"]:focus{outline:none}
+h1,h2,h3,p{margin:0}
+p+p{margin-top:12px}
+svg{display:block}
+var{font-family:Georgia,serif}
+.frame{width:min(1180px,calc(100% - 88px));margin-inline:auto}
+.skip{position:absolute;top:8px;left:8px;z-index:10;padding:8px 14px;background:var(--white);transform:translateY(-150%)}
+.skip:focus{transform:none}
+.site-header{background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;min-height:76px;gap:24px}
+.brand{display:inline-flex;align-items:center;gap:11px;justify-self:start;font-weight:800;line-height:1.2;white-space:nowrap}
+.brand-icon{display:grid;place-items:center;background:var(--green);color:#e5edd9;width:38px;height:38px;border-radius:9px}.brand-icon svg{width:30px}
+.brand small{display:block;margin-top:4px;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.06em}
+.topnav{display:flex;gap:36px;font-size:14px;font-weight:650;white-space:nowrap}
+.topnav a{padding:24px 2px 22px;border-bottom:2px solid transparent}
+.topnav a:hover,.topnav a[aria-current]{color:var(--rust);border-bottom-color:currentColor}
+.progress-link{justify-self:end;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);white-space:nowrap}.progress-link strong{font:700 12px var(--mono);margin-left:3px;color:var(--green)}
+.progress-ring{width:16px;height:16px;border-radius:50%;background:conic-gradient(#568165 var(--progress,0%),#dce4d6 0);display:grid;place-items:center}.progress-ring::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--paper)}
+.hero{display:grid;grid-template-columns:1fr 1.03fr;gap:clamp(32px,5.3vw,82px);align-items:center;padding-block:54px 58px}
+.eyebrow{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:750;letter-spacing:.16em;color:var(--rust)}
+.eyebrow>span{width:19px;height:1px;background:currentColor;flex:none}
+.hero h1,.standalone h1,.lesson-heading h1{font-family:var(--serif);font-size:clamp(42px,5.05vw,73px);font-weight:850;line-height:1.15;letter-spacing:-.06em;margin-top:17px}
+.hero h1 span{color:#38634d}
+.hero-copy p{max-width:440px;margin-top:22px;color:var(--muted);font-size:17px;line-height:1.9}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:44px;padding:9px 15px;border:1px solid transparent;border-radius:7px;font-size:14px;font-weight:720;line-height:1.4;text-align:center}
+.button.primary{background:var(--green);color:#fffef5}
+.button.primary:hover{background:#14372a}
+.button.secondary{background:transparent;border-color:#bdcabc;color:var(--green)}
+.button.secondary:hover,.mini-button:hover{background:var(--pale)}
+.text-link{color:var(--green);font-size:14px;font-weight:750;white-space:nowrap}.text-link:hover{text-decoration:underline;text-underline-offset:4px}
+.hero-lab{padding:18px 21px 19px;min-width:0;color:#f2f6e9;background:var(--deep);border:1px solid #285145;border-radius:15px}
+.lab-top{display:flex;justify-content:space-between;align-items:center}
+.lab-caption{font-size:11px;letter-spacing:.13em;color:#d3dfd0;display:inline-flex;align-items:center;gap:8px}
+.lab-caption i{width:6px;height:6px;background:#d6e899;border-radius:50%;box-shadow:0 0 0 3px #d6e89922}
+.lab-symbol{font:17px Georgia,serif;color:#c9dcb3}
+.hero-lab h2{font-size:19px;margin:3px 0 10px;letter-spacing:.02em}
+.plot{width:100%;height:auto;max-height:360px;background:#f5f8f0;border:1px solid #dce6d8;border-radius:9px;--grid:#dfe8d9;--axis:#768c7d;--axistext:#4c6a59;--vector:#356b52;--guide:#6b8d79;--point:#e5a681}
+.hero-lab .plot{background:#1e4538;border-color:#426558;--grid:#375c4d;--axis:#83a28f;--axistext:#b9cfc0;--vector:#d4ea9a;--guide:#aec38f;--point:#f1b694;max-height:none}
+.plot .drag-hit{cursor:grab;touch-action:none}.plot .drag-hit:active{cursor:grabbing}
+.plot .vector-target:focus-visible .mark{stroke:#f39154;stroke-width:4}
+.vector-readout{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:9px;font-size:12px;color:var(--muted)}
+.hero-lab .vector-readout{color:#c6d8cc}
+.vector-readout output{font:700 14px var(--mono);color:var(--green)}.hero-lab .vector-readout output{color:#d9eda4}
+.hero-lab .mini-button{color:#e3ede0;border-color:#5b7b6a}.hero-lab .mini-button:hover{background:#2e5948}
+.mini-button{background:transparent;border:1px solid var(--line);border-radius:6px;padding:5px 10px;min-height:31px;font-size:12px;font-weight:680;white-space:nowrap}
+.chapters{padding-block:30px 55px;border-top:1px solid var(--line);scroll-margin-top:18px}
+.section-lead{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:21px}
+.section-lead h2,.lab-card h2,.recap h2{font-family:var(--serif);font-size:clamp(26px,3.2vw,42px);letter-spacing:-.05em;line-height:1.25;margin-top:8px}
+.section-lead p{color:var(--muted);font-size:14px;margin-top:7px}
+.section-lead .text-link{padding-bottom:3px}
+.chapter-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.chapter-card{min-width:0;display:flex;flex-direction:column;padding:17px;border:1px solid var(--line);border-radius:10px;background:var(--white);min-height:159px;transition:background .15s,border-color .15s,transform .15s}
+.chapter-card:hover{background:#f0f5e9;border-color:#8faa90;transform:translateY(-2px)}
+.card-meta{display:flex;justify-content:space-between;align-items:center;color:var(--rust);font:700 12px var(--mono);margin-bottom:10px}
+.card-icon{width:31px;height:29px;display:grid;place-items:center;border-radius:6px;background:#e9eee2;color:var(--green);font:700 15px Georgia,serif}
+.chapter-card h3{font-size:19px;line-height:1.3;margin-bottom:6px}.chapter-card p{color:var(--muted);font-size:13px}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:11px;color:var(--green);font-size:11px;font-weight:700}
+.site-footer{border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.site-footer .frame{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:66px}
+.site-footer strong{color:var(--green)}.site-footer a:hover{text-decoration:underline}.footer-divider{margin-inline:5px}
+.lesson-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:36px;padding-block:42px 54px}
+.lesson-aside>div{position:sticky;top:20px}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-size:13px;font-weight:750;margin:3px 0 15px}
+.lesson-aside nav{display:grid;gap:4px}
+.lesson-aside nav a{display:flex;align-items:center;gap:10px;min-height:42px;border:1px solid transparent;padding:7px 9px;border-radius:7px;font-size:14px}
+.lesson-aside nav a span{color:var(--rust);font:700 12px var(--mono)}
+.lesson-aside nav a b{margin-left:auto;color:#426d51}
+.lesson-aside nav a:hover,.lesson-aside nav a[aria-current]{border-color:#d4e0ce;background:#e8efe2}
+.aside-links{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px;margin-top:15px;color:var(--muted);font-size:13px}
+.aside-links a:hover,.back-link:hover{text-decoration:underline}
+.lesson-body{min-width:0}
+.lesson-heading h1,.standalone h1{font-size:clamp(33px,4.2vw,58px);margin-top:10px}
+.lesson-heading p,.standalone>p{max-width:770px;color:var(--muted);margin-top:12px;font-size:16px}
+.lesson-heading{margin-bottom:21px}
+.lab-card{border:1px solid var(--line);background:var(--white);border-radius:12px;padding:clamp(15px,2.5vw,25px);min-width:0}
+.lab-card+.lab-card,.recap{margin-top:16px}
+.lab-card h2,.recap h2{font-size:clamp(23px,2.5vw,31px);margin:0 0 8px}
+.lab-card p{color:var(--muted);font-size:14px}
+.lab-card h3{font-size:16px;margin-bottom:5px}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start;gap:18px;margin-top:15px}
+.control-panel{padding:13px;background:var(--light);border-radius:8px;min-width:0}
+.range-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1px 8px;margin:7px 0 9px;font-size:13px}
+.range-row b{color:var(--green);font:700 13px var(--mono)}
+.range-row input{grid-column:1 / -1;width:100%;min-height:30px;margin:0;accent-color:#3b6b50;cursor:pointer}
+.ctrl-actions,.chips,.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-block:8px}
+.chip,.tab{background:var(--white);border:1px solid #bdcbbd;padding:6px 9px;min-height:38px;border-radius:6px;font-size:13px;font-weight:650}
+.chip[aria-pressed=true],.tab[aria-pressed=true]{background:var(--green);color:white;border-color:var(--green)}
+.chip:hover:not([aria-pressed=true]),.tab:hover:not([aria-pressed=true]){background:var(--pale)}
+.formula,.result-strip{background:#eaf1e5;color:#224b39;padding:10px 12px;border-radius:7px;margin-top:10px;font-family:var(--mono);font-weight:650;font-size:14px;overflow-wrap:anywhere}
+.result-strip{font-family:var(--sans);font-weight:650}
+.formula .tagged,.result-strip small{font-family:var(--sans);font-weight:500}
+.matrix-set{display:flex;gap:10px;flex-wrap:wrap;align-items:start;margin-block:9px}
+.matrix-box{flex:none;max-width:100%;background:#f5f7ef;border:1px solid #dce4d8;border-radius:8px;padding:8px;overflow:auto}
+.matrix-box figcaption{font-weight:750;font-size:13px;margin:0 0 4px;white-space:nowrap}
+.matrix-box figcaption span{color:var(--muted);font:11px var(--mono);margin-left:4px}
+figure{margin:0}
+.matrix{border-collapse:separate;border-spacing:2px;font:650 13px var(--mono);white-space:nowrap;text-align:center}
+.matrix td,.matrix th{min-width:26px;height:26px;padding:3px 4px}
+.matrix th{font-size:11px;color:var(--muted);font-weight:650}
+.matrix td{background:#edf0e7;border-radius:3px}
+.matrix td.hot{background:#d1e5ce;color:#184534}
+.matrix td.cross{background:#e8eae1;color:#33493c}
+.matrix td.core{background:#f6dfcc;color:#713722}
+.matrix td.pick{box-shadow:inset 0 0 0 2px #a34c32;background:#ffe6ce;color:#622e1e}
+.matrix td.row-pick{background:#d7e8d0;color:#214c37}
+.matrix td:has(button){padding:0}
+.matrix td button{display:block;border:0;background:transparent;width:100%;height:100%;min-width:33px;min-height:31px;padding:4px;font:inherit}
+.matrix td button:focus-visible{outline-offset:-2px}
+.matrix-legend{display:flex;gap:8px 14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}.matrix-legend span:before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;background:var(--swatch)}
+.rec-table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
+.rec-table th,.rec-table td{padding:6px;border-bottom:1px solid var(--line)}
+.rec-table tbody tr.selected{background:#e7eee1}
+.rec-table button{font:inherit;font-weight:700;min-height:32px}
+.mini-note{font-size:12px!important;color:var(--muted);margin-top:8px}
+.recap{padding:15px 17px;background:#e9efe4;border-radius:9px;border-left:3px solid #6d9274}
+.recap h2{font-size:23px;margin-bottom:6px}.recap p{font-size:14px}
+.recap a,.source-list a{text-decoration:underline;text-underline-offset:3px}
+.lesson-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:space-between;margin-top:18px}
+.lesson-actions>div{display:flex;flex-wrap:wrap;gap:7px}
+.switch-label{display:flex;align-items:flex-start;gap:8px;font-size:14px;margin-block:9px;cursor:pointer}.switch-label input{width:18px;height:18px;accent-color:#34694d;margin:3px 0 0;flex:none}
+.mode-label{font-size:13px;font-weight:700}.mode-label select{display:block;width:100%;min-height:42px;border:1px solid #bcccba;border-radius:6px;background:var(--white);padding:5px 8px;margin-top:4px}
+.pedigree{max-width:410px;border-radius:8px;background:#f4f7ee;width:100%;height:auto}
+.pedigree circle{fill:#e3edde;stroke:#789d7d;stroke-width:1.5}.pedigree .chosen{fill:#f4d3ba;stroke:#a65739;stroke-width:2}
+.pedigree text{font:700 15px var(--sans);fill:var(--green)}
+.pedigree path{stroke:#7d9786;stroke-width:1.5;fill:none}
+.details{margin-top:13px;border:1px solid var(--line);border-radius:8px;padding:8px 11px}
+.details summary{cursor:pointer;color:var(--green);font-size:14px;font-weight:750;padding:3px 0}
+.details p{margin:7px 0}
+.source-list{color:var(--muted);font-size:13px;padding-left:19px}
+.bar-list{display:grid;gap:8px;margin-top:12px}
+.bar-row{display:grid;grid-template-columns:44px minmax(0,1fr) 65px;align-items:center;gap:7px;font-size:13px}
+.bar-track{position:relative;height:16px;border-radius:4px;background:#e5ebe0}.bar-track::after{content:"";position:absolute;left:50%;inset-block:0;width:1px;background:#637b6b}.bar-fill{position:absolute;height:10px;top:3px;border-radius:2px;background:#477658}.bar-fill.neg{background:#bc7255}
+.bar-num{text-align:right;font:700 13px var(--mono)}
+.standalone{padding-block:52px 60px;min-height:65vh}
+.search-label{display:block;font-size:13px;font-weight:730;margin-top:20px}
+.search-input{display:block;max-width:460px;width:100%;min-height:46px;background:var(--white);border:1px solid #acbdaa;border-radius:7px;padding:7px 12px;margin-top:4px}
+.search-status{font-size:13px!important;margin:8px 0!important}
+.glossary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.term{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:13px}
+.term h2{font-size:18px}.term small{display:block;font:12px var(--mono);color:var(--rust);margin:2px 0 4px;overflow-wrap:anywhere}.term p{font-size:13px;color:var(--muted);margin-bottom:7px}
+.quiz-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:880px;margin-top:15px}
+.quiz-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;max-width:880px;margin-top:10px}
+.quiz-card{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:13px}
+.quiz-card fieldset{border:0;margin:0;padding:0;min-width:0}
+.quiz-card legend{padding:0;margin-bottom:5px;font-size:15px;font-weight:750}.quiz-card legend span{color:var(--rust);font:700 12px var(--mono);margin-right:7px}
+.quiz-option{display:flex;align-items:flex-start;gap:7px;font-size:13px;padding:5px 4px;cursor:pointer}.quiz-option input{accent-color:#34694d;margin:4px 0 0}
+.quiz-option:has(input:checked){background:#eef3e9;border-radius:4px}
+.quiz-card .button{margin-top:6px;min-height:36px}
+.quiz-feedback{margin-top:7px;font-size:13px;color:var(--rust)}.quiz-feedback.good{color:var(--green)}
+.quiz-card .text-link{display:inline-block;margin-top:6px;font-size:12px}
+@media(max-width:950px){.frame{width:calc(100% - 54px)}.hero{gap:28px}.lesson-layout{grid-template-columns:165px minmax(0,1fr);gap:22px}.chapter-card{padding:14px}}
+@media(max-width:765px){.frame{width:calc(100% - 34px)}.topbar{grid-template-columns:1fr auto;gap:2px 10px;padding-top:9px}.topnav{grid-row:2;grid-column:1 / -1;justify-content:center;gap:25px}.topnav a{padding-block:9px 8px}.progress-link{grid-column:2;grid-row:1}.brand-icon{width:34px;height:34px}.hero{grid-template-columns:1fr;padding-block:31px 32px;gap:23px}.hero-copy p{margin-top:12px;font-size:15px}.hero h1{font-size:clamp(41px,9.2vw,59px);margin-top:10px}.hero-actions{margin-top:16px}.hero-lab{padding:13px 14px 11px}.chapters{padding-block:20px 32px}.chapter-cards,.glossary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.section-lead{align-items:flex-start;margin-bottom:13px}.section-lead .text-link{margin-top:3px;font-size:12px}.chapter-card{min-height:145px;padding:11px}.chapter-card h3{font-size:16px}.card-meta{margin-bottom:6px}.lesson-layout{display:block;padding-block:16px 35px}.lesson-aside>div{position:static}.lesson-aside nav{display:flex;overflow-x:auto;gap:4px;margin-bottom:13px;padding-bottom:4px}.lesson-aside nav a{flex:none;min-height:36px;padding:4px 7px;font-size:12px}.aside-links{display:none}.back-link{margin-bottom:7px}.standalone{padding-block:26px 37px}}
+@media(max-width:510px){.lab-grid,.quiz-list{grid-template-columns:1fr;gap:10px}.section-lead p{font-size:12px}.card-bottom span:first-child{font-size:10px}.lab-card .matrix{font-size:12px}.lab-card .matrix td,.lab-card .matrix th{min-width:22px;padding:2px 3px}.lab-card .matrix td:has(button){padding:0}.lab-card .matrix td button{padding:3px;min-width:29px}.site-footer .frame{font-size:11px}.lesson-actions{align-items:stretch}.lesson-actions > div{width:100%;justify-content:space-between}.term{padding:9px}.term h2{font-size:15px}.term p{font-size:12px}}
+@media(max-width:360px){.frame{width:calc(100% - 24px)}.hero-lab{padding-inline:10px}.section-lead .text-link{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+.block-equation{display:flex;gap:6px;align-items:center;width:max-content;max-width:100%;font-size:clamp(10px,2.8vw,15px);white-space:nowrap;padding-inline:7px}
+.math-bracket{display:grid;grid-template-columns:auto;gap:2px 9px;border-inline:1px solid currentColor;border-radius:3px;padding:0 4px;text-align:center}
+.math-bracket.math-2{grid-template-columns:repeat(2,auto)}
+#lesson-vector{margin-top:12px}
+@media(max-width:765px){
+  .lesson-aside nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}
+  .lesson-aside nav a{gap:5px;line-height:1.32;background-color:#f0f1e8}
+  .lesson-aside nav a[aria-current]{background-color:#dce9d7}
+}
+@media(max-width:375px){
+  #mme-matrices .matrix{font-size:11px;border-spacing:1px}
+  #mme-matrices .matrix td,#mme-matrices .matrix th{padding-inline:2px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="frame topbar">
+    <a class="brand" href="#home" aria-label="育种数学，返回首页"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 23V9m0 14h16M11 20l10-11m-5 0h5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="23" r="2" fill="currentColor"/></svg></span><span>育种数学<small>动物育种交互教程</small></span></a>
+    <nav class="topnav" aria-label="主导航"><a href="#chapters" data-nav="chapters">章节</a><a href="#glossary" data-nav="glossary">概念速查</a><a href="#practice" data-nav="practice">互动练习</a></nav>
+    <a class="progress-link" href="#chapters" title="查看章节学习进度"><span class="progress-ring" aria-hidden="true"></span><span>学习进度 <strong data-completed>0 / 6</strong></span></a>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+  <div id="home" class="view">
+    <div class="frame hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> 从数据到育种值</div>
+        <h1>动物模型<br><span>线性代数教程</span></h1>
+        <p>从一个可拖动的向量开始，读懂猪场数据怎样变成设计矩阵、亲缘关系怎样进入方程，以及 BLUP 怎样预测育种值。</p>
+        <div class="hero-actions"><a class="button primary" href="#vectors">开始学习 <span aria-hidden="true">→</span></a><a class="button secondary" href="#chapters">浏览章节 <span aria-hidden="true">↓</span></a></div>
+      </div>
+      <section class="hero-lab" aria-labelledby="hero-lab-title">
+        <div class="lab-top"><span class="lab-caption"><i></i> 交互演示</span><span class="lab-symbol" aria-hidden="true">ℝ²</span></div>
+        <h2 id="hero-lab-title">拖动向量的端点</h2>
+        <div id="hero-vector"></div>
+      </section>
+    </div>
+    <section class="frame chapters" id="chapters" tabindex="-1">
+      <div class="section-lead"><div><div class="eyebrow"><span></span> 课程目录</div><h2>从向量到动物模型</h2><p>六章循序展开，也可以直接跳到正在用的概念。</p></div><a class="text-link" href="#glossary">概念速查 <span aria-hidden="true">↗</span></a></div>
+      <div id="chapter-cards" class="chapter-cards"></div>
+    </section>
+  </div>
+  <div id="lesson" class="view frame lesson-layout" hidden>
+    <aside class="lesson-aside"><div><a class="back-link" href="#chapters"><span aria-hidden="true">←</span> 课程目录</a><nav id="lesson-nav" aria-label="章节导航"></nav><div class="aside-links"><a href="#glossary">概念速查 <span aria-hidden="true">↗</span></a><a href="#practice">互动练习 <span aria-hidden="true">↗</span></a></div></div></aside>
+    <article id="lesson-body" class="lesson-body"></article>
+  </div>
+  <section class="view frame standalone" id="glossary" hidden>
+    <div class="eyebrow"><span></span> 学习工具</div><h1>概念速查</h1><p>按中文、英文或符号查找，点开对应章节看数值示例。</p>
+    <label class="search-label" for="glossary-search">查找概念</label><input class="search-input" type="search" id="glossary-search" placeholder="例如：关系矩阵、BLUP、X">
+    <p class="search-status" id="search-status" role="status"></p><div id="glossary-grid" class="glossary-grid"></div>
+  </section>
+  <section class="view frame standalone" id="practice" hidden>
+    <div class="eyebrow"><span></span> 巩固理解</div><h1>互动练习</h1><p>每章一题。提交后可以查看解析，也可以回到对应章节重做实验。</p>
+    <div class="quiz-summary"><strong id="quiz-score" role="status">已答对 0 / 6</strong><button class="button secondary" id="quiz-reset" type="button">重做全部</button></div>
+    <div id="quiz-list" class="quiz-list"></div>
+  </section>
+</main>
+<footer class="site-footer"><div class="frame"><span><strong>育种数学</strong> <span class="footer-divider">/</span> 动物模型线性代数教程</span><span><a href="#chapters">课程目录 <span aria-hidden="true">↑</span></a><span class="footer-divider">/</span><a href="/files/tutorials/linear-algebra-animal-model.html">看得见的线性代数</a><span class="footer-divider">/</span><a href="/portfolio/#tutorials">全部教程</a></span></div></footer>
+<script>
+"use strict";
+
+const MathLab = (() => {
+  const transpose = matrix => matrix[0].map((_, column) => matrix.map(row => row[column]));
+  const product = (left, right) => transpose(right).reduce((columns, column) => {
+    columns.push(left.map(row => row.reduce((sum, value, index) => sum + value * column[index], 0)));
+    return columns;
+  }, []);
+  const multiply = (left, right) => transpose(product(left, right));
+  const column = values => values.map(value => [value]);
+  const identity = size => Array.from({length: size}, (_, i) => Array.from({length: size}, (_, j) => Number(i === j)));
+
+  function solve(coefficients, values) {
+    const size = coefficients.length;
+    const augmented = coefficients.map((row, i) => [...row, ...values[i]]);
+    for (let i = 0; i < size; i++) {
+      let pivot = i;
+      for (let row = i + 1; row < size; row++) {
+        if (Math.abs(augmented[row][i]) > Math.abs(augmented[pivot][i])) pivot = row;
+      }
+      if (Math.abs(augmented[pivot][i]) < 1e-10) throw new Error("矩阵没有唯一解");
+      [augmented[i], augmented[pivot]] = [augmented[pivot], augmented[i]];
+      const scale = augmented[i][i];
+      augmented[i] = augmented[i].map(value => value / scale);
+      for (let row = 0; row < size; row++) {
+        if (row === i) continue;
+        const factor = augmented[row][i];
+        augmented[row] = augmented[row].map((value, j) => value - factor * augmented[i][j]);
+      }
+    }
+    return augmented.map(row => row.slice(size));
+  }
+
+  const inverse = matrix => solve(matrix, identity(matrix.length));
+  const pigs = ["P", "Q", "R", "S"];
+  const pedigrees = {
+    full: [[-1, -1], [-1, -1], [0, 1], [0, 1]],
+    half: [[-1, -1], [-1, -1], [0, 1], [0, -1]],
+    unrelated: [[-1, -1], [-1, -1], [0, 1], [-1, -1]],
+    inbred: [[-1, -1], [-1, -1], [0, 1], [0, 2]]
+  };
+  const records = [
+    { pig: 0, group: 0, value: 820 },
+    { pig: 1, group: 1, value: 900 },
+    { pig: 2, group: 0, value: 760 }
+  ];
+  function relationship(pedigree) {
+    const matrix = identity(pedigree.length);
+    pedigree.forEach(([sire, dam], i) => {
+      for (let j = 0; j < i; j++) {
+        const fromSire = sire < 0 ? 0 : matrix[sire][j];
+        const fromDam = dam < 0 ? 0 : matrix[dam][j];
+        matrix[i][j] = matrix[j][i] = (fromSire + fromDam) / 2;
+      }
+      if (sire >= 0 && dam >= 0) matrix[i][i] += matrix[sire][dam] / 2;
+    });
+    return matrix;
+  }
+  function design(rows) {
+    return {
+      X: rows.map(({group}) => [Number(group === 0), Number(group === 1)]),
+      Z: rows.map(({pig}) => pigs.map((_, index) => Number(pig === index))),
+      y: column(rows.map(({value}) => value))
+    };
+  }
+  function model(rows, A, h2) {
+    const {X, Z, y} = design(rows);
+    const W = X.map((row, i) => [...row, ...Z[i]]);
+    const tW = transpose(W);
+    const information = multiply(tW, W);
+    const lambda = (1 - h2) / h2;
+    const invA = inverse(A);
+    const p = X[0].length;
+    const coefficient = information.map((row, i) => row.map((value, j) =>
+      i >= p && j >= p ? value + lambda * invA[i - p][j - p] : value
+    ));
+    const rhs = multiply(tW, y);
+    const fitted = solve(coefficient, rhs).flat();
+    return {coefficient, rhs, fitted, lambda};
+  }
+  return {transpose, multiply, column, identity, solve, inverse, relationship, design, model, pigs, pedigrees, records};
+})();
+
+if (typeof module !== "undefined") module.exports = MathLab;
+</script>
+<script>
+"use strict";
+
+const $ = (query, root = document) => root.querySelector(query);
+const $$ = (query, root = document) => [...root.querySelectorAll(query)];
+const fmt = (value, digits = 2) => {
+  const rounded = Math.round(value * 10 ** digits) / 10 ** digits;
+  return (rounded === 0 ? 0 : rounded).toLocaleString("en-US", {maximumFractionDigits: digits, useGrouping: false});
+};
+const {transpose, multiply, column, identity, inverse, relationship, design, model, pigs, pedigrees, records} = MathLab;
+const numbered = index => String(index + 1).padStart(2, "0");
+const homeTitle = "动物模型线性代数教程";
+const chapters = [
+  {id:"vectors", title:"向量", symbol:"→", task:"拖动向量与编辑表型", lead:"同一组数字，既可以是一根箭头的坐标，也可以是一列按顺序排列的观测值。", description:"把两项坐标画成箭头，把多头猪的日增重排成一列。"},
+  {id:"matrices", title:"矩阵", symbol:"M", task:"改变权重与切换转置", lead:"矩阵给行和列指定含义。矩阵乘向量时，每一行都在做一次加权求和。", description:"看清行、列、维度与转置，亲手算出一行矩阵乘法。"},
+  {id:"equations", title:"线性方程组", symbol:"∩", task:"移动直线并找交点", lead:"每个二元一次方程都对应一条直线。两条线的公共点，就是同时满足两个方程的解。", description:"用两条直线理解唯一解、无解和无穷多解。"},
+  {id:"design", title:"设计矩阵 X 与 Z", symbol:"XZ", task:"点击记录追踪矩阵行", lead:"一条记录属于哪个批次？来自哪头猪？用 X 和 Z 把这两个问题写进模型。", description:"把批次和个体编码成 0 与 1，追踪每条记录的预测值。"},
+  {id:"relationship", title:"关系矩阵 A 与 G", symbol:"A", task:"切换系谱与点选格子", lead:"没有表型记录的动物，也能通过亲属获得信息。关系矩阵描述个体间加性遗传效应的协方差结构。", description:"切换全同胞、半同胞等系谱，观察亲缘系数和逆矩阵。"},
+  {id:"mme", title:"混合模型方程", symbol:"û", task:"调节遗传力并求解", lead:"把表型、批次和系谱放到同一组方程里，同时估计批次效应和预测育种值。", description:"改变遗传力和表型，观察 BLUP 如何利用亲属信息。"}
+];
+const glossary = [
+  ["向量", "vector · y, b, u", "按顺序排列的一组数。y 的每个元素对应一条已测表型记录。", 0],
+  ["维度", "dimension · n × p", "先写行数，再写列数。n 条记录组成的列向量是 n × 1。", 1],
+  ["转置", "transpose · Mᵀ", "把行列互换，元素 Mᵢⱼ 移到 Mᵀ 的第 j 行第 i 列。", 1],
+  ["矩阵乘法", "matrix product · Mv", "矩阵的每一行与向量对应元素相乘后求和。两个矩阵相乘要求内侧维度一致。", 1],
+  ["线性方程组", "linear system · Cθ = r", "寻找一组未知量，让所有线性方程同时成立。", 2],
+  ["固定效应设计矩阵", "X · fixed-effects design", "把每条记录连到批次等固定效应。列的意义取决于编码方式。", 3],
+  ["遗传效应设计矩阵", "Z · random-effects incidence","把每条记录连到对应动物的加性遗传效应。重复测定会出现多行指向同一列。", 3],
+  ["残差", "e · residual", "记录中模型未解释的部分。示例假设各记录的残差独立且同方差。", 3],
+  ["系谱关系矩阵", "A · pedigree relationship", "按系谱计算预期加性遗传关系。对角线是 1 加个体近交系数。", 4],
+  ["基因组关系矩阵", "G · genomic relationship", "根据 SNP 基因型及选定的等位基因频率等信息构造。由于孟德尔抽样，全同胞之间的基因组关系会在系谱期望 0.5 上下波动。", 4],
+  ["逆矩阵", "A⁻¹ · inverse", "和 A 相乘得到单位矩阵 I。混合模型方程使用 A⁻¹ 表达遗传效应的精度结构。", 4],
+  ["遗传力", "h² · heritability", "狭义遗传力。本例中 h² = σₐ² / (σₐ² + σₑ²)，即加性遗传方差占表型方差的比例。", 5],
+  ["方差比", "λ · variance ratio", "本例 λ = σₑ² / σₐ² = (1 − h²) / h²。它控制遗传效应惩罚的强弱。", 5],
+  ["混合模型方程", "MME · mixed model equations", "由数据与遗传协方差结构构成的联立方程，解出固定效应估计和随机遗传效应预测。", 5],
+  ["最佳线性无偏预测", "BLUP · best linear unbiased prediction", "在给定模型和方差组分下，对随机遗传效应 u 的最佳线性无偏预测。û 是预测的育种值；固定效应的对应估计称为 BLUE（b̂）。", 5]
+];
+const quizzes = [
+  ["同一头猪测了两次日增重，两条记录都保留。表型向量 y 怎样存？",["只保留第一次","两次各占一个元素","在一个元素里合并两次"],1,"y 按观测记录排列。两次测定各占一行，Z 中这两行指向同一头猪。"],
+  ["矩阵第 2 行是 [0, 1, 0]，与列向量 [10, 20, 30]ᵀ 相乘，该行结果是多少？",["10","20","60"],1,"对应元素相乘再求和，0×10 + 1×20 + 0×30 = 20。"],
+  ["x + y = 5 与 x + y = 3 组成的方程组有几个解？",["无解","一个解","无穷多解"],0,"两条直线斜率相同、截距不同，所以没有交点。"],
+  ["S 没有表型记录，但在系谱中。Z 里与 S 对应的列是什么样的？",["每行都是 1","没有这一列","每行都是 0"],2,"本例把所有四头猪纳入 u，所以 Z 保留 S 列。没有表型记录，就没有任何一行指向 S。"],
+  ["如果 P、Q 无亲缘且非近交，R 和 S 是它们的全同胞后代，A[R, S] 是多少？",["0","0.25","0.50"],2,"S 从 P、Q 各继承一半。R 与两个亲本的加性关系都是 0.5，所以 A[R, S] = 0.5 × (0.5 + 0.5)。"],
+  ["保持数据和系谱不变，把 h² 从 0.5 调到 0.25，会怎样？",["λ 从 1 增至 3，惩罚增强","λ 从 3 降至 1，惩罚减弱","λ 保持不变"],0,"λ = (1 − h²) / h²。较大的 λ 给 uᵀA⁻¹u 更高权重。"]
+];
+
+function loadList(key) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value.filter(item => Number.isInteger(item) && item >= 0 && item < chapters.length) : [];
+  } catch { return []; }
+}
+function saveList(key, set) {
+  try { localStorage.setItem(key, JSON.stringify([...set])); } catch { /* The lesson remains usable with browser storage disabled. */ }
+}
+const completed = new Set(loadList("breeding-math-chapters"));
+const correct = new Set(loadList("breeding-math-quiz"));
+
+function updateProgress() {
+  $$("[data-completed]").forEach(node => node.textContent = `${completed.size} / ${chapters.length}`);
+  $(".progress-ring").style.setProperty("--progress", `${completed.size / chapters.length * 100}%`);
+  $$("[data-card-progress]").forEach(node => node.textContent = completed.has(Number(node.dataset.cardProgress)) ? "✓ 已完成" : "进入实验");
+  $$("[data-nav-check]").forEach(node => node.textContent = completed.has(Number(node.dataset.navCheck)) ? "✓" : "");
+}
+$("#chapter-cards").innerHTML = chapters.map(({id, title, symbol, description}, index) =>
+  `<a class="chapter-card" href="#${id}"><div class="card-meta"><span>第 ${numbered(index)} 章</span><span class="card-icon" aria-hidden="true">${symbol}</span></div><h3>${title}</h3><p>${description}</p><div class="card-bottom"><span data-card-progress="${index}"></span><span aria-hidden="true">↗</span></div></a>`
+).join("");
+$("#lesson-nav").innerHTML = chapters.map(({id, title}, index) =>
+  `<a href="#${id}"><span>${numbered(index)}</span>${title}<b aria-hidden="true" data-nav-check="${index}"></b></a>`
+).join("");
+
+function pressed(container, index) {
+  $$("button[data-choice]", container).forEach(button => button.setAttribute("aria-pressed", String(button.dataset.choice === String(index))));
+}
+function chips(values, selected) {
+  return values.map(([value, label]) => `<button class="chip" type="button" data-choice="${value}" aria-pressed="${value === selected}">${label}</button>`).join("");
+}
+function slider(id, name, min, max, step, value) {
+  return `<label class="range-row" for="${id}"><span>${name}</span><b id="${id}-out">${fmt(value)}</b><input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${value}"></label>`;
+}
+function matrix(name, values, options = {}) {
+  const {rows = [], cols = [], cellClass = () => "", labelCell} = options;
+  return `<figure class="matrix-box"><figcaption>${name} <span>${values.length} × ${values[0].length}</span></figcaption><table class="matrix" aria-label="${name} 矩阵">
+  ${cols.length ? `<thead><tr>${rows.length ? "<td aria-hidden='true'></td>" : ""}${cols.map(label => `<th scope="col">${label}</th>`).join("")}</tr></thead>` : ""}
+  <tbody>${values.map((row, i) => `<tr>${rows.length ? `<th scope="row">${rows[i]}</th>` : ""}${row.map((value, j) => {
+    const cell = fmt(value);
+    const state = cellClass(i, j, value);
+    const content = labelCell ? `<button type="button" data-i="${i}" data-j="${j}" aria-pressed="${state === "pick"}" aria-label="${labelCell(i, j, cell)}">${cell}</button>` : cell;
+    return `<td class="${state}">${content}</td>`;
+  }).join("")}</tr>`).join("")}</tbody></table></figure>`;
+}
+
+function grid(kind, spec) {
+  const {w, h, ox, oy, sx, sy, lo, hi} = spec;
+  const ticks = Array.from({length: hi - lo + 1}, (_, i) => i + lo);
+  const x = value => ox + value * sx;
+  const y = value => oy - value * sy;
+  return `<svg class="plot" viewBox="0 0 ${w} ${h}" aria-label="${kind === "vector" ? "向量坐标平面" : "两条直线的坐标平面"}" ${kind === "vector" ? 'role="group"' : 'role="img"'}>
+  <defs><clipPath id="${spec.id}-clip"><rect x="15" y="10" width="${w-30}" height="${h-28}"/></clipPath></defs>
+  <g aria-hidden="true" stroke="var(--grid)">${ticks.map(tick => `<path d="M${x(tick)} 12V${h-18} M16 ${y(tick)}H${w-16}"/>`).join("")}</g>
+  <path aria-hidden="true" d="M16 ${oy}H${w-16}m-5 -4 5 4-5 4 M${ox} ${h-18}V12m-4 5 4-5 4 5" fill="none" stroke="var(--axis)" stroke-width="1.2"/>
+  <g aria-hidden="true" font-family="monospace" font-size="12" fill="var(--axistext)">${ticks.filter(tick => tick !== 0).map(tick =>
+    `<text x="${x(tick)}" y="${oy+17}" text-anchor="middle">${tick}</text><text x="${ox-7}" y="${y(tick)+4}" text-anchor="end">${tick}</text>`).join("")}
+  <text x="${ox-7}" y="${oy+16}" text-anchor="end">0</text><text x="${w-12}" y="${oy-8}" text-anchor="end">x</text><text x="${ox+12}" y="19">y</text></g>`;
+}
+function vectorLab(host, id, allowSliders = false) {
+  const spec = {id, w:460, h:280, ox:230, oy:137, sx:28, sy:28, lo:-4, hi:4};
+  const {w, ox, oy, sx, sy} = spec;
+  host.innerHTML = `${grid("vector", spec)}
+    <defs><marker id="${id}-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5 0 10Z" fill="var(--vector)"/></marker></defs>
+    <path class="guide" fill="none" stroke="var(--guide)" stroke-dasharray="4 4" stroke-width="1.4"/>
+    <line class="arrow" x1="${ox}" y1="${oy}" stroke="var(--vector)" stroke-width="3" marker-end="url(#${id}-arrow)"/>
+    <g class="vector-target" tabindex="0" role="group" aria-label="向量端点，按方向键移动">
+      <circle class="mark" r="11" fill="var(--point)" stroke="var(--vector)" stroke-width="1.5"/>
+      <circle class="drag-hit" r="30" fill="transparent"/>
+    </g><text class="plot-label" fill="var(--vector)" font-family="monospace" font-size="15" font-weight="700" pointer-events="none"></text></svg>
+    <div class="vector-readout"><output aria-live="off"></output><span class="length"></span><button class="mini-button" type="button">复位</button></div>
+    ${allowSliders ? slider(id+"-x","横坐标 x",-4,4,1,3)+slider(id+"-y","纵坐标 y",-4,4,1,2) : ""}`;
+  const svg = $("svg", host);
+  const target = $(".vector-target", host);
+  const hit = $(".drag-hit", host);
+  let coordinates = [3, 2];
+  let pointer = null;
+  const clamp = value => Math.max(-4, Math.min(4, Math.round(value)));
+  function draw(x, y) {
+    coordinates = [clamp(x), clamp(y)];
+    [x, y] = coordinates;
+    const px = ox + x * sx, py = oy - y * sy;
+    $(".guide", host).setAttribute("d", `M${px} ${oy}V${py}H${ox}`);
+    const arrow = $(".arrow", host);
+    arrow.setAttribute("x2", px);
+    arrow.setAttribute("y2", py);
+    arrow.style.visibility = x || y ? "" : "hidden";
+    target.setAttribute("transform", `translate(${px} ${py})`);
+    const label = $(".plot-label", host);
+    label.textContent = `(${x}, ${y})`;
+    label.setAttribute("x", px + (px > w - 85 ? -14 : 14));
+    label.setAttribute("y", py + (py < 50 ? 22 : -13));
+    label.setAttribute("text-anchor", px > w - 85 ? "end" : "start");
+    $("output", host).textContent = `v = (${x}, ${y})`;
+    $(".length", host).textContent = `长度 ${fmt(Math.hypot(x,y))}`;
+    target.setAttribute("aria-label", `向量端点 (${x}, ${y})，按方向键移动`);
+    if (allowSliders) {
+      [`${id}-x`, `${id}-y`].forEach((range, index) => {
+        $(`#${range}`, host).value = coordinates[index];
+        $(`#${range}-out`, host).textContent = coordinates[index];
+      });
+    }
+  }
+  function drag(event) {
+    const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    draw((point.x - ox) / sx, (oy - point.y) / sy);
+  }
+  hit.addEventListener("pointerdown", event => {
+    if (pointer !== null || event.button !== 0) return;
+    pointer = event.pointerId;
+    hit.setPointerCapture(pointer);
+  });
+  hit.addEventListener("pointermove", event => { if (event.pointerId === pointer) drag(event); });
+  hit.addEventListener("pointerup", event => { if (event.pointerId === pointer) { drag(event); pointer = null; } });
+  hit.addEventListener("lostpointercapture", () => { pointer = null; });
+  target.addEventListener("keydown", event => {
+    const shift = {ArrowRight:[1,0], ArrowLeft:[-1,0], ArrowUp:[0,1], ArrowDown:[0,-1]}[event.key];
+    if (!shift) return;
+    event.preventDefault();
+    draw(coordinates[0] + shift[0], coordinates[1] + shift[1]);
+  });
+  $(".mini-button", host).addEventListener("click", () => draw(3, 2));
+  if (allowSliders) host.addEventListener("input", () => draw(Number($(`#${id}-x`, host).value),Number($(`#${id}-y`, host).value)));
+  draw(...coordinates);
+}
+vectorLab($("#hero-vector"), "hero");
+const recaps = [
+  "y 按观测记录排列，u 按动物排列。遇到一头猪多条记录，先用记录编号核对 y、X、Z 的行，再用动物编号核对 Z 的列与 u、A 的动物顺序。",
+  "矩阵由行数 × 列数描述。矩阵乘法会把一组效应组合成一组结果。下一章把多个结果当作方程右侧，反过来找未知量。",
+  "相交的两条线有唯一解，平行的两条线无解，重合的两条线有无穷多解。动物模型把这套思路扩展到许多未知量，用数值方法求解。",
+  "y、X、Z 的行对齐到同一条观测。X 的列对应固定效应，Z 的列对应动物。没有表型的 S，仍可出现在 Z 的列和关系矩阵里。",
+  "A 表达加性遗传关系，Var(u) = Aσₐ²。遗传协方差的逆矩阵是 A⁻¹ / σₐ²。这称为遗传效应的精度矩阵。",
+  "先用 X、Z 对齐观测和效应，再用 A 描述亲属关系，最后用方差比 λ 控制遗传效应的收缩。b̂ 是固定效应估计，û 是个体育种值的预测。"
+];
+const lessonBuilders = [vectorLesson, matrixLesson, equationLesson, designLesson, relationshipLesson, mmeLesson];
+function renderLesson(index) {
+  const item = chapters[index];
+  const previous = chapters[index - 1];
+  const next = chapters[index + 1];
+  const done = completed.has(index);
+  const host = $("#lesson-body");
+  host.innerHTML = `<div class="lesson-heading"><div class="eyebrow"><span></span> 第 ${numbered(index)} 章 / ${item.task}</div><h1 tabindex="-1">${item.title}</h1><p>${item.lead}</p></div><div id="lesson-labs"></div>
+    <section class="recap"><h2>带回动物模型的一句话</h2><p>${recaps[index]}</p></section>
+    <div class="lesson-actions"><button type="button" class="button secondary complete" aria-pressed="${done}">${done ? "✓ 已完成本章" : "标记本章完成"}</button><div>${previous ? `<a class="button secondary" href="#${previous.id}">← 上一章</a>` : ""}<a class="button primary" href="#${next?.id ?? "practice"}">${next ? "下一章" : "做互动练习"} →</a></div></div>`;
+  lessonBuilders[index]($("#lesson-labs"));
+  $(".complete", host).addEventListener("click", event => {
+    if (completed.has(index)) completed.delete(index);
+    else completed.add(index);
+    saveList("breeding-math-chapters", completed);
+    updateProgress();
+    event.currentTarget.setAttribute("aria-pressed", String(completed.has(index)));
+    event.currentTarget.textContent = completed.has(index) ? "✓ 已完成本章" : "标记本章完成";
+  });
+}
+function vectorLesson(host) {
+  host.innerHTML = `<section class="lab-card"><h2>把坐标画成箭头</h2><p>拖动端点、使用方向键或调节滑块。虚线分别标出两个分量。用勾股定理合成两条直角边，就得到向量长度。</p><div id="lesson-vector"></div></section>
+  <section class="lab-card"><h2>把记录排成一列</h2><p>把猪场的日增重（g/日）按记录顺序排列，得到 3 × 1 的列向量 y。这里的三个分量是观测值。</p><div class="lab-grid"><div class="control-panel"><h3>编辑其中一条记录</h3><div class="chips">${chips([[0,"P"],[1,"Q"],[2,"R"]],0)}</div>${slider("phenotype","选中记录的日增重",650,1000,10,820)}</div><div id="record-vector" class="matrix-set"></div></div><div class="formula">行向量 [820, 900, 760] 经转置成为列向量。</div></section>`;
+  vectorLab($("#lesson-vector"), "vector", true);
+  const values = records.map(record => record.value);
+  let selected = 0;
+  const range = $("#phenotype");
+  const group = $(".chips", host);
+  const render = () => {
+    $("#phenotype-out").textContent = values[selected];
+    range.value = values[selected];
+    $("#record-vector").innerHTML = matrix("y", column(values), {rows:pigs.slice(0,3), cols:["g/日"], cellClass:i => i === selected ? "pick" : ""});
+    $(".formula", host).textContent = `行向量 [${values.join(", ")}] 经转置成为列向量。`;
+    pressed(group, selected);
+  };
+  group.addEventListener("click", event => { if (event.target.matches("button")) { selected = Number(event.target.dataset.choice); render(); } });
+  range.addEventListener("input", () => { values[selected] = Number(range.value); render(); });
+  render();
+}
+function matrixLesson(host) {
+  host.innerHTML = `<section class="lab-card"><h2>一行矩阵，算出一个结果</h2><p>v 是同一头猪三次称重算得的日增重分量。M 的每一行是一组权重：第 1 行只取第一次称重；第 2 行把前两次按 w 与 1 − w 加权平均，第三次权重为 0。调整 w，或切换 Mᵀ 查看行列换位。</p>
+  <div class="lab-grid"><div><div class="tabs">${chips([["normal","原矩阵 M"],["transposed","转置 Mᵀ"]],"normal")}</div><div class="matrix-set" id="matrix-demo"></div></div><div class="control-panel"><h3>查看乘法中的行</h3><div class="chips" id="demo-rows">${chips([[0,"第 1 行"],[1,"第 2 行"]],1)}</div>${slider("weight","第 2 行的第一次称重权重 w",0,1,.1,.3)}<p>每一行的权重之和都为 1，所以结果是加权平均。</p></div></div>
+  <div id="product-line" class="formula"></div><p class="mini-note">M 的维度是 2 × 3，v 是 3 × 1，结果有 2 行。内侧的 3 一致。Mᵀ 只用来观察行列换位，这里的乘法仍使用 M。</p></section>`;
+  let row = 1, mode = "normal";
+  const weight = $("#weight");
+  const v = [30,40,50];
+  function draw() {
+    const w = Number(weight.value);
+    const M = [[1,0,0],[w,1-w,0]];
+    const showTranspose = mode === "transposed";
+    const result = multiply(M, column(v));
+    $("#weight-out").textContent = fmt(w);
+    $("#matrix-demo").innerHTML = matrix(showTranspose ? "Mᵀ" : "M", showTranspose ? transpose(M) : M, {cellClass:(i,j) => (showTranspose ? j : i) === row ? "row-pick" : ""})
+      + matrix("v", column(v), {rows:["第1次","第2次","第3次"]}) + matrix("Mv", result, {cellClass:i => i === row ? "pick" : ""});
+    $("#product-line").textContent = `第 ${row + 1} 行 · ${M[row].map((item,i) => `${fmt(item)}×${v[i]}`).join(" + ")} = ${fmt(result[row][0])}`;
+    pressed($("#demo-rows"),row);
+    pressed($(".tabs",host),mode);
+  }
+  $("#demo-rows").addEventListener("click", event => { if (event.target.matches("button")) { row = Number(event.target.dataset.choice); draw(); } });
+  $(".tabs", host).addEventListener("click", event => { if (event.target.matches("button")) { mode = event.target.dataset.choice; draw(); } });
+  weight.addEventListener("input", draw);
+  draw();
+}
+function equationLesson(host) {
+  const spec = {id:"equation",w:390,h:308,ox:102,oy:229,sx:25,sy:25,lo:-2,hi:8};
+  const x = value => spec.ox + value * spec.sx;
+  const y = value => spec.oy - value * spec.sy;
+  host.innerHTML = `<section class="lab-card"><h2>让两条直线相交</h2><p>固定第一条线 x + y = 5。用滑块改变第二条线 x + ky = c 的 k 和 c，再试试三种预设。</p><div class="lab-grid"><div id="equation-graph"></div><div class="control-panel">${slider("factor","系数 k",0,3,1,2)}${slider("intercept","等号右侧 c",1,8,1,7)}<div class="chips" id="eq-presets">${chips([["unique","相交"],["parallel","平行"],["same","重合"]],"unique")}</div><div class="matrix-legend"><span style="--swatch:#3b7255">第一条线</span><span style="--swatch:#bc6645">第二条线</span></div></div></div>
+  <div id="eq-result" class="result-strip" role="status"></div><div id="eq-matrices" class="matrix-set"></div><p class="mini-note">C 的一行对应一条方程。Cθ = r 中，θ = [x, y]ᵀ 是未知量，r 是等号右侧。</p></section>`;
+  const factor = $("#factor"), intercept = $("#intercept");
+  const line = (k,c,color,dashed = false) => `<path d="M${x(c - k*(-10))} ${y(-10)}L${x(c - k*14)} ${y(14)}" fill="none" stroke="${color}" stroke-width="2.6" ${dashed ? 'stroke-dasharray="6 4"' : ""}/>`;
+  function draw() {
+    const k = Number(factor.value), c = Number(intercept.value);
+    $("#factor-out").textContent = k;
+    $("#intercept-out").textContent = c;
+    const mode = k !== 1 ? "unique" : c === 5 ? "same" : "parallel";
+    pressed($("#eq-presets"),mode);
+    let result, intersection = "";
+    if (mode === "unique") {
+      const vy = (c-5)/(k-1), vx = 5-vy;
+      result = `唯一解 · (${fmt(vx)}, ${fmt(vy)})。代回两条方程都成立。`;
+      const inFrame = x(vx) > 28 && x(vx) < spec.w - 28 && y(vy) > 20 && y(vy) < spec.h - 30;
+      if (inFrame) intersection = `<circle cx="${x(vx)}" cy="${y(vy)}" r="6" fill="#263f32" stroke="white" stroke-width="1.5"/>`;
+      else result += " 交点在当前坐标窗外。";
+    } else {
+      result = mode === "same" ? "无穷多解 · 双线重合，线上每一点都是解。" : "无解 · 两线平行，找不到同时满足两个方程的点。";
+    }
+    $("#eq-result").textContent = result;
+    $("#equation-graph").innerHTML = `${grid("equation",spec)}<g clip-path="url(#equation-clip)">${line(1,5,"#3b7255")}${line(k,c,"#bc6645",true)}${intersection}</g></svg>`;
+    $("#eq-matrices").innerHTML = matrix("C",[[1,1],[1,k]],{cols:["x","y"]}) + matrix("r",column([5,c]));
+  }
+  [factor,intercept].forEach(control => control.addEventListener("input",draw));
+  $("#eq-presets").addEventListener("click", event => {
+    if (!event.target.matches("button")) return;
+    [factor.value,intercept.value] = {unique:[2,7],parallel:[1,3],same:[1,5]}[event.target.dataset.choice];
+    draw();
+  });
+  draw();
+}
+function designLesson(host) {
+  host.innerHTML = `<section class="lab-card"><h2>从猪场记录到矩阵</h2><p>示例有两个批次共三条日增重记录，S 尚未测定。点一条记录，顺着高亮找出它使用的批次效应及遗传效应。</p><div class="formula">y = Xb + Zu + e <span class="tagged">· 表型 = 批次固定效应 + 加性遗传效应 + 残差</span></div>
+  <div class="lab-grid"><div id="design-table"></div><div class="control-panel"><h3>观察记录与动物的对应关系</h3><label class="switch-label"><input type="checkbox" id="repeat-record">加入 P 的第二条记录（850 g/日）</label><p>X 使用两个批次指示列，模型中无全局截距。b₁ 和 b₂ 分别表示两个批次的固定水平。</p></div></div><div id="design-matrices" class="matrix-set"></div><div id="design-explain" class="formula"></div>
+  <p class="mini-note">这里的 b 与 u 是演示用的已知值。第 6 章用原始三条记录反过来求 b̂ 和 û。实际重复记录模型要根据测量结构判断是否加入永久环境效应等项。</p></section>`;
+  let selected = 0;
+  const b = [800, 880], u = [20,10,-25,-5];
+  const table = $("#design-table");
+  const repeat = $("#repeat-record");
+  function draw() {
+    const rows = repeat.checked ? [...records, {pig:0,group:0,value:850}] : records;
+    selected = Math.min(selected,rows.length-1);
+    const {X,Z,y: yValues} = design(rows);
+    const rowNames = rows.map((_, index) => `r${index+1}`);
+    const fixed = multiply(X,column(b))[selected][0];
+    const genetic = multiply(Z,column(u))[selected][0];
+    const obs = rows[selected];
+    table.innerHTML = `<table class="rec-table"><thead><tr><th>记录</th><th>动物</th><th>批次</th><th>日增重</th></tr></thead><tbody>${rows.map(({pig,group,value},i) => `<tr class="${i === selected ? "selected" : ""}"><td><button type="button" class="mini-button" data-record="${i}" aria-pressed="${i === selected}" aria-label="查看记录 ${rowNames[i]}">${rowNames[i]}</button></td><td>${pigs[pig]}</td><td>批次 ${group+1}</td><td>${value}</td></tr>`).join("")}</tbody></table>`;
+    const cellClass = (i,j,value) => i === selected ? value !== 0 ? "hot" : "row-pick" : "";
+    $("#design-matrices").innerHTML = matrix("X",X,{rows:rowNames,cols:["b₁","b₂"],cellClass})+matrix("Z",Z,{rows:rowNames,cols:pigs,cellClass})+matrix("y",yValues,{rows:rowNames,cols:["g/日"],cellClass})
+      +matrix("b（示意）",column(b),{rows:["b₁","b₂"],cellClass:i=>i===obs.group?"hot":""})+matrix("u（示意）",column(u),{rows:pigs,cellClass:i=>i===obs.pig?"hot":""});
+    $("#design-explain").textContent = `${rowNames[selected]} · Xb = ${fixed}，Zu = ${genetic}。拟合值 Xb + Zu = ${fixed + genetic}，观测值 = ${obs.value}，残差 = ${obs.value - fixed - genetic} g/日。`;
+  }
+  repeat.addEventListener("change",draw);
+  table.addEventListener("click",event => {
+    if (!event.target.matches("button")) return;
+    selected = Number(event.target.dataset.record);
+    draw();
+    $(`[data-record="${selected}"]`, table).focus({preventScroll:true});
+  });
+  draw();
+}
+function relationshipLesson(host) {
+  host.innerHTML = `<section class="lab-card"><h2>切换系谱，看关系怎样改变</h2><p>P 和 Q 是无亲缘、非近交的基础个体，R 是它们的后代。改变 S 的亲本，再点选 A 的任意格子。</p>
+  <div class="lab-grid"><div id="pedigree-graph"></div><div class="control-panel"><label class="mode-label" for="family-mode">S 的系谱</label><select id="family-mode" aria-label="S 的系谱"><option value="full">与 R 全同胞</option><option value="half">与 R 父系半同胞</option><option value="unrelated">无已知亲缘</option><option value="inbred">P 与其女儿 R 的后代（近交示例）</option></select><p id="family-note" class="mini-note"></p></div></div><div class="matrix-set" id="relationship-matrix"></div><div class="result-strip" id="relationship-result" role="status"></div>
+  <details class="details"><summary>查看 A⁻¹ 如何验证</summary><p>把 A 乘以 A⁻¹ 得到单位矩阵 I。A⁻¹ 的元素可以为负，它在混合模型方程里用来表达育种值的联合惩罚结构。</p><div id="relationship-inverse" class="matrix-set"></div></details></section>
+  <section class="lab-card"><h2>A 与 G 用的是什么信息？</h2><p><strong>A 来自系谱。</strong>本例全同胞的预期加性关系是 0.5。<strong>G 来自 SNP 基因型。</strong>由于同胞继承的等位基因组合不同，实际基因组关系可高于或低于系谱预期，还取决于定标及参考群体。</p><p>本教程数值练习使用系谱 A。若在 GBLUP 中用基因组关系矩阵，需要让 G 的行列与 u 的动物编号对齐，并采用适合的方差尺度和求解方法。</p></section>`;
+  const mode = $("#family-mode");
+  const hostMatrix = $("#relationship-matrix");
+  let selected = [2,3];
+  const notes = {
+    full:"S 和 R 共享父亲 P 与母亲 Q。",
+    half:"S 与 R 共享父亲 P，S 的母亲未知。在本例的基础群体假设下，未知亲本与已知动物无亲缘。",
+    unrelated:"S 的亲本均未知，在本例中把 S 视为与其他猪无亲缘的基础个体。",
+    inbred:"R 是 P 的女儿。S 的两个亲本 P 和 R 有 0.5 的加性关系，因此 S 的近交系数为 0.25。"
+  };
+  const pos = [[81,36],[255,36],[132,112],[251,168]];
+  function draw() {
+    const pedigree = pedigrees[mode.value];
+    const A = relationship(pedigree);
+    const invA = inverse(A);
+    const [i,j] = selected;
+    const parents = pedigree.map(([sire,dam],child) => [sire,dam].filter(parent => parent >= 0).map(parent => {
+      const [px,py] = pos[parent], [cx,cy] = pos[child];
+      return `<path d="M${px} ${py} L${cx} ${cy}"/>`;
+    }).join("")).join("");
+    $("#family-note").textContent = notes[mode.value];
+    $("#pedigree-graph").innerHTML = `<svg class="pedigree" viewBox="0 0 340 204" role="img" aria-label="${notes[mode.value]}">${parents}${pigs.map((pig,index) => `<g transform="translate(${pos[index].join(" ")})"><circle r="19" class="${selected.includes(index) ? "chosen" : ""}"/><text y="5" text-anchor="middle">${pig}</text></g>`).join("")}</svg>`;
+    hostMatrix.innerHTML = matrix("A", A, {rows:pigs,cols:pigs,cellClass:(row,col,value)=>row===i&&col===j ? "pick" : value>=.5 ? "hot" : "",labelCell:(row,col,value)=>`${pigs[row]} 与 ${pigs[col]}，${value}`});
+    let message;
+    if (i === j) {
+      message = `对角线 A[${pigs[i]}, ${pigs[j]}] = 1 + F = 1 + ${fmt(A[i][i]-1)} = ${fmt(A[i][i])}。`;
+    } else {
+      const animal = Math.max(i,j), other = Math.min(i,j);
+      const [sire,dam] = pedigree[animal];
+      const sireVal = sire < 0 ? 0 : A[sire][other];
+      const damVal = dam < 0 ? 0 : A[dam][other];
+      message = `A[${pigs[i]}, ${pigs[j]}] = ${fmt(A[i][j])}。按 ${pigs[animal]} 的两个亲本递推：(${fmt(sireVal)} + ${fmt(damVal)}) ÷ 2。交换行列，得到同一个值。`;
+    }
+    $("#relationship-result").textContent = message;
+    $("#relationship-inverse").innerHTML = matrix("A⁻¹", invA, {rows:pigs,cols:pigs}) + matrix("AA⁻¹", multiply(A,invA), {rows:pigs,cols:pigs});
+  }
+  hostMatrix.addEventListener("click", event => {
+    if (!event.target.matches("button")) return;
+    selected = [Number(event.target.dataset.i), Number(event.target.dataset.j)];
+    draw();
+    $(`[data-i="${selected[0]}"][data-j="${selected[1]}"]`,hostMatrix).focus({preventScroll:true});
+  });
+  mode.addEventListener("change",draw);
+  draw();
+}
+function mmeLesson(host) {
+  host.innerHTML = `<section class="lab-card"><h2>三条表型，预测四头猪的育种值</h2><p>沿用第 4 章的两批三条日增重记录及第 5 章的父系半同胞系谱。P、Q 是 R 的亲本。S 和 R 同父，S 的母亲未知，S 也没有表型记录。所有数据都是教学用的模拟记录。</p>
+  <div class="lab-grid"><div class="control-panel"><h3>输入条件</h3>${slider("heritability","遗传力 h²",.05,.85,.05,.3)}${slider("p-record","P 的日增重（g/日）",650,1000,10,820)}<label class="switch-label"><input type="checkbox" id="use-pedigree" checked>使用系谱关系 A</label><p>取消勾选可用单位矩阵 I 对比。Q = 900，R = 760 g/日。</p></div>
+  <div><h3>固定效应估计与育种值预测</h3><div class="result-strip" id="fixed-estimates"></div><div class="bar-list" id="ebv-chart"></div><p class="mini-note" id="bar-scale"></p></div></div>
+  <div class="result-strip" id="mme-story"></div>
+  <details class="details" open><summary>查看实际求解的混合模型方程</summary><p>假设 Var(u) = Aσₐ²、Var(e) = Iσₑ²，并且 u 与 e 不相关。给定遗传力，计算 λ = (1 − h²) / h²。下方的绿色区域对应固定效应，橘色区域对应遗传效应，灰色为两者的交叉项。</p><div class="formula block-equation" aria-label="混合模型方程的分块形式"><span class="math-bracket math-2"><span>XᵀX</span><span>XᵀZ</span><span>ZᵀX</span><span>ZᵀZ + λA⁻¹</span></span><span class="math-bracket"><span>b̂</span><span>û</span></span><span>=</span><span class="math-bracket"><span>Xᵀy</span><span>Zᵀy</span></span></div><div class="matrix-legend"><span style="--swatch:#d1e5ce">固定 × 固定</span><span style="--swatch:#e8eae1">交叉项</span><span style="--swatch:#f6dfcc">遗传 × 遗传</span></div><div id="mme-matrices" class="matrix-set"></div><p class="mini-note">第一块是系数矩阵 C。中间是待求效应的解，右边是数据汇总得到的右侧向量。显示值四舍五入，求解使用未舍入数据。</p></details>
+  <details class="details"><summary>为什么有方差比和逆矩阵？</summary><p>这组方程同时兼顾表型拟合和对遗传效应的收缩。在本例的模型假设下，它求解平方残差和与 λ·uᵀA⁻¹u 之和最小的一组效应。给定表型和 A，λ 越大，整体遗传惩罚越强。个体育种值的变化还取决于数据、固定效应和系谱。</p><p>本例的两个批次仅有两条和一条记录，方差比由滑块给定。实际遗传评估通常需要更充足的数据和经过估计或验证的方差组分。</p><ul class="source-list"><li><a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/GeneticsPed/inst/doc/quanGenAnimalModel.pdf" target="_blank" rel="noopener noreferrer">GeneticsPed：动物模型与 Henderson 方程数值例子</a></li><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3878974/" target="_blank" rel="noopener noreferrer">系谱关系矩阵 A 与逆矩阵的性质</a></li><li>Mrode R. A. <cite>Linear Models for the Prediction of Animal Breeding Values</cite>（CABI），动物模型与 MME 的标准教材</li></ul></details></section>`;
+  const h2 = $("#heritability"), pRecord = $("#p-record"), useA = $("#use-pedigree");
+  const A = relationship(pedigrees.half);
+  const labels = ["b₁","b₂",...pigs];
+  function draw() {
+    const heritability = Number(h2.value), pGain = Number(pRecord.value);
+    const rows = records.map((row,i) => i === 0 ? {...row,value:pGain} : row);
+    const result = model(rows,useA.checked ? A : identity(pigs.length),heritability);
+    const [b1,b2,...u] = result.fitted;
+    const largest = Math.max(50, Math.ceil(Math.max(...u.map(value => Math.abs(value))) / 25) * 25);
+    $("#heritability-out").textContent = fmt(heritability);
+    $("#p-record-out").textContent = pGain;
+    $("#fixed-estimates").textContent = `批次 1：${fmt(b1)} · 批次 2：${fmt(b2)} g/日`;
+    $("#ebv-chart").innerHTML = u.map((value,i) => {
+      const width = Math.abs(value) / largest * 50;
+      return `<div class="bar-row"><strong>猪 ${pigs[i]}</strong><div class="bar-track" aria-hidden="true"><span class="bar-fill ${value < 0 ? "neg" : ""}" style="left:${value < 0 ? 50-width : 50}%;width:${width}%"></span></div><span class="bar-num" data-ebv="${pigs[i]}">${value > .005 ? "+" : ""}${fmt(value)}</span></div>`;
+    }).join("");
+    $("#bar-scale").textContent = `育种值单位为 g/日。图中心为 0，两端为 ±${largest}。`;
+    $("#mme-story").textContent = useA.checked
+      ? `λ = ${fmt(result.lambda)}。S 无表型也无后代，母亲未知，所以 ûS = ½(ûP + 0) = ½ × ${fmt(u[0])} = ${fmt(u[3])} g/日：它完全通过父亲 P 借用亲属记录。另外，Q 的育种值（${fmt(u[1])}）不由它自己的 900 g/日决定：批次 2 只有 Q 一条记录，它只够用来估计 b₂，Q 的信息来自后代 R 相对批次 1 的表现。`
+      : `λ = ${fmt(result.lambda)}。此时用 I 假设动物间遗传效应不相关。S 无表型、没有亲属信息来源，预测育种值为 ${fmt(u[3])} g/日。Q 的预测值同样为 ${fmt(u[1])}：批次 2 只有 Q 一条记录，它只够用来估计 b₂。`;
+    $("#mme-matrices").innerHTML = matrix("系数 C",result.coefficient,{rows:labels,cols:labels,cellClass:(i,j)=>i<2&&j<2?"hot":i>=2&&j>=2?"core":"cross"})
+      + matrix("解 θ̂",column(result.fitted),{rows:labels,cellClass:i=>i<2?"hot":"core"}) + matrix("右侧 r",result.rhs,{rows:labels,cellClass:i=>i<2?"hot":"core"});
+  }
+  [h2,pRecord].forEach(control => control.addEventListener("input",draw));
+  useA.addEventListener("change",draw);
+  draw();
+}
+
+function renderGlossary() {
+  const query = $("#glossary-search").value.trim().toLowerCase();
+  const matches = glossary.filter(([name, symbol, definition]) => {
+    if (query.length === 1 && /^[a-z]$/.test(query)) return symbol.toLowerCase().split(/[\s·,]+/).includes(query);
+    return `${name} ${symbol} ${definition}`.toLowerCase().includes(query);
+  });
+  $("#search-status").textContent = matches.length ? `${matches.length} 个概念` : "没有匹配的概念，可以换一个词或符号再试。";
+  $("#glossary-grid").innerHTML = matches.map(([name,symbol,definition,i]) => `<article class="term"><h2>${name}</h2><small>${symbol}</small><p>${definition}</p><a class="text-link" href="#${chapters[i].id}">查看第 ${i+1} 章 ↗</a></article>`).join("");
+}
+$("#glossary-search").addEventListener("input",renderGlossary);
+renderGlossary();
+
+function updateScore() {
+  $("#quiz-score").textContent = `已答对 ${correct.size} / ${quizzes.length}`;
+}
+function renderQuiz() {
+  $("#quiz-list").innerHTML = quizzes.map(([prompt,options,answer,explanation],i) => `<form class="quiz-card" data-quiz="${i}"><fieldset><legend><span>${numbered(i)}</span>${prompt}</legend>${options.map((option,j) => `<label class="quiz-option"><input type="radio" name="choice" value="${j}" ${correct.has(i)&&j===answer?"checked":""}>${option}</label>`).join("")}<button class="button secondary" type="submit">提交答案</button><div class="quiz-feedback ${correct.has(i)?"good":""}" role="status">${correct.has(i)?`答对了。${explanation}`:""}</div></fieldset><a class="text-link" href="#${chapters[i].id}">复习第 ${i+1} 章 ↗</a></form>`).join("");
+  updateScore();
+}
+$("#quiz-list").addEventListener("submit",event => {
+  event.preventDefault();
+  const form = event.target;
+  const choice = new FormData(form).get("choice");
+  const feedback = $(".quiz-feedback",form);
+  if (choice === null) {
+    feedback.classList.remove("good");
+    feedback.textContent = "请选择一个答案。";
+    return;
+  }
+  const index = Number(form.dataset.quiz);
+  const [,options,answer,explanation] = quizzes[index];
+  const isCorrect = Number(choice) === answer;
+  if (isCorrect) correct.add(index);
+  else correct.delete(index);
+  saveList("breeding-math-quiz",correct);
+  feedback.classList.toggle("good",isCorrect);
+  feedback.textContent = isCorrect ? `答对了。${explanation}` : `正确选项是“${options[answer]}”。${explanation}`;
+  updateScore();
+});
+$("#quiz-reset").addEventListener("click",() => { correct.clear(); saveList("breeding-math-quiz",correct); renderQuiz(); });
+renderQuiz();
+
+function route(initial = false) {
+  const page = location.hash.slice(1);
+  if (page === "main") return;
+  const index = chapters.findIndex(chapter => chapter.id === page);
+  const viewId = index >= 0 ? "lesson" : ["glossary","practice"].includes(page) ? page : "home";
+  $$(".view").forEach(view => { view.hidden = view.id !== viewId; });
+  $$(".topnav a").forEach(link => {
+    if (link.dataset.nav === page || (link.dataset.nav === "chapters" && index >= 0)) link.setAttribute("aria-current","page");
+    else link.removeAttribute("aria-current");
+  });
+  $$("#lesson-nav a").forEach((link,i) => {
+    if (i === index) link.setAttribute("aria-current","page");
+    else link.removeAttribute("aria-current");
+  });
+  if (index >= 0) {
+    renderLesson(index);
+  }
+  updateProgress();
+  const title = index >= 0 ? chapters[index].title : viewId === "glossary" ? "概念速查" : viewId === "practice" ? "互动练习" : "";
+  document.title = title ? `${title} | ${homeTitle}` : homeTitle;
+  if (page === "chapters") {
+    $("#chapters").scrollIntoView({block:"start"});
+    if (!initial) $("#chapters").focus({preventScroll:true});
+  } else if (!initial || page) {
+    if (!initial) {
+      const h1 = $("h1",document.getElementById(viewId));
+      h1.setAttribute("tabindex","-1");
+      h1.focus({preventScroll:true});
+    }
+    window.scrollTo(0, 0);
+  }
+}
+$(".skip").addEventListener("click", event => { event.preventDefault(); $("#main").focus(); });
+window.addEventListener("hashchange",() => route(false));
+route(true);
+</script>
+</body>
+</html>
