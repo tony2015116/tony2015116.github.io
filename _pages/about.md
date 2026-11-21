@@ -12,13 +12,11 @@ redirect_from:
 
 {% include base_path %}
 
-我叫郭猛，现任广西扬翔集团育种经理。
+<blockquote class="motto"><p>“我相信好的研究应该能被别人重复，也应该对现实有用。”</p></blockquote>
 
-我主要从事种猪选留、性能测定和遗传评估，也负责推进核心育种场和试验场的育种工作。我在种猪性能测定站管理和数据分析方面积累了多年经验。
+你好，我是**郭猛**。过去 7 年，我一直在广西扬翔一线深耕种猪性能测定、遗传评估与基因组选择落地。相比停留在纸面的分析脚本，我更倾向于把生产中反复踩过的坑，打磨成同行能直接上手的 **R 包、桌面/交互软件与实战教程**。更多工具和资料见[项目]({{ base_path }}/portfolio/)，研究详情见[成果]({{ base_path }}/publications/)。
 
-工作中反复用到的数据清洗和分析方法，我陆续整理成了 R 包、桌面软件、教程和速查表。相关代码已在 GitHub 公开，工具和资料汇总在[项目]({{ base_path }}/portfolio/)中。围绕实际育种问题开展的研究，可在[成果]({{ base_path }}/publications/)中查看。
-
-如果你也关注这些问题，或者只是想聊聊，欢迎联系我。
+{% include home-showcase.html %}
 
 ## 研究方向
 
@@ -42,6 +40,10 @@ redirect_from:
 
 ## 联系
 
-邮箱：<a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a>
+遇到下面这些情况，欢迎直接来信，我通常在两三天内回复：
 
-我通常会在两三天内回复。
+- **工具问题**：用 R 包或桌面软件遇到报错、想加新功能（也可以在 GitHub 提 Issue）
+- **同行交流**：基因组选择、测定站数据质控、遗传评估中的经验和难题
+- **分享与合作**：测定站数据分析或 R 语言培训、讲座邀请、开源共建
+
+<p class="contact-line">邮箱 <a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a> · <a href="https://github.com/{{ site.author.github }}">GitHub</a></p>

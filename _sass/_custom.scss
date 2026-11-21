@@ -432,3 +432,90 @@ pre.cite-pane {
   .sidebar .author__urls { text-align: left; min-width: 10em; }
   .sidebar .author__urls:after { border-color: var(--global-bg-color) transparent; }
 }
+
+/* ---------- 首页：开头引言、开源 R 包、论文与专利 ---------- */
+
+/* 引言：左侧墨绿竖线 + 从左到右淡出的渐变底色 */
+.page__content blockquote.motto {
+  margin: 0.4em 0 1.4em;
+  padding: 0.85em 1.3em;
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(90deg, var(--accent-soft) 0%, transparent 100%);
+  font-style: normal;
+  color: var(--global-text-color);
+  p { margin: 0; font-size: 1.1em; }
+}
+
+.home-label {
+  margin: 1.8em 0 0.7em;
+  font-size: 0.82em;
+  letter-spacing: 0.08em;
+  color: var(--global-text-color-light);
+}
+.badge {
+  display: inline-block;
+  padding: 0 0.45em;
+  border-radius: 3px;
+  font-size: 0.78em;
+  line-height: 1.6;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* R 包：一行四个六边形图标 */
+.hexes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1em 0.8em;
+  margin-bottom: 0.4em;
+}
+.hex {
+  text-align: center;
+  font-size: 0.86em;
+  line-height: 1.5;
+  a { border-bottom: none !important; }
+  img, .hex-ph { display: block; height: 96px; width: auto; margin: 0 auto 0.35em; transition: transform 0.15s; }
+  a:hover img, a:hover .hex-ph { transform: translateY(-2px); }
+  .hex-ph {
+    width: 83px;
+    display: flex; align-items: center; justify-content: center;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78em;
+  }
+  .hex-name { display: block; font-weight: 600; color: var(--global-text-color); }
+  .hex-desc { display: block; color: var(--global-text-color-light); font-size: 0.92em; }
+  .hex-badges { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.3em; margin-top: 0.2em; }
+  img.cran-dl { display: inline; height: 18px; margin: 0; }
+}
+@media (max-width: 600px) {
+  .hexes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* 论文与专利：左侧类别小标签 + 标题 + 出处 */
+.page__content ul.home-pubs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li { display: flex; gap: 0.9em; margin: 0 0 0.6em; font-size: 0.92em; line-height: 1.6; }
+  .kind {
+    flex: 0 0 3.2em;
+    height: 1.75em;
+    margin-top: 0.15em;
+    line-height: 1.7em;
+    text-align: center;
+    font-size: 0.82em;
+    border: 1px solid var(--global-border-color);
+    border-radius: 3px;
+    color: var(--global-text-color-light);
+  }
+  .kind--patent { color: #9a6a1f; border-color: #e8d6b5; }
+  .body { flex: 1; min-width: 0; }
+  .body a { color: var(--global-text-color); border-bottom: none; }
+  .body a:hover { color: var(--accent); }
+  .meta { display: block; color: var(--global-text-color-light); font-size: 0.92em; }
+}
+html[data-theme="dark"] .page__content ul.home-pubs .kind--patent { color: #d9b77a; border-color: #5a4a30; }
+
+.contact-line { color: var(--global-text-color-light); font-size: 0.95em; }
