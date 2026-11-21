@@ -9,7 +9,7 @@
 
 packages:
   - name: "mintyr"
-    logo: "mintyr.svg"
+    logo: "mintyr.png"
     url: "https://tony2015116.github.io/mintyr/"
     desc: "分组数据处理与导出"
     badge: "CRAN"
@@ -20,7 +20,7 @@ packages:
     desc: "测定站采食数据清洗与分析"
     badge: "v1.6.5"
   - name: "tidypptsdm"
-    logo: "tidypptsdm.svg"
+    logo: "tidypptsdm.png"
     url: "https://tony2015116.github.io/tidypptsdm/"
     desc: "测定站每日监控报告"
     badge: "R · Python · PyPI"
