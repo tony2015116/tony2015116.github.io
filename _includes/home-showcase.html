@@ -1,0 +1,35 @@
+{% include base_path %}
+{%- comment -%}
+  首页「开源 R 包」和「论文与专利」两栏。
+  R 包在 _data/home.yml 中编辑；论文与专利自动读取 _publications 中的全部条目，按时间倒序。
+  第一作者 / 第一发明人：authors 的第一个名字是 site.author.name 时自动标出。
+{%- endcomment -%}
+
+<div class="home-label">开源 R 包</div>
+<div class="hexes">
+{%- for p in site.data.home.packages %}
+  <div class="hex">
+    <a href="{{ p.url }}" aria-label="{{ p.name }}">{% if p.logo and p.logo != "" %}<img src="{{ base_path }}/images/packages/{{ p.logo }}" alt="{{ p.name }} 图标" loading="lazy" width="83" height="96">{% else %}<span class="hex-ph">{{ p.name }}</span>{% endif %}</a>
+    <a class="hex-name" href="{{ p.url }}">{{ p.name }}</a>
+    <span class="hex-desc">{{ p.desc }}</span>
+    <span class="hex-badges">{% if p.badge %}<span class="badge">{{ p.badge }}</span>{% endif %}{% if p.cran %}<img class="cran-dl" src="https://cranlogs.r-pkg.org/badges/grand-total/{{ p.name }}" alt="CRAN 累计下载量" loading="lazy">{% endif %}</span>
+  </div>
+{%- endfor %}
+</div>
+
+<div class="home-label">论文与专利</div>
+{% assign pubs = site.publications | sort: "date" | reverse %}
+<ul class="home-pubs">
+{%- for p in pubs %}
+  {%- assign first_author = p.authors | split: "," | first | strip %}
+  {%- assign pubno = p.number | split: "公开号" | last | strip %}
+  {%- if p.category == "patents" %}{% assign kind = "专利" %}{% assign role = "第一发明人" %}{% else %}{% assign kind = "论文" %}{% assign role = "第一作者" %}{% endif %}
+  <li>
+    <span class="kind{% if p.category == 'patents' %} kind--patent{% endif %}">{{ kind }}</span>
+    <span class="body">
+      {% if p.doi %}<a href="https://doi.org/{{ p.doi }}">{{ p.title }}</a>{% elsif p.category == "patents" %}<a href="https://patents.google.com/patent/{{ pubno }}">{{ p.title }}</a>{% else %}<a href="{{ base_path }}/publications/">{{ p.title }}</a>{% endif %}
+      <span class="meta">{% if p.category == "patents" %}{{ p.venue }} {{ pubno }}{% else %}{{ p.venue }}{% endif %}，{{ p.date | date: "%Y" }}{% if first_author == site.author.name %} · {{ role }}{% endif %}</span>
+    </span>
+  </li>
+{%- endfor %}
+</ul>

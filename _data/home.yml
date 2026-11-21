@@ -1,0 +1,31 @@
+# 首页「开源 R 包」一栏。按这里的顺序显示，最多放 4 个比较好看。
+#
+# name:   包名
+# logo:   六边形图标，放在 images/packages/ 下，只写文件名；留空则显示墨绿色占位六边形
+# url:    点击图标和包名跳转的地址（一般是文档站）
+# desc:   一句话用途，尽量不超过 12 个字，太长会折行
+# badge:  图标下方的小标签，如版本号、CRAN
+# cran:   写 true 时，标签后面自动显示 CRAN 累计下载量徽章（数字实时更新）
+
+packages:
+  - name: "mintyr"
+    logo: "mintyr.svg"
+    url: "https://tony2015116.github.io/mintyr/"
+    desc: "分组数据处理与导出"
+    badge: "CRAN"
+    cran: true
+  - name: "tidypptsda"
+    logo: "tidypptsda.png"
+    url: "https://tony2015116.github.io/tidypptsda/"
+    desc: "测定站采食数据清洗与分析"
+    badge: "v1.6.5"
+  - name: "tidypptsdm"
+    logo: "tidypptsdm.svg"
+    url: "https://tony2015116.github.io/tidypptsdm/"
+    desc: "测定站每日监控报告"
+    badge: "R · Python · PyPI"
+  - name: "pigheatmap"
+    logo: ""
+    url: "https://tony2015116.github.io/pigheatmap/"
+    desc: "猪场生产数据性能热图"
+    badge: "v0.2.0"
