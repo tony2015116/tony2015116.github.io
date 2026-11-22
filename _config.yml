@@ -25,7 +25,7 @@ highlight_authors:
   - "Meng Guo"   # TODO
   - "Guo M"     # TODO: 参考文献中的缩写形式
 # 百度统计：填入 hm.js?后面那串ID即可启用，不需要就留空
-baidu_analytics          :
+baidu_analytics          : "171a54279472a1a6d724d26791861cc7"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.

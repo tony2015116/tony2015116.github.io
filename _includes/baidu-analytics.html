@@ -1,0 +1,12 @@
+{% if site.baidu_analytics %}
+<!-- 百度统计：ID 在 _config.yml 的 baidu_analytics 中设置 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?{{ site.baidu_analytics }}";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+{% endif %}
