@@ -48,7 +48,7 @@ pdfurl: "/files/publications/2025-duroc-feed-efficiency.pdf"
 打开 `_data/projects.yml`，在对应分类的 `items` 下复制一条现有记录，修改名称和简介。页面按 YAML 中的顺序展示，想让项目靠前就把记录放在该分类的前面。
 
 - **GitHub 项目**填写 `repo: "用户名/仓库名"`。可在 `links` 增加文档、CRAN 或下载链接。
-- **站内 HTML**放到相应文件夹，再填 `url`。例如，HIBLUP 速查表放在 `files/cheatsheets/hiblup.html`，项目条目填 `url: "/files/cheatsheets/hiblup.html"`。教程和小工具分别放在 `files/tutorials/` 和 `files/tools/`。
+- **站内 HTML**放到相应文件夹，再填 `url`。例如，HIBLUP 速查表放在 `files/cheatsheets/hiblup.html`，项目条目填 `url: "/files/cheatsheets/hiblup.html"`。教程和小工具分别放在 `files/tutorials/` 和 `files/tools/`。部署时会自动给这些页面补上百度统计和分享卡片（标题取页面 `<title>`，简介取页面的 description，没有就用 `projects.yml` 里的 `description`），不需要手动添加，见 [`scripts/postbuild-standalone.py`](scripts/postbuild-standalone.py)。
 
 ## 四、更新经历和简历
 

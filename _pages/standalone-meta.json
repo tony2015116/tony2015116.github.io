@@ -1,0 +1,21 @@
+---
+# 供部署脚本 scripts/postbuild-standalone.py 读取，脚本用完即从 _site 中删除，不会发布。
+permalink: /standalone-meta.json
+sitemap: false
+layout: null
+---
+{
+  "baidu_analytics": {{ site.baidu_analytics | default: "" | jsonify }},
+  "url": {{ site.url | jsonify }},
+  "baseurl": {{ site.baseurl | default: "" | jsonify }},
+  "author": {{ site.author.name | jsonify }},
+  "og_image": "/images/og-image.png",
+  "descriptions": {
+    {%- assign first = true -%}
+    {%- for c in site.data.projects -%}{%- for it in c.items -%}{%- if it.url and it.description -%}
+    {%- unless first %},{% endunless %}
+    {{ it.url | jsonify }}: {{ it.description | jsonify }}
+    {%- assign first = false -%}
+    {%- endif -%}{%- endfor -%}{%- endfor %}
+  }
+}

@@ -51,6 +51,9 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+      - name: Add analytics and share meta to standalone pages
+        # 给 files/ 下的独立页面自动补统计代码和分享卡片，见脚本开头说明
+        run: python3 scripts/postbuild-standalone.py _site
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5.0.0
 
