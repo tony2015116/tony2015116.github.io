@@ -15,7 +15,8 @@
     <a href="{{ p.url }}" aria-label="{{ p.name }}">{% if p.logo and p.logo != "" %}<img src="{{ base_path }}/images/packages/{{ p.logo }}?v={{ site.time | date: '%s' }}" alt="{{ p.name }} 图标" loading="lazy" width="83" height="96">{% else %}<span class="hex-ph">{{ p.name }}</span>{% endif %}</a>
     <a class="hex-name" href="{{ p.url }}">{{ p.name }}</a>
     <span class="hex-desc">{{ p.desc }}</span>
-    <span class="hex-badges">{% if p.badge %}<span class="badge">{{ p.badge }}</span>{% endif %}{% if p.cran %}<img class="cran-dl" src="https://cranlogs.r-pkg.org/badges/grand-total/{{ p.name }}" alt="CRAN 累计下载量" loading="lazy">{% endif %}</span>
+    {%- assign dl = site.data.cran[p.name] -%}
+    <span class="hex-badges">{% if p.badge %}<span class="badge">{{ p.badge }}{% if p.cran and dl %} · 下载 {{ dl.text }}{% endif %}</span>{% endif %}</span>
   </div>
 {%- endfor %}
 </div>
