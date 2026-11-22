@@ -489,8 +489,23 @@ pre.cite-pane {
   .hex-badges { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.3em; margin-top: 0.2em; }
   img.cran-dl { display: inline; height: 18px; margin: 0; }
 }
+/* 手机端：改为紧凑列表——左侧小图标，右侧第一行包名 + 标签，第二行用途 */
 @media (max-width: 600px) {
-  .hexes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hexes { grid-template-columns: 1fr; gap: 0.55em; }
+  .hex {
+    display: grid;
+    grid-template-columns: 44px auto 1fr;
+    grid-template-areas: "icon name badges" "icon desc desc";
+    column-gap: 0.6em;
+    align-items: center;
+    text-align: left;
+    > a:first-child { grid-area: icon; }
+    > a:first-child img, .hex-ph { height: 50px; margin: 0; }
+    .hex-ph { width: 44px; font-size: 0.42em; }
+    .hex-name { grid-area: name; align-self: end; }
+    .hex-desc { grid-area: desc; align-self: start; line-height: 1.35; }
+    .hex-badges { grid-area: badges; justify-content: flex-start; align-self: end; margin: 0 0 0.15em; }
+  }
 }
 
 /* 论文与专利：左侧类别小标签 + 标题 + 出处 */
