@@ -9,6 +9,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+  # 每天北京时间 03:17 自动重新部署一次，更新首页的 CRAN 下载量
+  schedule:
+    - cron: "17 19 * * *"
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -46,6 +50,9 @@ jobs:
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v6.0.0
+      - name: Fetch CRAN download counts
+        # 写入 _data/cran.json，供首页 R 包标签显示下载量；取数失败不影响部署
+        run: ruby scripts/fetch-cran-downloads.rb
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"

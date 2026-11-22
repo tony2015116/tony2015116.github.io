@@ -30,3 +30,4 @@ assets/js/main.min.js
 .Rhistory
 .RData
 .Ruserdata
+_data/cran.json

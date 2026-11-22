@@ -490,7 +490,6 @@ pre.cite-pane {
   .hex-name { display: block; font-weight: 600; color: var(--global-text-color); }
   .hex-desc { display: block; color: var(--global-text-color-light); font-size: 0.92em; }
   .hex-badges { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.3em; margin-top: 0.2em; }
-  img.cran-dl { display: inline; height: 18px; margin: 0; }
 }
 /* 手机端：改为紧凑列表——左侧小图标，右侧第一行包名 + 标签，第二行用途 */
 @media (max-width: 600px) {
