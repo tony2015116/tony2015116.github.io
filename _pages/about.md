@@ -12,7 +12,7 @@ redirect_from:
 
 {% include base_path %}
 
-<blockquote class="motto"><p>“我相信好的研究应该能被别人重复，也应该对现实有用。”</p></blockquote>
+<blockquote class="motto"><p>“好的研究应该能被别人重复，也应该对现实有用。”</p></blockquote>
 
 你好，我是**郭猛**。过去 7 年，我一直在广西扬翔一线深耕种猪性能测定、遗传评估与基因组选择落地。相比停留在纸面的分析脚本，我更倾向于把生产中反复踩过的坑，打磨成同行能直接上手的 **R 包、桌面/交互软件与实战教程**。更多工具和资料见[项目]({{ base_path }}/portfolio/)，研究详情见[成果]({{ base_path }}/publications/)。
 
