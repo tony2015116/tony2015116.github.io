@@ -452,6 +452,9 @@ pre.cite-pane {
   letter-spacing: 0.08em;
   color: var(--global-text-color-light);
 }
+.home-label--row { display: flex; justify-content: space-between; align-items: baseline; gap: 1em; }
+.page__content a.home-more { font-size: 1.12em; letter-spacing: 0; border-bottom: none; white-space: nowrap; }
+.page__content a.home-more:hover { text-decoration: underline; }
 .badge {
   display: inline-block;
   padding: 0 0.45em;
