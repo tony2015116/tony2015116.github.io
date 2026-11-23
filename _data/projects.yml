@@ -37,24 +37,24 @@
           note = {R package version 0.2.1},
           url = {https://CRAN.R-project.org/package=mintyr},
         }
-    - name: "tidypptsda"
-      repo: "tony2015116/tidypptsda"
-      description: "种猪测定站（NEDAP、FIRE）采食数据的清洗与分析，算出日增重、日采食量和料肉比，删掉的每条记录都写明原因。"
+    - name: "tidypptsdd"
+      repo: "tony2015116/tidypptsdd"
+      description: "从 Nedap 种猪测定站下载 CSV：按站点和日期范围合并导出，或每站每天单独保存，可在 Windows 上每天定时下载前一天的数据。原名 pptsdd。"
       language: "R"
-      year: "2025 – 至今"
+      year: "2023 – 至今"
       links:
         - title: "文档"
-          url: "https://tony2015116.github.io/tidypptsda/"
-        - title: "进苗规划"
-          url: "https://tony2015116.github.io/tidypptsda/planner.html"
-      citation: "Guo M (2026). tidypptsda: Process and Analyse Pig Performance Testing Station Data. R package version 1.6.5, https://github.com/tony2015116/tidypptsda."
+          url: "https://tony2015116.github.io/tidypptsdd/"
+        - title: "快速入门"
+          url: "https://tony2015116.github.io/tidypptsdd/articles/basic-usage.html"
+      citation: "Guo M (2026). tidypptsdd: Pig Performance Test Station Data Download. R package version 0.1.8, https://github.com/tony2015116/tidypptsdd."
       bibtex: |
-        @Manual{tidypptsda,
-          title = {tidypptsda: Process and Analyse Pig Performance Testing Station Data},
+        @Manual{tidypptsdd,
+          title = {tidypptsdd: Pig Performance Test Station Data Download},
           author = {Meng Guo},
           year = {2026},
-          note = {R package version 1.6.5},
-          url = {https://github.com/tony2015116/tidypptsda},
+          note = {R package version 0.1.8},
+          url = {https://github.com/tony2015116/tidypptsdd},
         }
     - name: "tidypptsdm"
       repo: "tony2015116/tidypptsdm"
@@ -80,6 +80,42 @@
           year = {2026},
           note = {R package version 1.1.1},
           url = {https://github.com/tony2015116/tidypptsdm},
+        }
+    - name: "tidypptsda"
+      repo: "tony2015116/tidypptsda"
+      description: "种猪测定站（NEDAP、FIRE）采食数据的清洗与分析，算出日增重、日采食量和料肉比，删掉的每条记录都写明原因。"
+      language: "R"
+      year: "2025 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/tidypptsda/"
+        - title: "进苗规划"
+          url: "https://tony2015116.github.io/tidypptsda/planner.html"
+      citation: "Guo M (2026). tidypptsda: Process and Analyse Pig Performance Testing Station Data. R package version 1.6.5, https://github.com/tony2015116/tidypptsda."
+      bibtex: |
+        @Manual{tidypptsda,
+          title = {tidypptsda: Process and Analyse Pig Performance Testing Station Data},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 1.6.5},
+          url = {https://github.com/tony2015116/tidypptsda},
+        }
+    - name: "wdauto"
+      repo: "tony2015116/wdauto"
+      description: "在 Windows 上自动匹配并启动 Chrome / Edge 的 WebDriver 服务，供 tidypptsdd 通过浏览器下载报表；支持国内镜像和离线缓存。"
+      language: "R"
+      year: "2024 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/wdauto/"
+      citation: "Guo M (2026). wdauto: Selenium WebDriver Service. R package version 0.2.0, https://github.com/tony2015116/wdauto."
+      bibtex: |
+        @Manual{wdauto,
+          title = {wdauto: Selenium WebDriver Service},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 0.2.0},
+          url = {https://github.com/tony2015116/wdauto},
         }
     - name: "pigheatmap"
       repo: "tony2015116/pigheatmap"
