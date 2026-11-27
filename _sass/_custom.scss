@@ -465,13 +465,14 @@ pre.cite-pane {
   background: var(--accent-soft);
 }
 
-/* R 包：4 个时一行四个；5～6 个时每行三个，排两行 */
+/* R 包：4 个时一行四个；5 个时一行五个（间距收窄）；6 个时每行三个，排两行 */
 .hexes {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1em 0.8em;
   margin-bottom: 0.4em;
 }
+.hexes--5col { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1em 0.3em; }
 .hexes--3col { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4em 0.8em; }
 .hex {
   text-align: center;
