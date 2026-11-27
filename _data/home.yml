@@ -1,10 +1,11 @@
 # 首页「开源 R 包 · 精选」一栏。
 #
-# 只显示 featured: true 的包，按这里的顺序，最多 4 个（多写的会被忽略）。
+# 只显示 featured: true 的包，按这里的顺序，最多 6 个（多写的会被忽略）。
+# 电脑上 4 个排一行；5～6 个排成每行 3 个的两行。手机上始终是一列列表。
 # 全部 R 包在 _data/projects.yml 的「R 包」分类里维护；那里的包数多于首页精选数时，
 # 标题右侧会自动出现“全部 N 个 R 包 →”，链到项目页的 R 包分类。
 # 新写了包：先加进 projects.yml；想上首页再在这里加一条并写 featured: true，
-# 首页已满 4 个时，把想替换掉的那个改成 featured: false。
+# 首页已满 6 个时，把想替换掉的那个改成 featured: false。
 #
 # featured: 写 true 才在首页显示
 # name:   包名
@@ -22,6 +23,12 @@ packages:
     desc: "分组数据处理与导出"
     badge: "CRAN"
     cran: true
+  - name: "mintyrasr"
+    featured: true
+    logo: "mintyrasr.png"
+    url: "https://tony2015116.github.io/mintyrasr/"
+    desc: "ASReml-R 交叉验证"
+    badge: "v0.5.4"
   - name: "tidypptsdd"
     featured: true
     logo: "tidypptsdd.png"
@@ -38,10 +45,10 @@ packages:
     featured: true
     logo: "tidypptsda.png"
     url: "https://tony2015116.github.io/tidypptsda/"
-    desc: "测定站采食数据清洗与分析"
+    desc: "测定站数据清洗与分析"
     badge: "v1.6.5"
   - name: "pigheatmap"
-    featured: false
+    featured: true
     logo: "pigheatmap.png"
     url: "https://tony2015116.github.io/pigheatmap/"
     desc: "猪场生产数据性能热图"
