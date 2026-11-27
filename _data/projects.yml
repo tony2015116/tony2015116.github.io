@@ -37,6 +37,25 @@
           note = {R package version 0.2.1},
           url = {https://CRAN.R-project.org/package=mintyr},
         }
+    - name: "mintyrasr"
+      repo: "tony2015116/mintyrasr"
+      description: "直接用 ASReml-R 跑 mintyr 生成的 GBLUP 参数估计和交叉验证场景，算出遗传力、遗传相关、预测能力和准确性，不用再导出输入文件。"
+      language: "R"
+      year: "2026 – 至今"
+      links:
+        - title: "文档"
+          url: "https://tony2015116.github.io/mintyrasr/"
+        - title: "快速入门"
+          url: "https://tony2015116.github.io/mintyrasr/articles/mintyrasr-zh.html"
+      citation: "Guo M (2026). mintyrasr: Run 'mintyr' GBLUP Cross-Validation Scenarios Directly in 'ASReml-R'. R package version 0.5.4, https://github.com/tony2015116/mintyrasr."
+      bibtex: |
+        @Manual{mintyrasr,
+          title = {mintyrasr: Run 'mintyr' GBLUP Cross-Validation Scenarios Directly in 'ASReml-R'},
+          author = {Meng Guo},
+          year = {2026},
+          note = {R package version 0.5.4},
+          url = {https://github.com/tony2015116/mintyrasr},
+        }
     - name: "tidypptsdd"
       repo: "tony2015116/tidypptsdd"
       description: "从 Nedap 种猪测定站下载 CSV：按站点和日期范围合并导出，或每站每天单独保存，可在 Windows 上每天定时下载前一天的数据。原名 pptsdd。"

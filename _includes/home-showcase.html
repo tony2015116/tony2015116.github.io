@@ -1,16 +1,16 @@
 {% include base_path %}
 {%- comment -%}
   首页「开源 R 包」和「论文与专利」两栏。
-  R 包精选在 _data/home.yml 中编辑（featured: true，最多 4 个）；论文与专利自动读取 _publications 中的全部条目，按时间倒序。
+  R 包精选在 _data/home.yml 中编辑（featured: true，最多 6 个）；论文与专利自动读取 _publications 中的全部条目，按时间倒序。
   第一作者 / 第一发明人：authors 的第一个名字是 site.author.name 时自动标出。
 {%- endcomment -%}
 
 {%- assign featured = site.data.home.packages | where: "featured", true -%}
 {%- assign rgroup = site.data.projects | where: "key", "r-packages" | first -%}
-{%- assign shown = featured.size -%}{%- if shown > 4 %}{% assign shown = 4 %}{% endif -%}
+{%- assign shown = featured.size -%}{%- if shown > 6 %}{% assign shown = 6 %}{% endif -%}
 <div class="home-label home-label--row"><span>开源 R 包 · 精选</span>{% if rgroup and rgroup.items.size > shown %}<a class="home-more" href="{{ base_path }}/portfolio/#r-packages">全部 {{ rgroup.items.size }} 个 R 包 →</a>{% endif %}</div>
-<div class="hexes">
-{%- for p in featured limit: 4 %}
+<div class="hexes{% if shown == 5 %} hexes--5col{% elsif shown > 5 %} hexes--3col{% endif %}">
+{%- for p in featured limit: 6 %}
   <div class="hex">
     <a href="{{ p.url }}" aria-label="{{ p.name }}">{% if p.logo and p.logo != "" %}<img src="{{ base_path }}/images/packages/{{ p.logo }}?v={{ site.time | date: '%s' }}" alt="{{ p.name }} 图标" loading="lazy" width="83" height="96">{% else %}<span class="hex-ph">{{ p.name }}</span>{% endif %}</a>
     <a class="hex-name" href="{{ p.url }}">{{ p.name }}</a>
