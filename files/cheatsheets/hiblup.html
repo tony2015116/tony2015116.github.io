@@ -650,7 +650,100 @@ run_pipeline.pl -fork1 -h demo.sort.hmp.txt -export -exportType VCF -runfork1
 </table></div></article></div></section>
 <section class="sec" id="s4" data-sec="s4">
 <header class="sec-head"><span class="badge">04</span><h2>常用命令详解</h2><span class="sec-count">9 节</span></header>
-<div class="cards"><article class="card" id="s4-1"><h3>4.1 构建关系矩阵 <code>--make-xrm</code></h3><div class="card-body"><p><strong>建议先建好、再用 <code>--xrm</code> 复用</strong>：逐性状分析时每次都重建矩阵很慢，复用结果完全相同。</p>
+<div class="cards"><article class="card" id="s4-1"><h3>4.1 构建关系矩阵 <code>--make-xrm</code></h3><div class="card-body"><p><strong>建议先建好、再用 <code>--xrm</code> 复用</strong>：逐性状分析时每次都重建矩阵很慢，复用结果完全相同。HIBLUP 把系谱 A、基因组 G、一步法 H 和环境效应矩阵统称为 XRM。</p>
+<p><strong>(0) 一览：给什么输入，得什么矩阵</strong></p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>矩阵</th>
+<th>输出文件（<code>--out demo</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--pedigree</code></td>
+<td>系谱 A（PRM）</td>
+<td><code>demo.PA.*</code>；加 <code>--add-inv</code> 另得 <code>demo.PAinv.sparse.*</code></td>
+</tr>
+<tr>
+<td><code>--bfile</code></td>
+<td>基因组 G（GRM）</td>
+<td><code>demo.GA.*</code> / <code>demo.GD.*</code>；加 <code>--add-inv</code> / <code>--dom-inv</code> 另输出其逆</td>
+</tr>
+<tr>
+<td><code>--pedigree</code> + <code>--bfile</code>（或 <code>--xrm</code>）</td>
+<td>一步法 H（HRM）</td>
+<td><code>demo.HA.*</code> / <code>demo.HD.*</code>；逆为 <code>demo.HAinv.sparse.*</code> / <code>demo.HDinv.sparse.*</code></td>
+</tr>
+<tr>
+<td><code>--pheno</code> + <code>--rand</code></td>
+<td>环境随机效应矩阵</td>
+<td><code>demo.&lt;列名&gt;.sparse.*</code>，如 <code>demo.loc.sparse.*</code></td>
+</tr>
+</tbody>
+</table>
+<p>每个矩阵由两个文件组成：<code>*.id</code> 单列个体 ID；<code>*.bin</code> 二进制数据。</p>
+<ul>
+<li><strong>稠密</strong> <code>*.bin</code>：按顺序存下三角元素，每个 4 字节，共 n(n+1)/2 个。n = 1 万约 200 MB，n = 5 万约 5 GB。</li>
+<li><strong>稀疏</strong> <code>*.sparse.bin</code>：只存下三角非零元素，按 i（行）j（列）k（值）存，每个 12 字节。系谱逆、H 逆和环境矩阵都是稀疏格式。</li>
+<li><code>.bin</code> 打不开：建矩阵时加 <code>--write-txt</code> 同时输出可读的 <code>.txt</code>，或事后用 <code>--trans-xrm</code> 转换（见 (8)）。</li>
+</ul>
+<p><strong>常用参数</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--add</code> / <code>--dom</code></td>
+<td>构建加性 / 显性矩阵，可同时给</td>
+</tr>
+<tr>
+<td><code>--add-inv</code> / <code>--dom-inv</code></td>
+<td>同时输出逆矩阵（给 BLUPF90、DMU、ASReml 等用；HIBLUP 自己不需要）</td>
+</tr>
+<tr>
+<td><code>--code-method 1~4</code></td>
+<td>基因型编码方法，默认 1，见 (2)</td>
+</tr>
+<tr>
+<td><code>--step 10000</code></td>
+<td>每块读入的 SNP 数，控制内存</td>
+</tr>
+<tr>
+<td><code>--threads 32</code></td>
+<td>线程数；不给则读 OpenMP 环境变量、默认用满所有核</td>
+</tr>
+<tr>
+<td><code>--alpha 0.05</code></td>
+<td>H 矩阵中 A22 的混合比例，见 (5)</td>
+</tr>
+<tr>
+<td><code>--pop-class</code> / <code>--snp-weight</code></td>
+<td>多群体混合 G / 加权 G，见 (3)(4)</td>
+</tr>
+<tr>
+<td><code>--keep</code> / <code>--remove</code></td>
+<td>只用 / 剔除文件中列出的个体（单列、无表头）</td>
+</tr>
+<tr>
+<td><code>--extract</code> / <code>--exclude</code></td>
+<td>只用 / 剔除文件中列出的 SNP（单列、无表头）</td>
+</tr>
+<tr>
+<td><code>--write-txt</code></td>
+<td>另输出可读文本</td>
+</tr>
+<tr>
+<td><code>--ridge-value</code></td>
+<td>求逆报 “matrix is not invertible” 时给对角线加小值（岭回归）</td>
+</tr>
+</tbody>
+</table>
 <p><strong>(1) 系谱矩阵 A</strong></p>
 <pre><code># --add 加性 A（--dom 得显性）；--add-inv 同时输出 A 逆（给其他软件用）
 ./hiblup --make-xrm --pedigree demo.ped --add --add-inv --threads 32 --out demo
@@ -660,8 +753,82 @@ run_pipeline.pl -fork1 -h demo.sort.hmp.txt -export -exportType VCF -runfork1
 <pre><code># --add --dom 同时得 GA、GD；--code-method 编码方法（见下表）；--step 每块 SNP 数，控制内存
 ./hiblup --make-xrm --bfile demo --add --dom --code-method 1 --step 10000 --threads 32 --out demo
 # -&gt; demo.GA.bin  demo.GA.id  demo.GD.bin  demo.GD.id
+
+# 只用部分 SNP（如显著 SNP）或部分个体
+./hiblup --make-xrm --bfile demo --add --extract sig.snp.txt --threads 32 --out demo.sig
+./hiblup --make-xrm --bfile demo --add --keep ref.id.txt --threads 32 --out demo.ref
 </code></pre>
-<p>G 的计算公式：G = ZZ' / [tr(ZZ')/n]，Z 为 n×m 的编码后基因型矩阵，不同方法只是 Z 的编码方式不同：</p>
+<p>G 的计算公式：<strong>G = ZZ′ / [tr(ZZ′)/n]</strong>，Z 为 n×m 的编码后基因型矩阵（n 个体、m 标记），tr 为矩阵的迹。四种方法只是 Z 的编码不同。下表中 p<sub>A</sub>、p<sub>a</sub> 是等位基因 A、a 的频率；p<sub>AA</sub>、p<sub>Aa</sub>、p<sub>aa</sub> 是三种基因型的频率：</p>
+<table>
+<thead>
+<tr>
+<th><code>--code-method</code></th>
+<th>效应</th>
+<th>AA</th>
+<th>Aa</th>
+<th>aa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1（默认）</td>
+<td>加性</td>
+<td>2 − 2p<sub>A</sub></td>
+<td>1 − 2p<sub>A</sub></td>
+<td>−2p<sub>A</sub></td>
+</tr>
+<tr>
+<td>1（默认）</td>
+<td>显性</td>
+<td>−2p<sub>A</sub>p<sub>a</sub></td>
+<td>1 − 2p<sub>A</sub>p<sub>a</sub></td>
+<td>−2p<sub>A</sub>p<sub>a</sub></td>
+</tr>
+<tr>
+<td>2</td>
+<td>加性</td>
+<td>2 − 2p<sub>A</sub></td>
+<td>1 − 2p<sub>A</sub></td>
+<td>−2p<sub>A</sub></td>
+</tr>
+<tr>
+<td>2</td>
+<td>显性</td>
+<td>−2p<sub>a</sub>²</td>
+<td>2p<sub>A</sub>p<sub>a</sub></td>
+<td>−2p<sub>A</sub>²</td>
+</tr>
+<tr>
+<td>3</td>
+<td>加性</td>
+<td>(2 − 2p<sub>A</sub>) / √(2p<sub>A</sub>p<sub>a</sub>)</td>
+<td>(1 − 2p<sub>A</sub>) / √(2p<sub>A</sub>p<sub>a</sub>)</td>
+<td>−2p<sub>A</sub> / √(2p<sub>A</sub>p<sub>a</sub>)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>显性</td>
+<td>−2p<sub>a</sub>² / (2p<sub>A</sub>p<sub>a</sub>)</td>
+<td>2p<sub>A</sub>p<sub>a</sub> / (2p<sub>A</sub>p<sub>a</sub>)</td>
+<td>−2p<sub>A</sub>² / (2p<sub>A</sub>p<sub>a</sub>)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>加性</td>
+<td>2 − p<sub>Aa</sub> − 2p<sub>AA</sub></td>
+<td>1 − p<sub>Aa</sub> − 2p<sub>AA</sub></td>
+<td>−p<sub>Aa</sub> − 2p<sub>AA</sub></td>
+</tr>
+<tr>
+<td>4</td>
+<td>显性</td>
+<td>−2p<sub>aa</sub>p<sub>Aa</sub> / D</td>
+<td>4p<sub>AA</sub>p<sub>aa</sub> / D</td>
+<td>−2p<sub>AA</sub>p<sub>Aa</sub> / D</td>
+</tr>
+</tbody>
+</table>
+<p>方法 4 中 D = p<sub>AA</sub> + p<sub>aa</sub> − (p<sub>AA</sub> − p<sub>aa</sub>)²。</p>
 <table>
 <thead>
 <tr>
@@ -674,77 +841,101 @@ run_pipeline.pl -fork1 -h demo.sort.hmp.txt -export -exportType VCF -runfork1
 <tr>
 <td>1（默认）</td>
 <td>Su et al. 2012, PLoS ONE</td>
-<td>加性与显性按频率中心化</td>
+<td>加性与显性按等位基因频率中心化</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Zeng et al. 2005, Genetics</td>
-<td>基于 QTL 模型参数化</td>
+<td>基于 QTL 模型参数化，加性与方法 1 相同</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Yang et al. 2010, Nat Genet</td>
-<td>与 GCTA 标准化思路一致</td>
+<td>按 √(2pq) 标准化，与 GCTA 思路一致</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Vitezica et al. 2017, Genetics</td>
-<td>加性、显性、上位正交（NOIA）</td>
+<td>用基因型频率，加性、显性、上位正交（NOIA），不要求 HWE</td>
 </tr>
 </tbody>
 </table>
 <p>同一参数也影响基因组近交系数和亲缘系数（<code>--ibc --rc --code-method</code>）。</p>
-<p><strong>(3) G 的变体</strong></p>
-<table>
-<thead>
-<tr>
-<th>需求</th>
-<th>加参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>多品种混合 G</td>
-<td><code>--pop-class pop.txt</code></td>
-<td>每个群体用自己的频率中心化，跨群体块按迹的几何均值标准化</td>
-</tr>
-<tr>
-<td>加权 G</td>
-<td><code>--snp-weight wt.txt</code></td>
-<td>权重须为正数</td>
-</tr>
-<tr>
-<td>子集 SNP 的 G</td>
-<td><code>--extract sig.snp.txt</code></td>
-<td>如只用显著 SNP</td>
-</tr>
-<tr>
-<td>剔除部分 SNP</td>
-<td><code>--exclude sig.snp.txt</code></td>
-<td>常与上一行配对计算 PVE</td>
-</tr>
-</tbody>
-</table>
-<p><strong>(4) 一步法 H 矩阵</strong>：同时给系谱和基因型即自动构建。</p>
+<p><strong>基因型的三个注意点</strong></p>
+<ul>
+<li><strong>只读一套 PLINK 二进制</strong>（<code>.bed/.bim/.fam</code>）：按染色体分开的文件须先用 PLINK 合并；VCF、PED/MAP 用 <code>plink2 --make-bed</code> 转，HapMap 先用 TASSEL 转 VCF。</li>
+<li><strong>编码以 A1 为准</strong>：A1A1 = 2，A1A2 = 1，A2A2 = 0（A1 为 <code>.bim</code> 第 5 列），SNP 效应是 A1 的效应。</li>
+<li><strong>HIBLUP 不做填充</strong>：缺失基因型一律按杂合子（1）处理，有缺失须先用其他软件填充。</li>
+</ul>
+<p><strong>(3) 多群体混合 G</strong>：<code>--pop-class</code></p>
+<p>每个群体用自己的频率中心化 / 标准化得 Z<sub>i</sub>，群体内块按自身的迹标准化，跨群体块按两群体的迹的几何均值标准化：</p>
+<pre><code>G_ii = Z_i Z_i′ / [tr(Z_i Z_i′) / n_i]
+G_ij = Z_i Z_j′ / √{ [tr(Z_i Z_i′) / n_i] · [tr(Z_j Z_j′) / n_j] }
+</code></pre>
+<pre><code># demo.popclass.txt：两列，个体 ID + 群体（品种）
+ID   Breed
+Ind1 DD
+Ind2 YY
+Ind3 LL
+
+./hiblup --make-xrm --code-method 1 --bfile demo --pop-class demo.popclass.txt \
+         --step 10000 --threads 32 --out demo
+</code></pre>
+<p><strong>(4) 加权 G</strong>：<code>--snp-weight</code></p>
+<pre><code># snp.wt.txt：第 1 列 SNP ID，其后为权重，必须全为正数
+SNPid  weight
+SNP1   42
+SNP2   0.3
+SNP3   100
+
+./hiblup --make-xrm --code-method 1 --bfile demo --add --dom \
+         --snp-weight snp.wt.txt --threads 32 --out demo
+</code></pre>
+<p><code>--add</code> 与 <code>--dom</code> 同时给时，文件须有两列权重，<strong>加性列在前、显性列在后</strong>；只给其一则一列。</p>
+<p><strong>(5) 一步法 H 矩阵</strong>：同时给系谱和基因型即自动构建。</p>
 <pre><code>./hiblup --make-xrm --pedigree demo.ped --bfile demo \
          --alpha 0.05 --add --dom --out demo
-# -&gt; demo.HA.*  demo.HD.*；用 --add-inv / --dom-inv 得 H 逆（*.sparse.*）
+# -&gt; demo.HA.bin  demo.HA.id  demo.HD.bin  demo.HD.id
 
-# 用自己算好的 GRM（须为二进制）构建 H
+# 直接输出 H 逆
+./hiblup --make-xrm --pedigree demo.ped --bfile demo \
+         --alpha 0.05 --add-inv --dom-inv --out demo
+# -&gt; demo.HAinv.sparse.*  demo.HDinv.sparse.*
+
+# 用自己算好的 GRM（须为二进制，文本先 --trans-xrm 转）构建 H；--dom 同样支持
 ./hiblup --make-xrm --pedigree demo.ped --xrm yourGRM --alpha 0.05 --add --out demo
 </code></pre>
+<p>按 Aguilar 2010 / Christensen 2010 的公式（下标 1 为无基因型个体，2 为有基因型个体）：</p>
+<pre><code>H = | A11 + A12·A22⁻¹·(Gw − A22)·A22⁻¹·A21    A12·A22⁻¹·Gw |
+    | Gw·A22⁻¹·A21                             Gw           |
+
+Gw   = (1 − α)·Gadj + α·A22
+Gadj = a·G + b，a、b 由下面两式解出：
+       mean(diag(G))·a + b    = mean(diag(A22))
+       mean(offdiag(G))·a + b = mean(offdiag(A22))
+</code></pre>
 <ul>
-<li>构建过程：先把 G 线性校正到与 A22 尺度一致（使 G 对角线均值、非对角线均值分别等于 A22 的），得到 Gadj；再 Gw = (1−α)·Gadj + α·A22，然后按 Aguilar 2010 / Christensen 2010 的公式组成 H。</li>
+<li>先把 G 线性校正到与 A22 尺度一致（对角线均值、非对角线均值分别相等）得 Gadj，再与 A22 按 α 混合。</li>
 <li><code>--alpha</code> 越大，Gw 中系谱成分越多，可改善 G 的奇异性；示例使用 0.05。</li>
-<li>H 的构建同样支持 <code>--snp-weight</code>、<code>--pop-class</code>。</li>
+<li>H 的构建同样支持 <code>--snp-weight</code>、<code>--pop-class</code>；用自备 GRM 时也能输出 H 逆。</li>
 </ul>
-<p><strong>(5) 环境随机效应的矩阵</strong></p>
-<pre><code>./hiblup --make-xrm --pheno demo.phe --rand 6,7 --out demo
-# -&gt; demo.loc.sparse.*  demo.dam.sparse.*
+<p><strong>(6) 环境随机效应的矩阵</strong></p>
+<pre><code># --rand 6,7：表型文件第 6、7 列（如 loc、dam）
+./hiblup --make-xrm --pheno demo.phe --rand 6,7 --out demo
+# -&gt; demo.loc.sparse.bin  demo.loc.sparse.id  demo.dam.sparse.bin  demo.dam.sparse.id
 </code></pre>
 <p>用途：把环境效应作为 <code>--xrm</code> 输入多性状模型，从而估计环境效应在性状间的相关（默认只估遗传和残差协方差）。</p>
-<p><strong>(6) 格式转换与跨软件</strong></p>
+<p><strong>(7) 使用矩阵</strong></p>
+<pre><code>./hiblup ... --xrm demo.GA ...            # 给前缀，不带 .bin/.id
+./hiblup ... --xrm demo.GA,demo.GD ...    # 多个矩阵用逗号分隔
+./hiblup ... --xrm gcta.grm ...           # GCTA/LDAK 的二进制 GRM 可直接用
+
+# 由已建好的矩阵算近交系数 / 亲缘系数
+./hiblup --ibc --rc --xrm demo.GA --out demo   # -&gt; demo.ibc  demo.rc
+</code></pre>
+<ul>
+<li><strong>不要把逆矩阵给 <code>--xrm</code></strong>：HIBLUP 直接用 XRM 估方差组分、解混合模型方程，逆矩阵只是给其他软件的。</li></ul>
+<p><strong>(8) 格式转换与跨软件</strong></p>
 <pre><code># 二进制 -&gt; 文本方阵（demo.txt + demo.id.txt）；加 --triangle 输出下三角 i j k
 ./hiblup --trans-xrm --xrm demo.GA --out demo
 # 文本 -&gt; 二进制（ijk 格式需加 --triangle）
@@ -753,12 +944,22 @@ run_pipeline.pl -fork1 -h demo.sort.hmp.txt -export -exportType VCF -runfork1
 ./hiblup --trans-xrm --xrm gcta.grm --out hiblup
 # HIBLUP 的稠密 GRM 给 GCTA 用
 awk '{print $1,$1}' demo.GA.id &gt; gcta.grm.id &amp;&amp; cp demo.GA.bin gcta.grm.bin
+./gcta64 ... --grm gcta ...
+</code></pre>
+<p>文本格式示例（3 个个体）：</p>
+<pre><code># 方阵（默认）            # 下三角 i j k（--triangle）
+1.55755 1.04847 0.64622   1 1 1.55755
+1.04847 1.58144 0.66971   2 1 1.04847
+0.64622 0.66971 1.56794   2 2 1.58144
+                          3 1 0.646224
+                          3 2 0.669715
+                          3 3 1.56794
 </code></pre>
 <ul>
-<li>文件名带 <code>.sparse.</code> 的矩阵不能直接给 GCTA/LDAK。</li>
+<li>文件名带 <code>.sparse.</code> 的矩阵不能直接给 GCTA/LDAK；稀疏矩阵输出 ijk 时省略零元素。</li>
 <li>求逆报 “matrix is not invertible”：矩阵非正定，加 <code>--ridge-value</code> 小值。</li>
 </ul>
-<p><strong>(7) 基因型转码</strong></p>
+<p><strong>(9) 基因型转码</strong></p>
 <pre><code>./hiblup --trans-geno --bfile demo --add --out x             # x.geno.A.txt（0/1/2）
 ./hiblup --trans-geno --bfile demo --dom --out x             # x.geno.D.txt（杂合=1，纯合=0）
 ./hiblup --trans-geno --bfile demo --blupf90 --add --out x   # BLUPF90 格式（ID + 连续基因型字符串）
